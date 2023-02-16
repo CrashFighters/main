@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
 const firebaseConfig = {
     apiKey: "AIzaSyApP_TsV5cVMNXDrM5ASVFbJpxnZ7KiEJE",
@@ -15,16 +15,23 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+onAuthStateChanged(auth, update);
+function update(user) {
+    console.log(user)
+    if (user)
+        a.innerText = user.email
+    else
+        a.innerText = 'Not logged in'
+}
+
 window.login = async () => {
 
     await signInWithEmailAndPassword(auth, 'oscarknap@ziggo.nl', '123456');
-    a.innerText = 'yest';
 
 }
 
 window.logout = async () => {
 
     await signOut(auth);
-    a.innerText = 'no';
 
 }
