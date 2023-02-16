@@ -1,14 +1,10 @@
 const settings = require('../settings.json')
-const { set, get } = require(`../${settings.generic.path.files.modules}database/functions/database.js`);
+const perspective = require(`../${settings.generic.path.files.modules}perspective/functions/perspective.js`);
 
 module.exports = {
-    execute({ end }) {
-        console.log(get())
-        set({
-            foo: 'bar'
-        });
-        console.log(get())
+    async execute({ end }) {
+        const response = await perspective('Hallo allemaal! Wat een mooie dag vandaag.')
 
-        end()
+        end(JSON.stringify(response))
     }
 }
