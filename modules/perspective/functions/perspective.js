@@ -22,7 +22,6 @@ module.exports = async (message) => {
     const response = await analyzeAsync(client, analyzeRequest);
 
     return {
-        message,
         languages: response.languages,
         attributes: Object.fromEntries(
             Object.entries(response.attributeScores)
