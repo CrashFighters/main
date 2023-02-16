@@ -17,10 +17,11 @@ module.exports = {
             //     return response.end(JSON.stringify(t))
             // } else
 
+            let middlewareData = {};
             for (const middleware of middlewares) {
-                const _continue = middleware(request, response);
-                if (!_continue) return;
-            }
+                const newMiddlewareData = middleware(request, response);
+                middleWareData = { ...middlewareData, ...newMiddlewareData };
+            };
 
             if (request.url.toLowerCase().startsWith(settings.generic.path.online.api))
                 return require('../server/api.js').execute(request, response);
