@@ -7,6 +7,7 @@
   "author": "Oscar",
   "license": "ISC",
   "dependencies": {
+    "firebase-admin": "^11.5.0",
     "mime-types": "^2.1.35",
     "sniffr": "^1.2.0"
   }
