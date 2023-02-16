@@ -6,7 +6,7 @@ const statusCode = require('../functions/error/statusCode.js').execute;
 const parseErrorOnline = require('../functions/error/parseErrorOnline.js').execute;
 
 module.exports = {
-    execute(request, response) {
+    execute(request, response, middleWareData) {
         let messages = require('../functions/get/messages').execute({ request }).mainFunction();
 
         let parseError = (error, customText) => parseErrorOnline(error, response, customText);
@@ -50,7 +50,8 @@ module.exports = {
                             request,
                             isModuleInstalled,
                             params,
-                            response
+                            response,
+                            middleWareData
                         });
                     });
                 } else {
@@ -65,7 +66,8 @@ module.exports = {
                         request,
                         isModuleInstalled,
                         params,
-                        response
+                        response,
+                        middleWareData
                     });
                 }
             } else

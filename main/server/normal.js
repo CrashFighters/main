@@ -4,7 +4,7 @@ const statusCode = require('../functions/error/statusCode.js').execute;
 const checkAcceptHeader = require('../functions/parse/header/accept');
 
 module.exports = {
-    execute(request, response) {
+    execute(request, response, middleWareData) {
 
         let path = require('../functions/parse/normal').execute(request.url);
 

@@ -6,7 +6,7 @@ const settings = require('../../settings.json');
 const parseErrorOnline = require('../functions/error/parseErrorOnline').execute;
 
 module.exports = {
-    execute(request, response) {
+    async execute(request, response) {
         const parseError = (error, customText) => parseErrorOnline(error, response, customText);
 
         try {
@@ -19,14 +19,14 @@ module.exports = {
 
             let middlewareData = {};
             for (const middleware of middlewares) {
-                const newMiddlewareData = middleware(request, response);
+                const newMiddlewareData = await middleware(request, response);
                 middleWareData = { ...middlewareData, ...newMiddlewareData };
             };
 
             if (request.url.toLowerCase().startsWith(settings.generic.path.online.api))
-                return require('../server/api.js').execute(request, response);
+                return require('../server/api.js').execute(request, response, middleWareData);
             else
-                return require('./normal.js').execute(request, response);
+                return require('./normal.js').execute(request, response, middleWareData);
 
         } catch (err) {
             parseError(err);
