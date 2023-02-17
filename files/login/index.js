@@ -36,27 +36,7 @@ function signup() {
     window.createEmailAccount(email, password);
 }
 
-		//on window.auth.user change
-		window.auth.onStateChange((user) => {
-			if (user) {
-				// User is signed in, see docs for a list of available properties
-				// https://firebase.google.com/docs/reference/js/firebase.User
-				Toastify({
-
-text: "Successfully Logged In!",
-
-duration: 3000
-
-}).showToast();
-			} else {
-				// User is signed out
-				// ...
-				Toastify({
-
-text: "Please log in!",
-
-duration: 3000
-
-}).showToast();
-			}
-		});
+window.auth.onStateChange(() => {
+    if (window.auth.user)
+        window.location.replace('/');
+});
