@@ -1,5 +1,6 @@
 let admin;
-let { serviceAccount, databaseURL };
+let serviceAccount
+let databaseURL;
 
 let db;
 let ref;
@@ -9,8 +10,11 @@ let err;
 
 let hasInit = false;
 function init() {
+    console.log('Initializing database');
+
     admin = require('firebase-admin');
-    { serviceAccount, databaseURL } = require('../../../credentials/firebase.json');
+    serviceAccount = require('../../../credentials/firebase.json').serviceAccount;
+    databaseURL = require('../../../credentials/firebase.json').databaseURL;
 
     admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
