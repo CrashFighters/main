@@ -26,12 +26,20 @@ function update(user) {
 
 window.login = async () => {
 
-    await signInWithEmailAndPassword(auth, 'oscarknap@ziggo.nl', '123456');
+    try {
+        await signInWithEmailAndPassword(auth, 'oscarknap@ziggo.nl', '123456');
+    } catch (e) {
+        throw e
+    }
 
 }
 
 window.logout = async () => {
 
-    await signOut(auth);
+    try {
+        await signOut(auth);
+    } catch (e) {
+        throw e
+    }
 
 }
