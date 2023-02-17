@@ -7,9 +7,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<link rel="stylesheet" type="text/css" href="/login/index.css">
-	
-    <script type="module" src="/authSDK.js"></script>
-    <script type="module" src="/loginSDK.js"></script>
+
+	<script type="module" src="/authSDK.js"></script>
+	<script type="module" src="/loginSDK.js"></script>
 
 	<script src="/login/index.js" defer></script>
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
@@ -23,12 +23,13 @@
 				<form action="#">
 					<h1>Create Account</h1>
 					<div class="social-container">
-						<a href="#" class="social" onclick=loginWithGoogle()><i class="fa fa-google" aria-hidden="true"></i></i></a>
+						<a href="#" class="social" onclick=loginWithGoogle()><i class="fa fa-google"
+								aria-hidden="true"></i></i></a>
 					</div>
 					<span>or use your email for registration</span>
 					<input type="text" placeholder="Name" id="signupName" />
-					<input type="email" placeholder="Email" id="signupEmail"/>
-					<input type="password" placeholder="Password" id="signupPassword"/>
+					<input type="email" placeholder="Email" id="signupEmail" />
+					<input type="password" placeholder="Password" id="signupPassword" />
 					<button type="button" onclick="signup()">Sign Up</button>
 					<p id="mobile_para">To keep connected with us,please login</p>
 					<button class="ghost_mobile" id="signIn_mobile">Sign In</button>
@@ -38,12 +39,13 @@
 				<form action="#">
 					<h1>Login</h1>
 					<div class="social-container">
-						<a href="#" class="social" onclick=loginWithGoogle()><i class="fa fa-google" aria-hidden="true"></i></a>
+						<a href="#" class="social" onclick=loginWithGoogle()><i class="fa fa-google"
+								aria-hidden="true"></i></a>
 					</div>
 					<span>or use your account</span>
-					<input type="email" placeholder="Email"  id="loginEmail"/>
+					<input type="email" placeholder="Email" id="loginEmail" />
 					<input type="password" placeholder="Password" id="loginPassword" />
-					<a href="#">Forgot your password?</a>
+					<a href="/forgotPassword">Forgot your password?</a>
 					<button type="button" onclick="login()">Login</button>
 					<p id="mobile_para">Don't have an account? Sign up here !!</p>
 					<button class="ghost_mobile" id="signUp_mobile">Sign Up</button>
@@ -65,8 +67,8 @@
 				</div>
 			</div>
 		</div>
-	</div>	
-	
+	</div>
+
 </body>
 
 </html>
