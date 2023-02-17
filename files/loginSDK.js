@@ -47,7 +47,7 @@ window.resendVerificationEmail = async (email, password) => {
 
 window.sendPasswordResetEmail = async (email) => {
     try {
-        await auth.sendPasswordResetEmail(auth, email);
+        await sendPasswordResetEmail(auth, email);
     } catch (e) {
         throw e;
     };
