@@ -1,0 +1,44 @@
+body {
+    margin: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    overflow: hidden;
+
+    display: grid;
+    place-items: center;
+}
+
+main {
+    width: 50vw;
+    height: 20vh;
+
+    padding: 2vmax;
+    border: 5px solid black;
+    border-radius: 2vmax;
+
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+}
+
+h1 {
+    margin: 0;
+    margin-bottom: 3vh;
+
+    font-family: 'Roboto', sans-serif;
+}
+
+.buttons {
+    display: flex;
+    justify-content: end;
+    gap: 1vw;
+}
+
+button {
+    font-family: 'Roboto', sans-serif;
+}

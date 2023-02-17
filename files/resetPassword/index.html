@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset password</title>
+
+    <script type="module" src="/authSDK.js"></script>
+    <script type="module" src="/loginSDK.js"></script>
+
+    <script src="/resetPassword/index.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="/resetPassword/index.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <main>
+        <h1>Reset password</h1>
+
+        <input type="email" placeholder="Email" id="emailInput" />
+
+        <div class="buttons">
+            <button id="cancelButton" onclick="window.auth.login()">Go back to login</button>
+            <button id="sendButton" onclick="sendResetEmail()">Send reset email</button>
+        </div>
+    </main>
+
+</body>
+
+</html>
