@@ -12,7 +12,7 @@ window.googleSignInCallback = (a) => {
 document.body.innerHTML += `
 <div id="g_id_onload"
      data-client_id="478395146629-5j6vcc7rv6atcfp62kgdvlnbbjo3aj7u.apps.googleusercontent.com"
-     data-context="signup"
+     data-context="signin"
      data-callback="googleSignInCallback"
      data-close_on_tap_outside="false"
      data-itp_support="true">
