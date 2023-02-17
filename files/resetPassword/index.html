@@ -20,16 +20,61 @@
 
 <body>
 
-    <main>
-        <h1>Reset password</h1>
 
         <input type="email" placeholder="Email" id="emailInput" />
 
-        <div class="buttons">
-            <button id="cancelButton" onclick="window.auth.login()">Go back to login</button>
-            <button id="sendButton" onclick="sendResetEmail()">Send reset email</button>
+
+<div class="container" id="container">
+    <div class="row">
+        <div class="form-container sign-up-container">
+            <form action="#">
+                <h1>Create Account</h1>
+                <div class="social-container">
+                    <a href="#" class="social" onclick=loginWithGoogle()><i class="fa fa-google"
+                            aria-hidden="true"></i></i></a>
+                </div>
+                <span>or use your email for registration</span>
+                <input type="text" placeholder="Name" id="signupName" />
+                <input type="email" placeholder="Email" id="signupEmail" />
+                <input type="password" placeholder="Password" id="signupPassword" />
+                <button type="button" onclick="signup()">Sign Up</button>
+                <p id="mobile_para">To keep connected with us,please login</p>
+                <button class="ghost_mobile" id="signIn_mobile">Login</button>
+            </form>
         </div>
-    </main>
+        <div class="form-container sign-in-container">
+            <form action="#">
+                <h1>Login</h1>
+                <div class="social-container">
+                    <a href="#" class="social" onclick=loginWithGoogle()><i class="fa fa-google"
+                            aria-hidden="true"></i></a>
+                </div>
+                <span>or use your account</span>
+                <input type="email" placeholder="Email" id="loginEmail" />
+                <input type="password" placeholder="Password" id="loginPassword" />
+                <a href="/resetPassword">Forgot your password?</a>
+                <button type="button" onclick="login()">Login</button>
+                <p id="mobile_para">Don't have an account? Sign up here !!</p>
+                <button class="ghost_mobile" id="signUp_mobile">Sign Up</button>
+
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome!</h1>
+                    <p>To create an account, Fill in your information</p>
+                    <button class="ghost" id="signIn">Login</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Hello, User!</h1>
+                    <p>Enter your information and start enjoying CrashFighters!</p>
+                    <button class="ghost" id="signUp">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 
