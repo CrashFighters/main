@@ -1,27 +1,45 @@
-const admin = require('firebase-admin');
-const { serviceAccount, databaseURL } = require('../../../credentials/firebase.json');
+let admin;
+let { serviceAccount, databaseURL };
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL
-});
-
-const db = admin.database();
-const ref = db.ref();
+let db;
+let ref;
 
 let data = null;
 let err;
-ref.on('value', snapshot => {
-    data = snapshot.val();
-}, error => {
-    err = error;
-})
+
+let hasInit = false;
+function init() {
+    admin = require('firebase-admin');
+    { serviceAccount, databaseURL } = require('../../../credentials/firebase.json');
+
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+        databaseURL
+    });
+
+    db = admin.database();
+    ref = db.ref();
+
+    ref.on('value', snapshot => {
+        data = snapshot.val();
+    }, error => {
+        err = error;
+    });
+
+    hasInit = true;
+};
 
 module.exports = {
     set(val) {
+        if (!hasInit)
+            init();
+
         ref.set(val)
     },
     get() {
+        if (!hasInit)
+            init()
+
         if (err)
             throw err;
 
