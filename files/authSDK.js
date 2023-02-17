@@ -2,13 +2,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.17.1/firebas
 import {
     getAuth,
     onAuthStateChanged,
-    signOut,
-    // signInWithEmailAndPassword,
-    // signInWithPopup,
-    // signInWithRedirect,
-    // GoogleAuthProvider,
-    // createUserWithEmailAndPassword,
-    // sendEmailVerification
+    signOut
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
 const firebaseConfig = {
@@ -47,19 +41,7 @@ window.auth = {
 window.firebase = {
     app,
     auth
-}
-
-// onAuthStateChanged(auth, update);
-
-// window.google = async () => {
-
-//     try {
-//         await signInWithRedirect(auth, new GoogleAuthProvider());
-//     } catch (e) {
-//         throw e
-//     }
-
-// }
+};
 
 // window.signup = async () => {
 
