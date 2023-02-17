@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login (temp)</title>
+
+    <script type="module" src="/authSDK.js"></script>
+    <script type="module" src="/loginSDK.js"></script>
+</head>
+
+<body>
+    <h1>Login</h1>
+
+    <button type="button" onclick="loginWithEmail(prompt('email'), prompt('password'))">
+        Login with email
+    </button>
+
+    <button type="button" onclick="createEmailAccount(prompt('email'), prompt('password'))">
+        Create email account
+    </button>
+
+    <button type="button" onclick="loginWithGoogle()">
+        Login with Google
+    </button>
+</body>
+
+</html>
