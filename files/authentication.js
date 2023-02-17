@@ -1,5 +1,14 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
+import {
+    getAuth,
+    signOut,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    signInWithPopup,
+    signInWithRedirect,
+    GoogleAuthProvider,
+    createUserWithEmailAndPassword
+} from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
 const firebaseConfig = {
     apiKey: "AIzaSyApP_TsV5cVMNXDrM5ASVFbJpxnZ7KiEJE",
@@ -27,7 +36,10 @@ function update(user) {
 window.login = async () => {
 
     try {
-        await signInWithEmailAndPassword(auth, 'oscarknap@ziggo.nl', '123456');
+        // await signInWithEmailAndPassword(auth, 'oscarknap@ziggo.nl', '123456');
+        // await signInWithPopup(auth, new GoogleAuthProvider());
+        await signInWithRedirect(auth, new GoogleAuthProvider());
+        // await createUserWithEmailAndPassword(auth, 'oscarknap@ziggo.nl', '123456')
     } catch (e) {
         throw e
     }
