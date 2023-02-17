@@ -50,7 +50,7 @@ window.auth = {
         window.open('/login', '_self');
     },
     signup: () => {
-        window.open('/signup', '_self');
+        window.open('/login?signup=true', '_self');
     },
     user: null
 };
