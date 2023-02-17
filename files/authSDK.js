@@ -19,6 +19,22 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+onAuthStateChanged(auth, updateUserObject);
+
+function updateUserObject(user) {
+    if (!user)
+        return window.auth.user = null;
+
+    window.auth.user = {
+        language: auth.languageCode,
+        email: user.email,
+        emailVerified: user.emailVerified,
+        isAnonymous: user.isAnonymous,
+        creationTime: new Date(user.metadata.creationTime),
+        lastSignInTime: new Date(user.metadata.lastSignInTime)
+    };
+};
+
 window.auth = {
     signOut: async () => {
         try {
@@ -31,36 +47,15 @@ window.auth = {
         onAuthStateChanged(auth, callback);
     },
     login: () => {
-        window.open('/login', '_self')
+        window.open('/login', '_self');
     },
     signup: () => {
-        window.open('/signup', '_self')
-    }
+        window.open('/signup', '_self');
+    },
+    user: null
 };
 
 window.firebase = {
     app,
     auth
 };
-
-// window.signup = async () => {
-
-//     try {
-//         const { user } = await createUserWithEmailAndPassword(auth, prompt('Email'), prompt('Password'));
-//         if (!user.emailVerified)
-//             await sendEmailVerification(user,)
-//     } catch (e) {
-//         throw e
-//     }
-
-// }
-
-// window.login = async () => {
-
-//     try {
-//         await signInWithEmailAndPassword(auth, prompt('Email'), prompt('Password'));
-//     } catch (e) {
-//         throw e
-//     }
-
-// }
