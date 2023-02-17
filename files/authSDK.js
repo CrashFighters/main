@@ -43,7 +43,7 @@ window.auth = {
             throw e
         };
     },
-    onStateChanged: callback => {        
+    onStateChange: callback => {        
         onAuthStateChanged(auth, callback);
     },
     login: () => {
