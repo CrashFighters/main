@@ -13,17 +13,10 @@ body {
   margin: -20px 0 50px;
   margin: 20px;
 }
-html,
-body {
-  margin: 0;
-  height: 100%;
-  overflow: hidden;
-}
 
 h1 {
   font-weight: bold;
   margin: 0;
-  padding-bottom: 3.5vh;
 }
 
 h2 {
@@ -106,7 +99,12 @@ input {
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   position: relative;
   overflow: hidden;
+<<<<<<< HEAD
   width: 384px;
+=======
+  width: 768px;
+  max-width: 100%;
+>>>>>>> e8f3cbd10b3b415c91acf73d221d6394022efc66
   min-height: 480px;
 }
 
