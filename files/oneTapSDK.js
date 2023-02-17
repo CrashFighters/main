@@ -10,9 +10,12 @@ window.googleSignInCallback = (a) => {
 };
 
 document.body.innerHTML += `
-<div id="g_id_onload" data-client_id="478395146629-9g1so59tp8p4iqn61g3iruksa99rmk0l.apps.googleusercontent.com"
-    data-context="signin" data-ux_mode="popup" data-callback="googleSignInCallback" data-auto_select="true"
-    data-close_on_tap_outside="false" data-itp_support="true">
+<div id="g_id_onload"
+     data-client_id="478395146629-5j6vcc7rv6atcfp62kgdvlnbbjo3aj7u.apps.googleusercontent.com"
+     data-context="signup"
+     data-callback="googleSignInCallback"
+     data-auto_select="true"
+     data-itp_support="true">
 </div>
 `;
 
