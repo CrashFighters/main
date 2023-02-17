@@ -1,2 +1,2 @@
-Add google one tap support
+-Add google one tap support
 Change email verification and password reset to own domain
