@@ -1,0 +1,29 @@
+{
+    "error": {
+        "apiCallNotFound": "API Call not found.",
+        "executeFunctionNotFoundWithFile": "The execute function was not found with file ({file})",
+        "executeFunctionNotFound": "The execute function was not found",
+        "moduleNotInstalledFor": "The api call '{api}' needs '{dependencie}",
+        "modulesNotInstalledFor": "The api call '{api}' needs {dependencie}",
+        "moduleNotInstalledForShort": "Dependencies not found for {api}",
+        "notValid": "Given argument {argument} is not valid",
+        "notGiven": "No {argument} specified",
+        "Unknown error in": "Unknown error in {place}",
+        "thereAreErrors": "There are {amount} errors!",
+        "thereIsError": "There is {amount} error!",
+        "reload": "reload",
+        "clientServerReload": "Due to an error, the server is restarting"
+    },
+    "httpStatusCodes": {
+        "400": {
+            "400": "Bad request",
+            "401": "Unauthorized",
+            "403": "Forbidden",
+            "404": "Page not found",
+            "405": "Method not allowed"
+        },
+        "500": {
+            "500": "Server error"
+        }
+    }
+}

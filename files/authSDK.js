@@ -27,7 +27,7 @@ window.auth = {
             throw e
         };
     },
-    onStateChanged: callback => {
+    onStateChanged: callback => {        
         onAuthStateChanged(auth, callback);
     },
     login: () => {

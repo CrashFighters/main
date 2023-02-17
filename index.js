@@ -14,8 +14,8 @@ try {
 
 } catch (e) { }
 
+const port = process.env.PORT  || settings.generic.port;
 
-server.listen(						//Listen to server
-	process.env.PORT ||				//If hosted on heroku
-	settings.generic.port			//Else
-);
+server.listen(port);
+
+console.log(`Listening on port ${port}`);
