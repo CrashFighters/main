@@ -3,7 +3,8 @@ import {
     signInWithPopup,
     GoogleAuthProvider,
     createUserWithEmailAndPassword,
-    sendEmailVerification
+    sendEmailVerification,
+    sendPasswordResetEmail
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
 const { app, auth } = window.firebase;
@@ -39,6 +40,14 @@ window.resendVerificationEmail = async (email, password) => {
 
     try {
         await sendEmailVerification(auth.currentUser);
+    } catch (e) {
+        throw e;
+    };
+};
+
+window.sendPasswordResetEmail = async (email) => {
+    try {
+        await auth.sendPasswordResetEmail(auth, email);
     } catch (e) {
         throw e;
     };
