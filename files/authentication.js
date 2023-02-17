@@ -7,7 +7,8 @@ import {
     signInWithPopup,
     signInWithRedirect,
     GoogleAuthProvider,
-    createUserWithEmailAndPassword
+    createUserWithEmailAndPassword,
+    sendEmailVerification
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
 const firebaseConfig = {
@@ -21,25 +22,52 @@ const firebaseConfig = {
     measurementId: "G-6SF1JVH5WC"
 };
 
+const email = document.getElementById('email');
+const emailVerified = document.getElementById('emailVerified');
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+let currentUser;
 
 onAuthStateChanged(auth, update);
 function update(user) {
-    console.log(user)
-    if (user)
-        a.innerText = user.email
-    else
-        a.innerText = 'Not logged in'
+    currentUser = user;
+    console.log(user.providerData)
+    if (user) {
+        email.innerText = user.email
+        emailVerified.innerText = user.emailVerified ? 'Email verified' : 'Email not verified'
+    } else {
+        email.innerText = 'Not logged in'
+        emailVerified.innerText = 'Not logged in'
+    }
+}
+
+window.google = async () => {
+
+    try {
+        await signInWithRedirect(auth, new GoogleAuthProvider());
+    } catch (e) {
+        throw e
+    }
+
+}
+
+window.signup = async () => {
+
+    try {
+        const { user } = await createUserWithEmailAndPassword(auth, prompt('Email'), prompt('Password'));
+        if (!user.emailVerified)
+            await sendEmailVerification(user,)
+    } catch (e) {
+        throw e
+    }
+
 }
 
 window.login = async () => {
 
     try {
-        // await signInWithEmailAndPassword(auth, 'oscarknap@ziggo.nl', '123456');
-        // await signInWithPopup(auth, new GoogleAuthProvider());
-        await signInWithRedirect(auth, new GoogleAuthProvider());
-        // await createUserWithEmailAndPassword(auth, 'oscarknap@ziggo.nl', '123456')
+        await signInWithEmailAndPassword(auth, prompt('Email'), prompt('Password'));
     } catch (e) {
         throw e
     }
