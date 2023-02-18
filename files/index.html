@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Home</title>
+    <script type="module" src="/sdk/auth.js"></script>
+    <script type="module" src="/sdk/zeroTap.js"></script>
+    <script type="module" src="/sdk/templates.js"></script>
+  </head>
 
-  <script type="module" src="/sdk/auth.js"></script>
-  <script type="module" src="/sdk/zeroTap.js"></script>
-  <script type="module" src="/sdk/templates.js"></script>
+  <body>
+    <button type="button" onclick="window.auth.logout()">log out</button>
+    <button type="button" onclick="window.auth.login()">login</button>
 
-</head>
+    Welcome <span data-template="displayName"></span>! Your email is
+    <span data-template="email"></span>.
 
-<body>
-  <button type="button" onclick="window.auth.logout()">log out</button>
-  <button type="button" onclick="window.auth.login()">login</button>
-
-  Welcome <span data-template="displayName"></span>! Your email is
-  <span data-template="email"></span>.
-
-  <img data-template="picture" data-template_insert="src" />
-</body>
-
+    <img
+      data-template="picture"
+      data-template_insert="src"
+      data-template_fallback="https://xsgames.co/randomusers/avatar.php?g=pixel"
+    />
+  </body>
 </html>

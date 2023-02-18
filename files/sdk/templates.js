@@ -3,8 +3,7 @@ import { onStateChange } from "/sdk/auth.js";
 const getTemplateValues = (user) => ({
     email: user?.email ?? "",
     displayName: user?.displayName ?? "",
-    picture:
-        user?.picture ?? "https://xsgames.co/randomusers/avatar.php?g=pixel",
+    picture: user?.picture ?? "",
 });
 
 function replaceTemplates(user) {
@@ -22,13 +21,20 @@ function replaceTemplates(user) {
             );
             continue;
         }
+        var toSet = templateValues[item];
+        if (
+            templateValues[item] === "" &&
+            element.dataset["template_fallback"] !== undefined
+        )
+            toSet = element.dataset["template_fallback"];
+        else toSet = templateValues[item];
 
         if (
             element.dataset["template_insert"] === undefined ||
             element.dataset["template_insert"] === "innerText"
         )
-            element.innerText = templateValues[item];
-        else element[element.dataset["template_insert"]] = templateValues[item];
+            element.innerText = toSet;
+        else element[element.dataset["template_insert"]] = toSet;
     }
 
     if (elements.length === 0)
@@ -56,3 +62,4 @@ function deepQuerySelectorAll(selector, root = document) {
 onStateChange((user) => {
     replaceTemplates(user);
 });
+replaceTemplates(user);
