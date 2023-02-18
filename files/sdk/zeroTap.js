@@ -13,7 +13,7 @@ let loaded = false;
 window.auth.onStateChange(() => {
     if (!loaded) {
         if (!window.auth.user)
-            executeOneTap();
+            executeZeroTap();
 
         loaded = true;
 
