@@ -34,24 +34,27 @@ newBigButton.dataset.logo_alignment = 'left';
 for (const bigButton of bigButtons)
     bigButton.replaceWith(newBigButton);
 
-if (!document.getElementById('g_id_onload'))
-    document.head.innerHTML += `
-    <div id="g_id_onload"
-        data-client_id="478395146629-9g1so59tp8p4iqn61g3iruksa99rmk0l.apps.googleusercontent.com"
-        data-context="signin"
-        data-ux_mode="popup"
-        data-callback="googleSignInCallback"
-        data-auto_prompt="false">
-    </div>
-    `;
+if (!doesDocumentIncludeScript('/sdk/oneTap.js') && !doesDocumentIncludeScript('/sdk/zeroTap.js'))
+    if (document.getElementById('g_id_onload'))
+        throw new Error('g_id_onload element already exists')
+    else
+        document.head.innerHTML += `
+        <div id="g_id_onload"
+            data-client_id="478395146629-9g1so59tp8p4iqn61g3iruksa99rmk0l.apps.googleusercontent.com"
+            data-context="signin"
+            data-ux_mode="popup"
+            data-callback="googleSignInCallback"
+            data-auto_prompt="false">
+        </div>
+        `;
 
-if (!hasScriptLoaded('https://accounts.google.com/gsi/client')) {
+if (!doesDocumentIncludeScript('https://accounts.google.com/gsi/client')) {
     let script = document.createElement('script');
     script.src = 'https://accounts.google.com/gsi/client';
     document.head.appendChild(script);
 };
 
-function hasScriptLoaded(url) {
+function doesDocumentIncludeScript(url) {
     const scripts = [...document.getElementsByTagName('script')];
-    return Boolean(scripts.find(script => script.src === url));
+    return Boolean(scripts.find(script => script.src.endsWith(url)));
 };

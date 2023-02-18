@@ -19,7 +19,7 @@ window.auth.onStateChange(() => {
 
 function executeOneTap() {
     if (document.getElementById('g_id_onload'))
-        throw new Error('g_id_onload element already exists. Please follow the correct import order.')
+        throw new Error('g_id_onload element already exists')
     else
         document.body.innerHTML += `
         <div id="g_id_onload"
@@ -31,14 +31,14 @@ function executeOneTap() {
         </div>
         `;
 
-    if (!hasScriptLoaded('https://accounts.google.com/gsi/client')) {
+    if (!doesDocumentIncludeScript('https://accounts.google.com/gsi/client')) {
         let script = document.createElement('script');
         script.src = 'https://accounts.google.com/gsi/client';
         document.head.appendChild(script);
     };
 };
 
-function hasScriptLoaded(url) {
+function doesDocumentIncludeScript(url) {
     const scripts = [...document.getElementsByTagName('script')];
-    return Boolean(scripts.find(script => script.src === url));
+    return Boolean(scripts.find(script => script.src.endsWith(url)));
 };
