@@ -27,7 +27,7 @@ onStateChange(user => {
 
 const googleOnLoadDiv = document.createElement('div');
 googleOnLoadDiv.id = 'g_id_onload';
-googleOnLoadDiv.dataset.client_id = '478395146629-5j6vcc7rv6atcfp62kgdvlnbbjo3aj7u.apps.googleusercontent.com';
+googleOnLoadDiv.dataset.client_id = '478395146629-9g1so59tp8p4iqn61g3iruksa99rmk0l.apps.googleusercontent.com';
 googleOnLoadDiv.dataset.context = 'signin';
 googleOnLoadDiv.dataset.callback = 'googleSignInCallback';
 googleOnLoadDiv.dataset.auto_select = 'true';
