@@ -36,14 +36,14 @@ function updateUserObject(user) {
 };
 
 window.auth = {
-    signOut: async () => {
+    logout: async () => {
         try {
             await signOut(auth);
         } catch (e) {
             throw e
         };
     },
-    onStateChange: callback => {        
+    onStateChange: callback => {
         onAuthStateChanged(auth, callback);
     },
     login: () => {
