@@ -3,8 +3,7 @@ import { onStateChange } from "/sdk/auth.js";
 const getTemplateValues = (user) => ({
     email: user?.email ?? "",
     displayName: user?.displayName ?? "",
-    picture:
-        user?.picture ?? "https://xsgames.co/randomusers/avatar.php?g=pixel",
+    picture: user?.picture ?? "",
 });
 
 function replaceTemplates(user) {
