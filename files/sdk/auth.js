@@ -19,6 +19,12 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
+if (doesDocumentIncludeScript('/sdk/captcha.js')) {
+    const { init } = await import('/sdk/captcha.js');
+    await initAppCheck(app);
+}
+
 const auth = getAuth(app);
 
 async function updateUserObject(user) {
@@ -29,44 +35,42 @@ async function updateUserObject(user) {
             photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName ?? user.email)}`
         });
 
-    window.auth.user = {
-        picture: user.photoURL,
-        displayName: user.displayName,
-        language: auth.languageCode,
-        email: user.email,
-        emailVerified: user.emailVerified,
-        isAnonymous: user.isAnonymous,
-        creationTime: new Date(user.metadata.creationTime),
-        lastSignInTime: new Date(user.metadata.lastSignInTime),
-    };
+    // window.auth.user = { //todo
+    //     picture: user.photoURL,
+    //     displayName: user.displayName,
+    //     language: auth.languageCode,
+    //     email: user.email,
+    //     emailVerified: user.emailVerified,
+    //     isAnonymous: user.isAnonymous,
+    //     creationTime: new Date(user.metadata.creationTime),
+    //     lastSignInTime: new Date(user.metadata.lastSignInTime),
+    // };
 };
 
 let onStateChange = [];
 
-window.auth = {
-    logout: async () => {
-        try {
-            await signOut(auth);
-        } catch (e) {
-            throw e;
-        }
-    },
-    onStateChange: (callback) => {
-        onStateChange.push(callback);
-        onAuthStateChanged(auth, () => {
-            callback(window.auth.user);
-        });
-    },
-    login: () => {
-        window.open("/login", "_self");
-    },
-    signup: () => {
-        window.open("/login?signup=true", "_self");
-    },
-    user: null,
+export const logout = async () => {
+    try {
+        await signOut(auth);
+    } catch (e) {
+        throw e;
+    }
 };
+export const onStateChange = (callback) => {
+    onStateChange.push(callback);
+    onAuthStateChanged(auth, () => {
+        callback(window.auth.user);
+    });
+};
+export const login = () => {
+    window.open("/login", "_self");
+};
+export const signup = () => {
+    window.open("/login?signup=true", "_self");
+};
+export let user: null; //todo: change
 
-window._auth = {
+export const _ = {
     firebase: {
         app,
         auth
@@ -76,3 +80,8 @@ window._auth = {
 };
 
 window.auth.onStateChange(() => updateUserObject(auth.currentUser));
+
+function doesDocumentIncludeScript(url) {
+    const scripts = [...document.getElementsByTagName('script')];
+    return Boolean(scripts.find(script => script.src.endsWith(url)));
+};
