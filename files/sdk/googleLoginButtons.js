@@ -31,10 +31,8 @@ newBigButton.dataset.text = 'signin_with';
 newBigButton.dataset.size = 'large';
 newBigButton.dataset.logo_alignment = 'left';
 
-for (const bigButton of bigButtons) {
-    console.log('Replacing', bigButton, 'with', newBigButton)
+for (const bigButton of bigButtons)
     bigButton.replaceWith(newBigButton);
-}
 
 const documentIncludesGoogleTap = doesDocumentIncludeScript('/sdk/oneTap.js') || doesDocumentIncludeScript('/sdk/zeroTap.js');
 
