@@ -27,7 +27,7 @@ function replaceTemplates() {
 };
 
 function deepQuerySelectorAll(selector, root = document) {
-    const results = [...root.querySelectorAll(selector))];
+    const results = [...root.querySelectorAll(selector)];
 
     const pushNestedResults = root => {
         for (const element of deepQuerySelectorAll(selector, root))
