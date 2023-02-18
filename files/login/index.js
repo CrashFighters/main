@@ -41,8 +41,11 @@ import {
 import {
     loginWithEmail,
     createEmailAccount
-    setDisplayName
 } from '/sdk/login.js';
+
+import {
+    setDisplayName
+} from '/sdk/settings.js';
 
 let preventRedirect = false;
 onStateChange(user => {
