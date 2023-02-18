@@ -48,5 +48,5 @@ window.login = {
         } catch (e) {
             throw e;
         };
-    };
+    }
 }
