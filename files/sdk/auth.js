@@ -3,6 +3,7 @@ import {
     getAuth,
     onAuthStateChanged,
     signOut,
+    updateProfile
 } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
 
 const firebaseConfig = {
@@ -20,8 +21,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-function updateUserObject(user) {
+async function updateUserObject(user) {
     if (!user) return (window.auth.user = null);
+
+    if (!user.photoURL)
+        await updateProfile(user, {
+            photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName ?? user.email)}`
+        });
 
     window.auth.user = {
         picture: user.photoURL,
