@@ -45,19 +45,12 @@ function replaceTemplates() {
             element.innerHTML = TEMPLATE_VALUES[templateItem];
             i++;
         }
-        console.log(
-            "templateSDK: Replaced " +
-                templateItem +
-                " with " +
-                TEMPLATE_VALUES[templateItem]
-        );
     });
     if (i === 0) {
         throw new Error(
             "templateSDK is not in use on this page, please remove the script from the page."
         );
     }
-    console.log("templateSDK has replaced " + i + " templates on this page.");
 }
 
 window.auth.onStateChange(() => replaceTemplates());
