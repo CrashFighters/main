@@ -21,20 +21,20 @@ window.auth.onStateChange(() => {
     }
 });
 
+const googleOnLoadDiv = document.createElement('div');
+googleOnLoadDiv.id = 'g_id_onload';
+googleOnLoadDiv.dataset.client_id = '478395146629-5j6vcc7rv6atcfp62kgdvlnbbjo3aj7u.apps.googleusercontent.com';
+googleOnLoadDiv.dataset.context = 'signin';
+googleOnLoadDiv.dataset.callback = 'googleSignInCallback';
+googleOnLoadDiv.dataset.auto_select = 'true';
+googleOnLoadDiv.dataset.close_on_tap_outside = 'false';
+googleOnLoadDiv.dataset.itp_support = 'true';
+
 function executeZeroTap() {
     if (document.getElementById('g_id_onload'))
         throw new Error('g_id_onload element already exists')
     else
-        document.body.innerHTML += `
-        <div id="g_id_onload"
-            data-client_id="478395146629-5j6vcc7rv6atcfp62kgdvlnbbjo3aj7u.apps.googleusercontent.com"
-            data-context="signin"
-            data-callback="googleSignInCallback"
-            data-auto_select="true"
-            data-close_on_tap_outside="false"
-            data-itp_support="true">
-        </div>
-        `;
+        document.body.appendChild(googleOnLoadDiv);
 
     if ((!doesDocumentIncludeScript('/sdk/googleLoginButtons') || (doesDocumentIncludeScript('/sdk/googleLoginButtons') && !window.googleLoginButtonsHasRun)))
         if (doesDocumentIncludeScript('https://accounts.google.com/gsi/client'))
