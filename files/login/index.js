@@ -39,7 +39,7 @@ function assignListeners() {
         const email = document.getElementById("loginEmail").value;
         const password = document.getElementById("loginPassword").value;
 
-        window.loginWithEmail(email, password);
+        window.login.loginWithEmail(email, password);
     }
 
     function signup() {
@@ -47,7 +47,7 @@ function assignListeners() {
         const email = document.getElementById("signupEmail").value;
         const password = document.getElementById("signupPassword").value;
 
-        window.createEmailAccount(email, password);
+        window.login.createEmailAccount(email, password);
     }
 
     window.auth.onStateChange(() => {
