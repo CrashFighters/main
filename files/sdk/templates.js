@@ -19,13 +19,12 @@ function replaceTemplates() {
         }
 
         if (
-            element.dataset['template-insert'] === undefined ||
-            element.dataset['template-insert'] === 'innerText'
+            element.dataset['template_insert'] === undefined ||
+            element.dataset['template_insert'] === 'innerText'
         )
             element.innerText = templateValues[item];
         else
-            element[element.dataset['template-insert']] =
-                templateValues[item];
+            element[element.dataset['template_insert']] = templateValues[item];
 
     }
 
