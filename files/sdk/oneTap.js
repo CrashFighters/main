@@ -14,9 +14,9 @@ window.googleSignInCallback = (a) => {
 };
 
 let loaded = false;
-onStateChange(() => {
+onStateChange(user => {
     if (!loaded) {
-        if (!window.auth.user)
+        if (!user)
             executeOneTap();
 
         loaded = true;
