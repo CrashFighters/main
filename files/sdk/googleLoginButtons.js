@@ -34,7 +34,9 @@ newBigButton.dataset.logo_alignment = 'left';
 for (const bigButton of bigButtons)
     bigButton.replaceWith(newBigButton);
 
-if (!doesDocumentIncludeScript('/sdk/oneTap.js') && !doesDocumentIncludeScript('/sdk/zeroTap.js'))
+const documentIncludesGoogleTap = doesDocumentIncludeScript('/sdk/oneTap.js') || doesDocumentIncludeScript('/sdk/zeroTap.js');
+
+if (!documentIncludesGoogleTap)
     if (document.getElementById('g_id_onload'))
         throw new Error('g_id_onload element already exists')
     else
@@ -48,13 +50,18 @@ if (!doesDocumentIncludeScript('/sdk/oneTap.js') && !doesDocumentIncludeScript('
         </div>
         `;
 
-if (!doesDocumentIncludeScript('https://accounts.google.com/gsi/client')) {
-    let script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
-    document.head.appendChild(script);
-};
+if ((!documentIncludesGoogleTap) || (documentIncludesGoogleTap && window.googleTapHasRun))
+    if (doesDocumentIncludeScript('https://accounts.google.com/gsi/client'))
+        throw new Error('Google Sign In script already exists')
+    else {
+        let script = document.createElement('script');
+        script.src = 'https://accounts.google.com/gsi/client';
+        document.head.appendChild(script);
+    };
 
 function doesDocumentIncludeScript(url) {
     const scripts = [...document.getElementsByTagName('script')];
     return Boolean(scripts.find(script => script.src.endsWith(url)));
 };
+
+window.googleLoginButtonsHasRun = true;

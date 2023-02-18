@@ -11,10 +11,14 @@ window.googleSignInCallback = (a) => {
 
 let loaded = false;
 window.auth.onStateChange(() => {
-    if (!loaded && !window.auth.user)
-        executeOneTap();
+    if (!loaded) {
+        if (!window.auth.user)
+            executeOneTap();
 
-    loaded = true;
+        loaded = true;
+
+        window.googleTapHasRun = true;
+    }
 });
 
 function executeOneTap() {
@@ -31,11 +35,14 @@ function executeOneTap() {
         </div>
         `;
 
-    if (!doesDocumentIncludeScript('https://accounts.google.com/gsi/client')) {
-        let script = document.createElement('script');
-        script.src = 'https://accounts.google.com/gsi/client';
-        document.head.appendChild(script);
-    };
+    if ((!doesDocumentIncludeScript('/sdk/googleLoginButtons') || (doesDocumentIncludeScript('/sdk/googleLoginButtons') && !window.googleLoginButtonsHasRun)))
+        if (doesDocumentIncludeScript('https://accounts.google.com/gsi/client'))
+            throw new Error('Google Sign In script already exists');
+        else {
+            let script = document.createElement('script');
+            script.src = 'https://accounts.google.com/gsi/client';
+            document.head.appendChild(script);
+        };
 };
 
 function doesDocumentIncludeScript(url) {
