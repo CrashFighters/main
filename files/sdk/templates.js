@@ -4,6 +4,8 @@ const getTemplateValues = (user) => ({
     email: user?.email ?? "",
     displayName: user?.displayName ?? "",
     picture: user?.picture ?? "",
+    loggedOut: user !== null,
+    loggedIn: user === null,
 });
 
 function replaceTemplates(user) {
@@ -62,4 +64,4 @@ function deepQuerySelectorAll(selector, root = document) {
 onStateChange((user) => {
     replaceTemplates(user);
 });
-replaceTemplates(user);
+replaceTemplates(null);
