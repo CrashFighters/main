@@ -44,7 +44,8 @@ export const logout = async () => {
 };
 
 export const login = () => {
-    window.open("/login", "_self");
+    if (!window.auth.user) // if the user is not logged in
+        window.open("/login", "_self");
 };
 
 export const signup = () => {
