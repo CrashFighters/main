@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Reset password</title>
 
-    <script type="module" src="/sdk/auth.js"></script>
     <script type="module" src="/sdk/login.js"></script>
 
     <script src="/resetPassword/index.js" defer></script>
@@ -16,7 +15,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
 </head>
 
@@ -25,12 +26,9 @@
     <form action="#">
         <h1>Reset password</h1>
 
-
-
-            <input type="email" placeholder="Email" id="emailInput" />
-            <button type="button" id="sendResetEmailButton" class="disabled">Send email!</button>        <a href="/login" class="loginbackButton">Back to login</a>
-        
-
+        <input type="email" placeholder="Email" id="emailInput" />
+        <button type="button" id="sendResetEmailButton" class="disabled">Send email!</button> <a href="/login"
+            class="loginbackButton">Back to login</a>
 
     </form>
 
@@ -38,6 +36,5 @@
 </div>
 </div>
 </body>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
 </html>

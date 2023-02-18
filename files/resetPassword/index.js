@@ -54,7 +54,6 @@ emailInput.addEventListener("keyup", (event) => {
 document
     .getElementById("sendResetEmailButton")
     .addEventListener("mousedown", () => {
-        console.log("clicked");
         if (
             document
                 .getElementById("sendResetEmailButton")
