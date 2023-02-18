@@ -27,7 +27,7 @@ window.login = {
     createEmailAccount: async (email, password) => {
         try {
             const { user } = await createUserWithEmailAndPassword(auth, email, password);
-            // await sendEmailVerification(user); //todo
+            await sendEmailVerification(user);
         } catch (e) {
             throw e;
         };

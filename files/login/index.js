@@ -42,6 +42,8 @@ async function doLogin() {
     const password = document.getElementById('loginPassword').value;
 
     await window.login.loginWithEmail(email, password);
+
+    window.location.replace('/');
 }
 
 async function signup() {
@@ -51,4 +53,6 @@ async function signup() {
 
     await window.login.createEmailAccount(email, password);
     await window.settings.setDisplayName(name);
+
+    window.location.replace('/');
 }
