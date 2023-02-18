@@ -7,7 +7,7 @@ import {
     sendPasswordResetEmail
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-const { app, auth } = window.firebase;
+const { app, auth } = window._auth.firebase;
 
 window.login = {
     loginWithGoogle: async () => {
