@@ -9,7 +9,7 @@ window.googleSignInCallback = (a) => {
     signInWithCredential(auth, GoogleAuthProvider.credential(a.credential));
 };
 
-const smallButtons = document.getElementsByClassName('smallGoogleLoginButton');
+const smallButtons = [...document.getElementsByClassName('smallGoogleLoginButton')];
 const newSmallButton = document.createElement('div');
 newSmallButton.className = 'g_id_signin';
 newSmallButton.dataset.type = 'icon';
@@ -21,7 +21,7 @@ newSmallButton.dataset.size = 'large';
 for (const smallButton of smallButtons)
     smallButton.replaceWith(newSmallButton);
 
-const bigButtons = document.getElementsByClassName('bigGoogleLoginButton');
+const bigButtons = [...document.getElementsByClassName('bigGoogleLoginButton')];
 const newBigButton = document.createElement('div');
 newBigButton.className = 'g_id_signin';
 newBigButton.dataset.type = 'standard';
@@ -31,8 +31,10 @@ newBigButton.dataset.text = 'signin_with';
 newBigButton.dataset.size = 'large';
 newBigButton.dataset.logo_alignment = 'left';
 
-for (const bigButton of bigButtons)
+for (const bigButton of bigButtons) {
+    console.log('Replacing', bigButton, 'with', newBigButton)
     bigButton.replaceWith(newBigButton);
+}
 
 const documentIncludesGoogleTap = doesDocumentIncludeScript('/sdk/oneTap.js') || doesDocumentIncludeScript('/sdk/zeroTap.js');
 
