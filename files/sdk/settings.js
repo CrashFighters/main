@@ -2,7 +2,7 @@ import {
     updateProfile
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-const { updateUserObject, onStateChange, firebase: { app, auth } } = window._auth;
+const { updateUserObject, onStateChange, firebase: { app, auth } } = (await import('/sdk/auth.js'));
 
 window.settings = {
     setDisplayName: async (displayName) => {
