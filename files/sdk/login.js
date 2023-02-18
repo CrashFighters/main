@@ -4,7 +4,7 @@ import {
     GoogleAuthProvider,
     createUserWithEmailAndPassword,
     sendEmailVerification,
-    sendPasswordResetEmail
+    sendPasswordResetEmail as firebaseSendPasswordResetEmail
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
 const { app, auth } = (await import('/sdk/auth.js'))._.firebase;
@@ -47,7 +47,7 @@ export const resendVerificationEmail = async (email, password) => {
 
 export const sendPasswordResetEmail = async (email) => {
     try {
-        await sendPasswordResetEmail(auth, email);
+        await firebaseSendPasswordResetEmail(auth, email);
     } catch (e) {
         throw e;
     };
