@@ -1,56 +1,46 @@
-var uniqueId =
-    Math.random().toString(36).substring(2, 15) +
-    Math.random().toString(36).substring(2, 15);
-
-function deepQuerySelectorAll(selector, root = document) {
-    const results = Array.from(root.querySelectorAll(selector));
-    const pushNestedResults = (root) => {
-        deepQuerySelectorAll(selector, root).forEach((elem) => {
-            if (!results.includes(elem)) {
-                results.push(elem);
-            }
-        });
-    };
-    root.shadowRoot && pushNestedResults(root.shadowRoot);
-    root.querySelectorAll("*").forEach(
-        (elem) => elem.shadowRoot && pushNestedResults(elem.shadowRoot)
-    );
-    return results;
-}
+const getTemplateValues = () => ({
+    email: window.auth.user?.email ?? "",
+    displayName: window.auth.user?.displayName ?? "",
+    picture: window.auth.user?.picture ?? ""
+});
 
 function replaceTemplates() {
-    var TEMPLATE_VALUES = {
-        "{{email}}": window.auth.user?.email ?? "",
-        "{{firstName}}":
-            window.auth.user?.displayName.split(" ")[0] ?? "Anonymous",
-        "{{lastName}}": window.auth.user?.displayName.split(" ")[1] ?? "",
-        "{{displayName}}": window.auth.user?.displayName ?? "Anonymous",
-        "{{profilePicture}}":
-            window.auth.user?.picture ?? "https://robohash.org/" + uniqueId,
-    };
-    let i = 0;
-    deepQuerySelectorAll("[data-template]").forEach((element) => {
-        var item = element.getAttribute("data-template");
-        var templateItem = "{{" + item + "}}";
-        if (!(templateItem in TEMPLATE_VALUES)) {
-            throw new Error(
-                "The templateSDK does not support the template '" + item + "'"
-            );
-        }
-        if (element.getAttribute("data-insertTo") != null) {
-            element[element.getAttribute("data-insertTo")] =
-                TEMPLATE_VALUES[templateItem];
-            i++;
-        } else {
-            element.innerHTML = TEMPLATE_VALUES[templateItem];
-            i++;
-        }
-    });
-    if (i === 0) {
-        throw new Error(
-            "templateSDK is not in use on this page, please remove the script from the page."
-        );
-    }
-}
+    const templateValues = getTemplateValues();
+    const elements = deepQuerySelectorAll("[data-template]");
 
-window.auth.onStateChange(() => replaceTemplates());
+    for (const element of elements) {
+        const item = element.dataset.template;
+
+        if (!(item in templateValues)) {
+            console.error(new Error(`The template SDK does not support the template ${item}`));
+            continue;
+        }
+
+        if (element.dataset["template-insertTo"] === undefined || element.dataset["template-insertTo"] === "innerText")
+            element.innerText = templateValues[item];
+        else
+            element[element.dataset["template-insertTo"]] = templateValues[item];
+    };
+
+    if (elements.length === 0)
+        throw new Error("The template SDK wasn't used on this page. It can be removed.");
+};
+
+function deepQuerySelectorAll(selector, root = document) {
+    const results = [...root.querySelectorAll(selector))];
+
+    const pushNestedResults = root => {
+        for (const element of deepQuerySelectorAll(selector, root))
+            if (!results.includes(element))
+                results.push(element);
+    };
+
+    if (root.shadowRoot)
+        pushNestedResults(root.shadowRoot);
+
+    for (const element of root.querySelectorAll("*"))
+        if (element.shadowRoot)
+            pushNestedResults(element.shadowRoot);
+
+    return results;
+};
