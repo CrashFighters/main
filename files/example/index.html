@@ -9,12 +9,16 @@
 
     <script type="module" src="/sdk/auth.js"></script>
     <script type="module" src="/sdk/zeroTap.js"></script>
+
+    <script src="/example/index.js" defer></script>
 </head>
 
 <body>
     Example page
     <button type="button" onclick="window.auth.logout()">Log out</button>
     <button type="button" onclick="window.auth.login()">Login</button>
+
+    <p id="email">Loading</p>
 </body>
 
 </html>
