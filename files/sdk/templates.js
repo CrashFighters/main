@@ -2,14 +2,6 @@ var uniqueId =
     Math.random().toString(36).substring(2, 15) +
     Math.random().toString(36).substring(2, 15);
 
-const TEMPLATE_VALUES = {
-    "{{email}}": window.auth.user?.email ?? "",
-    "{{firstName}}": window.auth.user?.displayName.split(" ")[0] ?? "Anonymous",
-    "{{lastName}}": window.auth.user?.displayName.split(" ")[1] ?? "",
-    "{{displayName}}": window.auth.user?.displayName ?? "Anonymous",
-    "{{profilePicture}}":
-        window.auth.user?.picture ?? "https://robohash.org/" + uniqueId,
-};
 function deepQuerySelectorAll(selector, root = document) {
     const results = Array.from(root.querySelectorAll(selector));
     const pushNestedResults = (root) => {
@@ -27,6 +19,15 @@ function deepQuerySelectorAll(selector, root = document) {
 }
 
 function replaceTemplates() {
+    var TEMPLATE_VALUES = {
+        "{{email}}": window.auth.user?.email ?? "",
+        "{{firstName}}":
+            window.auth.user?.displayName.split(" ")[0] ?? "Anonymous",
+        "{{lastName}}": window.auth.user?.displayName.split(" ")[1] ?? "",
+        "{{displayName}}": window.auth.user?.displayName ?? "Anonymous",
+        "{{profilePicture}}":
+            window.auth.user?.picture ?? "https://robohash.org/" + uniqueId,
+    };
     let i = 0;
     deepQuerySelectorAll("[data-template]").forEach((element) => {
         var item = element.getAttribute("data-template");
