@@ -20,8 +20,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-onAuthStateChanged(auth, updateUserObject);
-
 function updateUserObject(user) {
     if (!user) return (window.auth.user = null);
 
@@ -35,7 +33,9 @@ function updateUserObject(user) {
         creationTime: new Date(user.metadata.creationTime),
         lastSignInTime: new Date(user.metadata.lastSignInTime),
     };
-}
+};
+
+let onStateChange = [];
 
 window.auth = {
     logout: async () => {
@@ -46,6 +46,7 @@ window.auth = {
         }
     },
     onStateChange: (callback) => {
+        onStateChange.push(callback);
         onAuthStateChanged(auth, () => {
             callback(window.auth.user);
         });
@@ -59,10 +60,13 @@ window.auth = {
     user: null,
 };
 
+window.auth.onStateChange(updateUserObject);
+
 window._auth = {
     firebase: {
         app,
         auth
     },
-    updateUserObject
+    updateUserObject,
+    onStateChange
 };
