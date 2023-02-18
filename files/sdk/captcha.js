@@ -16,15 +16,21 @@ export async function initAppCheck(app) {
             appCheck
         }
     }
-}
+};
+
+window.googleCaptchaCallback = token => {
+    console.log(token)
+};
 
 const captchaButtons = [...document.getElementsByClassName('captchaButton')];
 for (const captchaButton of captchaButtons) {
     const newCaptchaButton = document.createElement('button');
     newCaptchaButton.onclick = captchaButton.onclick;
+    newCaptchaButton.innerText = captchaButton.innerText;
+
     newCaptchaButton.className = 'g-recaptcha';
     newCaptchaButton.dataset.sitekey = publicRecaptchaKey;
-    newCaptchaButton.dataset.callback = 'onSubmit';
+    newCaptchaButton.dataset.callback = 'googleCaptchaCallback';
     newCaptchaButton.dataset.action = 'submit';
 
     captchaButton.replaceWith(newCaptchaButton);
