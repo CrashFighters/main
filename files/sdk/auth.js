@@ -31,9 +31,11 @@ let onStateChangeCallbacks = [];
 export const onStateChange = (callback) => {
     onStateChangeCallbacks.push(callback);
     onAuthStateChanged(auth, () => {
-        callback(window.auth.user);
+        callback(user);
     });
 };
+
+export let user = null;
 
 export const logout = async () => {
     try {
@@ -51,25 +53,27 @@ export const signup = () => {
     window.open("/login?signup=true", "_self");
 };
 
-export let user = null;
+async function updateUserObject(newUser) {
+    if (!newUser) {
+        user = null;
+        window.auth.user = null;
+        return;
+    };
 
-async function updateUserObject(user) {
-    if (!user) return (window.auth.user = null);
-
-    if (!user.photoURL)
-        await updateProfile(user, {
-            photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName ?? user.email)}`
+    if (!newUser.photoURL)
+        await updateProfile(newUser, {
+            photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(newUser.displayName ?? newUser.email)}`
         });
 
     user = {
-        picture: user.photoURL,
-        displayName: user.displayName,
+        picture: newUser.photoURL,
+        displayName: newUser.displayName,
         language: auth.languageCode,
-        email: user.email,
-        emailVerified: user.emailVerified,
-        isAnonymous: user.isAnonymous,
-        creationTime: new Date(user.metadata.creationTime),
-        lastSignInTime: new Date(user.metadata.lastSignInTime),
+        email: newUser.email,
+        emailVerified: newUser.emailVerified,
+        isAnonymous: newUser.isAnonymous,
+        creationTime: new Date(newUser.metadata.creationTime),
+        lastSignInTime: new Date(newUser.metadata.lastSignInTime),
     };
     window.auth.user = user;
 };
