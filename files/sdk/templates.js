@@ -1,11 +1,15 @@
-const getTemplateValues = () => ({
-    email: window.auth.user?.email ?? '',
-    displayName: window.auth.user?.displayName ?? '',
-    picture: window.auth.user?.picture ?? '',
+import {
+    onStateChange
+} from '/sdk/auth.js';
+
+const getTemplateValues = (user) => ({
+    email: user?.email ?? '',
+    displayName: user?.displayName ?? '',
+    picture: user?.picture ?? '',
 });
 
-function replaceTemplates() {
-    const templateValues = getTemplateValues();
+function replaceTemplates(user) {
+    const templateValues = getTemplateValues(user);
     const elements = deepQuerySelectorAll('[data-template]');
 
     for (const element of elements) {
@@ -50,6 +54,6 @@ function deepQuerySelectorAll(selector, root = document) {
     return results;
 }
 
-window.auth.onStateChange((user) => {
-    replaceTemplates();
+onStateChange(user => {
+    replaceTemplates(user);
 });
