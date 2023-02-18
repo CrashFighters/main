@@ -54,6 +54,7 @@ button {
   text-transform: uppercase;
   transition: transform 80ms ease-in;
 }
+
 .disabled {
   background-color: #cccccc;
   color: #ffffff;
@@ -99,12 +100,7 @@ input {
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   position: relative;
   overflow: hidden;
-<<<<<<< HEAD
   width: 384px;
-=======
-  width: 768px;
-  max-width: 100%;
->>>>>>> e8f3cbd10b3b415c91acf73d221d6394022efc66
   min-height: 480px;
 }
 
@@ -139,6 +135,7 @@ input {
 }
 
 @keyframes show {
+
   0%,
   49.99% {
     opacity: 0;
