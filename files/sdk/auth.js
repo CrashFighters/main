@@ -26,6 +26,7 @@ function updateUserObject(user) {
     if (!user) return (window.auth.user = null);
 
     window.auth.user = {
+        picture: user.photoURL,
         displayName: user.displayName,
         language: auth.languageCode,
         email: user.email,
