@@ -3,9 +3,11 @@ import {
     ReCaptchaV3Provider
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app-check.js';
 
+import { publicRecaptchaKey } from '/common/apiKeys.js';
+
 export async function initAppCheck(app) {
     const appCheck = initializeAppCheck(app, {
-        provider: new ReCaptchaV3Provider('6LfA2JIkAAAAAGWMmTI-5OR1Hmj7vKORFHV4aXIj'),
+        provider: new ReCaptchaV3Provider(publicRecaptchaKey),
         isTokenAutoRefreshEnabled: true
     });
 
