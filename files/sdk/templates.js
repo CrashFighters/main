@@ -17,7 +17,7 @@ function deepQuerySelectorAll(selector, root = document) {
 function replaceTemplates() {
     var i = 0;
     deepQuerySelectorAll("[data-includesTemplate]").forEach((element) => {
-        i++;
+        var didSomething = false;
         const includesList = element
             .getAttribute("data-includesTemplate")
             .split(" ");
@@ -26,7 +26,30 @@ function replaceTemplates() {
                 "{{email}}",
                 window.auth.user?.email || ""
             );
+            didSomething = true;
         }
+        if (includesList.includes("firstName")) {
+            element.innerHTML = element.innerHTML.replaceAll(
+                "{{first_name}}",
+                window.auth.user?.displayName.split(" ")[0] || ""
+            );
+            didSomething = true;
+        }
+        if (includesList.includes("lastName")) {
+            element.innerHTML = element.innerHTML.replaceAll(
+                "{{last_name}}",
+                window.auth.user?.displayName.split(" ")[1] || ""
+            );
+            didSomething = true;
+        }
+        if (includesList.includes("displayName")) {
+            element.innerHTML = element.innerHTML.replaceAll(
+                "{{display_name}}",
+                window.auth.user?.displayName || ""
+            );
+            didSomething = true;
+        }
+        if (didSomething) i++;
     });
     if (i == 0)
         throw new Error(
