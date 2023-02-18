@@ -59,7 +59,10 @@ window.auth = {
     user: null,
 };
 
-window.firebase = {
-    app,
-    auth,
+window._auth = {
+    firebase: {
+        app,
+        auth
+    },
+    updateUserObject
 };
