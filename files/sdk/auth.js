@@ -31,11 +31,9 @@ let onStateChangeCallbacks = [];
 export const onStateChange = (callback) => {
     onStateChangeCallbacks.push(callback);
     onAuthStateChanged(auth, () => {
-        callback(user);
+        callback(window.auth.user);
     });
 };
-
-export let user = null;
 
 export const logout = async () => {
     try {
@@ -55,7 +53,6 @@ export const signup = () => {
 
 async function updateUserObject(newUser) {
     if (!newUser) {
-        user = null;
         window.auth.user = null;
         return;
     };
@@ -65,7 +62,7 @@ async function updateUserObject(newUser) {
             photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(newUser.displayName ?? newUser.email)}`
         });
 
-    user = {
+    window.auth.user = {
         picture: newUser.photoURL,
         displayName: newUser.displayName,
         language: auth.languageCode,
@@ -75,7 +72,6 @@ async function updateUserObject(newUser) {
         creationTime: new Date(newUser.metadata.creationTime),
         lastSignInTime: new Date(newUser.metadata.lastSignInTime),
     };
-    window.auth.user = user;
 };
 
 export const _ = {
@@ -92,7 +88,7 @@ window.auth = {
     logout,
     login,
     signup,
-    user,
+    user: null,
     _
 }
 
