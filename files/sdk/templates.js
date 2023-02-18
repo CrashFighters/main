@@ -13,7 +13,7 @@ function replaceTemplates() {
 
         if (!(item in templateValues)) {
             console.error(
-                new Error(`[templateSDK] Template ${item} used on line ${element.dataset.lineNumber} is not a valid template.`);
+                new Error(`[templateSDK] Template ${item} used on line ${element.dataset.lineNumber} is not a valid template.`)
             );
             continue;
         }
