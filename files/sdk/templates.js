@@ -22,21 +22,22 @@ function replaceTemplates(user) {
                 )
             );
             continue;
-        }
-        var toSet = templateValues[item];
+        };
+
+        let value = templateValues[item];
         if (
             templateValues[item] === "" &&
             element.dataset["template_fallback"] !== undefined
         )
-            toSet = element.dataset["template_fallback"];
-        else toSet = templateValues[item];
+            value = element.dataset["template_fallback"];
 
         if (
             element.dataset["template_insert"] === undefined ||
             element.dataset["template_insert"] === "innerText"
         )
-            element.innerText = toSet;
-        else element[element.dataset["template_insert"]] = toSet;
+            element.innerText = value;
+        else
+            element[element.dataset["template_insert"]] = value;
     }
 
     if (elements.length === 0)
