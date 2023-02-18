@@ -27,27 +27,13 @@ if (doesDocumentIncludeScript('/sdk/captcha.js')) {
 
 const auth = getAuth(app);
 
-async function updateUserObject(user) {
-    if (!user) return (window.auth.user = null);
-
-    if (!user.photoURL)
-        await updateProfile(user, {
-            photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName ?? user.email)}`
-        });
-
-    // window.auth.user = { //todo
-    //     picture: user.photoURL,
-    //     displayName: user.displayName,
-    //     language: auth.languageCode,
-    //     email: user.email,
-    //     emailVerified: user.emailVerified,
-    //     isAnonymous: user.isAnonymous,
-    //     creationTime: new Date(user.metadata.creationTime),
-    //     lastSignInTime: new Date(user.metadata.lastSignInTime),
-    // };
+let onStateChangeCallbacks = [];
+export const onStateChange = (callback) => {
+    onStateChangeCallbacks.push(callback);
+    onAuthStateChanged(auth, () => {
+        callback(window.auth.user);
+    });
 };
-
-let onStateChange = [];
 
 export const logout = async () => {
     try {
@@ -56,19 +42,37 @@ export const logout = async () => {
         throw e;
     }
 };
-export const onStateChange = (callback) => {
-    onStateChange.push(callback);
-    onAuthStateChanged(auth, () => {
-        callback(window.auth.user);
-    });
-};
+
 export const login = () => {
     window.open("/login", "_self");
 };
+
 export const signup = () => {
     window.open("/login?signup=true", "_self");
 };
-export let user: null; //todo: change
+
+export let user = null;
+
+async function updateUserObject(user) {
+    if (!user) return (window.auth.user = null);
+
+    if (!user.photoURL)
+        await updateProfile(user, {
+            photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName ?? user.email)}`
+        });
+
+    user = {
+        picture: user.photoURL,
+        displayName: user.displayName,
+        language: auth.languageCode,
+        email: user.email,
+        emailVerified: user.emailVerified,
+        isAnonymous: user.isAnonymous,
+        creationTime: new Date(user.metadata.creationTime),
+        lastSignInTime: new Date(user.metadata.lastSignInTime),
+    };
+    window.auth.user = user;
+};
 
 export const _ = {
     firebase: {
@@ -76,10 +80,19 @@ export const _ = {
         auth
     },
     updateUserObject,
-    onStateChange
+    onStateChangeCallbacks
 };
 
-window.auth.onStateChange(() => updateUserObject(auth.currentUser));
+window.auth = {
+    onStateChange,
+    logout,
+    login,
+    signup,
+    user,
+    _
+}
+
+onStateChange(() => updateUserObject(auth.currentUser));
 
 function doesDocumentIncludeScript(url) {
     const scripts = [...document.getElementsByTagName('script')];
