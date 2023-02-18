@@ -1,46 +1,41 @@
-function deepQuerySelectorAll(selector, root) {
-    root = root || document;
+function deepQuerySelectorAll(selector, root = document) {
     const results = Array.from(root.querySelectorAll(selector));
-    const pushNestedResults = function (root) {
+    const pushNestedResults = (root) => {
         deepQuerySelectorAll(selector, root).forEach((elem) => {
             if (!results.includes(elem)) {
                 results.push(elem);
             }
         });
     };
-    if (root.shadowRoot) {
-        pushNestedResults(root.shadowRoot);
-    }
-    for (const elem of root.querySelectorAll("*")) {
-        if (elem.shadowRoot) {
-            pushNestedResults(elem.shadowRoot);
-        }
-    }
+    root.shadowRoot && pushNestedResults(root.shadowRoot);
+    root.querySelectorAll("*").forEach(
+        (elem) => elem.shadowRoot && pushNestedResults(elem.shadowRoot)
+    );
     return results;
 }
 
-//loop through all elements that have the data-includesTemplate attribute
-
 function replaceTemplates() {
-    deepQuerySelectorAll("[data-includesTemplate]", document.body).forEach(
-        (element) => {
-            var includesList = element
-                .getAttribute("data-includesTemplate")
-                .split(" ");
-
-            if (includesList.includes("email")) {
-                element.innerHTML = element.innerHTML.replaceAll(
-                    "{{email}}",
-                    window.auth.user ? window.auth.user.email : ""
-                );
-            }
+    var i = 0;
+    deepQuerySelectorAll("[data-includesTemplate]").forEach((element) => {
+        i++;
+        const includesList = element
+            .getAttribute("data-includesTemplate")
+            .split(" ");
+        if (includesList.includes("email")) {
+            element.innerHTML = element.innerHTML.replaceAll(
+                "{{email}}",
+                window.auth.user?.email || ""
+            );
         }
-    );
+    });
+    if (i == 0)
+        throw new Error(
+            "templateSDK is not in use on this page, it is safe to remove."
+        );
+    if (i > 0)
+        console.log(
+            "templateSDK has replaced " + i + " templates on this page."
+        );
 }
 
-//on user auth state change, replace templates
-window.auth.onStateChange((user) => {
-    replaceTemplates();
-});
-
-replaceTemplates();
+window.auth.onStateChange(() => replaceTemplates());
