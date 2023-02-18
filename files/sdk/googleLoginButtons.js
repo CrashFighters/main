@@ -1,3 +1,10 @@
+import {
+    GoogleAuthProvider,
+    signInWithCredential
+} from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
+
+const { app, auth } = window.firebase;
+
 window.googleSignInCallback = (a) => {
     signInWithCredential(auth, GoogleAuthProvider.credential(a.credential));
 };
