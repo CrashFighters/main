@@ -38,6 +38,12 @@ import {
     onStateChange
 } from '/sdk/auth.js';
 
+import {
+    loginWithEmail,
+    createEmailAccount
+    setDisplayName
+} from '/sdk/login.js';
+
 let preventRedirect = false;
 onStateChange(user => {
     if (user && !preventRedirect)
@@ -49,7 +55,7 @@ window.doLogin = async () => {
     const password = document.getElementById('loginPassword').value;
 
     preventRedirect = true;
-    await window.login.loginWithEmail(email, password);
+    await loginWithEmail(email, password);
 
     window.location.replace('/');
 }
@@ -60,8 +66,8 @@ window.doSignup = async () => {
     const password = document.getElementById('signupPassword').value;
 
     preventRedirect = true;
-    await window.login.createEmailAccount(email, password);
-    await window.settings.setDisplayName(name);
+    await createEmailAccount(email, password);
+    await setDisplayName(name);
 
     window.location.replace('/');
 }
