@@ -1,6 +1,10 @@
+import {
+    login
+} from '/sdk/auth.js';
+
 const emailInput = document.getElementById("emailInput");
 
-function sendResetEmail() {
+window.sendResetEmail = async () => {
     if (emailInput.value == "") {
         return Toastify({
             text: "Please enter your email address.",
@@ -22,7 +26,7 @@ function sendResetEmail() {
             backgroundColor: "#4caf50",
             //when done, redirect to login page
             callback: () => {
-                window.auth.login();
+                login();
             },
         }).showToast();
     } catch (error) {
