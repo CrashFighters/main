@@ -60,8 +60,6 @@ window.auth = {
     user: null,
 };
 
-window.auth.onStateChange(updateUserObject);
-
 window._auth = {
     firebase: {
         app,
@@ -70,3 +68,5 @@ window._auth = {
     updateUserObject,
     onStateChange
 };
+
+window.auth.onStateChange(() => updateUserObject(auth.currentUser));
