@@ -13,6 +13,8 @@
 
   <body>
     <button type="button" onclick="window.auth.logout()">sign out</button>
-    <div data-includesTemplate="email">Welcome {{email}}</div>
+    <div data-includesTemplate="email displayName">
+      Welcome {{displayName}}! Your email is {{email}}
+    </div>
   </body>
 </html>
