@@ -2,6 +2,10 @@ import {
     login
 } from '/sdk/auth.js';
 
+import {
+    sendPasswordResetEmail
+} from '/sdk/login.js';
+
 const emailInput = document.getElementById("emailInput");
 
 window.sendResetEmail = async () => {
@@ -16,7 +20,7 @@ window.sendResetEmail = async () => {
     }
 
     try {
-        window.login.sendPasswordResetEmail(emailInput.value);
+        sendPasswordResetEmail(emailInput.value);
         emailInput.value = "";
         Toastify({
             text: "Password reset email sent! Please check your inbox.",
