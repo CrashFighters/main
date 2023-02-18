@@ -12,7 +12,7 @@ function replaceTemplates() {
         const item = element.dataset.template;
 
         if (!(item in templateValues)) {
-            console.error(new Error(`The template SDK does not support the template ${item}`));
+            console.error(new Error(`[templateSDK] Template ${item} used on line ${element.dataset.lineNumber} is not a valid template.`));
             continue;
         }
 
@@ -23,7 +23,7 @@ function replaceTemplates() {
     };
 
     if (elements.length === 0)
-        throw new Error("The template SDK wasn't used on this page. It can be removed.");
+        throw new Error("[templateSDK] No templates found to replace. Please make sure you have at least one element with the data-template attribute.");
 };
 
 function deepQuerySelectorAll(selector, root = document) {
