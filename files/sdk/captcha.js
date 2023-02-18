@@ -18,14 +18,22 @@ export async function initAppCheck(app) {
     }
 }
 
-export async function initRecaptcha() {
-    if (!doesDocumentIncludeScript('https://www.google.com/recaptcha/api.js')) {
-        const script = document.createElement('script');
-        script.src = 'https://www.google.com/recaptcha/api.js';
-        document.head.appendChild(script);
-    }
+const captchaButtons = [...document.getElementsByClassName('captchaButton')];
+for (const captchaButton of captchaButtons) {
+    const newCaptchaButton = document.createElement('button');
+    newCaptchaButton.onclick = captchaButton.onclick;
+    newCaptchaButton.className = 'g-recaptcha';
+    newCaptchaButton.dataset.sitekey = publicRecaptchaKey;
+    newCaptchaButton.dataset.callback = 'onSubmit';
+    newCaptchaButton.dataset.action = 'submit';
 
-    //todo: add html elements
+    captchaButton.replaceWith(newCaptchaButton);
+}
+
+if (!doesDocumentIncludeScript('https://www.google.com/recaptcha/api.js')) {
+    const script = document.createElement('script');
+    script.src = 'https://www.google.com/recaptcha/api.js';
+    document.head.appendChild(script);
 }
 
 function doesDocumentIncludeScript(url) {

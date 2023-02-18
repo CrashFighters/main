@@ -11,7 +11,7 @@ import { firebaseConfig } from "/common/apiKeys.js";
 const app = initializeApp(firebaseConfig);
 
 if (doesDocumentIncludeScript('/sdk/captcha.js')) {
-    const { init } = await import('/sdk/captcha.js');
+    const { initAppCheck } = await import('/sdk/captcha.js');
     await initAppCheck(app);
 }
 
