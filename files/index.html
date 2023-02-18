@@ -7,12 +7,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Home</title>
   <script type="module" src="/sdk/auth.js"></script>
-  <script type="module" src="/requireLogin.js"></script>
   <script type="module" src="/sdk/templates.js"></script>
 </head>
 
 <body>
-  <button type="button" onclick="window.auth.logout()">sign out</button>
+  <button type="button" onclick="window.auth.logout()">log out</button>
+  <button type="button" onclick="window.auth.login()">login</button>
 
   Welcome <span data-template="displayName"></span>! Your email is
   <span data-template="email"></span>.
