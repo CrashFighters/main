@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Home</title>
+    <script type="module" src="/sdk/auth.js"></script>
+    <!-- <script type="module" src="/requireLogin.js"></script> -->
+    <script type="module" src="/sdk/templates.js"></script>
+  </head>
 
-  <script type="module" src="/sdk/auth.js"></script>
-  <script type="module" src="/requireLogin.js"></script>
-</head>
-
-<body>
-  <button type="button" onclick="window.auth.logout()">sign out</button>
-</body>
-
+  <body>
+    <button type="button" onclick="window.auth.logout()">sign out</button>
+    <div data-includesTemplate="email">Welcome {{email}}</div>
+  </body>
 </html>
