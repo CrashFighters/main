@@ -34,7 +34,7 @@ signInButton_mobile.addEventListener("click", () => {
     container.classList.remove("right-panel-active");
 });
 
-function login() {
+function doLogin() {
     const email = document.getElementById("loginEmail").value;
     const password = document.getElementById("loginPassword").value;
 
