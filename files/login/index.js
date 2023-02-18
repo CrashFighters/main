@@ -34,19 +34,20 @@ signInButton_mobile.addEventListener("click", () => {
     container.classList.remove("right-panel-active");
 });
 
-function doLogin() {
+async function doLogin() {
     const email = document.getElementById("loginEmail").value;
     const password = document.getElementById("loginPassword").value;
 
-    window.login.loginWithEmail(email, password);
+    await window.login.loginWithEmail(email, password);
 }
 
-function signup() {
+async function signup() {
     const name = document.getElementById("signupName").value;
     const email = document.getElementById("signupEmail").value;
     const password = document.getElementById("signupPassword").value;
 
-    window.login.createEmailAccount(email, password);
+    await window.login.createEmailAccount(email, password);
+    await window.settings.setDisplayName(name);
 }
 
 window.auth.onStateChange(() => {
