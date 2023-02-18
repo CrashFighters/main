@@ -22,9 +22,15 @@ function replaceTemplates(user) {
                 )
             );
             continue;
-        };
+        }
 
         let value = templateValues[item];
+        console.log();
+
+        if (element.dataset["template_update_callback"] !== undefined) {
+            //run callback function with the value as parameter
+            window[element.dataset["template_update_callback"]](item, value);
+        }
         if (
             templateValues[item] === "" &&
             element.dataset["template_fallback"] !== undefined
@@ -36,8 +42,7 @@ function replaceTemplates(user) {
             element.dataset["template_insert"] === "innerText"
         )
             element.innerText = value;
-        else
-            element[element.dataset["template_insert"]] = value;
+        else element[element.dataset["template_insert"]] = value;
     }
 
     if (elements.length === 0)
