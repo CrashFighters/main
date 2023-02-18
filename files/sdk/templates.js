@@ -15,12 +15,17 @@ function deepQuerySelectorAll(selector, root = document) {
 }
 
 function replaceTemplates() {
+    var uniqueId =
+        Math.random().toString(36).substring(2, 15) +
+        Math.random().toString(36).substring(2, 15);
     var TEMPLATE_VALUES = {
-        "{{email}}": window.auth.user?.email || "",
-        "{{firstName}}": window.auth.user?.displayName.split(" ")[0] || "",
-        "{{lastName}}": window.auth.user?.displayName.split(" ")[1] || "",
-        "{{displayName}}": window.auth.user?.displayName || "",
-        "{{profilePicture}}": "",
+        "{{email}}": window.auth.user?.email ?? "",
+        "{{firstName}}":
+            window.auth.user?.displayName.split(" ")[0] ?? "Anonymous",
+        "{{lastName}}": window.auth.user?.displayName.split(" ")[1] ?? "",
+        "{{displayName}}": window.auth.user?.displayName ?? "Anonymous",
+        "{{profilePicture}}":
+            window.auth.user?.picture ?? "https://robohash.org/" + uniqueId,
     };
     let i = 0;
     deepQuerySelectorAll("[data-includesTemplate]").forEach((element) => {
@@ -59,6 +64,7 @@ function replaceTemplates() {
 }
 
 window.auth.onStateChange(() => replaceTemplates());
+document.body.onload = () => replaceTemplates();
 
 // function deepQuerySelectorAll(selector, root = document) {
 //     const results = Array.from(root.querySelectorAll(selector));
