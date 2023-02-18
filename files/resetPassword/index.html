@@ -1,93 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Reset password</title>
 
-    <script type="module" src="/authSDK.js"></script>
-    <script type="module" src="/loginSDK.js"></script>
+    <script type="module" src="/sdk/auth.js"></script>
+    <script type="module" src="/sdk/login.js"></script>
 
     <script src="/resetPassword/index.js" defer></script>
     <link rel="stylesheet" type="text/css" href="/resetPassword/index.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
-  </head>
-
-
-    <div class="container" id="container">
-          <form action="#">
-            <h1>Reset password</h1>
+</head>
 
 
 <div class="container" id="container">
-    <div class="row">
-        <div class="form-container sign-up-container">
-            <form action="#">
-                <h1>Create Account</h1>
-                <div class="social-container">
-                    <a href="#" class="social" onclick=loginWithGoogle()><i class="fa fa-google"
-                            aria-hidden="true"></i></i></a>
-                </div>
-                <span>or use your email for registration</span>
-                <input type="text" placeholder="Name" id="signupName" />
-                <input type="email" placeholder="Email" id="signupEmail" />
-                <input type="password" placeholder="Password" id="signupPassword" />
-                <button type="button" onclick="signup()">Sign Up</button>
-                <p id="mobile_para">To keep connected with us,please login</p>
-                <button class="ghost_mobile" id="signIn_mobile">Login</button>
-            </form>
-        </div>
-        <div class="form-container sign-in-container">
-            <form action="#">
-                <h1>Login</h1>
-                <div class="social-container">
-                    <a href="#" class="social" onclick=loginWithGoogle()><i class="fa fa-google"
-                            aria-hidden="true"></i></a>
-                </div>
-                <span>or use your account</span>
-                <input type="email" placeholder="Email" id="loginEmail" />
-                <input type="password" placeholder="Password" id="loginPassword" />
-                <a href="/resetPassword">Forgot your password?</a>
-                <button type="button" onclick="login()">Login</button>
-                <p id="mobile_para">Don't have an account? Sign up here !!</p>
-                <button class="ghost_mobile" id="signUp_mobile">Sign Up</button>
+    <form action="#">
+        <h1>Reset password</h1>
 
-            </form>
-        </div>
-        <div class="overlay-container">
-            <div class="overlay">
-                <div class="overlay-panel overlay-left">
-                    <h1>Welcome!</h1>
-                    <p>To create an account, Fill in your information</p>
-                    <button class="ghost" id="signIn">Login</button>
+
+        <div class="container" id="container">
+            <div class="row">
+                <div class="form-container sign-up-container">
+                    <form action="#">
+                        <h1>Create Account</h1>
+                        <div class="social-container">
+                            <a href="#" class="social" onclick=loginWithGoogle()><i class="fa fa-google"
+                                    aria-hidden="true"></i></i></a>
+                        </div>
+                        <span>or use your email for registration</span>
+                        <input type="text" placeholder="Name" id="signupName" />
+                        <input type="email" placeholder="Email" id="signupEmail" />
+                        <input type="password" placeholder="Password" id="signupPassword" />
+                        <button type="button" onclick="signup()">Sign Up</button>
+                        <p id="mobile_para">To keep connected with us,please login</p>
+                        <button class="ghost_mobile" id="signIn_mobile">Login</button>
+                    </form>
                 </div>
-                <div class="overlay-panel overlay-right">
-                    <h1>Hello, User!</h1>
-                    <p>Enter your information and start enjoying CrashFighters!</p>
-                    <button class="ghost" id="signUp">Sign Up</button>
+                <div class="form-container sign-in-container">
+                    <form action="#">
+                        <h1>Login</h1>
+                        <div class="social-container">
+                            <a href="#" class="social" onclick=loginWithGoogle()><i class="fa fa-google"
+                                    aria-hidden="true"></i></a>
+                        </div>
+                        <span>or use your account</span>
+                        <input type="email" placeholder="Email" id="loginEmail" />
+                        <input type="password" placeholder="Password" id="loginPassword" />
+                        <a href="/resetPassword">Forgot your password?</a>
+                        <button type="button" onclick="login()">Login</button>
+                        <p id="mobile_para">Don't have an account? Sign up here !!</p>
+                        <button class="ghost_mobile" id="signUp_mobile">Sign Up</button>
+
+                    </form>
+                </div>
+                <div class="overlay-container">
+                    <div class="overlay">
+                        <div class="overlay-panel overlay-left">
+                            <h1>Welcome!</h1>
+                            <p>To create an account, Fill in your information</p>
+                            <button class="ghost" id="signIn">Login</button>
+                        </div>
+                        <div class="overlay-panel overlay-right">
+                            <h1>Hello, User!</h1>
+                            <p>Enter your information and start enjoying CrashFighters!</p>
+                            <button class="ghost" id="signUp">Sign Up</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <button type="button" id="sendResetEmailButton" class="disabled">Send email!</button>
+        <a href="/login" class="loginbackButton">Back to login</a>
+    </form>
+
+
 </div>
-
-            <button type="button" id="sendResetEmailButton" class="disabled">Send email!</button>
-            <a href="/login" class="loginbackButton">Back to login</a>
-        </form>
-
-        
-      </div>
-    </div>
-  </body>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</div>
+</body>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
 </html>
