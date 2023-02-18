@@ -12,7 +12,7 @@ function sendResetEmail() {
     }
 
     try {
-        window.sendPasswordResetEmail(emailInput.value);
+        window.login.sendPasswordResetEmail(emailInput.value);
         emailInput.value = "";
         Toastify({
             text: "Password reset email sent! Please check your inbox.",
@@ -22,7 +22,7 @@ function sendResetEmail() {
             backgroundColor: "#4caf50",
             //when done, redirect to login page
             callback: () => {
-                window.location.replace("/login");
+                window.auth.login();
             },
         }).showToast();
     } catch (error) {
@@ -37,19 +37,18 @@ function sendResetEmail() {
 }
 
 emailInput.addEventListener("keyup", (event) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter") //todo: use onSubmit
         sendResetEmail();
-    }
+
     //check if email is valid
-    if (emailInput.value.includes("@") && emailInput.value.includes(".")) {
+    if (emailInput.value.includes("@") && emailInput.value.includes("."))
         document
             .getElementById("sendResetEmailButton")
             .classList.remove("disabled");
-    } else {
+    else
         document
             .getElementById("sendResetEmailButton")
             .classList.add("disabled");
-    }
 });
 
 document
