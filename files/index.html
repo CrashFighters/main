@@ -12,9 +12,8 @@
 
   <body>
     <button type="button" onclick="window.auth.logout()">sign out</button>
-    <div data-includesTemplate="email displayName profilePicture">
-      Welcome {{displayName}}! Your email is {{email}}
-      <img src="{{profilePicture}}" />
-    </div>
+    Welcome <span data-template="displayName"></span>! Your email is
+    <span data-template="email"></span>.
+    <img data-template="profilePicture" data-insertTo="src" />
   </body>
 </html>
