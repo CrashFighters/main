@@ -10,29 +10,33 @@ window.googleSignInCallback = (a) => {
 };
 
 const smallButtons = [...document.getElementsByClassName('smallGoogleLoginButton')];
-const newSmallButton = document.createElement('div');
-newSmallButton.className = 'g_id_signin';
-newSmallButton.dataset.type = 'icon';
-newSmallButton.dataset.shape = 'circle';
-newSmallButton.dataset.theme = 'outline';
-newSmallButton.dataset.text = 'signin_with';
-newSmallButton.dataset.size = 'large';
 
-for (const smallButton of smallButtons)
+for (const smallButton of smallButtons) {
+    const newSmallButton = document.createElement('div');
+    newSmallButton.className = 'g_id_signin';
+    newSmallButton.dataset.type = 'icon';
+    newSmallButton.dataset.shape = 'circle';
+    newSmallButton.dataset.theme = 'outline';
+    newSmallButton.dataset.text = 'signin_with';
+    newSmallButton.dataset.size = 'large';
+
     smallButton.replaceWith(newSmallButton);
+}
 
 const bigButtons = [...document.getElementsByClassName('bigGoogleLoginButton')];
-const newBigButton = document.createElement('div');
-newBigButton.className = 'g_id_signin';
-newBigButton.dataset.type = 'standard';
-newBigButton.dataset.shape = 'pill';
-newBigButton.dataset.theme = 'outline';
-newBigButton.dataset.text = 'signin_with';
-newBigButton.dataset.size = 'large';
-newBigButton.dataset.logo_alignment = 'left';
 
-for (const bigButton of bigButtons)
+for (const bigButton of bigButtons) {
+    const newBigButton = document.createElement('div');
+    newBigButton.className = 'g_id_signin';
+    newBigButton.dataset.type = 'standard';
+    newBigButton.dataset.shape = 'pill';
+    newBigButton.dataset.theme = 'outline';
+    newBigButton.dataset.text = 'signin_with';
+    newBigButton.dataset.size = 'large';
+    newBigButton.dataset.logo_alignment = 'left';
+
     bigButton.replaceWith(newBigButton);
+}
 
 const documentIncludesGoogleTap = doesDocumentIncludeScript('/sdk/oneTap.js') || doesDocumentIncludeScript('/sdk/zeroTap.js');
 
