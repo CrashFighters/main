@@ -3,7 +3,7 @@ import {
     signInWithCredential
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-const { app, auth } = (await import('/sdk/auth.js')).default.firebase;
+const { app, auth } = (await import('/sdk/auth.js'))._.firebase;
 
 window.googleSignInCallback = (a) => {
     signInWithCredential(auth, GoogleAuthProvider.credential(a.credential));
