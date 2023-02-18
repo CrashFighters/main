@@ -34,13 +34,17 @@ signInButton_mobile.addEventListener('click', () => {
     container.classList.remove('right-panel-active');
 });
 
-if (window.auth.user)
-    window.location.replace('/');
+let preventRedirect = false;
+window.auth.onStateChange(user => {
+    if (user && !preventRedirect)
+        window.location.replace('/');
+});
 
 async function doLogin() {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
 
+    preventRedirect = true;
     await window.login.loginWithEmail(email, password);
 
     window.location.replace('/');
@@ -51,6 +55,7 @@ async function signup() {
     const email = document.getElementById('signupEmail').value;
     const password = document.getElementById('signupPassword').value;
 
+    preventRedirect = true;
     await window.login.createEmailAccount(email, password);
     await window.settings.setDisplayName(name);
 
