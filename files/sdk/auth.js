@@ -44,7 +44,9 @@ window.auth = {
         };
     },
     onStateChange: callback => {
-        onAuthStateChanged(auth, callback);
+        onAuthStateChanged(auth, () => {
+            callback(window.auth.user);
+        });
     },
     login: () => {
         window.open('/login', '_self');
