@@ -81,9 +81,9 @@ module.exports = {
             } else
                 if (isModuleInstalled('text')) {
                     let list = require(`../../${settings.generic.path.files.modules}text/createList.js`).createList(api[path].enabled.dependencies.dependenciesNotInstalled);
-                    return parseError(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', path)), messages.error.modulesNotInstalledFor.replace('{api}', path).replace('{dependencie}', list));
+                    return parseError(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', path)), messages.error.modulesNotInstalledFor.replace('{api}', path).replace('{dependency}', list));
                 } else
-                    return parseError(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', path)), messages.error.moduleNotInstalledFor.replace('{api}', path).replace('{dependencie}', api[path].enabled.dependencies.dependenciesNotInstalled[0]));
+                    return parseError(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', path)), messages.error.moduleNotInstalledFor.replace('{api}', path).replace('{dependency}', api[path].enabled.dependencies.dependenciesNotInstalled[0]));
         } else
             return statusCode(response, 404, { text: messages.error.apiCallNotFound });
 
