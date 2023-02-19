@@ -22,6 +22,13 @@ window.googleCaptchaCallback = token => {
     console.log(token)
 };
 
+// hide recaptcha badge
+const style = document.createElement('style');
+style.innerHTML = `
+.grecaptcha-badge { visibility: hidden; }
+`;
+document.head.appendChild(style);
+
 const captchaButtons = [...document.getElementsByClassName('captchaButton')];
 for (const captchaButton of captchaButtons) {
     const newCaptchaButton = document.createElement('button');
