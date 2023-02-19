@@ -142,7 +142,6 @@ window.doLogin = async (recaptchaScore) => {
     } catch (e) {
         let firebaseErrorCode = firebaseErrorCodes[e.code];
         return handleLoginError({ errorCode: firebaseErrorCode?.errorCode, field: firebaseErrorCode?.field, error: e });
-
     } finally {
         nativeButton.disabled = false;
         preventRedirect = false;
