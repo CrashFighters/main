@@ -58,7 +58,6 @@ button {
 button:disabled,
 button.disabled {
 	background-color: #a2a2a2;
-	transform: scale(0.95);
 
 	cursor: not-allowed;
 }

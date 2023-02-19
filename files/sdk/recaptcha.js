@@ -57,24 +57,47 @@ export async function getScore(action = 'SDK_execute') {
 }
 
 function renderV2Button(element) {
-    return new Promise((res, rej) => {
-        grecaptcha.render(element, {
-            sitekey: publicRecaptchaV2Key,
-            callback: async token => {
-                if (await checkSuccessFromV2Token(token))
-                    res()
-                else
-                    rej()
-            },
-            'error-callback': rej,
-            'expired-callback': rej
-        });
+    let callbacks = [];
+    let button = {
+        state: 'ready',
+        onStateChange: cb => {
+            callbacks.push(cb);
+        }
+    };
+
+    const setState = state => {
+        button.state = state;
+        for (const cb of callbacks)
+            cb(button);
+    };
+
+    grecaptcha.render(element, {
+        sitekey: publicRecaptchaV2Key,
+        callback: async token => {
+            if (await checkSuccessFromV2Token(token))
+                setState('success')
+            else
+                setState('error')
+        },
+        'error-callback': () => {
+            setState('error')
+        },
+        'expired-callback': () => {
+            setState('expired')
+        }
     });
+
+    return button;
 }
 
-export async function awaitButtonSuccess(element) {
+export async function createButton(element) {
+    if (!element)
+        throw new Error('No element provided to createButton')
+
     await waitReady();
-    await renderV2Button(element);
+    const button = renderV2Button(element);
+
+    return button;
 }
 
 // hide recaptcha badge

@@ -2,8 +2,16 @@ const api = require('../setup/preload/api.js').execute();
 const settings = require('../../settings.json');
 
 const isModuleInstalled = require('../functions/isModuleInstalled.js').execute;
-const statusCode = require('../functions/error/statusCode.js').execute;
 const parseErrorOnline = require('../functions/error/parseErrorOnline.js').execute;
+
+const statusCode = (response, code, { text, short }) => {
+    response.end(JSON.stringify({
+        error: true,
+        code,
+        text,
+        short
+    }));
+}
 
 module.exports = {
     execute(request, response, middleWareData) {
@@ -40,8 +48,8 @@ module.exports = {
                         });
                         params = cont;
                         ex.execute({
-                            statusCode: (code, text) => {
-                                statusCode(response, code, { text: text });
+                            statusCode: (code, short, text) => {
+                                statusCode(response, code, { text, short });
                             },
                             parseError,
                             end: (data) => {
@@ -56,8 +64,8 @@ module.exports = {
                     });
                 } else {
                     ex.execute({
-                        statusCode: (code, text) => {
-                            statusCode(response, code, { text: text });
+                        statusCode: (code, short, text) => {
+                            statusCode(response, code, { text, short });
                         },
                         parseError,
                         end: (data) => {
