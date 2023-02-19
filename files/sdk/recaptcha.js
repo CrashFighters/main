@@ -33,7 +33,7 @@ export async function initAppCheck(app) {
     }
 };
 
-export async function execute(action = 'SDK-execute') {
+export async function execute(action = 'SDK_execute') {
     await waitReady();
     const token = await grecaptcha.execute(publicRecaptchaV3Key, { action });
     const score = await getScoreFromToken(token);
@@ -74,7 +74,7 @@ for (const captchaButton of invisRecaptchaButtons) {
     newCaptchaButton.dataset['recaptcha_callback'] = captchaButton.dataset['recaptcha_callback'];
     newCaptchaButton.innerText = captchaButton.innerText;
     newCaptchaButton.id = captchaButton.id;
-    newCaptchaButton.dataset.action = captchaButton.dataset['recaptcha_action'] ?? 'SDK-button';
+    newCaptchaButton.dataset.action = captchaButton.dataset['recaptcha_action'] ?? 'SDK_button';
 
     newCaptchaButton.addEventListener('click', () => {
         newCaptchaButton.style.cursor = 'wait';
