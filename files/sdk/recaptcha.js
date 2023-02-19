@@ -74,10 +74,6 @@ function googleCaptchaV3Callback(id) {
         const element = document.getElementById(id);
         const score = await getScoreFromV3Token(token);
 
-        await wait(100)
-
-        element.style.cursor = null;
-        element.classList.remove('disabled');
         window[element.dataset['recaptcha_callback']]?.(score);
     };
 };
@@ -99,10 +95,6 @@ for (const invisRecaptchaButton of invisRecaptchaButtons) {
     newInvisCaptchaButton.dataset.callback = `googleCaptchaV3Callback-${invisRecaptchaButton.id}`;
     window[`googleCaptchaV3Callback-${invisRecaptchaButton.id}`] = googleCaptchaV3Callback(invisRecaptchaButton.id);
 
-    newInvisCaptchaButton.addEventListener('click', () => {
-        newInvisCaptchaButton.style.cursor = 'wait';
-        newInvisCaptchaButton.classList.add('disabled');
-    });
     newInvisCaptchaButton.className = 'g-recaptcha';
     newInvisCaptchaButton.dataset.sitekey = publicRecaptchaV3Key;
 
