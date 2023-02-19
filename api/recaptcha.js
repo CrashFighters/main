@@ -13,16 +13,20 @@ const headers = {
     'Content-Length': null
 };
 
+const allowedTokenCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'.split('');
+
 module.exports = {
     async execute({ params, end, statusCode, request, parseError }) {
         try {
             if (!params.token) return statusCode(400, 'No token provided');
+            if (params.token.length !== 526) return statusCode(400, 'Invalid token');
+            if (params.token.split('').some(char => !allowedTokenCharacters.includes(char))) return statusCode(400, 'Invalid token');
 
-            const postData = JSON.stringify({
+            const postData = Object.entries({
                 secret,
                 response: params.token,
                 remoteip: request.socket.remoteAddress
-            });
+            }).map(([key, value]) => `${key}=${value}`).join('&');
 
             headers['Content-Length'] = postData.length;
 
