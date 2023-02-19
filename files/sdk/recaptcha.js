@@ -63,7 +63,7 @@ function googleCaptchaCallback(id) {
     };
 };
 
-const invisRecaptchaButtons = [...document.getElementsByClassName('invisReCaptchaButton')];
+const invisRecaptchaButtons = [...document.getElementsByClassName('invisRecaptchaButton')];
 for (const captchaButton of invisRecaptchaButtons) {
     if (!captchaButton.id) {
         console.error('captchaButton must have an id attribute', captchaButton);
