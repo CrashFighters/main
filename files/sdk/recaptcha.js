@@ -92,7 +92,7 @@ function renderV2Button(element) {
 
 export async function createButton(element) {
     if (!element)
-        throw new Error('Invalid element')
+        throw new Error('No element provided to createButton')
 
     await waitReady();
     const button = renderV2Button(element);
