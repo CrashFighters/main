@@ -63,8 +63,8 @@ function googleCaptchaCallback(id) {
     };
 };
 
-const captchaButtons = [...document.getElementsByClassName('captchaButton')];
-for (const captchaButton of captchaButtons) {
+const invisRecaptchaButtons = [...document.getElementsByClassName('invisReCaptchaButton')];
+for (const captchaButton of invisRecaptchaButtons) {
     if (!captchaButton.id) {
         console.error('captchaButton must have an id attribute', captchaButton);
         continue;
