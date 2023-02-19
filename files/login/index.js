@@ -106,8 +106,6 @@ function handleLoginError({ errorCode, field, error }) {
     for (const loginFieldId of loginFields) {
         const feedbackElement = document.getElementById(`login-${loginFieldId}-feedback`);
 
-        console.log(feedbackElement)
-
         if (loginFieldId === field)
             feedbackElement.innerText = message;
         else
