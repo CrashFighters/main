@@ -1,18 +1,11 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Account Login</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <script type="module" src="/sdk/oneTap.js"></script>
-    <script type="module" src="/sdk/googleLoginButtons.js"></script>
-    <!-- <script type="module" src="/sdk/captcha.js"></script> -->
+<head>
+  <title>Account Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <script type="module" src="/sdk/oneTap.js"></script>
   <script type="module" src="/sdk/googleLoginButtons.js"></script>
   <script type="module" src="/sdk/recaptcha.js"></script>
 
@@ -37,7 +30,8 @@
           <input type="text" placeholder="Name" id="signupName" />
           <input type="email" placeholder="Email" id="signupEmail" />
           <input type="password" placeholder="Password" id="signupPassword" />
-          <button type="button" onclick="doSignup()">Sign Up</button>
+          <button type="button" data-score_callback="doSignup" class="captchaButton" id="signupButton-1">Sign
+            up</button>
           <p id="mobile_para">To keep connected with us,please login</p>
           <button class="ghost_mobile" id="signIn_mobile">Login</button>
         </form>
@@ -72,5 +66,6 @@
         </div>
       </div>
     </div>
-  </body>
+</body>
+
 </html>
