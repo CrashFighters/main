@@ -47,6 +47,11 @@ import {
     setDisplayName
 } from '/sdk/settings.js';
 
+import {
+    minimalLoginRecaptchaScore,
+    minimalSignupRecaptchaScore
+} from '/common/settings.js';
+
 let preventRedirect = false;
 onStateChange(user => {
     if (user && !preventRedirect)
@@ -54,10 +59,13 @@ onStateChange(user => {
 });
 
 window.doLogin = async (recaptchaScore) => {
-    console.log('recaptchaScore', recaptchaScore);
-
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
+
+    if (recaptchaScore < minimalLoginRecaptchaScore) {
+        //todo
+        return
+    };
 
     preventRedirect = true;
     await loginWithEmail(email, password);
@@ -66,11 +74,14 @@ window.doLogin = async (recaptchaScore) => {
 }
 
 window.doSignup = async (recaptchaScore) => {
-    console.log('recaptchaScore', recaptchaScore);
-
     const name = document.getElementById('signupName').value;
     const email = document.getElementById('signupEmail').value;
     const password = document.getElementById('signupPassword').value;
+
+    if (recaptchaScore < minimalSignupRecaptchaScore) {
+        //todo
+        return;
+    }
 
     preventRedirect = true;
     await createEmailAccount(email, password);
