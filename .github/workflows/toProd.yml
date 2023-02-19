@@ -1,17 +1,30 @@
-name: Release to Production
+name: Merge branch with labeled
 on:
-  workflow_dispatch:
+  pull_request:
+    types: [labeled]
 jobs:
-  sync-branch:
+  merge-branch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      # Job for transpiler the code
+      - name: 'Transpiler-JS Action'
+        uses: jossydevers/transpiler-js@v1.0.0
+        with:
+          typename: 'release' # (OPTIONAL)
+      - name: Minify Action
+        uses: anthonyftwang/minify-action@v1.0.1
 
-      - name: Merge development -> staging
+
+      # Auto-commit to repository
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Auto minify & compatibility layer
+          branch: ${{ github.ref }}
+
+      - name: Merge by labeled
         uses: devmasx/merge-branch@master
         with:
-          type: now
-          from_branch: main
-          target_branch: prod
+          label_name: 'merge to prod'
+          target_branch: 'prod'
           github_token: ${{ github.token }}
-permissions: write-all
