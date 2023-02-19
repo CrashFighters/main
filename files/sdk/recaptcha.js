@@ -110,9 +110,15 @@ document.head.appendChild(style);
 function googleCaptchaV3Callback(id) {
     return async function (token) {
         const element = document.getElementById(id);
+        if (element.dataset['recaptcha_loading_class'])
+            element.classList.add(element.dataset['recaptcha_loading_class']);
+
         const score = await getScoreFromV3Token(token);
 
         window[element.dataset['recaptcha_callback']]?.(score);
+
+        if (element.dataset['recaptcha_loading_class'])
+            element.classList.remove(element.dataset['recaptcha_loading_class']);
     };
 };
 
@@ -128,6 +134,7 @@ for (const invisRecaptchaButton of invisRecaptchaButtons) {
     newInvisCaptchaButton.innerText = invisRecaptchaButton.innerText;
     newInvisCaptchaButton.id = invisRecaptchaButton.id;
     newInvisCaptchaButton.dataset['recaptcha_callback'] = invisRecaptchaButton.dataset['recaptcha_callback'];
+    newInvisCaptchaButton.dataset['recaptcha_loading_class'] = invisRecaptchaButton.dataset['recaptcha_loading_class'];
 
     newInvisCaptchaButton.dataset.action = invisRecaptchaButton.dataset['recaptcha_action'] ?? 'SDK_invisButton';
     newInvisCaptchaButton.dataset.callback = `googleCaptchaV3Callback-${invisRecaptchaButton.id}`;

@@ -65,7 +65,7 @@ button:disabled,
 button.disabled {
 	background-color: #a2a2a2;
 
-	cursor: not-allowed;
+	cursor: wait;
 }
 
 button:active {
