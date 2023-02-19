@@ -3,7 +3,10 @@ import {
     ReCaptchaV3Provider
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app-check.js';
 
-import { publicRecaptchaV3Key } from '/common/apiKeys.js';
+import {
+    publicRecaptchaV3Key,
+    publicRecaptchaV2Key
+} from '/common/apiKeys.js';
 
 const wait = ms => new Promise(res => setTimeout(res, ms));
 
@@ -43,6 +46,22 @@ export async function getScore(action = 'SDK_execute') {
     return score;
 }
 
+function renderV2Button(element, action) {
+    return new Promise((res, rej) => {
+        grecaptcha.render(element, {
+            sitekey: publicRecaptchaV2Key,
+            callback: res,
+            'expired-callback': rej,
+            'error-callback': rej
+        });
+    });
+}
+
+export async function createButton(element, action = 'SDK_button') {
+    await waitReady();
+    await renderV2Button(element, action);
+}
+
 // hide recaptcha badge
 const style = document.createElement('style');
 style.innerHTML = `
@@ -76,7 +95,7 @@ for (const invisRecaptchaButton of invisRecaptchaButtons) {
     newInvisCaptchaButton.id = invisRecaptchaButton.id;
     newInvisCaptchaButton.dataset['recaptcha_callback'] = invisRecaptchaButton.dataset['recaptcha_callback'];
 
-    newInvisCaptchaButton.dataset.action = invisRecaptchaButton.dataset['recaptcha_action'] ?? 'SDK_button';
+    newInvisCaptchaButton.dataset.action = invisRecaptchaButton.dataset['recaptcha_action'] ?? 'SDK_invisButton';
     newInvisCaptchaButton.dataset.callback = `googleCaptchaV3Callback-${invisRecaptchaButton.id}`;
     window[`googleCaptchaV3Callback-${invisRecaptchaButton.id}`] = googleCaptchaV3Callback(invisRecaptchaButton.id);
 
