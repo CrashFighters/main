@@ -7,7 +7,7 @@ import { publicRecaptchaV3Key } from '/common/apiKeys.js';
 
 const wait = ms => new Promise(res => setTimeout(res, ms));
 
-async function getScoreFromToken(token) {
+async function getScoreFromV3Token(token) {
     const res = await fetch(`/api/recaptchaV3?token=${token}`);
     const score = parseFloat(await res.text());
 
@@ -20,28 +20,28 @@ function waitReady() {
     });
 };
 
-export async function initAppCheck(app) {
-    const appCheck = initializeAppCheck(app, {
-        provider: new ReCaptchaV3Provider(publicRecaptchaV3Key),
-        isTokenAutoRefreshEnabled: true
-    });
+window._recaptcha = {
+    initAppCheck: async function (app) {
+        const appCheck = initializeAppCheck(app, {
+            provider: new ReCaptchaV3Provider(publicRecaptchaV3Key),
+            isTokenAutoRefreshEnabled: true
+        });
 
-    window._captcha = {
-        firebase: {
-            appCheck
+        window._captcha = {
+            firebase: {
+                appCheck
+            }
         }
     }
 };
 
-export async function execute(action = 'SDK_execute') {
+export async function getScore(action = 'SDK_execute') {
     await waitReady();
     const token = await grecaptcha.execute(publicRecaptchaV3Key, { action });
-    const score = await getScoreFromToken(token);
+    const score = await getScoreFromV3Token(token);
 
     return score;
 }
-
-window.captchaExecute = execute;
 
 // hide recaptcha badge
 const style = document.createElement('style');
@@ -50,10 +50,10 @@ style.innerHTML = `
 `;
 document.head.appendChild(style);
 
-function googleCaptchaCallback(id) {
+function googleCaptchaV3Callback(id) {
     return async function (token) {
         const element = document.getElementById(id);
-        const score = await getScoreFromToken(token);
+        const score = await getScoreFromV3Token(token);
 
         await wait(100)
 
@@ -64,28 +64,30 @@ function googleCaptchaCallback(id) {
 };
 
 const invisRecaptchaButtons = [...document.getElementsByClassName('invisRecaptchaButton')];
-for (const captchaButton of invisRecaptchaButtons) {
-    if (!captchaButton.id) {
-        console.error('captchaButton must have an id attribute', captchaButton);
+for (const invisRecaptchaButton of invisRecaptchaButtons) {
+    if (!invisRecaptchaButton.id) {
+        console.error('captchaButton must have an id attribute', invisRecaptchaButton);
         continue;
     }
 
-    const newCaptchaButton = document.createElement('button');
-    newCaptchaButton.dataset['recaptcha_callback'] = captchaButton.dataset['recaptcha_callback'];
-    newCaptchaButton.innerText = captchaButton.innerText;
-    newCaptchaButton.id = captchaButton.id;
-    newCaptchaButton.dataset.action = captchaButton.dataset['recaptcha_action'] ?? 'SDK_button';
+    const newInvisCaptchaButton = document.createElement('button');
 
-    newCaptchaButton.addEventListener('click', () => {
-        newCaptchaButton.style.cursor = 'wait';
-        newCaptchaButton.classList.add('disabled');
+    newInvisCaptchaButton.innerText = invisRecaptchaButton.innerText;
+    newInvisCaptchaButton.id = invisRecaptchaButton.id;
+    newInvisCaptchaButton.dataset['recaptcha_callback'] = invisRecaptchaButton.dataset['recaptcha_callback'];
+
+    newInvisCaptchaButton.dataset.action = invisRecaptchaButton.dataset['recaptcha_action'] ?? 'SDK_button';
+    newInvisCaptchaButton.dataset.callback = `googleCaptchaV3Callback-${invisRecaptchaButton.id}`;
+    window[`googleCaptchaV3Callback-${invisRecaptchaButton.id}`] = googleCaptchaV3Callback(invisRecaptchaButton.id);
+
+    newInvisCaptchaButton.addEventListener('click', () => {
+        newInvisCaptchaButton.style.cursor = 'wait';
+        newInvisCaptchaButton.classList.add('disabled');
     });
-    newCaptchaButton.dataset.callback = `googleCaptchaCallback-${captchaButton.id}`;
-    window[`googleCaptchaCallback-${captchaButton.id}`] = googleCaptchaCallback(captchaButton.id);
-    newCaptchaButton.className = 'g-recaptcha';
-    newCaptchaButton.dataset.sitekey = publicRecaptchaV3Key;
+    newInvisCaptchaButton.className = 'g-recaptcha';
+    newInvisCaptchaButton.dataset.sitekey = publicRecaptchaV3Key;
 
-    captchaButton.replaceWith(newCaptchaButton);
+    invisRecaptchaButton.replaceWith(newInvisCaptchaButton);
 }
 
 if (!doesDocumentIncludeScript('https://www.google.com/recaptcha/api.js')) {
