@@ -62,23 +62,81 @@ onStateChange(user => {
         window.location.replace('/');
 });
 
-let loginCaptcha;
+const firebaseErrorCodes = {
+    'auth/user-not-found': {
+        errorCode: 'emailDoesNotExist',
+        field: 'email'
+    },
+    'auth/invalid-email': {
+        errorCode: 'invalidEmail',
+        field: 'email'
+    },
+    'auth/wrong-password': {
+        errorCode: 'wrongPassword',
+        field: 'password'
+    },
+    'auth/weak-password': {
+        errorCode: 'weakPassword',
+        field: 'password'
+    }
+};
+
+const errorCodeMessages = {
+    emailDoesNotExist: 'There is no account associated with this email address',
+    invalidEmail: "This isn't a valid email address",
+    wrongPassword: 'The password you entered is incorrect',
+    weakPassword: 'The password you entered is too weak',
+    recaptchaNotSolved: 'Please solve the captcha'
+}
+
+const loginFields = [
+    'email',
+    'password',
+    'recaptcha'
+];
+function handleLoginError({ errorCode, field, error }) {
+    if (!field)
+        throw new Error('Not implemented'); //todo: use Toastify?
+
+    if (!loginFields.includes(field))
+        throw new Error(`Invalid field: ${field}`)
+
+    const message = errorCodeMessages[errorCode] ?? errorCode ?? error?.message ?? 'An unknown error occurred';
+
+    for (const loginFieldId of loginFields) {
+        const feedbackElement = document.getElementById(`login-${loginFieldId}-feedback`);
+
+        console.log(feedbackElement)
+
+        if (loginFieldId === field)
+            feedbackElement.innerText = message;
+        else
+            feedbackElement.innerText = '';
+    }
+
+};
+
+let loginRecaptcha;
 window.doLogin = async (recaptchaScore) => {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
     const nativeButton = document.getElementById('loginButton-1');
 
     // create login captcha if user is likely a bot
-    if (recaptchaScore < minimalLoginRecaptchaScore && !loginCaptcha)
-        loginCaptcha = await createButton(document.getElementById('loginRecaptchaButton'));
+    if (recaptchaScore < minimalLoginRecaptchaScore && !loginRecaptcha)
+        loginRecaptcha = await createButton(document.getElementById('loginRecaptchaButton'));
 
-    if ((loginCaptcha && loginCaptcha.state !== 'success') || (!loginCaptcha && recaptchaScore < minimalLoginRecaptchaScore))
-        return;
+    if ((loginRecaptcha && loginRecaptcha.state !== 'success'))
+        return handleLoginError({ errorCode: 'recaptchaNotSolved', field: 'recaptcha' });
 
     nativeButton.disabled = true;
     preventRedirect = true;
     try {
         await loginWithEmail(email, password);
+    } catch (e) {
+        let firebaseErrorCode = firebaseErrorCodes[e.code];
+        return handleLoginError({ errorCode: firebaseErrorCode?.errorCode, field: firebaseErrorCode?.field, error: e });
+
     } finally {
         nativeButton.disabled = false;
         preventRedirect = false;
@@ -87,7 +145,7 @@ window.doLogin = async (recaptchaScore) => {
     window.location.replace('/');
 }
 
-let signupCaptcha;
+let signupRecaptcha;
 window.doSignup = async (recaptchaScore) => {
     const name = document.getElementById('signupName').value;
     const email = document.getElementById('signupEmail').value;
@@ -95,10 +153,10 @@ window.doSignup = async (recaptchaScore) => {
     const nativeButton = document.getElementById('signupButton-1');
 
     // create login captcha if user is likely a bot
-    if (recaptchaScore < minimalSignupRecaptchaScore && !signupCaptcha)
-        signupCaptcha = await createButton(document.getElementById('signupRecaptchaButton'));
+    if (recaptchaScore < minimalSignupRecaptchaScore && !signupRecaptcha)
+        signupRecaptcha = await createButton(document.getElementById('signupRecaptchaButton'));
 
-    if ((signupCaptcha && signupCaptcha.state !== 'success') || (!signupCaptcha && recaptchaScore < minimalSignupRecaptchaScore))
+    if ((signupRecaptcha && signupRecaptcha.state !== 'success') || (!signupRecaptcha && recaptchaScore < minimalSignupRecaptchaScore))
         return;
 
     nativeButton.disabled = true;

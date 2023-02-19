@@ -46,8 +46,11 @@
           </div>
           <span>or use your account</span>
           <input type="email" placeholder="Email" id="loginEmail" />
+          <p id="login-email-feedback" class="errorFeedback"></p>
           <input type="password" placeholder="Password" id="loginPassword" />
+          <p id="login-password-feedback" class="errorFeedback"></p>
           <div id="loginRecaptchaButton"></div>
+          <p id="login-recaptcha-feedback" class="errorFeedback"></p>
           <a href="/resetPassword">Forgot your password?</a>
           <button type="button" data-recaptcha_callback="doLogin" data-recaptcha_action="loginPage_login"
             class="invisRecaptchaButton" id="loginButton-1">Login</button>
