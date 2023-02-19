@@ -10,8 +10,8 @@ import { firebaseConfig } from "/common/apiKeys.js";
 
 const app = initializeApp(firebaseConfig);
 
-if (doesDocumentIncludeScript('/sdk/captcha.js')) {
-    const { initAppCheck } = await import('/sdk/captcha.js');
+if (doesDocumentIncludeScript('/sdk/recaptcha.js')) {
+    const { initAppCheck } = await import('/sdk/recaptcha.js');
     await initAppCheck(app);
 }
 
