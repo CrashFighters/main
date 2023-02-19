@@ -5,6 +5,8 @@ import {
 
 import { publicRecaptchaV3Key } from '/common/apiKeys.js';
 
+const wait = ms => new Promise(res => setTimeout(res, ms));
+
 async function getScoreFromToken(token) {
     const res = await fetch(`/api/recaptcha?token=${token}`);
     const score = parseFloat(await res.text());
@@ -53,8 +55,10 @@ function googleCaptchaCallback(id) {
         const element = document.getElementById(id);
         const score = await getScoreFromToken(token);
 
+        await wait(100)
+
         element.style.cursor = null;
-        element.enabled = true;
+        element.classList.remove('disabled');
         window[element.dataset['score_callback']]?.(score);
     };
 };
@@ -73,7 +77,7 @@ for (const captchaButton of captchaButtons) {
 
     newCaptchaButton.addEventListener('click', () => {
         newCaptchaButton.style.cursor = 'wait';
-        newCaptchaButton.enabled = false;
+        newCaptchaButton.classList.add('disabled');
     });
     newCaptchaButton.dataset.callback = `googleCaptchaCallback-${captchaButton.id}`;
     window[`googleCaptchaCallback-${captchaButton.id}`] = googleCaptchaCallback(captchaButton.id);
