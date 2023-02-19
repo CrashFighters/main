@@ -59,7 +59,7 @@ function renderV2Button(element) {
 
 export async function verifyViaButton(element) {
     await waitReady();
-    await renderV2Button(element, action);
+    await renderV2Button(element);
 }
 
 // hide recaptcha badge
