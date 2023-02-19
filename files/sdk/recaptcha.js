@@ -26,12 +26,13 @@ style.innerHTML = `
 document.head.appendChild(style);
 
 function googleCaptchaCallback(id) {
-    const element = document.getElementById(id);
-
     return async function (token) {
+        const element = document.getElementById(id);
         const res = await fetch(`/api/recaptcha?token=${token}`);
         const score = parseInt(await res.text());
 
+        element.style.cursor = null;
+        element.enabled = true;
         window[element.dataset['score_callback']]?.(score);
     };
 };
@@ -48,13 +49,17 @@ for (const captchaButton of captchaButtons) {
     newCaptchaButton.innerText = captchaButton.innerText;
     newCaptchaButton.id = captchaButton.id;
 
+    newCaptchaButton.addEventListener('click', () => {
+        newCaptchaButton.style.cursor = 'wait';
+        newCaptchaButton.enabled = false;
+    });
+    newCaptchaButton.dataset.callback = `googleCaptchaCallback-${captchaButton.id}`;
+    window[`googleCaptchaCallback-${captchaButton.id}`] = googleCaptchaCallback(captchaButton.id);
     newCaptchaButton.className = 'g-recaptcha';
     newCaptchaButton.dataset.sitekey = publicRecaptchaKey;
-    newCaptchaButton.dataset.callback = `googleCaptchaCallback-${captchaButton.id}`;
     newCaptchaButton.dataset.action = 'submit';
 
     captchaButton.replaceWith(newCaptchaButton);
-    window[`googleCaptchaCallback-${captchaButton.id}`] = googleCaptchaCallback(captchaButton.id);
 }
 
 if (!doesDocumentIncludeScript('https://www.google.com/recaptcha/api.js')) {
