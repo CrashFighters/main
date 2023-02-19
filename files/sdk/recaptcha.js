@@ -5,6 +5,19 @@ import {
 
 import { publicRecaptchaKey } from '/common/apiKeys.js';
 
+async function getScoreFromToken(token) {
+    const res = await fetch(`/api/recaptcha?token=${token}`);
+    const score = parseInt(await res.text());
+
+    return score;
+};
+
+function waitReady() {
+    return new Promise(res => {
+        grecaptcha.ready(res);
+    });
+};
+
 export async function initAppCheck(app) {
     const appCheck = initializeAppCheck(app, {
         provider: new ReCaptchaV3Provider(publicRecaptchaKey),
@@ -18,6 +31,16 @@ export async function initAppCheck(app) {
     }
 };
 
+export async function execute() {
+    await waitReady();
+    const token = await grecaptcha.execute(publicRecaptchaKey, { action: 'submit' });
+    const score = await getScoreFromToken(token);
+
+    return score;
+}
+
+window.captchaExecute = execute;
+
 // hide recaptcha badge
 const style = document.createElement('style');
 style.innerHTML = `
@@ -28,8 +51,7 @@ document.head.appendChild(style);
 function googleCaptchaCallback(id) {
     return async function (token) {
         const element = document.getElementById(id);
-        const res = await fetch(`/api/recaptcha?token=${token}`);
-        const score = parseInt(await res.text());
+        const score = await getScoreFromToken(token);
 
         element.style.cursor = null;
         element.enabled = true;
@@ -64,7 +86,7 @@ for (const captchaButton of captchaButtons) {
 
 if (!doesDocumentIncludeScript('https://www.google.com/recaptcha/api.js')) {
     const script = document.createElement('script');
-    script.src = 'https://www.google.com/recaptcha/api.js';
+    script.src = `https://www.google.com/recaptcha/api.js?render=${publicRecaptchaKey}`;
     document.head.appendChild(script);
 }
 
