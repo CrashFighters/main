@@ -53,7 +53,7 @@ import {
 } from '/common/settings.js';
 
 import {
-    awaitButtonSuccess
+    createButton
 } from '/sdk/recaptcha.js';
 
 let preventRedirect = false;
@@ -62,50 +62,54 @@ onStateChange(user => {
         window.location.replace('/');
 });
 
+let loginCaptcha;
 window.doLogin = async (recaptchaScore) => {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
-    const button = document.getElementById('loginButton-1');
+    const nativeButton = document.getElementById('loginButton-1');
 
-    if (recaptchaScore < minimalLoginRecaptchaScore) {
-        button.disabled = true;
+    // create login captcha if user is likely a bot
+    if (recaptchaScore < minimalLoginRecaptchaScore && !loginCaptcha)
+        loginCaptcha = await createButton(document.getElementById('loginRecaptchaButton'));
 
-        try {
-            await awaitButtonSuccess(document.getElementById('loginRecaptchaButton'));
-        } catch (e) {
-            button.disabled = false;
-            throw e;
-        }
+    if ((loginCaptcha && loginCaptcha.state !== 'success') || (!loginCaptcha && recaptchaScore < minimalLoginRecaptchaScore))
+        return;
+
+    nativeButton.disabled = true;
+    preventRedirect = true;
+    try {
+        await loginWithEmail(email, password);
+    } finally {
+        nativeButton.disabled = false;
+        preventRedirect = false;
     }
 
-    preventRedirect = true;
-    await loginWithEmail(email, password);
-
-    button.disabled = false;
     window.location.replace('/');
 }
 
+let signupCaptcha;
 window.doSignup = async (recaptchaScore) => {
     const name = document.getElementById('signupName').value;
     const email = document.getElementById('signupEmail').value;
     const password = document.getElementById('signupPassword').value;
-    const button = document.getElementById('signupButton-1');
+    const nativeButton = document.getElementById('signupButton-1');
 
-    if (recaptchaScore < minimalSignupRecaptchaScore) {
-        button.disabled = true;
+    // create login captcha if user is likely a bot
+    if (recaptchaScore < minimalSignupRecaptchaScore && !signupCaptcha)
+        signupCaptcha = await createButton(document.getElementById('signupRecaptchaButton'));
 
-        try {
-            await awaitButtonSuccess(document.getElementById('signupRecaptchaButton'));
-        } catch (e) {
-            button.disabled = false;
-            throw e;
-        }
+    if ((signupCaptcha && signupCaptcha.state !== 'success') || (!signupCaptcha && recaptchaScore < minimalSignupRecaptchaScore))
+        return;
+
+    nativeButton.disabled = true;
+    preventRedirect = true;
+    try {
+        await createEmailAccount(email, password);
+        await setDisplayName(name);
+    } finally {
+        nativeButton.disabled = false;
+        preventRedirect = false;
     }
 
-    preventRedirect = true;
-    await createEmailAccount(email, password);
-    await setDisplayName(name);
-
-    button.disabled = false;
     window.location.replace('/');
 }
