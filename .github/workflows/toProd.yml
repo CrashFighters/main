@@ -1,7 +1,7 @@
-name: Merge branch with labeled
+name: Release
 on:
-  pull_request:
-    types: [labeled]
+  pull_request_target:
+    types: [opened]
 jobs:
   merge-branch:
     runs-on: ubuntu-latest
@@ -19,12 +19,9 @@ jobs:
       # Auto-commit to repository
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: Auto minify & compatibility layer
-          branch: ${{ github.ref }}
-
-      - name: Merge by labeled
-        uses: devmasx/merge-branch@master
+          commit_message: Release
+          branch: prod
+      - uses: superbrothers/close-pull-request@v3
         with:
-          label_name: 'merge to prod'
-          target_branch: 'prod'
-          github_token: ${{ github.token }}
+          # Optional. Post a issue comment just before closing a pull request.
+          comment: "Pull request has been merged to prod."
