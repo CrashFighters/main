@@ -16,10 +16,15 @@ async function getScoreFromV3Token(token) {
 };
 
 async function checkSuccessFromV2Token(token) {
-    const res = await fetch(`/api/recaptchaV2?token=${token}`);
-    const score = parseFloat(await res.text());
+    try {
+        const res = await fetch(`/api/recaptchaV2?token=${token}`);
+        const success = await res.json();
 
-    return score;
+        return success;
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
 }
 
 function waitReady() {
