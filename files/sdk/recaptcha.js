@@ -46,7 +46,7 @@ export async function getScore(action = 'SDK_execute') {
     return score;
 }
 
-function renderV2Button(element, action) {
+function renderV2Button(element) {
     return new Promise((res, rej) => {
         grecaptcha.render(element, {
             sitekey: publicRecaptchaV2Key,
@@ -57,7 +57,7 @@ function renderV2Button(element, action) {
     });
 }
 
-export async function createButton(element, action = 'SDK_button') {
+export async function createButton(element) {
     await waitReady();
     await renderV2Button(element, action);
 }
