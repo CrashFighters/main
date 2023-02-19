@@ -3,15 +3,15 @@ import {
     getAuth,
     onAuthStateChanged,
     signOut,
-    updateProfile
+    updateProfile,
 } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
 
 import { firebaseConfig } from "/common/apiKeys.js";
 
 const app = initializeApp(firebaseConfig);
 
-if (doesDocumentIncludeScript('/sdk/recaptcha.js')) {
-    const { initAppCheck } = await import('/sdk/recaptcha.js');
+if (doesDocumentIncludeScript("/sdk/recaptcha.js")) {
+    const { initAppCheck } = await import("/sdk/recaptcha.js");
     await initAppCheck(app);
 }
 
@@ -34,7 +34,8 @@ export const logout = async () => {
 };
 
 export const login = () => {
-    if (!window.auth.user) // if the user is not logged in
+    if (!window.auth.user)
+        // if the user is not logged in
         window.open("/login", "_self");
 };
 
@@ -46,11 +47,13 @@ async function updateUserObject(newUser) {
     if (!newUser) {
         window.auth.user = null;
         return;
-    };
+    }
 
     if (!newUser.photoURL)
         await updateProfile(newUser, {
-            photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(newUser.displayName ?? newUser.email)}`
+            photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                newUser.displayName ?? newUser.email
+            )}`,
         });
 
     window.auth.user = {
@@ -63,15 +66,15 @@ async function updateUserObject(newUser) {
         creationTime: new Date(newUser.metadata.creationTime),
         lastSignInTime: new Date(newUser.metadata.lastSignInTime),
     };
-};
+}
 
 export const _ = {
     firebase: {
         app,
-        auth
+        auth,
     },
     updateUserObject,
-    onStateChangeCallbacks
+    onStateChangeCallbacks,
 };
 
 window.auth = {
@@ -80,12 +83,12 @@ window.auth = {
     login,
     signup,
     user: null,
-    _
-}
+    _,
+};
 
 onStateChange(() => updateUserObject(auth.currentUser));
 
 function doesDocumentIncludeScript(url) {
-    const scripts = [...document.getElementsByTagName('script')];
-    return Boolean(scripts.find(script => script.src.endsWith(url)));
-};
+    const scripts = [...document.getElementsByTagName("script")];
+    return Boolean(scripts.find((script) => script.src.endsWith(url)));
+}
