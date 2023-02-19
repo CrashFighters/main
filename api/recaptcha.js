@@ -24,13 +24,19 @@ module.exports = {
 
             headers['Content-Length'] = postData.length;
 
-            const response = await fetch(endpoint, {
-                method: 'POST',
-                body: postData,
-                headers
-            });
+            // const response = await fetch(endpoint, {
+            //     method: 'POST',
+            //     body: postData,
+            //     headers
+            // });
 
-            const result = await response.json();
+            // const result = await response.json();
+
+            console.log('[WARNING] Generating fake recaptcha response in /api/recaptcha.js')
+            const result = {
+                success: true,
+                score: 0.9
+            };
 
             if (!result.success)
                 if (result['error-codes'].includes('missing-input-secret') || result['error-codes'].includes('invalid-input-secret') || result['error-codes'].includes('bad-request'))
