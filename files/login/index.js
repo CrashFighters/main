@@ -54,6 +54,8 @@ onStateChange(user => {
 });
 
 window.doLogin = async (recaptchaScore) => {
+    console.log('recaptchaScore', recaptchaScore);
+
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
 
@@ -63,7 +65,9 @@ window.doLogin = async (recaptchaScore) => {
     window.location.replace('/');
 }
 
-window.doSignup = async () => {
+window.doSignup = async (recaptchaScore) => {
+    console.log('recaptchaScore', recaptchaScore);
+
     const name = document.getElementById('signupName').value;
     const email = document.getElementById('signupEmail').value;
     const password = document.getElementById('signupPassword').value;
