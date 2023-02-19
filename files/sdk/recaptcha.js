@@ -15,8 +15,7 @@ async function getScoreFromV3Token(token) {
     return score;
 };
 
-async function getScoreFromV2Token(token) {
-    console.log('V2 token', token)
+async function checkSuccessFromV2Token(token) {
     const res = await fetch(`/api/recaptchaV2?token=${token}`);
     const score = parseFloat(await res.text());
 
@@ -57,15 +56,18 @@ function renderV2Button(element) {
         grecaptcha.render(element, {
             sitekey: publicRecaptchaV2Key,
             callback: async token => {
-                const score = await getScoreFromV2Token(token);
-                res(score);
+                if (await checkSuccessFromV2Token(token))
+                    res()
+                else
+                    rej()
             },
-            'error-callback': rej
+            'error-callback': rej,
+            'expired-callback': rej
         });
     });
 }
 
-export async function verifyViaButton(element) {
+export async function awaitButtonSuccess(element) {
     await waitReady();
     await renderV2Button(element);
 }
