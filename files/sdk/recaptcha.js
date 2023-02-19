@@ -8,14 +8,20 @@ import {
     publicRecaptchaV2Key
 } from '/common/apiKeys.js';
 
-const wait = ms => new Promise(res => setTimeout(res, ms));
-
 async function getScoreFromV3Token(token) {
     const res = await fetch(`/api/recaptchaV3?token=${token}`);
     const score = parseFloat(await res.text());
 
     return score;
 };
+
+async function getScoreFromV2Token(token) {
+    console.log('V2 token', token)
+    const res = await fetch(`/api/recaptchaV2?token=${token}`);
+    const score = parseFloat(await res.text());
+
+    return score;
+}
 
 function waitReady() {
     return new Promise(res => {
@@ -50,7 +56,10 @@ function renderV2Button(element) {
     return new Promise((res, rej) => {
         grecaptcha.render(element, {
             sitekey: publicRecaptchaV2Key,
-            callback: res, //todo: verify token passed to res
+            callback: async token => {
+                const score = await getScoreFromV2Token(token);
+                res(score);
+            },
             'error-callback': rej
         });
     });
