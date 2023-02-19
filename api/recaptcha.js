@@ -24,7 +24,7 @@ module.exports = {
 
             headers['Content-Length'] = postData.length;
 
-            const response = await fetch(full, {
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 body: postData,
                 headers
