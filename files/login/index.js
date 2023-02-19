@@ -92,7 +92,7 @@ const errorCodeMessages = { //todo: put in en.json
     invalidEmail: "This isn't a valid email address",
     wrongPassword: 'The password you entered is incorrect',
     weakPassword: 'The password you entered is too weak',
-    recaptchaNotSolved: 'Please solve the captcha'
+    recaptchaNotSolved: 'Please solve the captcha',
     recaptchaExpired: 'The captcha has expired. Please solve it again',
     recaptchaError: 'Please try the captcha again'
 }
