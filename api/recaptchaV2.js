@@ -12,9 +12,9 @@ const allowedTokenCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv
 module.exports = {
     async execute({ params, end, statusCode, request, parseError }) {
         try {
-            if (!params.token) return statusCode(400, 'No token provided');
-            if (params.token.length !== 526) return statusCode(400, 'Invalid token');
-            if (params.token.split('').some(char => !allowedTokenCharacters.includes(char))) return statusCode(400, 'Invalid token');
+            if (!params.token) return statusCode(400, 'noTokenProvided', 'No token provided');
+            if (params.token.length !== 526) return statusCode(400, 'invalidToken', 'Invalid token');
+            if (params.token.split('').some(char => !allowedTokenCharacters.includes(char))) return statusCode(400, 'invalidToken', 'Invalid token');
 
             const postData = Object.entries({
                 secret,
@@ -41,11 +41,11 @@ module.exports = {
                 if (result['error-codes'].includes('missing-input-secret') || result['error-codes'].includes('invalid-input-secret') || result['error-codes'].includes('bad-request'))
                     throw new Error(`Recaptcha: Server has invalid config: ${result['error-codes'].join(', ')}`);
                 else if (result['error-codes'].includes('missing-input-response') || result['error-codes'].includes('invalid-input-response'))
-                    return statusCode(400, 'Invalid token');
+                    return statusCode(400, 'invalidToken', 'Invalid token');
                 else if (result['error-codes'].includes('timeout-or-duplicate'))
-                    return statusCode(400, 'Token has expired or has already been used');
+                    return statusCode(400, 'tokenExpired', 'Token has expired or has already been used');
                 else
-                    return statusCode(400, 'Unknown error');
+                    return statusCode(400, 'unknown', 'Unknown error');
 
             end(JSON.stringify(result.success));
 
