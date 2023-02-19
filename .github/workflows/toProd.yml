@@ -7,6 +7,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      # Job for transpiler the code
+      - name: 'Transpiler-JS Action'
+        uses: jossydevers/transpiler-js@v1.0.0
+        with:
+          typename: 'release' # (OPTIONAL)
+      - name: Minify Action
+        uses: anthonyftwang/minify-action@v1.0.1
+
+
+      # Auto-commit to repository
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Auto minify & compatibility layer
+          branch: ${{ github.ref }}
 
       - name: Merge by labeled
         uses: devmasx/merge-branch@master
