@@ -226,6 +226,8 @@ input {
 
 .social-container {
 	margin: 20px 0;
+	height: 44px;
+	/* google sign in button height */
 }
 
 .social-container a {
