@@ -1,8 +1,6 @@
 name: Release to Production
 on:
-  push:
-    branches:
-      - '*'
+  workflow_dispatch:
 jobs:
   sync-branch:
     runs-on: ubuntu-latest
