@@ -16,3 +16,4 @@ jobs:
           from_branch: main
           target_branch: prod
           github_token: ${{ github.token }}
+permissions: write-all
