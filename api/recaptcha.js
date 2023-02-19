@@ -48,7 +48,7 @@ module.exports = {
                 else
                     return statusCode(400, 'Unknown error');
 
-            end(JSON.stringify(result));
+            end(`${result.score}`);
 
         } catch (e) {
             return parseError(e);
