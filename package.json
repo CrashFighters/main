@@ -6,14 +6,15 @@
   "scripts": {
     "dev": "nodemon"
   },
-  
   "author": "Oscar",
   "license": "ISC",
   "dependencies": {
     "firebase-admin": "^11.5.0",
     "googleapis": "^111.0.0",
     "mime-types": "^2.1.35",
-    "nodemon": "^2.0.20",
     "sniffr": "^1.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }
