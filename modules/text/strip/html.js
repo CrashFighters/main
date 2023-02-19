@@ -1,1 +1,8 @@
-export function execute(t){let e=t.split("");return e.forEach(((t,n)=>{"<"==t&&(e[n]="&lt"),">"==t&&(e[n]="&gt")})),e.join("")}
+export function execute(string) {
+    let newContent = string.split('');
+    newContent.forEach((val, index) => {
+        if (val == '<') newContent[index] = '&lt';
+        if (val == '>') newContent[index] = '&gt';
+    });
+    return newContent.join('');
+}

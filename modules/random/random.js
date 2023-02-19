@@ -1,1 +1,13 @@
-module.exports={execute(e,t){let n=t.split(""),o="";for(let t=0;t<e;t++)o+=n[Math.floor(Math.random()*n.length)];return o},chars:{nonConfusingNumsAndLetters:"23456789ABCDEFGHJKMNPQRSTUVWXYZ"}};
+module.exports = {
+	execute(length, characters) {
+		let chars = characters.split('');
+		let output = '';
+		for (let ii = 0; ii < length; ii++) {
+			output += chars[Math.floor(Math.random() * chars.length)];
+		}
+		return output;
+	},
+	chars: {
+		nonConfusingNumsAndLetters: '23456789ABCDEFGHJKMNPQRSTUVWXYZ'
+	}
+};

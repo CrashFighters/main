@@ -1,1 +1,151 @@
-import{initializeAppCheck,ReCaptchaV3Provider}from"https://www.gstatic.com/firebasejs/9.17.1/firebase-app-check.js";import{publicRecaptchaV3Key,publicRecaptchaV2Key}from"/common/apiKeys.js";async function getScoreFromV3Token(e){const t=await fetch(`/api/recaptchaV3?token=${e}`);return parseFloat(await t.text())}async function checkSuccessFromV2Token(e){try{const t=await fetch(`/api/recaptchaV2?token=${e}`);return await t.json()}catch(e){return console.error(e),!1}}function waitReady(){return new Promise((e=>{grecaptcha.ready(e)}))}window._recaptcha={initAppCheck:async function(e){const t=initializeAppCheck(e,{provider:new ReCaptchaV3Provider(publicRecaptchaV3Key),isTokenAutoRefreshEnabled:!0});window._captcha={firebase:{appCheck:t}}}};export async function getScore(e="SDK_execute"){await waitReady();const t=await grecaptcha.execute(publicRecaptchaV3Key,{action:e});return await getScoreFromV3Token(t)}function renderV2Button(e){let t=[],a={state:"ready",onStateChange:e=>{t.push(e)}};const c=e=>{a.state=e;for(const e of t)e(a)};return grecaptcha.render(e,{sitekey:publicRecaptchaV2Key,callback:async e=>{await checkSuccessFromV2Token(e)?c("success"):c("error")},"error-callback":()=>{c("error")},"expired-callback":()=>{c("expired")}}),a}export async function createButton(e){if(!e)throw new Error("No element provided to createButton");await waitReady();return renderV2Button(e)}const style=document.createElement("style");function googleCaptchaV3Callback(e){return async function(t){const a=document.getElementById(e),c=await getScoreFromV3Token(t);window[a.dataset.recaptcha_callback]?.(c)}}style.innerHTML="\n    .grecaptcha-badge { visibility: hidden; }\n",document.head.appendChild(style);const invisRecaptchaButtons=[...document.getElementsByClassName("invisRecaptchaButton")];for(const e of invisRecaptchaButtons){if(!e.id){console.error("captchaButton must have an id attribute",e);continue}const t=document.createElement("button");t.innerText=e.innerText,t.id=e.id,t.dataset.recaptcha_callback=e.dataset.recaptcha_callback,t.dataset.action=e.dataset.recaptcha_action??"SDK_invisButton",t.dataset.callback=`googleCaptchaV3Callback-${e.id}`,window[`googleCaptchaV3Callback-${e.id}`]=googleCaptchaV3Callback(e.id),t.className="g-recaptcha",t.dataset.sitekey=publicRecaptchaV3Key,e.replaceWith(t)}if(!doesDocumentIncludeScript("https://www.google.com/recaptcha/api.js")){const a=document.createElement("script");a.src=`https://www.google.com/recaptcha/api.js?render=${publicRecaptchaV3Key}`,document.head.appendChild(a)}function doesDocumentIncludeScript(e){const t=[...document.getElementsByTagName("script")];return Boolean(t.find((t=>t.src.endsWith(e))))}
+import {
+    initializeAppCheck,
+    ReCaptchaV3Provider
+} from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app-check.js';
+
+import {
+    publicRecaptchaV3Key,
+    publicRecaptchaV2Key
+} from '/common/apiKeys.js';
+
+async function getScoreFromV3Token(token) {
+    const res = await fetch(`/api/recaptchaV3?token=${token}`);
+    const score = parseFloat(await res.text());
+
+    return score;
+};
+
+async function checkSuccessFromV2Token(token) {
+    try {
+        const res = await fetch(`/api/recaptchaV2?token=${token}`);
+        const success = await res.json();
+
+        return success;
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+}
+
+function waitReady() {
+    return new Promise(res => {
+        grecaptcha.ready(res);
+    });
+};
+
+window._recaptcha = {
+    initAppCheck: async function (app) {
+        const appCheck = initializeAppCheck(app, {
+            provider: new ReCaptchaV3Provider(publicRecaptchaV3Key),
+            isTokenAutoRefreshEnabled: true
+        });
+
+        window._captcha = {
+            firebase: {
+                appCheck
+            }
+        }
+    }
+};
+
+export async function getScore(action = 'SDK_execute') {
+    await waitReady();
+    const token = await grecaptcha.execute(publicRecaptchaV3Key, { action });
+    const score = await getScoreFromV3Token(token);
+
+    return score;
+}
+
+function renderV2Button(element) {
+    let callbacks = [];
+    let button = {
+        state: 'ready',
+        onStateChange: cb => {
+            callbacks.push(cb);
+        }
+    };
+
+    const setState = state => {
+        button.state = state;
+        for (const cb of callbacks)
+            cb(button);
+    };
+
+    grecaptcha.render(element, {
+        sitekey: publicRecaptchaV2Key,
+        callback: async token => {
+            if (await checkSuccessFromV2Token(token))
+                setState('success')
+            else
+                setState('error')
+        },
+        'error-callback': () => {
+            setState('error')
+        },
+        'expired-callback': () => {
+            setState('expired')
+        }
+    });
+
+    return button;
+}
+
+export async function createButton(element) {
+    if (!element)
+        throw new Error('No element provided to createButton')
+
+    await waitReady();
+    const button = renderV2Button(element);
+
+    return button;
+}
+
+// hide recaptcha badge
+const style = document.createElement('style');
+style.innerHTML = `
+    .grecaptcha-badge { visibility: hidden; }
+`;
+document.head.appendChild(style);
+
+function googleCaptchaV3Callback(id) {
+    return async function (token) {
+        const element = document.getElementById(id);
+        const score = await getScoreFromV3Token(token);
+
+        window[element.dataset['recaptcha_callback']]?.(score);
+    };
+};
+
+const invisRecaptchaButtons = [...document.getElementsByClassName('invisRecaptchaButton')];
+for (const invisRecaptchaButton of invisRecaptchaButtons) {
+    if (!invisRecaptchaButton.id) {
+        console.error('captchaButton must have an id attribute', invisRecaptchaButton);
+        continue;
+    }
+
+    const newInvisCaptchaButton = document.createElement('button');
+
+    newInvisCaptchaButton.innerText = invisRecaptchaButton.innerText;
+    newInvisCaptchaButton.id = invisRecaptchaButton.id;
+    newInvisCaptchaButton.dataset['recaptcha_callback'] = invisRecaptchaButton.dataset['recaptcha_callback'];
+
+    newInvisCaptchaButton.dataset.action = invisRecaptchaButton.dataset['recaptcha_action'] ?? 'SDK_invisButton';
+    newInvisCaptchaButton.dataset.callback = `googleCaptchaV3Callback-${invisRecaptchaButton.id}`;
+    window[`googleCaptchaV3Callback-${invisRecaptchaButton.id}`] = googleCaptchaV3Callback(invisRecaptchaButton.id);
+
+    newInvisCaptchaButton.className = 'g-recaptcha';
+    newInvisCaptchaButton.dataset.sitekey = publicRecaptchaV3Key;
+
+    invisRecaptchaButton.replaceWith(newInvisCaptchaButton);
+}
+
+if (!doesDocumentIncludeScript('https://www.google.com/recaptcha/api.js')) {
+    const script = document.createElement('script');
+    script.src = `https://www.google.com/recaptcha/api.js?render=${publicRecaptchaV3Key}`;
+    document.head.appendChild(script);
+}
+
+function doesDocumentIncludeScript(url) {
+    const scripts = [...document.getElementsByTagName('script')];
+    return Boolean(scripts.find(script => script.src.endsWith(url)));
+};

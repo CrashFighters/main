@@ -1,1 +1,24 @@
-module.exports={twoColumns(e,t,l){let o=0;e.forEach((e=>{e[0].length>o&&(o=e[0].length)}));let h=o+t,r=[];return e.forEach((e=>{let t=h-e[0].length,o="";for(let e=0;e<t;e++)o=`${o}${l}`;r.push(`${e[0]}${o}${e[1]}`)})),r}};
+module.exports = {
+	twoColumns(rows, spaceBetweenMax, spaceBetweenChar) {
+		let maxSpace = 0;
+		rows.forEach((val) => {
+			if (val[0].length > maxSpace) maxSpace = val[0].length;
+		});
+
+		let space = maxSpace + spaceBetweenMax;
+		let out = [];
+
+		rows.forEach((val) => {
+			let spaceBetweenLength = space - val[0].length;
+			let spaceBetween = '';
+
+			for (let ii = 0; ii < spaceBetweenLength; ii++) {
+				spaceBetween = `${spaceBetween}${spaceBetweenChar}`;
+			}
+
+			out.push(`${val[0]}${spaceBetween}${val[1]}`);
+		});
+
+		return out;
+	}
+};

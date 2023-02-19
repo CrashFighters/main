@@ -1,1 +1,211 @@
-const repairSettings={jsonBeginEnd:[["","}"],["{",""],["{","}"]],projectDependencies:["mime-types"]};module.exports={async execute(e){let s,r=require(__filename),a=[],n=[];return e.close(),s=await r.repairs.messages.main.fix(),a=a.concat(s?.changed||[]),n=n.concat(s?.logs||[]),s=await r.repairs.modules.node_modules(),a=a.concat(s?.changed||[]),n=n.concat(s?.logs||[]),{changed:a,logs:n}},repairs:{messages:{main:{fix(){let e=require(__filename);if(!e.repairs.messages.main.test())return;let s,r=e.repairs.messages.main.fixes,a=[],n=[];return s=r.beginEnd("","}"),a=a.concat(s.changed),n=n.concat(s.logs),s=r.beginEnd("{",""),a=a.concat(s.changed),n=n.concat(s.logs),s=r.beginEnd("{","}"),a=a.concat(s.changed),n=n.concat(s.logs),{changed:a,logs:n}},test(){const e=require("../../../settings.json"),s=require("fs");try{return s.readdirSync(e.generic.path.files.messages).forEach((r=>{JSON.parse(s.readFileSync(`${e.generic.path.files.messages}${r}`))})),!1}catch{return!0}},fixes:{beginEnd(e,s){const r=require("../../../settings.json"),a=require("fs"),n=a.readdirSync(r.generic.path.files.messages);let c=[],i=[];return n.forEach((n=>{try{JSON.parse(`${a.readFileSync(`${r.generic.path.files.messages}${n}`)}`)}catch{try{JSON.parse(`${e}${a.readFileSync(`${r.generic.path.files.messages}${n}`)}${s}`),a.writeFileSync(`${r.generic.path.files.messages}${n}`,`${e}${a.readFileSync(`${r.generic.path.files.messages}${n}`)}${s}`),c.push({tag:"changedJson",begin:e,end:s})}catch(e){i.push({tag:"error",value:e})}}})),{changed:c,logs:i}}}}},modules:{async node_modules(){let e=[],s=[];try{const r=require("../../../settings.json"),a=require("fs");let n=[],c=s=>{try{require.resolve(s)}catch{n.push(s),e.push({tag:"installedNodeModule",value:s})}};return repairSettings.projectDependencies.forEach((e=>{c(e)})),a.readdirSync(r.generic.path.files.modules).forEach((e=>{let n=`${r.generic.path.files.modules}${e}/${r.generic.path.files.extraDependencies}`;if(console.log(n),a.existsSync(n))try{let e=require(n);e?.node_modules&&e.node_modules.forEach((e=>{c(e)}))}catch(e){s.push({tag:"error",value:e})}let i=r.generic.path.files.moduleApi.replace("{modules}",r.generic.path.files.modules).replace("{name}",e);if(a.existsSync(i)){a.readdirSync(i).forEach((a=>{try{let s=require(`../../.${r.generic.path.files.moduleApi.replace("{modules}",r.generic.path.files.modules).replace("{name}",e)}${a}`);s.dependencies?.node_modules&&s.dependencies.node_modules.forEach((e=>{c(e)}))}catch(e){s.push({tag:"error",value:e})}}))}})),n&&await require("../installNodeModule").execute(n),{changed:e,logs:s}}catch(s){return{changed:e,logs:[{tag:"error",value:s}]}}}}}};
+const repairSettings = {
+    jsonBeginEnd: [
+        ['', '}'],
+        ['{', ''],
+        ['{', '}']
+    ],
+    projectDependencies: [
+        'mime-types'
+    ]
+}
+
+module.exports = {
+    async execute(server) {
+        let t = require(__filename);
+
+        let changed = [];
+        let logs = [];
+        let currentReturn;
+
+        server.close();
+
+        currentReturn = await t.repairs.messages.main.fix();
+        changed = changed.concat(currentReturn?.changed || [])
+        logs = logs.concat(currentReturn?.logs || [])
+
+        currentReturn = await t.repairs.modules.node_modules();
+        changed = changed.concat(currentReturn?.changed || [])
+        logs = logs.concat(currentReturn?.logs || [])
+
+        return {
+            changed,
+            logs
+        }
+
+    },
+    repairs: {
+        messages: {
+            main: {
+                fix() {
+                    let t = require(__filename);
+                    if (!t.repairs.messages.main.test()) return;
+
+                    let f = t.repairs.messages.main.fixes;
+
+                    let changed = [];
+                    let logs = [];
+                    let currentReturn;
+
+                    currentReturn = f.beginEnd('', '}');
+                    changed = changed.concat(currentReturn.changed)
+                    logs = logs.concat(currentReturn.logs)
+
+                    currentReturn = f.beginEnd('{', '');
+                    changed = changed.concat(currentReturn.changed)
+                    logs = logs.concat(currentReturn.logs)
+
+                    currentReturn = f.beginEnd('{', '}');
+                    changed = changed.concat(currentReturn.changed)
+                    logs = logs.concat(currentReturn.logs)
+
+                    return {
+                        changed,
+                        logs
+                    };
+                },
+                test() {
+                    const settings = require('../../../settings.json');
+                    const fs = require('fs');
+
+                    try {
+                        const messages = fs.readdirSync(settings.generic.path.files.messages);
+
+                        messages.forEach(val => {
+                            JSON.parse(fs.readFileSync(`${settings.generic.path.files.messages}${val}`));
+                        })
+
+                        return false;
+                    } catch {
+                        return true;
+                    }
+                },
+                fixes: {
+                    beginEnd(begin, end) {
+                        const settings = require('../../../settings.json');
+                        const fs = require('fs');
+                        const messages = fs.readdirSync(settings.generic.path.files.messages);
+
+                        let changed = [];
+                        let logs = [];
+
+                        messages.forEach(val => {
+                            try {
+                                JSON.parse(`${fs.readFileSync(`${settings.generic.path.files.messages}${val}`)}`);
+                            } catch {
+
+                                try {
+                                    JSON.parse(`${begin}${fs.readFileSync(`${settings.generic.path.files.messages}${val}`)}${end}`);
+
+                                    fs.writeFileSync(`${settings.generic.path.files.messages}${val}`, `${begin}${fs.readFileSync(`${settings.generic.path.files.messages}${val}`)}${end}`);
+                                    changed.push({
+                                        tag: 'changedJson',
+                                        begin,
+                                        end
+                                    })
+
+                                } catch (err) {
+                                    logs.push({
+                                        tag: 'error',
+                                        value: err
+                                    })
+                                }
+                            }
+                        });
+
+                        return {
+                            changed,
+                            logs
+                        }
+
+                    }
+                }
+            }
+        },
+        modules: {
+            async node_modules() {
+                let changed = [];
+                let logs = [];
+                try {
+                    const settings = require('../../../settings.json');
+                    const fs = require('fs');
+
+                    let installmodules = [];
+
+                    let installModule = name => {
+                        try {
+                            require.resolve(name)
+                        } catch {
+                            installmodules.push(name);
+                            changed.push({
+                                tag: 'installedNodeModule',
+                                value: name
+                            });
+                        }
+                    }
+
+                    repairSettings.projectDependencies.forEach(val => {
+                        installModule(val);
+                    })
+
+                    let modules = fs.readdirSync(settings.generic.path.files.modules);
+                    modules.forEach(val => {
+
+                        let extraDependenciesPath = `${settings.generic.path.files.modules}${val}/${settings.generic.path.files.extraDependencies}`;
+                        console.log(extraDependenciesPath)
+                        if (fs.existsSync(extraDependenciesPath)) {
+                            try {
+                                let extraDependencies = require(extraDependenciesPath);
+
+                                if (extraDependencies?.node_modules)
+                                    extraDependencies.node_modules.forEach(val => {
+                                        installModule(val)
+                                    })
+                            } catch (err) {
+                                logs.push({
+                                    tag: 'error',
+                                    value: err
+                                })
+                            }
+                        }
+
+                        let apiPath = settings.generic.path.files.moduleApi.replace('{modules}', settings.generic.path.files.modules).replace('{name}', val);
+                        if (fs.existsSync(apiPath)) {
+                            let apis = fs.readdirSync(apiPath);
+                            apis.forEach(api => {
+                                try {
+                                    let apiFile = require(`../../.${settings.generic.path.files.moduleApi.replace('{modules}', settings.generic.path.files.modules).replace('{name}', val)}${api}`);
+                                    if (apiFile.dependencies?.node_modules) {
+                                        apiFile.dependencies.node_modules.forEach(val => {
+                                            installModule(val);
+                                        })
+                                    }
+                                } catch (err) {
+                                    logs.push({
+                                        tag: 'error',
+                                        value: err
+                                    })
+                                }
+                            })
+                        }
+                    })
+
+                    if (installmodules)
+                        await require(`../installNodeModule`).execute(installmodules)
+
+                    return {
+                        changed,
+                        logs
+                    }
+                } catch (err) {
+                    return {
+                        changed,
+                        logs: [{
+                            tag: 'error',
+                            value: err
+                        }]
+                    }
+                }
+            }
+        }
+    }
+}

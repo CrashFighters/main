@@ -1,1 +1,56 @@
-<!doctype html><html lang=en><meta charset=UTF-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><title>Home</title><script type=module src=/sdk/auth.js></script><script type=module src=/sdk/zeroTap.js></script><script type=module src=/sdk/templates.js data-template_debug=true></script><script>function test(t,e){console.log("Got template update: "+t+" = "+e)}</script><button type=button onclick=window.auth.logout() data-template=loggedIn data-template_insert=disabled data-template_fallback=true>log out</button> <button type=button onclick=window.auth.login() data-template=loggedOut data-template_insert=disabled data-template_fallback=false>login</button> Welcome <span data-template=displayName data-template_fallback="unknown person"></span>! Your email is <span data-template=email data-template_fallback=unknown data-template_update_callback=test></span>. <img data-template=picture data-template_insert=src>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <script type="module" src="/sdk/auth.js"></script>
+    <script type="module" src="/sdk/zeroTap.js"></script>
+    <script
+      type="module"
+      src="/sdk/templates.js"
+      data-template_debug="true"
+    ></script>
+    <script>
+      function test(template, value) {
+        console.log("Got template update: " + template + " = " + value);
+      }
+    </script>
+  </head>
+
+  <body>
+    <button
+      type="button"
+      onclick="window.auth.logout()"
+      data-template="loggedIn"
+      data-template_insert="disabled"
+      data-template_fallback="true"
+    >
+      log out
+    </button>
+    <button
+      type="button"
+      onclick="window.auth.login()"
+      data-template="loggedOut"
+      data-template_insert="disabled"
+      data-template_fallback="false"
+    >
+      login
+    </button>
+
+    Welcome
+    <span
+      data-template="displayName"
+      data-template_fallback="unknown person"
+    ></span
+    >! Your email is
+    <span
+      data-template="email"
+      data-template_fallback="unknown"
+      data-template_update_callback="test"
+    ></span
+    >.
+    <img data-template="picture" data-template_insert="src" />
+  </body>
+</html>
