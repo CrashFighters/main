@@ -1,12 +1,6 @@
 const https = require('https');
 
-const secret = require('../credentials/recaptcha.json').private;
-const {
-    hostname,
-    port,
-    path,
-    full
-} = require('../credentials/recaptcha.json').endpoint;
+const { endpoint, private: secret } = require('../credentials/recaptchaV3.json');
 
 const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
