@@ -74,7 +74,7 @@ for (const captchaButton of invisRecaptchaButtons) {
     newCaptchaButton.dataset['recaptcha_callback'] = captchaButton.dataset['recaptcha_callback'];
     newCaptchaButton.innerText = captchaButton.innerText;
     newCaptchaButton.id = captchaButton.id;
-    newCaptchaButton.dataset.action = captchaButton.dataset.action ?? 'SDK-button';
+    newCaptchaButton.dataset.action = captchaButton.dataset['recaptcha_action'] ?? 'SDK-button';
 
     newCaptchaButton.addEventListener('click', () => {
         newCaptchaButton.style.cursor = 'wait';
