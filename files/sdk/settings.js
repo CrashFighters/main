@@ -4,21 +4,21 @@ import {
 
 import '/sdk/auth.js';
 
-const { updateUserObject, onStateChange, firebase: { app, auth } } = (await import('/sdk/auth.js'))._;
+const { updateUserObject, onStateChangeCallbacks, firebase: { app, auth } } = (await import('/sdk/auth.js'))._;
 
 export const setDisplayName = async (displayName) => {
     await updateProfile(auth.currentUser, {
         displayName
     });
     updateUserObject(auth.currentUser);
-    for (const callback of onStateChange)
+    for (const callback of onStateChangeCallbacks)
         callback(window.auth.user);
 };
 
 export const setLanguage = async (language) => {
     auth.languageCode = language;
     updateUserObject(auth.currentUser);
-    for (const callback of onStateChange)
+    for (const callback of onStateChangeCallbacks)
         callback(window.auth.user);
 };
 
@@ -27,6 +27,6 @@ export const setPicture = async (picture) => {
         photoURL: picture
     });
     updateUserObject(auth.currentUser);
-    for (const callback of onStateChange)
+    for (const callback of onStateChangeCallbacks)
         callback(window.auth.user);
 };
