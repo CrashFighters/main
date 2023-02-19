@@ -53,7 +53,7 @@ import {
 } from '/common/settings.js';
 
 import {
-    createButton
+    verifyViaButton
 } from '/sdk/recaptcha.js';
 
 let preventRedirect = false;
