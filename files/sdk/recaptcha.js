@@ -33,9 +33,9 @@ export async function initAppCheck(app) {
     }
 };
 
-export async function execute() {
+export async function execute(action = 'SDK-execute') {
     await waitReady();
-    const token = await grecaptcha.execute(publicRecaptchaV3Key, { action: 'submit' });
+    const token = await grecaptcha.execute(publicRecaptchaV3Key, { action });
     const score = await getScoreFromToken(token);
 
     return score;
@@ -59,7 +59,7 @@ function googleCaptchaCallback(id) {
 
         element.style.cursor = null;
         element.classList.remove('disabled');
-        window[element.dataset['score_callback']]?.(score);
+        window[element.dataset['recaptcha_callback']]?.(score);
     };
 };
 
@@ -71,9 +71,10 @@ for (const captchaButton of invisRecaptchaButtons) {
     }
 
     const newCaptchaButton = document.createElement('button');
-    newCaptchaButton.dataset['score_callback'] = captchaButton.dataset['score_callback'];
+    newCaptchaButton.dataset['recaptcha_callback'] = captchaButton.dataset['recaptcha_callback'];
     newCaptchaButton.innerText = captchaButton.innerText;
     newCaptchaButton.id = captchaButton.id;
+    newCaptchaButton.dataset.action = captchaButton.dataset.action ?? 'SDK-button';
 
     newCaptchaButton.addEventListener('click', () => {
         newCaptchaButton.style.cursor = 'wait';
@@ -83,7 +84,6 @@ for (const captchaButton of invisRecaptchaButtons) {
     window[`googleCaptchaCallback-${captchaButton.id}`] = googleCaptchaCallback(captchaButton.id);
     newCaptchaButton.className = 'g-recaptcha';
     newCaptchaButton.dataset.sitekey = publicRecaptchaV3Key;
-    newCaptchaButton.dataset.action = 'submit';
 
     captchaButton.replaceWith(newCaptchaButton);
 }
