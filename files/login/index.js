@@ -65,10 +65,19 @@ onStateChange(user => {
 window.doLogin = async (recaptchaScore) => {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
+    const button = document.getElementById('loginButton-1');
 
-    if (recaptchaScore < minimalLoginRecaptchaScore)
-        // will throw if captcha fails
-        await verifyViaButton(document.getElementById('loginRecaptchaButton'));
+    if (recaptchaScore < minimalLoginRecaptchaScore) {
+        button.disabled = true;
+
+        try {
+            await verifyViaButton(document.getElementById('loginRecaptchaButton'));
+        } catch (e) {
+            throw e;
+        } finally {
+            button.disabled = false;
+        }
+    }
 
     preventRedirect = true;
     await loginWithEmail(email, password);
@@ -80,10 +89,19 @@ window.doSignup = async (recaptchaScore) => {
     const name = document.getElementById('signupName').value;
     const email = document.getElementById('signupEmail').value;
     const password = document.getElementById('signupPassword').value;
+    const button = document.getElementById('signupButton-1');
 
-    if (recaptchaScore < minimalSignupRecaptchaScore)
-        // will throw if captcha fails
-        await verifyViaButton(document.getElementById('signupRecaptchaButton'));
+    if (recaptchaScore < minimalSignupRecaptchaScore) {
+        button.disabled = true;
+
+        try {
+            await verifyViaButton(document.getElementById('signupRecaptchaButton'));
+        } catch (e) {
+            throw e;
+        } finally {
+            button.disabled = false;
+        }
+    }
 
     preventRedirect = true;
     await createEmailAccount(email, password);
