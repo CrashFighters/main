@@ -81,12 +81,20 @@ const firebaseErrorCodes = {
     }
 };
 
-const errorCodeMessages = {
+const recaptchaStateNames = {
+    ready: 'recaptchaNotSolved',
+    expired: 'recaptchaExpired',
+    error: 'recaptchaError'
+};
+
+const errorCodeMessages = { //todo: put in en.json
     emailDoesNotExist: 'There is no account associated with this email address',
     invalidEmail: "This isn't a valid email address",
     wrongPassword: 'The password you entered is incorrect',
     weakPassword: 'The password you entered is too weak',
     recaptchaNotSolved: 'Please solve the captcha'
+    recaptchaExpired: 'The captcha has expired. Please solve it again',
+    recaptchaError: 'Please try the captcha again'
 }
 
 const loginFields = [
@@ -125,7 +133,7 @@ window.doLogin = async (recaptchaScore) => {
         loginRecaptcha = await createButton(document.getElementById('loginRecaptchaButton'));
 
     if ((loginRecaptcha && loginRecaptcha.state !== 'success'))
-        return handleLoginError({ errorCode: 'recaptchaNotSolved', field: 'recaptcha' });
+        return handleLoginError({ errorCode: recaptchaStateNames[loginRecaptcha.state], field: 'recaptcha' });
 
     nativeButton.disabled = true;
     preventRedirect = true;
