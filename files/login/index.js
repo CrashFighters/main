@@ -69,14 +69,18 @@ window.doLogin = async (recaptchaScore) => {
 
     if (recaptchaScore < minimalLoginRecaptchaScore) {
         button.disabled = true;
+        let buttonScore;
 
         try {
-            await verifyViaButton(document.getElementById('loginRecaptchaButton'));
+            buttonScore = await verifyViaButton(document.getElementById('loginRecaptchaButton'));
         } catch (e) {
             throw e;
         } finally {
             button.disabled = false;
         }
+
+        console.log('buttonScore', buttonScore);
+        throw new Error('not implemented')
     }
 
     preventRedirect = true;
@@ -91,17 +95,8 @@ window.doSignup = async (recaptchaScore) => {
     const password = document.getElementById('signupPassword').value;
     const button = document.getElementById('signupButton-1');
 
-    if (recaptchaScore < minimalSignupRecaptchaScore) {
-        button.disabled = true;
-
-        try {
-            await verifyViaButton(document.getElementById('signupRecaptchaButton'));
-        } catch (e) {
-            throw e;
-        } finally {
-            button.disabled = false;
-        }
-    }
+    // if (recaptchaScore < minimalSignupRecaptchaScore)
+    throw new Error('not implemented');
 
     preventRedirect = true;
     await createEmailAccount(email, password);
