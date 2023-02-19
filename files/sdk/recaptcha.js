@@ -7,7 +7,7 @@ import { publicRecaptchaV3Key } from '/common/apiKeys.js';
 
 async function getScoreFromToken(token) {
     const res = await fetch(`/api/recaptcha?token=${token}`);
-    const score = parseInt(await res.text());
+    const score = parseFloat(await res.text());
 
     return score;
 };
