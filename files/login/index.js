@@ -52,6 +52,10 @@ import {
     minimalSignupRecaptchaScore
 } from '/common/settings.js';
 
+import {
+    createButton
+} from '/sdk/recaptcha.js';
+
 let preventRedirect = false;
 onStateChange(user => {
     if (user && !preventRedirect)
@@ -62,10 +66,9 @@ window.doLogin = async (recaptchaScore) => {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
 
-    if (recaptchaScore < minimalLoginRecaptchaScore) {
-        //todo
-        return
-    };
+    if (recaptchaScore < minimalLoginRecaptchaScore)
+        // will throw if captcha fails
+        await verifyViaButton(document.getElementById('loginRecaptchaButton'));
 
     preventRedirect = true;
     await loginWithEmail(email, password);
@@ -78,10 +81,9 @@ window.doSignup = async (recaptchaScore) => {
     const email = document.getElementById('signupEmail').value;
     const password = document.getElementById('signupPassword').value;
 
-    if (recaptchaScore < minimalSignupRecaptchaScore) {
-        //todo
-        return;
-    }
+    if (recaptchaScore < minimalSignupRecaptchaScore)
+        // will throw if captcha fails
+        await verifyViaButton(document.getElementById('signupRecaptchaButton'));
 
     preventRedirect = true;
     await createEmailAccount(email, password);

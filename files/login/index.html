@@ -30,6 +30,7 @@
           <input type="text" placeholder="Name" id="signupName" />
           <input type="email" placeholder="Email" id="signupEmail" />
           <input type="password" placeholder="Password" id="signupPassword" />
+          <div id="signupRecaptchaButton"></div>
           <button type="button" data-recaptcha_callback="doSignup" data-recaptcha_action="loginPage_signup"
             class="invisRecaptchaButton" id="signupButton-1">Sign
             up</button>
@@ -46,6 +47,7 @@
           <span>or use your account</span>
           <input type="email" placeholder="Email" id="loginEmail" />
           <input type="password" placeholder="Password" id="loginPassword" />
+          <div id="loginRecaptchaButton"></div>
           <a href="/resetPassword">Forgot your password?</a>
           <button type="button" data-recaptcha_callback="doLogin" data-recaptcha_action="loginPage_login"
             class="invisRecaptchaButton" id="loginButton-1">Login</button>
