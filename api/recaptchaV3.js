@@ -32,7 +32,7 @@ module.exports = {
 
             // const result = await response.json();
 
-            console.log('[WARNING] Generating fake recaptcha response in /api/recaptcha.js')
+            console.log('[WARNING] Generating fake recaptcha response in /api/recaptchaV3.js')
             const result = {
                 success: true,
                 score: 0.9

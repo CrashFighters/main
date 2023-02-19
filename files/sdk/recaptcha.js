@@ -8,7 +8,7 @@ import { publicRecaptchaV3Key } from '/common/apiKeys.js';
 const wait = ms => new Promise(res => setTimeout(res, ms));
 
 async function getScoreFromToken(token) {
-    const res = await fetch(`/api/recaptcha?token=${token}`);
+    const res = await fetch(`/api/recaptchaV3?token=${token}`);
     const score = parseFloat(await res.text());
 
     return score;
