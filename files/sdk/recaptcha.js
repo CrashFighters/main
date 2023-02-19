@@ -18,29 +18,43 @@ export async function initAppCheck(app) {
     }
 };
 
-window.googleCaptchaCallback = token => {
-    console.log(token)
-};
-
 // hide recaptcha badge
 const style = document.createElement('style');
 style.innerHTML = `
-.grecaptcha-badge { visibility: hidden; }
+    .grecaptcha-badge { visibility: hidden; }
 `;
 document.head.appendChild(style);
 
+function googleCaptchaCallback(id) {
+    const element = document.getElementById(id);
+
+    return async function (token) {
+        const res = await fetch(`/api/recaptcha?token=${token}`);
+        const score = parseInt(await res.text());
+
+        window[element.dataset['score_callback']]?.(score);
+    };
+};
+
 const captchaButtons = [...document.getElementsByClassName('captchaButton')];
 for (const captchaButton of captchaButtons) {
+    if (!captchaButton.id) {
+        console.error('captchaButton must have an id attribute', captchaButton);
+        continue;
+    }
+
     const newCaptchaButton = document.createElement('button');
-    newCaptchaButton.onclick = captchaButton.onclick;
+    newCaptchaButton.dataset['score_callback'] = captchaButton.dataset['score_callback'];
     newCaptchaButton.innerText = captchaButton.innerText;
+    newCaptchaButton.id = captchaButton.id;
 
     newCaptchaButton.className = 'g-recaptcha';
     newCaptchaButton.dataset.sitekey = publicRecaptchaKey;
-    newCaptchaButton.dataset.callback = 'googleCaptchaCallback';
+    newCaptchaButton.dataset.callback = `googleCaptchaCallback-${captchaButton.id}`;
     newCaptchaButton.dataset.action = 'submit';
 
     captchaButton.replaceWith(newCaptchaButton);
+    window[`googleCaptchaCallback-${captchaButton.id}`] = googleCaptchaCallback(captchaButton.id);
 }
 
 if (!doesDocumentIncludeScript('https://www.google.com/recaptcha/api.js')) {

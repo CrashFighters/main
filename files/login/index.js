@@ -53,7 +53,7 @@ onStateChange(user => {
         window.location.replace('/');
 });
 
-window.doLogin = async () => {
+window.doLogin = async (recaptchaScore) => {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
 
