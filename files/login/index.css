@@ -66,6 +66,10 @@ button:active {
 	transform: scale(0.95);
 }
 
+button:focus {
+	outline-color: rgb(255, 0, 255);
+}
+
 button.ghost {
 	background-color: transparent;
 	border-color: #FFFFFF;
