@@ -53,7 +53,7 @@ import {
 } from '/common/settings.js';
 
 import {
-    verifyViaButton
+    awaitButtonSuccess
 } from '/sdk/recaptcha.js';
 
 let preventRedirect = false;
@@ -69,23 +69,19 @@ window.doLogin = async (recaptchaScore) => {
 
     if (recaptchaScore < minimalLoginRecaptchaScore) {
         button.disabled = true;
-        let buttonScore;
 
         try {
-            buttonScore = await verifyViaButton(document.getElementById('loginRecaptchaButton'));
+            await awaitButtonSuccess(document.getElementById('loginRecaptchaButton'));
         } catch (e) {
-            throw e;
-        } finally {
             button.disabled = false;
+            throw e;
         }
-
-        console.log('buttonScore', buttonScore);
-        throw new Error('not implemented')
     }
 
     preventRedirect = true;
     await loginWithEmail(email, password);
 
+    button.disabled = false;
     window.location.replace('/');
 }
 
@@ -95,12 +91,21 @@ window.doSignup = async (recaptchaScore) => {
     const password = document.getElementById('signupPassword').value;
     const button = document.getElementById('signupButton-1');
 
-    // if (recaptchaScore < minimalSignupRecaptchaScore)
-    throw new Error('not implemented');
+    if (recaptchaScore < minimalSignupRecaptchaScore) {
+        button.disabled = true;
+
+        try {
+            await awaitButtonSuccess(document.getElementById('signupRecaptchaButton'));
+        } catch (e) {
+            button.disabled = false;
+            throw e;
+        }
+    }
 
     preventRedirect = true;
     await createEmailAccount(email, password);
     await setDisplayName(name);
 
+    button.disabled = false;
     window.location.replace('/');
 }
