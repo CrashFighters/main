@@ -1,0 +1,19 @@
+These are all the places where there is a list of allowed domains:
+
+https://www.google.com/recaptcha/admin/site/613603520/settings
+https://console.firebase.google.com/project/crashfighters/authentication/settings
+https://console.cloud.google.com/apis/credentials/key/4df088bc-21d3-4b06-9d6a-080c2724c96d?project=crashfighters
+https://console.cloud.google.com/apis/credentials/oauthclient/478395146629-9g1so59tp8p4iqn61g3iruksa99rmk0l.apps.googleusercontent.com?project=crashfighters
+https://console.cloud.google.com/apis/credentials/consent/edit?project=crashfighters
+
+
+These are all the allowed domains:
+
+http://localhost
+http://localhost:80
+https://crashfighters.firebaseapp.com
+https://crashfighters.web.app
+https://crashfighters.loca.lt
+https://crashfighters.com
+https://crashfighters.nl
+http://crashfighters.nl
