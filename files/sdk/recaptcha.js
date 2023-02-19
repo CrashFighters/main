@@ -51,7 +51,6 @@ function renderV2Button(element) {
         grecaptcha.render(element, {
             sitekey: publicRecaptchaV2Key,
             callback: res, //todo: verify token passed to res
-            'expired-callback': rej,
             'error-callback': rej
         });
     });
