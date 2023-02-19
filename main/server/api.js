@@ -49,7 +49,7 @@ module.exports = {
                         params = cont;
                         ex.execute({
                             statusCode: (code, short, text) => {
-                                statusCode(response, code, { text: text });
+                                statusCode(response, code, { text, short });
                             },
                             parseError,
                             end: (data) => {
@@ -65,7 +65,7 @@ module.exports = {
                 } else {
                     ex.execute({
                         statusCode: (code, short, text) => {
-                            statusCode(response, code, { text: text });
+                            statusCode(response, code, { text, short });
                         },
                         parseError,
                         end: (data) => {
