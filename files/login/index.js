@@ -164,6 +164,8 @@ window.doSignup = async (recaptchaScore) => {
     try {
         await createEmailAccount(email, password);
         await setDisplayName(name);
+    } catch (e) {
+        throw e; //todo: add same error handling as login
     } finally {
         nativeButton.disabled = false;
         preventRedirect = false;
