@@ -3,7 +3,7 @@ import {
     ReCaptchaV3Provider
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app-check.js';
 
-import { publicRecaptchaKey } from '/common/apiKeys.js';
+import { publicRecaptchaV3Key } from '/common/apiKeys.js';
 
 async function getScoreFromToken(token) {
     const res = await fetch(`/api/recaptcha?token=${token}`);
@@ -20,7 +20,7 @@ function waitReady() {
 
 export async function initAppCheck(app) {
     const appCheck = initializeAppCheck(app, {
-        provider: new ReCaptchaV3Provider(publicRecaptchaKey),
+        provider: new ReCaptchaV3Provider(publicRecaptchaV3Key),
         isTokenAutoRefreshEnabled: true
     });
 
@@ -33,7 +33,7 @@ export async function initAppCheck(app) {
 
 export async function execute() {
     await waitReady();
-    const token = await grecaptcha.execute(publicRecaptchaKey, { action: 'submit' });
+    const token = await grecaptcha.execute(publicRecaptchaV3Key, { action: 'submit' });
     const score = await getScoreFromToken(token);
 
     return score;
@@ -78,7 +78,7 @@ for (const captchaButton of captchaButtons) {
     newCaptchaButton.dataset.callback = `googleCaptchaCallback-${captchaButton.id}`;
     window[`googleCaptchaCallback-${captchaButton.id}`] = googleCaptchaCallback(captchaButton.id);
     newCaptchaButton.className = 'g-recaptcha';
-    newCaptchaButton.dataset.sitekey = publicRecaptchaKey;
+    newCaptchaButton.dataset.sitekey = publicRecaptchaV3Key;
     newCaptchaButton.dataset.action = 'submit';
 
     captchaButton.replaceWith(newCaptchaButton);
@@ -86,7 +86,7 @@ for (const captchaButton of captchaButtons) {
 
 if (!doesDocumentIncludeScript('https://www.google.com/recaptcha/api.js')) {
     const script = document.createElement('script');
-    script.src = `https://www.google.com/recaptcha/api.js?render=${publicRecaptchaKey}`;
+    script.src = `https://www.google.com/recaptcha/api.js?render=${publicRecaptchaV3Key}`;
     document.head.appendChild(script);
 }
 
