@@ -1,5 +1,3 @@
-const https = require('https');
-
 const { endpoint, private: secret } = require('../credentials/recaptchaV3.json');
 
 const headers = {

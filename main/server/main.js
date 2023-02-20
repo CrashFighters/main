@@ -15,13 +15,13 @@ module.exports = {
             let middlewareData = {};
             for (const middleware of middlewares) {
                 const newMiddlewareData = await middleware(request, response);
-                middleWareData = { ...middlewareData, ...newMiddlewareData };
+                middlewareData = { ...middlewareData, ...newMiddlewareData };
             };
 
             if (request.url.toLowerCase().startsWith(settings.generic.path.online.api))
-                return require('../server/api.js').execute(request, response, middleWareData);
+                return require('../server/api.js').execute(request, response, middlewareData);
             else
-                return require('./normal.js').execute(request, response, middleWareData);
+                return require('./normal.js').execute(request, response, middlewareData);
 
         } catch (err) {
             parseError(err);
