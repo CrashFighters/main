@@ -1,9 +1,4 @@
 import {
-    initializeAppCheck,
-    ReCaptchaV3Provider
-} from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app-check.js';
-
-import {
     publicRecaptchaV3Key,
     publicRecaptchaV2Key
 } from '/common/apiKeys.js';
@@ -31,21 +26,6 @@ function waitReady() {
     return new Promise(res => {
         grecaptcha.ready(res);
     });
-};
-
-window._recaptcha = {
-    initAppCheck: async function (app) {
-        const appCheck = initializeAppCheck(app, {
-            provider: new ReCaptchaV3Provider(publicRecaptchaV3Key),
-            isTokenAutoRefreshEnabled: true
-        });
-
-        window._captcha = {
-            firebase: {
-                appCheck
-            }
-        }
-    }
 };
 
 export async function getScore(action = 'SDK_execute') {
