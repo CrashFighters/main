@@ -7,9 +7,11 @@ import {
 
 const { firebase: { auth } } = (await import('/sdk/auth.js'))._;
 
-const _2FaRecaptchaButton = document.getElementById('2faRecaptchaButton');
+const id = '2faRecaptchaButton';
+
+const _2FaRecaptchaButton = document.getElementById(id);
 if (!_2FaRecaptchaButton)
-    throw new Error('No element with id "2faRecaptchaButton" found');
+    throw new Error(`No element with id "${id}" found`);
 
 let recaptchaDoneCallbacks = [];
 let recaptchaState = 'ready';
@@ -29,23 +31,30 @@ const __recaptchaVerifier = new RecaptchaVerifier(_2FaRecaptchaButton, {
 }, auth);
 let recaptchaRenderPromise = __recaptchaVerifier.render();
 
-function getRecaptchaVerifier() {
-    if (['success', 'expired'].includes(recaptchaState)) {
-        recaptchaDoneCallbacks = [];
-        __recaptchaVerifier.clear();
-        recaptchaRenderPromise = __recaptchaVerifier.render();
-    };
-    if (recaptchaState === 'successBefore') {
-        recaptchaState = 'success';
-        return Promise.resolve(__recaptchaVerifier);
-    };
-    recaptchaState = 'waiting';
+export const _ = {
+    getRecaptchaVerifier() {
+        _2FaRecaptchaButton.style.display = null;
 
-    return new Promise(async res => {
-        await recaptchaRenderPromise;
-        recaptchaDoneCallbacks.push(res);
-    });
-}
+        if (['success', 'expired'].includes(recaptchaState)) {
+            recaptchaDoneCallbacks = [];
+            __recaptchaVerifier.clear();
+            recaptchaRenderPromise = __recaptchaVerifier.render();
+        };
+        if (recaptchaState === 'successBefore') {
+            recaptchaState = 'success';
+            return Promise.resolve(__recaptchaVerifier);
+        };
+        recaptchaState = 'waiting';
+
+        return new Promise(async res => {
+            await recaptchaRenderPromise;
+            recaptchaDoneCallbacks.push(res);
+        });
+    },
+    hide2faRecaptchaButton() {
+        _2FaRecaptchaButton.style.display = 'none';
+    }
+};
 
 export const enable = async (phoneNumber, displayName) => {
     if (!window.auth.user)
@@ -63,7 +72,7 @@ export const enable = async (phoneNumber, displayName) => {
         session: multiFactorSession
     };
 
-    const recaptchaVerifier = await getRecaptchaVerifier();
+    const recaptchaVerifier = await _.getRecaptchaVerifier();
 
     const phoneAuthProvider = new PhoneAuthProvider(auth);
     const verificationId = await phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
