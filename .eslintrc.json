@@ -1,6 +1,7 @@
 {
     "env": {
-        "node": true
+        "node": true,
+        "browser": true
     },
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -40,8 +41,6 @@
         "WeakSet": true,
         "Proxy": true,
         "Reflect": true,
-        "document": true,
-        "window": true,
         "grecaptcha": true,
         "Toastify": true
     }
