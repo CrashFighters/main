@@ -28,9 +28,13 @@
           </div>
           <span>or use email</span>
           <input type="text" placeholder="Name" id="signupName" />
+          <p id="signup-name-feedback" class="errorFeedback"></p>
           <input type="email" placeholder="Email" id="signupEmail" />
+          <p id="signup-email-feedback" class="errorFeedback"></p>
           <input type="password" placeholder="Password" id="signupPassword" />
+          <p id="signup-password-feedback" class="errorFeedback"></p>
           <div id="signupRecaptchaButton"></div>
+          <p id="signup-recaptcha-feedback" class="errorFeedback"></p>
           <button type="button" data-recaptcha_callback="doSignup" data-recaptcha_action="loginPage_signup"
             data-recaptcha_loading_class="disabled" class="invisRecaptchaButton" id="signupButton-1">Sign
             up</button>

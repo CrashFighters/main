@@ -67,8 +67,16 @@ const firebaseErrorCodes = {
         errorCode: 'emailDoesNotExist',
         field: 'email'
     },
+    'auth/missing-email': {
+        errorCode: 'missingEmail',
+        field: 'email'
+    },
     'auth/invalid-email': {
         errorCode: 'invalidEmail',
+        field: 'email'
+    },
+    'auth/email-already-in-use': {
+        errorCode: 'emailAlreadyInUse',
         field: 'email'
     },
     'auth/wrong-password': {
@@ -90,11 +98,14 @@ const recaptchaStateNames = {
 const errorCodeMessages = { //todo: put in en.json
     emailDoesNotExist: 'There is no account associated with this email address',
     invalidEmail: "This isn't a valid email address",
-    wrongPassword: 'The password you entered is incorrect',
-    weakPassword: 'The password you entered is too weak',
+    missingEmail: 'Please enter an email address',
+    emailAlreadyInUse: 'This email address is already in use',
+    wrongPassword: 'The password is incorrect',
+    weakPassword: 'The password is too weak',
     recaptchaNotSolved: 'Please solve the captcha',
     recaptchaExpired: 'The captcha has expired. Please solve it again',
-    recaptchaError: 'Please try the captcha again'
+    recaptchaError: 'Please try the captcha again',
+    noName: 'Please enter a name'
 }
 
 const loginFields = [
@@ -150,6 +161,32 @@ window.doLogin = async (recaptchaScore) => {
     window.location.replace('/');
 }
 
+const signupFields = [
+    'name',
+    'email',
+    'password',
+    'recaptcha'
+];
+function handleSignupError({ errorCode, field, error }) {
+    if (!field)
+        throw new Error('Not implemented'); //todo: use Toastify?
+
+    if (!signupFields.includes(field))
+        throw new Error(`Invalid field: ${field}`)
+
+    const message = errorCodeMessages[errorCode] ?? errorCode ?? error?.message ?? 'An unknown error occurred';
+
+    for (const signupFieldId of signupFields) {
+        const feedbackElement = document.getElementById(`signup-${signupFieldId}-feedback`);
+
+        if (signupFieldId === field)
+            feedbackElement.innerText = message;
+        else
+            feedbackElement.innerText = '';
+    }
+
+};
+
 let signupRecaptcha;
 window.doSignup = async (recaptchaScore) => {
     const name = document.getElementById('signupName').value;
@@ -157,12 +194,15 @@ window.doSignup = async (recaptchaScore) => {
     const password = document.getElementById('signupPassword').value;
     const nativeButton = document.getElementById('signupButton-1');
 
+    if (name.length === 0)
+        return handleSignupError({ errorCode: 'noName', field: 'name' });
+
     // create login captcha if user is likely a bot
     if (recaptchaScore < minimalSignupRecaptchaScore && !signupRecaptcha)
         signupRecaptcha = await createButton(document.getElementById('signupRecaptchaButton'));
 
-    if ((signupRecaptcha && signupRecaptcha.state !== 'success') || (!signupRecaptcha && recaptchaScore < minimalSignupRecaptchaScore))
-        return;
+    if ((signupRecaptcha && signupRecaptcha.state !== 'success'))
+        return handleSignupError({ errorCode: recaptchaStateNames[loginRecaptcha.state], field: 'recaptcha' });
 
     nativeButton.disabled = true;
     preventRedirect = true;
@@ -170,7 +210,8 @@ window.doSignup = async (recaptchaScore) => {
         await createEmailAccount(email, password);
         await setDisplayName(name);
     } catch (e) {
-        throw e; //todo: add same error handling as login
+        let firebaseErrorCode = firebaseErrorCodes[e.code];
+        return handleSignupError({ errorCode: firebaseErrorCode?.errorCode, field: firebaseErrorCode?.field, error: e });
     } finally {
         nativeButton.disabled = false;
         preventRedirect = false;
