@@ -32,13 +32,15 @@ export const logout = async () => {
 };
 
 export const login = () => {
-    if (!window.auth.user)
-        // if the user is not logged in
-        window.open('/login', '_self');
+    if (!window.auth.user) // if the user is not logged in
+        if (window.location.pathname !== '/login')
+            window.open(`/login?redirect=${encodeURIComponent(location.href)}`, '_self');
 };
 
 export const signup = () => {
-    window.open('/login?signup=true', '_self');
+    if (!window.auth.user) // if the user is not logged in
+        if (window.location.pathname !== '/login')
+            window.open(`/login?signup=true&redirect=${encodeURIComponent(location.href)}`, '_self');
 };
 
 async function updateUserObject(newUser) {
