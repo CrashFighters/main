@@ -74,7 +74,7 @@ async function updateUserObject(newUser) {
         displayName: newUser.displayName,
         language: auth.languageCode,
         email,
-        emailVerified: newUser.emailVerified,
+        emailVerified: newUser.email ? newUser.emailVerified : true,
         isAnonymous: newUser.isAnonymous,
         creationTime: new Date(newUser.metadata.creationTime),
         lastSignInTime: new Date(newUser.metadata.lastSignInTime),
