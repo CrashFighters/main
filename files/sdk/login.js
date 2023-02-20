@@ -62,9 +62,8 @@ export async function prepare2fa() {
     recaptchaVerifier = await getRecaptchaVerifier();
 };
 
-let verificationId;
 let resolver;
-export async function send2fa(error) {
+export async function get2faMethods(error) {
     if (!recaptchaVerifier)
         throw new Error('prepare2fa not called');
 
@@ -73,9 +72,17 @@ export async function send2fa(error) {
 
     resolver = getMultiFactorResolver(auth, error);
 
-    if (resolver.hints.length > 1)
-        console.error('Multiple 2FA options found, this is not supported yet. Choosing first option');
-    const selectedIndex = 0;
+    return resolver.hints.map(hint => ({
+        displayName: hint.displayName,
+        phoneNumber: hint.phoneNumber
+    }));
+
+}
+
+let verificationId;
+export async function send2fa(selectedIndex) {
+    if (!recaptchaVerifier)
+        throw new Error('prepare2fa not called');
 
     const hint = resolver.hints[selectedIndex];
     if (hint.factorId !== PhoneMultiFactorGenerator.FACTOR_ID)

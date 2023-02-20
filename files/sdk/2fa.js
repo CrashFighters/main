@@ -56,17 +56,15 @@ export const _ = {
     }
 };
 
-export const enable = async (phoneNumber, displayName) => {
+export const add = async (phoneNumber, displayName) => {
     if (!window.auth.user)
         throw new Error('User is not logged in');
-    if (!window.auth.user.emailVerified)
-        throw new Error('User email must be verified');
     if (window.auth.user.loginMethod !== 'email')
         throw new Error('User must be logged in with email');
+    if (!window.auth.user.emailVerified)
+        throw new Error('User email must be verified');
 
     const multiFactorUser = multiFactor(auth.currentUser);
-    if (multiFactorUser.enrolledFactors.length > 0)
-        throw new Error('User already has 2fa enabled');
 
     const multiFactorSession = await multiFactorUser.getSession();
     const phoneInfoOptions = {

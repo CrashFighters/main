@@ -45,6 +45,7 @@ import {
     loginWithEmail,
     createEmailAccount,
     prepare2fa,
+    get2faMethods,
     send2fa,
     loginWith2fa
 } from '/sdk/login.js';
@@ -177,6 +178,30 @@ window.removeLoginErrorFeedback = () => {
     }
 };
 
+function choose2faMethod(_2faMethods) {
+    const chooseText = document.getElementById('choose2faMethodText');
+    const choose = document.getElementById('choose2faMethod');
+
+    return new Promise(res => {
+        for (const index in _2faMethods) {
+            const { displayName, phoneNumber } = _2faMethods[index];
+
+            const button = document.createElement('button');
+            button.innerText = displayName ? `${displayName} (${phoneNumber})` : phoneNumber;
+            button.addEventListener('click', () => {
+                chooseText.style.display = 'none';
+                choose.style.display = 'none';
+                res(index);
+            })
+
+            choose.appendChild(button);
+        }
+
+        chooseText.style.display = null;
+        choose.style.display = null;
+    });
+}
+
 let _2faError;
 async function enable2fa(error) {
     _2faError = error;
@@ -202,11 +227,19 @@ async function enable2fa(error) {
 
     await prepare2fa();
 
+    const _2faMethods = await get2faMethods(error);
+    let selectedIndex;
+
+    if (_2faMethods.length === 1)
+        selectedIndex = 0;
+    else
+        selectedIndex = await choose2faMethod(_2faMethods);
+
     verificationCodeInput.style.display = null;
     verify2faButton.addEventListener('click', () => verify2faButton.disabled = true);
     verify2faButton.style.display = null;
 
-    const { phoneNumber, displayName } = await send2fa(error);
+    const { phoneNumber, displayName } = await send2fa(selectedIndex);
 
     verificationCodeSent.innerText = verificationCodeSent.innerText.replace('{location}', displayName ? `${displayName} (${phoneNumber})` : phoneNumber);
     verificationCodeSent.style.display = null;
