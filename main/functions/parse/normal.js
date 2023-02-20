@@ -20,7 +20,7 @@ module.exports = {
         ) {
             if (
                 path.split('/')[1]
-                ==
+                ===
                 path.split('/')[2]
             ) {
                 path =
@@ -33,10 +33,9 @@ module.exports = {
         }
 
         if (
-            !path
-                .split('/')[path
-                    .split('/')
-                    .length - 1
+            !path.split('/')[path
+                .split('/')
+                .length - 1
             ]
                 .includes('.')
         ) {
@@ -55,10 +54,9 @@ module.exports = {
                     .splice(2)
                     .join('/');
 
-            if (!newPath
-                .split('/')[newPath
-                    .split('/')
-                    .length - 1
+            if (!newPath.split('/')[newPath
+                .split('/')
+                .length - 1
             ]
                 .includes('.')
             ) {
