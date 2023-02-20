@@ -99,6 +99,12 @@ input {
 	width: 100%;
 }
 
+input:disabled,
+input.disabled {
+	cursor: not-allowed;
+	color: rgb(147, 147, 147);
+}
+
 .container {
 	background-color: #fff;
 	border-radius: 10px;
