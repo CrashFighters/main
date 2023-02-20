@@ -15,6 +15,7 @@
     "sniffr": "^1.2.0"
   },
   "devDependencies": {
+    "eslint": "^8.34.0",
     "nodemon": "^2.0.20"
   }
 }
