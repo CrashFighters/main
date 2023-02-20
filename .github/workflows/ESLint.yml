@@ -21,4 +21,4 @@ jobs:
         run: ls -la
 
       - name: Run ESLint
-        run: npx eslint /api/ /files/ /main/ /modules/ --max-warnings 0
+        run: npx eslint api/ files/ main/ modules/ --max-warnings 0
