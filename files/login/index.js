@@ -203,6 +203,7 @@ async function enable2fa(error) {
     await prepare2fa();
 
     verificationCodeInput.style.display = null;
+    verify2faButton.addEventListener('click', () => verify2faButton.disabled = true);
     verify2faButton.style.display = null;
 
     const { phoneNumber, displayName } = await send2fa(error);
@@ -215,12 +216,15 @@ window.verify2fa = async () => {
     if (!_2faError)
         throw new Error('No 2FA error found')
 
+    const verify2faButton = document.getElementById('verify2faButton');
     const verificationCode = document.getElementById('verificationCodeInput').value;
     try {
         await loginWith2fa(verificationCode);
     } catch (e) {
         let firebaseErrorCode = firebaseErrorCodes[e.code];
         return handleLoginError({ errorCode: firebaseErrorCode?.errorCode, field: firebaseErrorCode?.field, error: e });
+    } finally {
+        verify2faButton.disabled = false;
     }
 };
 
