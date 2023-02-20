@@ -6,12 +6,12 @@ import {
     updateProfile,
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-import { initAppCheck } from '/sdk/recaptcha.js';
+import { init } from '/sdk/appCheck.js';
 import { firebaseConfig } from '/common/apiKeys.js';
 
 const app = initializeApp(firebaseConfig);
 
-await initAppCheck(app);
+await init(app);
 
 const auth = getAuth(app);
 

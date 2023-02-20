@@ -9,7 +9,7 @@ import {
 
 export let appCheck;
 
-export async function initAppCheck(app) {
+export async function init(app) {
     initializeAppCheck(app, {
         provider: new ReCaptchaV3Provider(publicRecaptchaV3Key),
         isTokenAutoRefreshEnabled: true
