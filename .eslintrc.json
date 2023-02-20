@@ -41,6 +41,7 @@
         "Proxy": true,
         "Reflect": true,
         "document": true,
-        "window": true
+        "window": true,
+        "grecaptcha": true,
     }
 }
