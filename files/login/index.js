@@ -5,6 +5,7 @@ const signUpButton_mobile = document.getElementById('signUp_mobile');
 const signInButton_mobile = document.getElementById('signIn_mobile');
 
 //remove old listeners
+//todo: removeEventListener with new function doesn't do anything. Why is this here?
 signUpButton.removeEventListener('click', () => {
     container.classList.add('right-panel-active');
 });
@@ -17,6 +18,7 @@ signUpButton_mobile.removeEventListener('click', () => {
 signInButton_mobile.removeEventListener('click', () => {
     container.classList.remove('right-panel-active');
 });
+
 
 signUpButton.addEventListener('click', () => {
     container.classList.add('right-panel-active');
@@ -33,6 +35,7 @@ signUpButton_mobile.addEventListener('click', () => {
 signInButton_mobile.addEventListener('click', () => {
     container.classList.remove('right-panel-active');
 });
+
 
 import {
     onStateChange
@@ -59,10 +62,28 @@ import {
     createButton
 } from '/sdk/recaptcha.js';
 
+const urlParams = new URLSearchParams(window.location.search);
+const signup = urlParams.get('signup') === 'true';
+if (signup)
+    document.getElementById('container').classList.add('right-panel-active');
+
+function redirect() {
+    const redirectLocation = urlParams.get('redirect');
+
+    let doRedirect = redirectLocation !== null;
+    if (doRedirect && new URL(redirectLocation).origin !== window.location.origin)
+        doRedirect = confirm(`Do you want to continue to the external website "${redirectLocation}"?`)
+
+    if (doRedirect)
+        window.location.replace(redirectLocation);
+    else
+        window.location.replace('/');
+};
+
 let preventRedirect = false;
 onStateChange(user => {
     if (user && !preventRedirect)
-        window.location.replace('/');
+        redirect();
 });
 
 const firebaseErrorCodes = {
@@ -232,7 +253,7 @@ window.doLogin = async (recaptchaScore) => {
         preventRedirect = false;
     }
 
-    window.location.replace('/');
+    redirect();
 }
 
 const signupFields = [
@@ -297,5 +318,5 @@ window.doSignup = async (recaptchaScore) => {
         preventRedirect = false;
     }
 
-    window.location.replace('/');
+    redirect();
 }
