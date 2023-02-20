@@ -42,6 +42,6 @@
         "Reflect": true,
         "document": true,
         "window": true,
-        "grecaptcha": true,
+        "grecaptcha": true
     }
 }
