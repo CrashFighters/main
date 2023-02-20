@@ -48,7 +48,9 @@ async function updateUserObject(newUser) {
     if (!newUser) {
         window.auth.user = null;
         return;
-    }
+    };
+    if (newUser.multiFactor?.enrolledFactors?.length > 1)
+        console.error(new Error('Multiple 2FA methods are not supported yet'));
 
     if (!newUser.photoURL)
         await updateProfile(newUser, {
@@ -66,6 +68,14 @@ async function updateUserObject(newUser) {
         isAnonymous: newUser.isAnonymous,
         creationTime: new Date(newUser.metadata.creationTime),
         lastSignInTime: new Date(newUser.metadata.lastSignInTime),
+        id: newUser.uid,
+        '2fa': !newUser.multiFactor?.enrolledFactors?.[0] ? undefined : {
+            creationTime: new Date(newUser.multiFactor.enrolledFactors[0].enrollmentTime),
+            type: newUser.multiFactor.enrolledFactors[0].factorId,
+            displayName: newUser.multiFactor.enrolledFactors[0].displayName,
+            phoneNumber: newUser.multiFactor.enrolledFactors[0].phoneNumber,
+            id: newUser.multiFactor.enrolledFactors[0].uid
+        }
     };
 }
 
