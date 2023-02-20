@@ -149,7 +149,7 @@ function handleLoginError({ errorCode, field, error }) {
     }
 
 };
-function removeLoginErrorFeedback() {
+window.removeLoginErrorFeedback = () => {
     for (const loginFieldId of loginFields) {
         const feedbackElement = document.getElementById(`login-${loginFieldId}-feedback`);
         feedbackElement.innerText = '';
@@ -219,7 +219,7 @@ window.doLogin = async (recaptchaScore) => {
     nativeButton.disabled = true;
     preventRedirect = true;
     try {
-        removeLoginErrorFeedback();
+        window.removeLoginErrorFeedback();
         await loginWithEmail(email, password);
     } catch (e) {
         if (e.code === 'auth/multi-factor-auth-required')
@@ -259,6 +259,12 @@ function handleSignupError({ errorCode, field, error }) {
             feedbackElement.innerText = '';
     }
 
+};
+window.removeSignupErrorFeedback = () => {
+    for (const signupFieldId of signupFields) {
+        const feedbackElement = document.getElementById(`signup-${signupFieldId}-feedback`);
+        feedbackElement.innerText = '';
+    }
 };
 
 let signupRecaptcha;
