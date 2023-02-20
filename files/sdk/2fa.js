@@ -12,27 +12,37 @@ if (!_2FaRecaptchaButton)
     throw new Error('No element with id "2faRecaptchaButton" found');
 
 let recaptchaDoneCallbacks = [];
-let recaptchaSolved = false;
+let recaptchaState = 'ready';
 const __recaptchaVerifier = new RecaptchaVerifier(_2FaRecaptchaButton, {
     size: 'normal',
     callback: () => {
         for (const recaptchaDoneCallback of recaptchaDoneCallbacks)
             recaptchaDoneCallback(__recaptchaVerifier);
-        recaptchaSolved = true;
+        if (recaptchaState === 'waiting')
+            recaptchaState = 'success'
+        else
+            recaptchaState = 'successBefore';
     },
     'expired-callback': () => {
-        recaptchaSolved = false;
+        recaptchaState = 'expired';
     }
 }, auth);
+let recaptchaRenderPromise = __recaptchaVerifier.render();
 
 function getRecaptchaVerifier() {
-    if (recaptchaSolved) {
+    if (['success', 'expired'].includes(recaptchaState)) {
         recaptchaDoneCallbacks = [];
         __recaptchaVerifier.clear();
-        recaptchaSolved = false;
+        recaptchaRenderPromise = __recaptchaVerifier.render();
     };
+    if (recaptchaState === 'successBefore') {
+        recaptchaState = 'success';
+        return Promise.resolve(__recaptchaVerifier);
+    };
+    recaptchaState = 'waiting';
 
-    return new Promise(res => {
+    return new Promise(async res => {
+        await recaptchaRenderPromise;
         recaptchaDoneCallbacks.push(res);
     });
 }
@@ -40,6 +50,8 @@ function getRecaptchaVerifier() {
 export const enable = async (phoneNumber, displayName) => {
     if (!window.auth.user)
         throw new Error('User is not logged in');
+    if (!window.auth.user.emailVerified)
+        throw new Error('User email must be verified');
 
     const multiFactorUser = multiFactor(auth.currentUser);
     if (multiFactorUser.enrolledFactors.length > 0)
@@ -54,16 +66,11 @@ export const enable = async (phoneNumber, displayName) => {
     const recaptchaVerifier = await getRecaptchaVerifier();
 
     const phoneAuthProvider = new PhoneAuthProvider(auth);
-    phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
+    const verificationId = await phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
 
-    return async (verificationId, verificationCode) => {
-        // when user claims they have confirmed the code, can be called multiple times
-
+    return async (verificationCode) => {
         const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
         const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(credential);
-        multiFactor(auth.currentUser).enroll(multiFactorAssertion, displayName);
+        await multiFactor(auth.currentUser).enroll(multiFactorAssertion, displayName);
     };
-
 };
-
-window.a = enable; //todo: remove
