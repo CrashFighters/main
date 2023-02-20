@@ -66,12 +66,14 @@ async function updateUserObject(newUser) {
     else if (newUser.providerData[0].providerId === 'google.com')
         loginMethod = 'google';
 
+    let email = newUser.email ?? newUser.providerData[0]?.email ?? null;
+
     window.auth.user = {
         loginMethod,
         picture: newUser.photoURL,
         displayName: newUser.displayName,
         language: auth.languageCode,
-        email: newUser.email,
+        email,
         emailVerified: newUser.emailVerified,
         isAnonymous: newUser.isAnonymous,
         creationTime: new Date(newUser.metadata.creationTime),
