@@ -14,7 +14,7 @@ module.exports = {
             ...i
         }
 
-        let out = "";
+        let out = '';
 
         if (info.numbers) out += settings.chars.numbers;
         if (info.confusingNumbers) out += settings.chars.confusingNumbers;

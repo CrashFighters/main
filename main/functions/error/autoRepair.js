@@ -190,7 +190,7 @@ module.exports = {
                     })
 
                     if (installmodules)
-                        await require(`../installNodeModule`).execute(installmodules)
+                        await require('../installNodeModule').execute(installmodules)
 
                     return {
                         changed,

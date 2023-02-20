@@ -34,14 +34,14 @@ module.exports = {
 
                 if (!exists) return parseError(new Error(messages.error.executeFunctionNotFoundWithFile.replace('{file}', path)), messages.error.executeFunctionNotFound);
 
-                if (request.method == 'POST') {
+                if (request.method === 'POST') {
                     let body = '';
                     request.on('data', function (data) {
                         body += data;
                     });
                     request.on('end', async function () {
                         let cont = {};
-                        body.split('&').forEach((val, index) => {
+                        body.split('&').forEach(val => {
                             let key = decodeURIComponent(val.split('=')[0].replace(/\+/g, ' '));
                             let value = decodeURIComponent(val.split('=')[1].replace(/\+/g, ' '));
                             cont[key] = decodeURIComponent(value);
@@ -78,12 +78,13 @@ module.exports = {
                         middleWareData
                     });
                 }
-            } else
+            } else {
                 if (isModuleInstalled('text')) {
                     let list = require(`../../${settings.generic.path.files.modules}text/createList.js`).createList(api[path].enabled.dependencies.dependenciesNotInstalled);
                     return parseError(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', path)), messages.error.modulesNotInstalledFor.replace('{api}', path).replace('{dependency}', list));
                 } else
                     return parseError(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', path)), messages.error.moduleNotInstalledFor.replace('{api}', path).replace('{dependency}', api[path].enabled.dependencies.dependenciesNotInstalled[0]));
+            }
         } else
             return statusCode(response, 404, { text: messages.error.apiCallNotFound });
 

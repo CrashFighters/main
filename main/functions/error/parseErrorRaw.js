@@ -22,11 +22,11 @@ module.exports = {
             let files = readdirSync(settings.generic.path.files.errors);
 
             files.forEach(file => {
-                if (file == settings.generic.path.files.noError) return;
+                if (file === settings.generic.path.files.noError) return;
 
                 let data = require(`../../.${settings.generic.path.files.errors}${file}`);
 
-                if (data.errorMessage.split(': ')[1] == errorMessage.split('\n')[0].split(': ')[1]) {
+                if (data.errorMessage.split(': ')[1] === errorMessage.split('\n')[0].split(': ')[1]) {
                     fileIsSpecial = false;
                     sameFile = file;
                 }

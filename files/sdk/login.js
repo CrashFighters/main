@@ -7,7 +7,7 @@ import {
     sendPasswordResetEmail as firebaseSendPasswordResetEmail
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-const { app, auth } = (await import('/sdk/auth.js'))._.firebase;
+const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
 export const loginWithGoogle = async () => {
     try {
@@ -34,7 +34,7 @@ export const createEmailAccount = async (email, password) => {
     };
 };
 
-export const resendVerificationEmail = async (email, password) => {
+export const resendVerificationEmail = async () => {
     if (!auth.currentUser)
         throw new Error('User is not logged in');
 

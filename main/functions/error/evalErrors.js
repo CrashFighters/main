@@ -22,14 +22,14 @@ module.exports = {
 
                 let files = [];
                 fi.forEach(val => {
-                    if (val == settings.generic.path.files.noError) return;
+                    if (val === settings.generic.path.files.noError) return;
                     files.push(val);
                 })
 
                 if (files[0]) {
                     cConsole.clear();
                     let message = messages.error.thereAreErrors.replace('{amount}', files.length);
-                    if (files.length == 1) message = messages.error.thereIsError.replace('{amount}', files.length);
+                    if (files.length === 1) message = messages.error.thereIsError.replace('{amount}', files.length);
 
                     cConsole.warn(message);
                     cConsole.log();

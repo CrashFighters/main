@@ -36,7 +36,7 @@ module.exports = {
         let retry = true;
 
         let currentErr = `${err}`.split('\n')[0];
-        if (currentErr == lastError && timeDiff < 1000) {
+        if (currentErr === lastError && timeDiff < 1000) {
             amountError += 1;
         } else {
             lastError = currentErr;
@@ -78,9 +78,9 @@ module.exports = {
 
     },
     extremeServer(r, response) {
-        response.writeHead(500, "The server has an extreme error, please try again later");
-        response.end("The server has an extreme error, please try again later");
-        cConsole.warn("New request in extreme error mode")
+        response.writeHead(500, 'The server has an extreme error, please try again later');
+        response.end('The server has an extreme error, please try again later');
+        cConsole.warn('New request in extreme error mode')
     },
     reloadServer(r, response) {
         let messages;
@@ -91,12 +91,12 @@ module.exports = {
         }
 
         let reloadingPath = settings.generic.path.files.reloadingFile.replace('{files}', settings.generic.path.files.files);
-        response.writeHead(500, "Because of an extreme error, the server is reloading in 5 seconds");
+        response.writeHead(500, 'Because of an extreme error, the server is reloading in 5 seconds');
         try {
             let data = Buffer.from(fs.readFileSync(reloadingPath).toString('utf-8').replace('|reloadText|', messages ? messages.error.clientServerReload : ''));
             response.end(data);
         } catch (err) {
-            response.end("Because of an extreme error, the server is reloading in 5 seconds")
+            response.end('Because of an extreme error, the server is reloading in 5 seconds')
         }
     },
     serverExecute(a1, a2) {
@@ -111,7 +111,7 @@ module.exports = {
             try {
                 require('../../server/main').execute(a1, a2);
             } catch (err) {
-                (a => { })(err.stack)
+                err.stack; // generate stack
                 let t = require(__filename);
                 t.execute(err, a2);
             }

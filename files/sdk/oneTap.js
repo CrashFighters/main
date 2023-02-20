@@ -9,7 +9,7 @@ import {
 
 import { googleSignInKey } from '/common/apiKeys.js';
 
-const { app, auth } = (await import('/sdk/auth.js'))._.firebase;
+const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
 window.googleSignInCallback = (a) => {
     signInWithCredential(auth, GoogleAuthProvider.credential(a.credential));

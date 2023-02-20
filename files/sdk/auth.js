@@ -1,17 +1,17 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js';
 import {
     getAuth,
     onAuthStateChanged,
     signOut,
     updateProfile,
-} from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+} from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-import { firebaseConfig } from "/common/apiKeys.js";
+import { firebaseConfig } from '/common/apiKeys.js';
 
 const app = initializeApp(firebaseConfig);
 
-if (doesDocumentIncludeScript("/sdk/recaptcha.js")) {
-    await import("/sdk/recaptcha.js");
+if (doesDocumentIncludeScript('/sdk/recaptcha.js')) {
+    await import('/sdk/recaptcha.js');
     const { initAppCheck } = window._recaptcha;
     await initAppCheck(app);
 }
@@ -37,11 +37,11 @@ export const logout = async () => {
 export const login = () => {
     if (!window.auth.user)
         // if the user is not logged in
-        window.open("/login", "_self");
+        window.open('/login', '_self');
 };
 
 export const signup = () => {
-    window.open("/login?signup=true", "_self");
+    window.open('/login?signup=true', '_self');
 };
 
 async function updateUserObject(newUser) {
@@ -90,6 +90,6 @@ window.auth = {
 onStateChange(() => updateUserObject(auth.currentUser));
 
 function doesDocumentIncludeScript(url) {
-    const scripts = [...document.getElementsByTagName("script")];
+    const scripts = [...document.getElementsByTagName('script')];
     return Boolean(scripts.find((script) => script.src.endsWith(url)));
 }

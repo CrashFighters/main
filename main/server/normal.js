@@ -4,7 +4,8 @@ const statusCode = require('../functions/error/statusCode.js').execute;
 const checkAcceptHeader = require('../functions/parse/header/accept');
 
 module.exports = {
-    execute(request, response, middleWareData) {
+    // execute(request, response, middleWareData) {
+    execute(request, response) {
 
         let path = require('../functions/parse/normal').execute(request.url);
 
@@ -15,12 +16,13 @@ module.exports = {
                 response.writeHead(200, { 'Content-Type': mime.lookup(path) });
                 return response.end(data);
             });
-        else
+        else {
             if (request.headers.accept && !checkAcceptHeader(request.headers.accept, 'text/html').isIn) {
                 response.writeHead(404);
                 return response.end();
             }
             else
                 statusCode(response, 404);
+        }
     }
 };

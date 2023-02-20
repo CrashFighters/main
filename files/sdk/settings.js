@@ -4,7 +4,7 @@ import {
 
 import '/sdk/auth.js';
 
-const { updateUserObject, onStateChangeCallbacks, firebase: { app, auth } } = (await import('/sdk/auth.js'))._;
+const { updateUserObject, onStateChangeCallbacks, firebase: { auth } } = (await import('/sdk/auth.js'))._;
 
 export const setDisplayName = async (displayName) => {
     await updateProfile(auth.currentUser, {

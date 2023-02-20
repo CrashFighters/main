@@ -27,7 +27,7 @@ module.exports = {
         let userOptions = [];
         if (request && requestInfo)
             userOptions = requestInfo(request).lang || [];
-        else
+        else {
             if (request && request.headers['accept-language'])
                 userOptions = [
                     {
@@ -39,6 +39,7 @@ module.exports = {
                         quality: 1
                     }
                 ]
+        }
 
         let lang;
         let found = false;

@@ -46,7 +46,7 @@ window.sendResetEmail = async () => {
 
 emailInput.addEventListener("keyup", (event) => {
     if (event.key === "Enter") //todo: use onSubmit
-        sendResetEmail();
+        window.sendResetEmail();
 
     //check if email is valid
     if (emailInput.value.includes("@") && emailInput.value.includes("."))
@@ -66,7 +66,7 @@ document
             document
                 .getElementById("sendResetEmailButton")
                 .classList.contains("disabled") == true
-        ) {
+        )
             return Toastify({
                 text: "Please enter a valid email address.",
                 duration: 3000,
@@ -74,7 +74,6 @@ document
                 position: "center",
                 backgroundColor: "#f44336",
             }).showToast();
-        } else {
-            sendResetEmail();
-        }
+        else
+            window.sendResetEmail();
     });
