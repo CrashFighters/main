@@ -28,11 +28,39 @@ export async function loginWithEmail(email, password) {
     };
 };
 
+export async function createEmailAccount(email, password) {
+    try {
+        const { user } = await createUserWithEmailAndPassword(auth, email, password);
+        await sendEmailVerification(user);
+    } catch (e) {
+        throw e;
+    };
+};
+
+export async function resendVerificationEmail() {
+    if (!auth.currentUser)
+        throw new Error('User is not logged in');
+
+    try {
+        await sendEmailVerification(auth.currentUser);
+    } catch (e) {
+        throw e;
+    };
+};
+
+export async function sendPasswordResetEmail(email) {
+    try {
+        await firebaseSendPasswordResetEmail(auth, email);
+    } catch (e) {
+        throw e;
+    };
+};
+
 let recaptchaVerifier;
 export async function prepare2fa() {
     const { getRecaptchaVerifier } = (await import('/sdk/2fa.js'))._;
     recaptchaVerifier = await getRecaptchaVerifier();
-}
+};
 
 let verificationId;
 let resolver;
@@ -66,47 +94,17 @@ export async function send2fa(error) {
         phoneNumber: hint.phoneNumber,
         displayName: hint.displayName
     }
-}
+};
 
-export async function verify2fa(verificationCode) {
+export async function loginWith2fa(verificationCode) {
     if (!verificationId || !resolver)
         throw new Error('send2fa not called');
 
     const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
     const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(credential);
 
-    const userCredential = await resolver.resolveSignIn(multiFactorAssertion);
+    await resolver.resolveSignIn(multiFactorAssertion);
 
     verificationId = null;
     resolver = null;
-
-    return userCredential;
-}
-
-export async function createEmailAccount(email, password) {
-    try {
-        const { user } = await createUserWithEmailAndPassword(auth, email, password);
-        await sendEmailVerification(user);
-    } catch (e) {
-        throw e;
-    };
-};
-
-export async function resendVerificationEmail() {
-    if (!auth.currentUser)
-        throw new Error('User is not logged in');
-
-    try {
-        await sendEmailVerification(auth.currentUser);
-    } catch (e) {
-        throw e;
-    };
-};
-
-export async function sendPasswordResetEmail(email) {
-    try {
-        await firebaseSendPasswordResetEmail(auth, email);
-    } catch (e) {
-        throw e;
-    };
 };

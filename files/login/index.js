@@ -40,7 +40,10 @@ import {
 
 import {
     loginWithEmail,
-    createEmailAccount
+    createEmailAccount,
+    prepare2fa,
+    send2fa,
+    loginWith2fa
 } from '/sdk/login.js';
 
 import {
@@ -86,6 +89,12 @@ const firebaseErrorCodes = {
     'auth/weak-password': {
         errorCode: 'weakPassword',
         field: 'password'
+    },
+    'auth/too-many-requests': {
+        errorCode: 'tooManyRequests'
+    },
+    'auth/multi-factor-auth-required': {
+        errorCode: '2faRequired'
     }
 };
 
@@ -105,16 +114,20 @@ const errorCodeMessages = { //todo: put in en.json
     recaptchaNotSolved: 'Please solve the captcha',
     recaptchaExpired: 'The captcha has expired. Please solve it again',
     recaptchaError: 'Please try the captcha again',
-    noName: 'Please enter a name'
+    noName: 'Please enter a name',
+    '2faRequired': '2FA is required for this account',
+    tooManyRequests: 'Too many tries. Please try again later'
 }
 
 const loginFields = [
     'email',
     'password',
-    'recaptcha'
+    'recaptcha',
+    'verificationCode'
 ];
 function handleLoginError({ errorCode, field, error }) {
-    const message = errorCodeMessages[errorCode] ?? errorCode ?? error?.message ?? 'An unknown error occurred';
+    console.error(error)
+    const message = errorCodeMessages[errorCode] ?? errorCode ?? error?.message ? `Error: ${error.message}` : 'An unknown error occurred';
 
     if (!field)
         return alert(message);
@@ -131,6 +144,54 @@ function handleLoginError({ errorCode, field, error }) {
             feedbackElement.innerText = '';
     }
 
+};
+function removeLoginErrorFeedback() {
+    for (const loginFieldId of loginFields) {
+        const feedbackElement = document.getElementById(`login-${loginFieldId}-feedback`);
+        feedbackElement.innerText = '';
+    }
+};
+
+let _2faError;
+async function enable2fa(error) {
+    _2faError = error;
+
+    const emailElement = document.getElementById('loginEmail');
+    const passwordElement = document.getElementById('loginPassword');
+
+    const nativeButton = document.getElementById('loginButton-1');
+    const signupRecaptchaButton = document.getElementById('signupRecaptchaButton');
+    const forgotPassword = document.getElementById('forgotPassword');
+
+    const verificationCodeInput = document.getElementById('verificationCodeInput');
+    const verify2faButton = document.getElementById('verify2faButton');
+
+    const verificationCodeSent = document.getElementById('2faVerificationCodeSent');
+
+    emailElement.disabled = true;
+    passwordElement.disabled = true;
+
+    nativeButton.style.display = 'none';
+    signupRecaptchaButton.style.display = 'none';
+    forgotPassword.style.display = 'none';
+
+    await prepare2fa();
+
+    verificationCodeInput.style.display = null;
+    verify2faButton.style.display = null;
+
+    const { phoneNumber, displayName } = await send2fa(error);
+
+    verificationCodeSent.innerText = verificationCodeSent.innerText.replace('{location}', displayName ? `${displayName} (${phoneNumber})` : phoneNumber);
+    verificationCodeSent.style.display = null;
+};
+
+window.verify2fa = async () => {
+    if (!_2faError)
+        throw new Error('No 2FA error found')
+
+    const verificationCode = document.getElementById('verificationCodeInput').value;
+    await loginWith2fa(verificationCode);
 };
 
 let loginRecaptcha;
@@ -149,8 +210,12 @@ window.doLogin = async (recaptchaScore) => {
     nativeButton.disabled = true;
     preventRedirect = true;
     try {
+        removeLoginErrorFeedback();
         await loginWithEmail(email, password);
     } catch (e) {
+        if (e.code === 'auth/multi-factor-auth-required')
+            return enable2fa(e);
+
         let firebaseErrorCode = firebaseErrorCodes[e.code];
         return handleLoginError({ errorCode: firebaseErrorCode?.errorCode, field: firebaseErrorCode?.field, error: e });
     } finally {
@@ -168,7 +233,7 @@ const signupFields = [
     'recaptcha'
 ];
 function handleSignupError({ errorCode, field, error }) {
-    const message = errorCodeMessages[errorCode] ?? errorCode ?? error?.message ?? 'An unknown error occurred';
+    const message = errorCodeMessages[errorCode] ?? errorCode ?? error?.message ? `Error: ${error.message}` : 'An unknown error occurred';
 
     if (!field)
         return alert(message)
