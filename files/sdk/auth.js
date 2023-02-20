@@ -95,8 +95,3 @@ window.auth = {
 };
 
 onStateChange(() => updateUserObject(auth.currentUser));
-
-function doesDocumentIncludeScript(url) {
-    const scripts = [...document.getElementsByTagName('script')];
-    return Boolean(scripts.find((script) => script.src.endsWith(url)));
-}

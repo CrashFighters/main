@@ -38,7 +38,7 @@ export const setPicture = async (picture) => {
         callback(window.auth.user);
 };
 
-export const enable2fa = async (displayName) => {
+export const enable2fa = async () => {
     if (!window.auth.user)
         throw new Error('User is not logged in')
 
