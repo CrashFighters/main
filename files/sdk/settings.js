@@ -1,5 +1,6 @@
 import {
-    updateProfile
+    updateProfile,
+    multiFactor
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
 import '/sdk/auth.js';
@@ -7,6 +8,9 @@ import '/sdk/auth.js';
 const { updateUserObject, onStateChangeCallbacks, firebase: { auth } } = (await import('/sdk/auth.js'))._;
 
 export const setDisplayName = async (displayName) => {
+    if (!window.auth.user)
+        throw new Error('User is not logged in')
+
     await updateProfile(auth.currentUser, {
         displayName
     });
@@ -23,6 +27,9 @@ export const setLanguage = async (language) => {
 };
 
 export const setPicture = async (picture) => {
+    if (!window.auth.user)
+        throw new Error('User is not logged in')
+
     await updateProfile(auth.currentUser, {
         photoURL: picture
     });
@@ -30,3 +37,15 @@ export const setPicture = async (picture) => {
     for (const callback of onStateChangeCallbacks)
         callback(window.auth.user);
 };
+
+export const enable2fa = async (displayName) => {
+    if (!window.auth.user)
+        throw new Error('User is not logged in')
+
+    const multiFactorUser = multiFactor(auth.currentUser);
+    if (multiFactorUser.enrolledFactors.length > 0)
+        throw new Error('User already has 2fa enabled');
+
+    // multiFactorUser.enroll()
+    throw new Error('not implemented'); //todo
+}
