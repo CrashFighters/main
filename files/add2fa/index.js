@@ -1,5 +1,5 @@
 import {
-    enable
+    add
 } from '/sdk/2fa.js';
 
 const phoneNumberInput = document.getElementById('phoneNumber');
@@ -20,12 +20,12 @@ window.doVerify2fa = async () => {
     enableButton.disabled = false;
 }
 
-window.doEnable2fa = async () => {
+window.doAdd2fa = async () => {
     const phoneNumber = phoneNumberInput.value;
     const displayName = displayNameInput.value;
     enableButton.disabled = true;
     verifyButton.disabled = true;
 
-    confirm = await enable(phoneNumber, displayName);
+    confirm = await add(phoneNumber, displayName);
     verifyButton.disabled = false;
 }
