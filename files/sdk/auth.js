@@ -56,7 +56,16 @@ async function updateUserObject(newUser) {
             )}`,
         });
 
+    let loginMethod = 'unknown';
+    if (newUser.providerData.length > 1)
+        console.error(new Error("Multiple login methods shouldn't be possible, because linking is disabled"));
+    else if (newUser.providerData[0].providerId === 'password')
+        loginMethod = 'email';
+    else if (newUser.providerData[0].providerId === 'google.com')
+        loginMethod = 'google';
+
     window.auth.user = {
+        loginMethod,
         picture: newUser.photoURL,
         displayName: newUser.displayName,
         language: auth.languageCode,
