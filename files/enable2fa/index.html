@@ -16,11 +16,11 @@
     <button onclick="window.auth.logout().then(() => window.auth.login())">Re login</button>
     <br>
     <br>
-    <input type="tel" id="phoneNumber">
-    <input type="text" id="displayName">
+    <input type="tel" id="phoneNumber" placeholder="Phone number">
+    <input type="text" id="displayName" placeholder="Phone custom user note">
     <div id="2faRecaptchaButton"></div>
     <button onclick="doEnable2fa()" id="enable2faButton">Enable 2fa</button>
-    <input type="text" id="verificationCode">
+    <input type="text" id="verificationCode" placeholder="Verification code">
     <button onclick="doVerify2fa()" id="verify2faButton" disabled>Verify 2fa</button>
 </body>
 
