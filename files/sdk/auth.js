@@ -6,14 +6,12 @@ import {
     updateProfile,
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
+import { initAppCheck } from '/sdk/recaptcha.js';
 import { firebaseConfig } from '/common/apiKeys.js';
 
 const app = initializeApp(firebaseConfig);
 
-if (doesDocumentIncludeScript('/sdk/recaptcha.js')) {
-    const { initAppCheck } = await import('/sdk/recaptcha.js');
-    await initAppCheck(app);
-}
+await initAppCheck(app);
 
 const auth = getAuth(app);
 
