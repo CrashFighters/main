@@ -114,13 +114,13 @@ const loginFields = [
     'recaptcha'
 ];
 function handleLoginError({ errorCode, field, error }) {
+    const message = errorCodeMessages[errorCode] ?? errorCode ?? error?.message ?? 'An unknown error occurred';
+
     if (!field)
-        throw new Error('Not implemented'); //todo: use Toastify?
+        return alert(message);
 
     if (!loginFields.includes(field))
         throw new Error(`Invalid field: ${field}`)
-
-    const message = errorCodeMessages[errorCode] ?? errorCode ?? error?.message ?? 'An unknown error occurred';
 
     for (const loginFieldId of loginFields) {
         const feedbackElement = document.getElementById(`login-${loginFieldId}-feedback`);
@@ -168,13 +168,13 @@ const signupFields = [
     'recaptcha'
 ];
 function handleSignupError({ errorCode, field, error }) {
+    const message = errorCodeMessages[errorCode] ?? errorCode ?? error?.message ?? 'An unknown error occurred';
+
     if (!field)
-        throw new Error('Not implemented'); //todo: use Toastify?
+        return alert(message)
 
     if (!signupFields.includes(field))
         throw new Error(`Invalid field: ${field}`)
-
-    const message = errorCodeMessages[errorCode] ?? errorCode ?? error?.message ?? 'An unknown error occurred';
 
     for (const signupFieldId of signupFields) {
         const feedbackElement = document.getElementById(`signup-${signupFieldId}-feedback`);
