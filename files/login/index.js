@@ -95,6 +95,10 @@ const firebaseErrorCodes = {
     },
     'auth/multi-factor-auth-required': {
         errorCode: '2faRequired'
+    },
+    'auth/invalid-verification-code': {
+        errorCode: 'invalidVerificationCode',
+        field: 'verificationCode'
     }
 };
 
@@ -116,8 +120,9 @@ const errorCodeMessages = { //todo: put in en.json
     recaptchaError: 'Please try the captcha again',
     noName: 'Please enter a name',
     '2faRequired': '2FA is required for this account',
-    tooManyRequests: 'Too many tries. Please try again later'
-}
+    tooManyRequests: 'Too many tries. Please try again later',
+    invalidVerificationCode: 'Invalid verification code'
+};
 
 const loginFields = [
     'email',
@@ -126,8 +131,7 @@ const loginFields = [
     'verificationCode'
 ];
 function handleLoginError({ errorCode, field, error }) {
-    console.error(error)
-    const message = errorCodeMessages[errorCode] ?? errorCode ?? error?.message ? `Error: ${error.message}` : 'An unknown error occurred';
+    const message = errorCodeMessages[errorCode] ?? errorCode ?? (error?.message ? `Error: ${error.message}` : 'An unknown error occurred');
 
     if (!field)
         return alert(message);
@@ -191,7 +195,12 @@ window.verify2fa = async () => {
         throw new Error('No 2FA error found')
 
     const verificationCode = document.getElementById('verificationCodeInput').value;
-    await loginWith2fa(verificationCode);
+    try {
+        await loginWith2fa(verificationCode);
+    } catch (e) {
+        let firebaseErrorCode = firebaseErrorCodes[e.code];
+        return handleLoginError({ errorCode: firebaseErrorCode?.errorCode, field: firebaseErrorCode?.field, error: e });
+    }
 };
 
 let loginRecaptcha;
@@ -233,7 +242,7 @@ const signupFields = [
     'recaptcha'
 ];
 function handleSignupError({ errorCode, field, error }) {
-    const message = errorCodeMessages[errorCode] ?? errorCode ?? error?.message ? `Error: ${error.message}` : 'An unknown error occurred';
+    const message = errorCodeMessages[errorCode] ?? errorCode ?? (error?.message ? `Error: ${error.message}` : 'An unknown error occurred');
 
     if (!field)
         return alert(message)
