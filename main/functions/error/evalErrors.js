@@ -1,4 +1,4 @@
-const { readdir } = require('util').promisify(require('fs'));
+const readdir = require('util').promisify(require('fs').readdir);
 
 const settings = require('../../../settings.json');
 const messages = require('../get/messages').execute().mainFunction();
