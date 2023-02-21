@@ -206,6 +206,8 @@ let _2faError;
 async function enable2fa(error) {
     _2faError = error;
 
+    const _2faRecaptchaContainer = document.getElementById('_2faRecaptchaContainer');
+
     const emailElement = document.getElementById('loginEmail');
     const passwordElement = document.getElementById('loginPassword');
 
@@ -216,7 +218,9 @@ async function enable2fa(error) {
     const verificationCodeInput = document.getElementById('verificationCodeInput');
     const verify2faButton = document.getElementById('verify2faButton');
 
-    const verificationCodeSent = document.getElementById('2faVerificationCodeSent');
+    const verificationCodeStatus = document.getElementById('2faVerificationCodeStatus');
+
+    _2faRecaptchaContainer.style.display = null;
 
     emailElement.disabled = true;
     passwordElement.disabled = true;
@@ -235,21 +239,22 @@ async function enable2fa(error) {
     else
         selectedIndex = await choose2faMethod(_2faMethods);
 
+    _2faRecaptchaContainer.style.display = 'none';
+
     verificationCodeInput.style.display = null;
 
     verify2faButton.style.opacity = 0;
     verify2faButton.style.display = null;
 
-    verificationCodeSent.style.opacity = 0;
-    verificationCodeSent.style.display = null;
+    verificationCodeStatus.innerText = 'Sending a verification code';
+    verificationCodeStatus.style.display = null;
 
     const { phoneNumber, displayName } = await send2fa(selectedIndex);
 
-    verificationCodeSent.innerText = verificationCodeSent.innerText.replace('{location}', displayName ? `${displayName} (${phoneNumber})` : phoneNumber);
+    verificationCodeStatus.innerText = 'A verification code has been sent to {location}'.replace('{location}', displayName ? `${displayName} (${phoneNumber})` : phoneNumber);
 
     verify2faButton.addEventListener('click', () => verify2faButton.disabled = true);
     verify2faButton.style.opacity = null;
-    verificationCodeSent.style.opacity = null;
 };
 
 window.verify2fa = async () => {

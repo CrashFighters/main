@@ -8,6 +8,10 @@
 	margin-bottom: 1vh;
 }
 
+#_2faRecaptchaContainer {
+	height: 78px;
+}
+
 #choose2faMethodText {
 	margin: 0;
 	margin-top: 2vh;

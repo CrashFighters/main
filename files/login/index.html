@@ -56,10 +56,12 @@
           <p id="login-password-feedback" class="errorFeedback"></p>
           <div id="loginRecaptchaButton"></div>
           <p id="login-recaptcha-feedback" class="errorFeedback"></p>
-          <div id="2faRecaptchaButton"></div>
+          <div id="_2faRecaptchaContainer" style="display: none">
+            <div id="2faRecaptchaButton"></div>
+          </div>
           <p id="choose2faMethodText" style="display: none">Choose which 2FA method to use:</p>
           <div id="choose2faMethod" style="display: none"></div>
-          <p id="2faVerificationCodeSent" style="display: none">A verification code has been sent to {location}</p>
+          <p id="2faVerificationCodeStatus" style="display: none"></p>
           <input type="text" placeholder="Verification code" id="verificationCodeInput"
             onchange="window.removeLoginErrorFeedback()"
             onkeydown="if(event.key === 'Enter') document.getElementById('verify2faButton').click()"
