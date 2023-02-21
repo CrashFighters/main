@@ -13,7 +13,7 @@ module.exports = {
         if (path.includes('?'))
             path = path.split('?')[0]
 
-        let orgPath = path;
+        const orgPath = path;
 
         if (
             path.split('/')[1]
