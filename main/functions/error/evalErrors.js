@@ -20,7 +20,7 @@ module.exports = {
 
         try {
             const files =
-                await readdir(settings.generic.path.files.errors)
+                (await readdir(settings.generic.path.files.errors))
                     .filter(val => val !== settings.generic.path.files.noError);
 
             if (files[0]) {

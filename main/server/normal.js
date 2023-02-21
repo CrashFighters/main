@@ -7,7 +7,7 @@ module.exports = {
     // execute(request, response, middleWareData) {
     execute(request, response) {
 
-        const path = require('../functions/parse/normal').execute(request.url);
+        const path = require('../functions/urlToPath.js').execute(request.url);
 
         if (fs.existsSync(path))
             fs.readFile(path, async (err, data) => {
