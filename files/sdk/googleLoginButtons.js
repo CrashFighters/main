@@ -60,7 +60,7 @@ if ((!documentIncludesGoogleTap) || (documentIncludesGoogleTap && window.googleT
     if (doesDocumentIncludeScript('https://accounts.google.com/gsi/client'))
         throw new Error('Google Sign In script already exists')
     else {
-        let script = document.createElement('script');
+        const script = document.createElement('script');
         script.src = 'https://accounts.google.com/gsi/client';
         document.head.appendChild(script);
     };

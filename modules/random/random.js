@@ -1,6 +1,9 @@
 module.exports = {
     execute(length, characters) {
-        let chars = characters.split('');
+        //todo: improve
+
+        const chars = characters.split('');
+
         let output = '';
         for (let ii = 0; ii < length; ii++) {
             output += chars[Math.floor(Math.random() * chars.length)];

@@ -31,24 +31,24 @@ module.exports = {
                 cConsole.warn(message);
                 cConsole.log();
                 if (isModuleInstalled('text')) {
-                    let rows = [];
+                    const rows = [];
                     files.forEach((val) => {
                         if (val.endsWith('.json')) {
-                            let occurrences = require(`../../../${settings.generic.path.files.errors}${val}`).occurrences.length;
+                            const occurrences = require(`../../../${settings.generic.path.files.errors}${val}`).occurrences.length;
                             rows.push([`${settings.generic.path.files.errors}${val}`, occurrences]);
                         } else
                             rows.push([`${settings.generic.path.files.errors}${val}`, -1])
                     });
 
-                    let createDiagram = require(`../../../${settings.generic.path.files.modules}text/createDiagram.js`);
-                    let diagram = createDiagram.twoColumns(rows, 4, ' ');
+                    const createDiagram = require(`../../../${settings.generic.path.files.modules}text/createDiagram.js`);
+                    const diagram = createDiagram.twoColumns(rows, 4, ' ');
 
                     diagram.forEach((val) => {
                         cConsole.warn(val);
                     });
                 } else
                     files.forEach((val) => {
-                        let occurrences = require(`../../../${settings.generic.path.files.errors}${val}`).occurrences.length;
+                        const occurrences = require(`../../../${settings.generic.path.files.errors}${val}`).occurrences.length;
                         cConsole.warn(`${settings.generic.path.files.errors}${val}\t\t${occurrences}`);
                     });
 

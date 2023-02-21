@@ -37,8 +37,8 @@ export async function getScore(action = 'SDK_execute') {
 }
 
 function renderV2Button(element) {
-    let callbacks = [];
-    let button = {
+    const callbacks = [];
+    const button = {
         state: 'ready',
         onStateChange: cb => {
             callbacks.push(cb);

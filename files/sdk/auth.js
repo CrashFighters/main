@@ -15,7 +15,7 @@ await init(app);
 
 const auth = getAuth(app);
 
-let onStateChangeCallbacks = [];
+const onStateChangeCallbacks = [];
 export const onStateChange = (callback) => {
     onStateChangeCallbacks.push(callback);
     onAuthStateChanged(auth, () => {
@@ -66,7 +66,7 @@ async function updateUserObject(newUser) {
     else if (newUser.providerData[0].providerId === 'google.com')
         loginMethod = 'google';
 
-    let email = newUser.email ?? newUser.providerData[0]?.email ?? null;
+    const email = newUser.email ?? newUser.providerData[0]?.email ?? null;
 
     window.auth.user = {
         loginMethod,

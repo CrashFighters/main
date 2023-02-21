@@ -10,9 +10,9 @@ if (isModuleInstalled('requestInfo')) {
 module.exports = {
     execute(argument) {
         let files = argument?.files;
-        let request = argument?.request;
+        const request = argument?.request;
 
-        let options = [];
+        const options = [];
         if (!files)
             files = fs.readdirSync(settings.generic.path.files.messages);
 

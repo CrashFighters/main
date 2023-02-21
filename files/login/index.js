@@ -275,7 +275,7 @@ window.verify2fa = async () => {
     try {
         await loginWith2fa(verificationCode);
     } catch (e) {
-        let firebaseErrorCode = firebaseErrorCodes[e.code];
+        const firebaseErrorCode = firebaseErrorCodes[e.code];
         return handleLoginError({ errorCode: firebaseErrorCode?.errorCode, field: firebaseErrorCode?.field, error: e });
     } finally {
         verify2faButton.disabled = false;
@@ -304,7 +304,7 @@ window.doLogin = async (recaptchaScore) => {
         if (e.code === 'auth/multi-factor-auth-required')
             return enable2fa(e);
 
-        let firebaseErrorCode = firebaseErrorCodes[e.code];
+        const firebaseErrorCode = firebaseErrorCodes[e.code];
         return handleLoginError({ errorCode: firebaseErrorCode?.errorCode, field: firebaseErrorCode?.field, error: e });
     } finally {
         nativeButton.disabled = false;
@@ -369,7 +369,7 @@ window.doSignup = async (recaptchaScore) => {
         await createEmailAccount(email, password);
         await setDisplayName(name);
     } catch (e) {
-        let firebaseErrorCode = firebaseErrorCodes[e.code];
+        const firebaseErrorCode = firebaseErrorCodes[e.code];
         return handleSignupError({ errorCode: firebaseErrorCode?.errorCode, field: firebaseErrorCode?.field, error: e });
     } finally {
         nativeButton.disabled = false;

@@ -2,8 +2,8 @@ module.exports = (acceptHeader, check) => {
     if (typeof acceptHeader !== 'string')
         throw new Error(`Typeof acceptHeader (${acceptHeader}) is not string`)
 
-    let arr = acceptHeader.split(',');
-    let newArr = [];
+    const arr = acceptHeader.split(',');
+    const newArr = [];
     let isAll = false;
     let allQal = 1;
 

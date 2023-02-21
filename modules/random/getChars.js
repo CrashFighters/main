@@ -2,14 +2,14 @@ const settings = require('./settings.json');
 
 module.exports = {
     execute(i) {
-        let defaultInfo = {
+        const defaultInfo = {
             numbers: true,
             confusingNumbers: true,
             letters: true,
             confusingLetters: true
         }
 
-        let info = {
+        const info = {
             ...defaultInfo,
             ...i
         }

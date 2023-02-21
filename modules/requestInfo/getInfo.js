@@ -6,9 +6,9 @@ module.exports = {
         const s = new sniffr();
         s.sniff(request.headers['user-agent']);
 
-        let ip = (request.headers['x-forwarded-for'] || '').split(',').pop().trim() || request.connection.remoteAddress || request.socket.remoteAddress || request.connection.socket.remoteAddress;
+        const ip = (request.headers['x-forwarded-for'] || '').split(',').pop().trim() || request.connection.remoteAddress || request.socket.remoteAddress || request.connection.socket.remoteAddress;
 
-        let object = {};
+        const object = {};
 
         if (ip)
             object.ip = {
@@ -16,31 +16,31 @@ module.exports = {
             };
         if (cookie) object.cookie = cookie;
 
-        let browser = {
+        const browser = {
             name: s.browser.name === 'Unknown' ? null : s.browser.name,
             version: s.browser.version === 'Unknown' ? null : s.browser.version
         };
         if (browser.name || browser.version) object.browser = browser;
 
-        let os = {
+        const os = {
             name: s.os.name === 'Unknown' ? null : s.os.name,
             version: s.os.version === 'Unknown' ? null : s.os.version
         };
         if (os.name || os.version) object.os = os;
 
-        let device = {
+        const device = {
             name: s.device.name === 'Unknown' ? null : s.device.name
         };
         if (device.name) object.device = device;
 
-        let langObject = [];
+        const langObject = [];
 
-        let langHeader = request.headers['accept-language'];
+        const langHeader = request.headers['accept-language'];
         if (langHeader) {
-            let langs = langHeader.split(',');
+            const langs = langHeader.split(',');
 
             langs.forEach((val) => {
-                let lang = val.split(';')[0].split('-')[0];
+                const lang = val.split(';')[0].split('-')[0];
                 let region = null;
                 if (val.split(';')[0].split('-').length > 1) region = val.split(';')[0].split('-')[1];
 
@@ -49,7 +49,7 @@ module.exports = {
                     quality = parseFloat(val.split(';')[1].split('q=')[1]);
                 }
 
-                let out = {
+                const out = {
                     name: lang,
                     quality
                 };

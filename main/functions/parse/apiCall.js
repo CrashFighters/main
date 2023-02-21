@@ -4,9 +4,9 @@ module.exports = {
     execute(org) {
 
         //Remove api beginning
-        let call = org.split(settings.generic.path.online.api).join('');
+        const call = org.split(settings.generic.path.online.api).join('');
 
-        let params = {};
+        const params = {};
         let path = call;
 
         //If path includes params
