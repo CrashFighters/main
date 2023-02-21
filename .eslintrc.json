@@ -24,6 +24,7 @@
         "no-unused-vars": "warn",
         "no-unreachable": "warn",
         "eqeqeq": "warn",
+        "prefer-const": "warn",
         "quotes": [
             "warn",
             "single",
