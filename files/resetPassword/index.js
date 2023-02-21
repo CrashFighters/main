@@ -45,7 +45,7 @@ window.sendResetEmail = async () => {
 }
 
 emailInput.addEventListener('keyup', (event) => {
-    if (event.key === 'Enter') //todo: use onSubmit
+    if (event.key === 'Enter')
         window.sendResetEmail();
 
     //check if email is valid
