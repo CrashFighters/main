@@ -59,14 +59,16 @@
           <div id="2faRecaptchaButton"></div>
           <p id="choose2faMethodText" style="display: none">Choose which 2FA method to use:</p>
           <div id="choose2faMethod" style="display: none"></div>
-          <p id="2faVerificationCodeSent" style="display: none">A 2FA code has been sent to {location}</p>
-          <input type="text" placeholder="2FA code" id="verificationCodeInput"
-            onchange="window.removeLoginErrorFeedback()" style="display: none" />
+          <p id="2faVerificationCodeSent" style="display: none">A verification code has been sent to {location}</p>
+          <input type="text" placeholder="Verification code" id="verificationCodeInput"
+            onchange="window.removeLoginErrorFeedback()"
+            onkeydown="if(event.key === 'Enter') document.getElementById('verify2faButton').click()"
+            style="display: none" />
           <p id="login-verificationCode-feedback" class="errorFeedback"></p>
           <a href="/resetPassword" id="forgotPassword">Forgot your password?</a>
           <button type="button" data-recaptcha_callback="doLogin" data-recaptcha_action="loginPage_login"
             data-recaptcha_loading_class="disabled" class="invisRecaptchaButton" id="loginButton-1">Login</button>
-          <button type="button" onclick="verify2fa()" id="verify2faButton" style="display: none">Verify 2fa</button>
+          <button type="button" onclick="verify2fa()" id="verify2faButton" style="display: none">Verify code</button>
           <p id="mobile_para">Don't have an account? Sign up here !!</p>
           <button class="ghost_mobile" id="signUp_mobile">Sign Up</button>
         </form>
