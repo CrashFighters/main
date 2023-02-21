@@ -45,8 +45,11 @@
       <div class="form-container sign-in-container">
         <form onsubmit="return false;">
           <h1>Login</h1>
-          <div class=" social-container">
-            <div class="bigGoogleLoginButton"></div>
+          <div class="social-container">
+            <div class="googleLoginButtonWrapper">
+              <div class="googleLoginOverlay" style="display: none"></div>
+              <div class="bigGoogleLoginButton"></div>
+            </div>
           </div>
           <span>or use email</span>
           <input type="email" placeholder="Email" onchange="window.removeLoginErrorFeedback()" id="loginEmail" />
@@ -70,7 +73,8 @@
           <a href="/resetPassword" id="forgotPassword">Forgot your password?</a>
           <button type="button" data-recaptcha_callback="doLogin" data-recaptcha_action="loginPage_login"
             data-recaptcha_loading_class="disabled" class="invisRecaptchaButton" id="loginButton-1">Login</button>
-          <button type="button" onclick="verify2fa()" id="verify2faButton" style="display: none">Verify code</button>
+          <button type="button" onclick="verify2fa()" id="verify2faButton" style="display: none">Verify
+            code</button>
           <p id="mobile_para">Don't have an account? Sign up here !!</p>
           <button class="ghost_mobile" id="signUp_mobile">Sign Up</button>
         </form>

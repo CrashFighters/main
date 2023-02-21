@@ -1,6 +1,7 @@
 import {
     signInWithEmailAndPassword,
     signInWithPopup,
+    signInWithRedirect,
     GoogleAuthProvider,
     createUserWithEmailAndPassword,
     sendEmailVerification,
@@ -14,7 +15,10 @@ const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
 export async function loginWithGoogle() {
     try {
-        await signInWithPopup(auth, new GoogleAuthProvider());
+        if (window.innerWidth > window.innerHeight)
+            await signInWithPopup(auth, new GoogleAuthProvider());
+        else
+            await signInWithRedirect(auth, new GoogleAuthProvider());
     } catch (e) {
         throw e;
     };
