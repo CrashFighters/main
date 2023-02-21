@@ -67,9 +67,6 @@ export async function get2faMethods(error) {
     if (!recaptchaVerifier)
         throw new Error('prepare2fa not called');
 
-    const { hide2faRecaptchaButton } = (await import('/sdk/2fa.js'))._;
-    hide2faRecaptchaButton();
-
     resolver = getMultiFactorResolver(auth, error);
 
     return resolver.hints.map(hint => ({
@@ -83,6 +80,9 @@ let verificationId;
 export async function send2fa(selectedIndex) {
     if (!recaptchaVerifier)
         throw new Error('prepare2fa not called');
+
+    const { hide2faRecaptchaButton } = (await import('/sdk/2fa.js'))._;
+    hide2faRecaptchaButton();
 
     const hint = resolver.hints[selectedIndex];
     if (hint.factorId !== PhoneMultiFactorGenerator.FACTOR_ID)
