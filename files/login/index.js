@@ -236,13 +236,20 @@ async function enable2fa(error) {
         selectedIndex = await choose2faMethod(_2faMethods);
 
     verificationCodeInput.style.display = null;
-    verify2faButton.addEventListener('click', () => verify2faButton.disabled = true);
+
+    verify2faButton.style.opacity = 0;
     verify2faButton.style.display = null;
+
+    verificationCodeSent.style.opacity = 0;
+    verificationCodeSent.style.display = null;
 
     const { phoneNumber, displayName } = await send2fa(selectedIndex);
 
     verificationCodeSent.innerText = verificationCodeSent.innerText.replace('{location}', displayName ? `${displayName} (${phoneNumber})` : phoneNumber);
-    verificationCodeSent.style.display = null;
+
+    verify2faButton.addEventListener('click', () => verify2faButton.disabled = true);
+    verify2faButton.style.opacity = null;
+    verificationCodeSent.style.opacity = null;
 };
 
 window.verify2fa = async () => {
