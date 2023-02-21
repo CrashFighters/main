@@ -8,7 +8,7 @@
     <title>Add 2fa method</title>
 
     <script type="module" src="/sdk/auth.js"></script>
-    <script type="module" src="/enable2fa/index.js"></script>
+    <script type="module" src="/add2fa/index.js"></script>
 </head>
 
 <body>
@@ -19,9 +19,9 @@
     <input type="tel" id="phoneNumber" placeholder="Phone number">
     <input type="text" id="displayName" placeholder="Phone custom user note">
     <div id="2faRecaptchaButton"></div>
-    <button onclick="doAdd2fa()" id="enable2faButton">Add 2fa</button>
+    <button onclick="window.doAdd2fa()" id="enable2faButton">Add 2fa</button>
     <input type="text" id="verificationCode" placeholder="Verification code">
-    <button onclick="doVerify2fa()" id="verify2faButton" disabled>Verify 2fa</button>
+    <button onclick="window.doVerify2fa()" id="verify2faButton" disabled>Verify 2fa</button>
 </body>
 
 </html>
