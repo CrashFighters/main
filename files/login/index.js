@@ -130,6 +130,9 @@ const firebaseErrorCodes = {
     'auth/invalid-verification-code': {
         errorCode: 'invalidVerificationCode',
         field: 'verificationCode'
+    },
+    'auth/internal-error': {
+        errorCode: 'firebaseAuthInternalError'
     }
 };
 
@@ -152,14 +155,16 @@ const errorCodeMessages = { //todo: put in en.json
     noName: 'Please enter a name',
     '2faRequired': '2FA is required for this account',
     tooManyRequests: 'Too many tries. Please try again later',
-    invalidVerificationCode: 'Invalid verification code'
+    invalidVerificationCode: 'Invalid verification code',
+    firebaseAuthInternalError: 'An internal error in Firebase authentication occurred. Please try again later'
 };
 
 const loginFields = [
     'email',
     'password',
     'recaptcha',
-    'verificationCode'
+    'verificationCode',
+    '2fa-recaptcha'
 ];
 function handleLoginError({ errorCode, field, error }) {
     const message = errorCodeMessages[errorCode] ?? errorCode ?? (error?.message ? `Error: ${error.message}` : 'An unknown error occurred');
@@ -238,7 +243,9 @@ async function enable2fa(error) {
     signupRecaptchaButton.style.display = 'none';
     forgotPassword.style.display = 'none';
 
-    await prepare2fa();
+    let recaptchaObject;
+
+    recaptchaObject = await prepare2fa();
 
     const _2faMethods = await get2faMethods(error);
     let selectedIndex;
@@ -247,6 +254,9 @@ async function enable2fa(error) {
         selectedIndex = 0;
     else
         selectedIndex = await choose2faMethod(_2faMethods);
+
+    while (!['success', 'successBefore'].includes(recaptchaObject.state))
+        recaptchaObject = await prepare2fa();
 
     _2faRecaptchaContainer.style.display = 'none';
 

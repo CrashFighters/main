@@ -61,9 +61,12 @@ export async function sendPasswordResetEmail(email) {
 };
 
 let recaptchaVerifier;
+let recaptchaObject;
 export async function prepare2fa() {
     const { getRecaptchaVerifier } = (await import('/sdk/2fa.js'))._;
-    recaptchaVerifier = await getRecaptchaVerifier();
+    ([recaptchaVerifier, recaptchaObject] = await getRecaptchaVerifier());
+
+    return recaptchaObject;
 };
 
 let resolver;

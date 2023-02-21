@@ -15,11 +15,12 @@ if (!_2FaRecaptchaButton)
 
 let recaptchaDoneCallbacks = [];
 let recaptchaState = 'ready';
+let recaptchaObject = { state: recaptchaState };
 const __recaptchaVerifier = new RecaptchaVerifier(_2FaRecaptchaButton, {
     size: 'normal',
     callback: () => {
         for (const recaptchaDoneCallback of recaptchaDoneCallbacks)
-            recaptchaDoneCallback(__recaptchaVerifier);
+            recaptchaDoneCallback([__recaptchaVerifier, recaptchaObject]);
         if (recaptchaState === 'waiting')
             recaptchaState = 'success'
         else
@@ -34,6 +35,7 @@ let recaptchaRenderPromise = __recaptchaVerifier.render();
 export const _ = {
     getRecaptchaVerifier() {
         _2FaRecaptchaButton.style.display = null;
+        recaptchaObject = { state: recaptchaState };
 
         if (['success', 'expired'].includes(recaptchaState)) {
             recaptchaDoneCallbacks = [];
