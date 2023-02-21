@@ -3,13 +3,15 @@ const settings = require('../../../settings.json');
 
 module.exports = {
     execute(p) {
+        // todo: use someone elses code. Maybe URL?
+
         let path = p;
 
         if (path.includes('$'))
             path = path.split('$')[0]
 
-        if (path.includes('?')) //Als params
-            path = path.split('?')[0] //Verwijder params van path
+        if (path.includes('?'))
+            path = path.split('?')[0]
 
         let orgPath = path;
 

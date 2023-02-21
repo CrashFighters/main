@@ -1,3 +1,17 @@
+/*
+
+Hello future self,
+sorry for the spaghetti code. This file grew into something
+out of my control. Normally I like spaghetti, but not this
+much. I'm very sorry, but I'm too lazy to clean this up.
+
+Again sorry,
+your past self
+
+(If you're someone else, this file isn't very interesting, see main/server/main.js instead)
+
+*/
+
 const fs = require('fs');
 const settings = require('../../../settings.json');
 let gMessages;

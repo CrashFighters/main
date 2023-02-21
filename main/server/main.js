@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-//todo: check if middleware folder exists
-const middlewares = fs.readdirSync(path.resolve(__dirname, './middleware/')).map(a => require(`./middleware/${a}`));
+const middlewares = fs.existsSync(path.resolve(__dirname, '/middleware/')) ?
+    fs.readdirSync(path.resolve(__dirname, './middleware/')).map(a => require(`./middleware/${a}`)) :
+    null;
 
 const settings = require('../../settings.json');
 const parseErrorOnline = require('../functions/error/parseErrorOnline').execute;
@@ -13,10 +14,11 @@ module.exports = {
         try {
 
             let middlewareData = {};
-            for (const middleware of middlewares) {
-                const newMiddlewareData = await middleware(request, response);
-                middlewareData = { ...middlewareData, ...newMiddlewareData };
-            };
+            if (middlewares)
+                for (const middleware of middlewares) {
+                    const newMiddlewareData = await middleware(request, response);
+                    middlewareData = { ...middlewareData, ...newMiddlewareData };
+                };
 
             if (request.url.toLowerCase().startsWith(settings.generic.path.online.api))
                 return require('../server/api.js').execute(request, response, middlewareData);
