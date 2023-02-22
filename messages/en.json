@@ -14,8 +14,14 @@
         "reload": "reload",
         "clientServerReload": "The server is restarting due to an error."
     },
+    "general": {
+        "login": "Login",
+        "logout": "Logout",
+        "yourEmailIs": "Your email is",
+        "welcome": "Welcome"
+    },
     "pages": {
-        "login": {
+        "/login": {
             "error": {
                 "emailDoesNotExist": "There is no account associated with this email address",
                 "invalidEmail": "This is not a valid email address",

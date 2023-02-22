@@ -14,13 +14,19 @@
         "reload": "reload",
         "clientServerReload": "Vanwege een fout is de server aan het herladen."
     },
+    "general": {
+        "login": "Inloggen",
+        "logout": "Uitloggen",
+        "yourEmailIs": "Je email is",
+        "welcome": "Welkom"
+    },
     "pages": {
-        "login": {
+        "/login": {
             "error": {
-                "emailDoesNotExist": "Er is geen account met dit email adres",
-                "invalidEmail": "Dit is geen geldig email adres",
-                "missingEmail": "Vul een email adres in",
-                "emailAlreadyInUse": "Dit email adres is al in gebruik",
+                "emailDoesNotExist": "Er is geen account met dit email",
+                "invalidEmail": "Dit is geen geldig email",
+                "missingEmail": "Vul een email in",
+                "emailAlreadyInUse": "Dit email is al in gebruik",
                 "wrongPassword": "Het wachtwoord is incorrect",
                 "weakPassword": "Het wachtwoord is te zwak",
                 "recaptchaNotSolved": "Los de captcha op",
