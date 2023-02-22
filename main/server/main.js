@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const middlewares = fs.existsSync(path.resolve(__dirname, '/middleware/')) ?
+const middlewares = fs.existsSync(path.resolve(__dirname, './middleware/')) ?
     fs.readdirSync(path.resolve(__dirname, './middleware/')).map(a => require(`./middleware/${a}`)) :
     null;
 
