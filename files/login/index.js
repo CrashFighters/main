@@ -93,11 +93,10 @@ function redirect() {
             cancelButtonText: 'Nope!',
             confirmButtonText: 'Yep!'
         }).then((result) => {
-            if (result.isConfirmed) {
+            if (result.isConfirmed)
                 window.open(redirectLocation, '_self')
-            } else {
+            else
                 window.open('/', '_self')
-            }
         });
     else
         window.open('/', '_self')
