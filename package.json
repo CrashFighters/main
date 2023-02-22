@@ -16,6 +16,9 @@
     "sniffr": "^1.2.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.21.0",
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
     "eslint": "^8.34.0",
     "nodemon": "^2.0.20"
   }

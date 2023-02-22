@@ -1,18 +1,1 @@
-// if renaming or moving this file, also update path in main/server/middleware/googleSignIn.js
-
-const googleCredentials = {};
-
-module.exports = {
-    execute({ end, statusCode, params }) {
-        if (!params.token) return statusCode(400, 'noToken', 'No token provided');
-
-        const credential = googleCredentials[params.token];
-        if (!credential) return statusCode(400, 'invalidToken', 'Invalid token provided');
-
-        delete googleCredentials[params.token];
-        end(credential);
-    },
-    setCredential(token, credential) {
-        googleCredentials[token] = credential;
-    }
-}
+const googleCredentials={};module.exports={execute({end:e,statusCode:o,params:n}){if(!n.token)return o(400,"noToken","No token provided");const t=googleCredentials[n.token];if(!t)return o(400,"invalidToken","Invalid token provided");delete googleCredentials[n.token],e(t)},setCredential(e,o){googleCredentials[e]=o}};
