@@ -4,7 +4,7 @@ import { onStateChange } from '/sdk/auth.js';
 const scriptOnPage = document.querySelector('script[data-template_debug]');
 const debug = scriptOnPage !== null;
 
-if (debug) console.log('[templateSDK] Dᴇʙᴜɢ Mᴏᴅᴇ Aᴄᴛɪᴠᴇ');
+if (debug) console.log('[templateSDK] Debug Mode is enabled.');
 
 const getTemplateValues = (user) => ({
     email: user?.email ?? '',
