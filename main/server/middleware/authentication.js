@@ -1,6 +1,7 @@
 // const firebase = require('../../../modules/authentication/functions/authentication.js');
 
-module.exports = async ({ request }) => {
+// module.exports = async ({ request }) => {
+module.exports = async () => {
     return {};
 
     // const authToken = request.headers.authToken;
