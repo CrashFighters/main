@@ -23,9 +23,7 @@ window.doVerify2fa = async () => {
 window.doAdd2fa = async () => {
     const phoneNumber = phoneNumberInput.value;
     const displayName = displayNameInput.value;
-    enableButton.disabled = true;
-    verifyButton.disabled = true;
-
     confirm = await add(phoneNumber, displayName);
-    verifyButton.disabled = false;
+    window.twoFactorAuth.readyForVerification = confirm;
+
 }
