@@ -111,6 +111,8 @@ for (const invisRecaptchaButton of invisRecaptchaButtons) {
 
     const newInvisCaptchaButton = document.createElement('button');
 
+    newInvisCaptchaButton.dataset = invisRecaptchaButton.dataset;
+
     newInvisCaptchaButton.innerText = invisRecaptchaButton.innerText;
     newInvisCaptchaButton.id = invisRecaptchaButton.id;
     newInvisCaptchaButton.dataset['recaptcha_callback'] = invisRecaptchaButton.dataset['recaptcha_callback'];
