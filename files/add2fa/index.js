@@ -27,20 +27,32 @@ window.doVerify2fa = async () => {
 window.doAdd2fa = async () => {
     const phoneNumber = phoneNumberInput.value;
     const displayName = displayNameInput.value;
-    confirm = await add(phoneNumber, displayName);
-    window.twoFactorAuth.readyForVerification = confirm;
+    confirm = await add(phoneNumber, displayName).catch((e) => {
+        console.log(e)
+        window.verificationStyle = 'display: none;';
+        window.addTwofaStyle = 'display: block;';
+    }). finally(() => { 
+        window.verificationStyle = 'display: block;';
+        window.addTwofaStyle = 'display: none;';
+        replaceTemplates();
+    });
 }
 
 window.addDisabled = true;
+
+window.verificationStyle = 'display: none;';
+window.addTwofaStyle = 'display: block;';
+
 const checkIfValid = () => {
     return phoneNumberInput.value !== '' && phoneNumberInput.value.match(/^\+?[0-9]\d{9,12}$/);
 }
-
 phoneNumberInput.addEventListener('input', {
     handleEvent: () => {
         window.addDisabled = !checkIfValid();
         replaceTemplates();
     }
 });
+
+
 
 replaceTemplates();
