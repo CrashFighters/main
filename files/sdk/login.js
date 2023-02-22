@@ -1,6 +1,5 @@
 import {
     signInWithEmailAndPassword,
-    signInWithCredential,
     createUserWithEmailAndPassword,
     sendEmailVerification,
     sendPasswordResetEmail as firebaseSendPasswordResetEmail,
@@ -10,14 +9,6 @@ import {
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
 const { auth } = (await import('/sdk/auth.js'))._.firebase;
-
-export async function loginWithCredential(credential) {
-    try {
-        await signInWithCredential(auth, credential);
-    } catch (e) {
-        throw e;
-    };
-}
 
 export async function loginWithEmail(email, password) {
     try {
