@@ -16,7 +16,7 @@ function coolAlert(message) {
         type: 'error',
         confirmButtonText: 'Alright',
         //button color
-        confirmButtonColor: '#000',
+        confirmButtonColor: '#000'
     });
 }
 
@@ -336,7 +336,7 @@ window.verify2fa = async () => {
         return handleLoginError({
             errorCode: firebaseErrorCode?.errorCode,
             field: firebaseErrorCode?.field,
-            error: e,
+            error: e
         });
     } finally {
         verify2faButton.disabled = false;
@@ -358,7 +358,7 @@ window.doLogin = async (recaptchaScore) => {
     if (loginRecaptcha && loginRecaptcha.state !== 'success')
         return handleLoginError({
             errorCode: recaptchaStateNames[loginRecaptcha.state],
-            field: 'recaptcha',
+            field: 'recaptcha'
         });
 
     nativeButton.disabled = true;
@@ -373,7 +373,7 @@ window.doLogin = async (recaptchaScore) => {
         return handleLoginError({
             errorCode: firebaseErrorCode?.errorCode,
             field: firebaseErrorCode?.field,
-            error: e,
+            error: e
         });
     } finally {
         nativeButton.disabled = false;
@@ -434,7 +434,7 @@ window.doSignup = async (recaptchaScore) => {
     if (signupRecaptcha && signupRecaptcha.state !== 'success')
         return handleSignupError({
             errorCode: recaptchaStateNames[loginRecaptcha.state],
-            field: 'recaptcha',
+            field: 'recaptcha'
         });
 
     nativeButton.disabled = true;
@@ -447,7 +447,7 @@ window.doSignup = async (recaptchaScore) => {
         return handleSignupError({
             errorCode: firebaseErrorCode?.errorCode,
             field: firebaseErrorCode?.field,
-            error: e,
+            error: e
         });
     } finally {
         nativeButton.disabled = false;

@@ -3,7 +3,7 @@ import {
     getAuth,
     onAuthStateChanged,
     signOut,
-    updateProfile,
+    updateProfile
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
 import { init } from '/sdk/appCheck.js';
@@ -55,7 +55,7 @@ async function updateUserObject(newUser) {
         await updateProfile(newUser, {
             photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(
                 newUser.displayName ?? newUser.email
-            )}`,
+            )}`
         });
 
     let loginMethod = 'unknown';
@@ -92,10 +92,10 @@ async function updateUserObject(newUser) {
 export const _ = {
     firebase: {
         app,
-        auth,
+        auth
     },
     updateUserObject,
-    onStateChangeCallbacks,
+    onStateChangeCallbacks
 };
 
 window.auth = {
@@ -104,7 +104,7 @@ window.auth = {
     login,
     signup,
     user: null,
-    _,
+    _
 };
 
 onStateChange(() => updateUserObject(auth.currentUser));

@@ -7,7 +7,7 @@ module.exports = async (message) => {
 
     const analyzeRequest = {
         comment: {
-            text: message,
+            text: message
         },
         requestedAttributes: {
             TOXICITY: {},

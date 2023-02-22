@@ -6,7 +6,7 @@ export const firebaseConfig = {
     storageBucket: 'crashfighters.appspot.com',
     messagingSenderId: '478395146629',
     appId: '1:478395146629:web:ffe0bf832bde931bc424ec',
-    measurementId: 'G-6SF1JVH5WC',
+    measurementId: 'G-6SF1JVH5WC'
 };
 
 export const googleSignInKey = '478395146629-9g1so59tp8p4iqn61g3iruksa99rmk0l.apps.googleusercontent.com';

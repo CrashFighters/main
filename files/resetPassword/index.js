@@ -15,7 +15,7 @@ window.sendResetEmail = async () => {
             duration: 3000,
             gravity: 'top',
             position: 'center',
-            backgroundColor: '#f44336',
+            backgroundColor: '#f44336'
         }).showToast();
     }
 
@@ -31,7 +31,7 @@ window.sendResetEmail = async () => {
             //when done, redirect to login page
             callback: () => {
                 login();
-            },
+            }
         }).showToast();
     } catch (error) {
         Toastify({
@@ -39,7 +39,7 @@ window.sendResetEmail = async () => {
             duration: 3000,
             gravity: 'top',
             position: 'center',
-            backgroundColor: '#f44336',
+            backgroundColor: '#f44336'
         }).showToast();
     }
 }
@@ -72,7 +72,7 @@ document
                 duration: 3000,
                 gravity: 'top',
                 position: 'center',
-                backgroundColor: '#f44336',
+                backgroundColor: '#f44336'
             }).showToast();
         else
             window.sendResetEmail();
