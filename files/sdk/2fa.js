@@ -81,14 +81,14 @@ export const add = async (phoneNumber, displayName) => {
         session: multiFactorSession
     };
 
-    const [recaptchaVerifier] = await _.getRecaptchaVerifier();
+    const [recaptchaVerifier, recaptchaButton] = await _.getRecaptchaVerifier();
 
     const phoneAuthProvider = new PhoneAuthProvider(auth);
     const verificationId = await phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
 
-    return async (verificationCode) => {
+    return [async (verificationCode) => {
         const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
         const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(credential);
         await multiFactor(auth.currentUser).enroll(multiFactorAssertion, displayName);
-    };
+    }, recaptchaButton];
 };

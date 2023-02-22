@@ -14,6 +14,7 @@ const verificationCodeInput = document.getElementById('verificationCode');
 const verifyButton = document.getElementById('verify2faButton');
 
 let confirm;
+let recaptchaButton;
 window.doVerify2fa = async () => {
     if (!confirm)
         throw new Error('Must enable before verifying');
@@ -27,16 +28,20 @@ window.doVerify2fa = async () => {
 window.doAdd2fa = async () => {
     const phoneNumber = phoneNumberInput.value;
     const displayName = displayNameInput.value;
-    confirm = await add(phoneNumber, displayName).catch((e) => {
+    ([confirm, recaptchaButton] = await add(phoneNumber, displayName).catch((e) => {
         console.log(e)
         window.verificationStyle = 'display: none;';
         window.addTwofaStyle = 'display: block;';
-    }). finally(() => { 
+    }).finally(() => {
         window.verificationStyle = 'display: block;';
         window.addTwofaStyle = 'display: none;';
         replaceTemplates();
-    });
+    }));
 }
+
+recaptchaButton.onStateChange(recaptchaButton => {
+    console.log(recaptchaButton.state);
+})
 
 window.addDisabled = true;
 
