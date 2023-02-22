@@ -74,10 +74,13 @@ if ((!documentIncludesGoogleTap) || (documentIncludesGoogleTap && window.googleT
 const googleSignInIdToken = getCookie('g_csrf_token');
 if (googleSignInIdToken) {
     // user got redirected from login with Google redirect
+
+    deleteCookie('g_csrf_token');
+
     //todo: add error handling
     const response = await fetch(`/api/getGoogleSignInCredential?token=${googleSignInIdToken}`);
     if (!response.ok) throw new Error('Failed to get Google Sign In credential')
-    console.log(response)
+
     const credential = await response.text();
 
     signInWithCredential(auth, GoogleAuthProvider.credential(credential));
