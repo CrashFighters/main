@@ -15,7 +15,7 @@ const getTemplateValues = (user) => ({
     custom: null
 });
 
-function replaceTemplates(user) {
+export function replaceTemplates(user) {
     const templateValues = getTemplateValues(user);
     const elements = deepQuerySelectorAll('[data-template]');
 
@@ -111,7 +111,3 @@ onStateChange((user) => {
     replaceTemplates(user);
 });
 replaceTemplates(null);
-
-//add window function to replace templates
-window.replaceTemplates = replaceTemplates;
-
