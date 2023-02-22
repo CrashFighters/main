@@ -21,9 +21,9 @@ function replaceTemplates(user) {
 
     for (const element of elements) {
         const item = element.dataset.template;
-        
 
-        console.log('[templateSDK] Attempting template ' + item + ' with value ' + templateValues[item] + '.');
+        if(debug)
+            console.log('[templateSDK] Attempting template ' + item + ' with value ' + templateValues[item] + '.');
 
         if (!(item in templateValues) && debug) {
             console.error(
