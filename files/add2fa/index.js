@@ -2,6 +2,10 @@ import {
     add
 } from '/sdk/2fa.js';
 
+import {
+    replaceTemplates
+} from '/sdk/templates.js';
+
 const phoneNumberInput = document.getElementById('phoneNumber');
 const displayNameInput = document.getElementById('displayName');
 const enableButton = document.getElementById('enable2faButton');
@@ -27,3 +31,24 @@ window.doAdd2fa = async () => {
     window.twoFactorAuth.readyForVerification = confirm;
 
 }
+
+window.addDisabled = false;
+const checkIfEmpty = () => {
+    return phoneNumberInput.value === '' || displayNameInput.value === '';
+}
+
+phoneNumberInput.addEventListener('input', {
+    handleEvent: () => {
+        window.addDisabled = checkIfEmpty();
+        replaceTemplates();
+    }
+});
+
+displayNameInput.addEventListener('input', {
+    handleEvent: () => {
+        window.addDisabled = checkIfEmpty();
+        replaceTemplates();
+    }
+});
+
+replaceTemplates();
