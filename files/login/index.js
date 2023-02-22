@@ -59,14 +59,14 @@ import {
     prepare2fa,
     get2faMethods,
     send2fa,
-    loginWith2fa,
+    loginWith2fa
 } from '/sdk/login.js';
 
 import { setDisplayName } from '/sdk/settings.js';
 
 import {
     minimalLoginRecaptchaScore,
-    minimalSignupRecaptchaScore,
+    minimalSignupRecaptchaScore
 } from '/common/settings.js';
 
 import { createButton } from '/sdk/recaptcha.js';
@@ -79,7 +79,7 @@ if (signup)
 function redirect() {
     const redirectLocation = urlParams.get('redirect');
 
-    let doRedirect = redirectLocation !== null;
+    const doRedirect = redirectLocation !== null;
     if (
         doRedirect &&
         new URL(redirectLocation).origin !== window.location.origin
@@ -92,7 +92,7 @@ function redirect() {
             confirmButtonColor: '#000',
             cancelButtonColor: '#d33',
             cancelButtonText: 'Nope!',
-            confirmButtonText: 'Yep!',
+            confirmButtonText: 'Yep!'
         }).then((result) => {
             if (result.isConfirmed) {
                 location = redirectLocation;
@@ -112,47 +112,47 @@ onStateChange((user) => {
 const firebaseErrorCodes = {
     'auth/user-not-found': {
         errorCode: 'emailDoesNotExist',
-        field: 'email',
+        field: 'email'
     },
     'auth/missing-email': {
         errorCode: 'missingEmail',
-        field: 'email',
+        field: 'email'
     },
     'auth/invalid-email': {
         errorCode: 'invalidEmail',
-        field: 'email',
+        field: 'email'
     },
     'auth/email-already-in-use': {
         errorCode: 'emailAlreadyInUse',
-        field: 'email',
+        field: 'email'
     },
     'auth/wrong-password': {
         errorCode: 'wrongPassword',
-        field: 'password',
+        field: 'password'
     },
     'auth/weak-password': {
         errorCode: 'weakPassword',
-        field: 'password',
+        field: 'password'
     },
     'auth/too-many-requests': {
-        errorCode: 'tooManyRequests',
+        errorCode: 'tooManyRequests'
     },
     'auth/multi-factor-auth-required': {
-        errorCode: '2faRequired',
+        errorCode: '2faRequired'
     },
     'auth/invalid-verification-code': {
         errorCode: 'invalidVerificationCode',
-        field: 'verificationCode',
+        field: 'verificationCode'
     },
     'auth/internal-error': {
-        errorCode: 'firebaseAuthInternalError',
-    },
+        errorCode: 'firebaseAuthInternalError'
+    }
 };
 
 const recaptchaStateNames = {
     ready: 'recaptchaNotSolved',
     expired: 'recaptchaExpired',
-    error: 'recaptchaError',
+    error: 'recaptchaError'
 };
 
 const errorCodeMessages = {
@@ -171,7 +171,7 @@ const errorCodeMessages = {
     tooManyRequests: 'Too many tries. Please try again later',
     invalidVerificationCode: 'Invalid verification code',
     firebaseAuthInternalError:
-        'An internal error in Firebase authentication occurred. Please try again later',
+        'An internal error in Firebase authentication occurred. Please try again later'
 };
 
 const loginFields = [
@@ -179,7 +179,7 @@ const loginFields = [
     'password',
     'recaptcha',
     'verificationCode',
-    '2fa-recaptcha',
+    '2fa-recaptcha'
 ];
 function handleLoginError({ errorCode, field, error }) {
     const message =
