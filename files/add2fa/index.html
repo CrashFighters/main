@@ -1,41 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add 2fa method</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Add 2fa method</title>
+    <script type="module" src="/sdk/auth.js"></script>
+    <script type="module" src="/add2fa/index.js"></script>
+    <script type="module" src="/sdk/templates.js"></script>
+  </head>
 
-  <script type="module" src="/sdk/auth.js"></script>
-  <script type="module" src="/add2fa/index.js"></script>
-  <script type="module" src="/sdk/templates.js"></script>
-</head>
+  <body>
+    <div
+      data-template="custom"
+      data-template_insert="style"
+      data-template_fallback="display: block;"
+      data-template_var="addTwofaStyle"
+    >
+      <button onclick="window.auth.logout().then(() => window.auth.login())">
+        Re login
+      </button>
+      <br />
+      <br />
+      <input type="tel" id="phoneNumber" placeholder="Phone number" required />
+      <input
+        type="text"
+        id="displayName"
+        placeholder="Phone custom user note"
+      />
+      <div id="2faRecaptchaButton"></div>
 
-<body>
-  <div data-template="custom" data-template_insert="display" data-template_fallback="block"
-    data-template_var="addDisplay">
-    <button onclick="window.auth.logout().then(() => window.auth.login())">
-      Re login
-    </button>
-    <br />
-    <br />
-    <input type="tel" id="phoneNumber" placeholder="Phone number" required />
-    <input type="text" id="displayName" placeholder="Phone custom user note" />
-    <div id="2faRecaptchaButton"></div>
-
-    <button onclick="window.doAdd2fa()" id="enable2faButton" data-template_var="addDisabled"
-      data-template_insert="disabled" data-template_fallback="true" data-template="custom" disabled>
-      Add 2fa
-    </button>
-  </div>
-  <div data-template="custom" data-template_insert="style" data-template_fallback="display: none;"
-    data-template_var="verifyDisplay">
-    <input type="text" id="verificationCode" placeholder="Verification code" />
-    <button onclick="window.doVerify2fa()" id="verify2faButton" disabled>
-      Verify 2fa
-    </button>
-  </div>
-</body>
-
+      <button
+        onclick="window.doAdd2fa()"
+        id="enable2faButton"
+        data-template_var="addDisabled"
+        data-template_insert="disabled"
+        data-template_fallback="true"
+        data-template="custom"
+        disabled
+      >
+        Add 2fa
+      </button>
+    </div>
+    <div
+      data-template="custom"
+      data-template_insert="style"
+      data-template_fallback="display: none;"
+      data-template_var="verificationStyle"
+    >
+      <input
+        type="text"
+        id="verificationCode"
+        placeholder="Verification code"
+      />
+      <button onclick="window.doVerify2fa()" id="verify2faButton" disabled>
+        Verify 2fa
+      </button>
+  </body>
 </html>
