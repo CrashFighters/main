@@ -12,22 +12,26 @@
         "thereAreErrors": "Er zijn {amount} fouten!",
         "thereIsError": "Er is {amount} fout!",
         "reload": "reload",
-        "clientServerReload": "Vanwege een fout is de server aan het herladen.",
-        "loginPage": {
-            "emailDoesNotExist": "Er is geen account met dit email adres",
-            "invalidEmail": "Dit is geen geldig email adres",
-            "missingEmail": "Vul een email adres in",
-            "emailAlreadyInUse": "Dit email adres is al in gebruik",
-            "wrongPassword": "Het wachtwoord is incorrect",
-            "weakPassword": "Het wachtwoord is te zwak",
-            "recaptchaNotSolved": "Los de captcha op",
-            "recaptchaExpired": "De captcha is verlopen. Los hem opnieuw op",
-            "recaptchaError": "Probeer de captcha opnieuw op te lossen",
-            "noName": "Vul een naam in",
-            "2faRequired": "2FA is nodig voor dit account",
-            "tooManyRequests": "Te veel pogingen. Probeer het later opnieuw",
-            "invalidVerificationCode": "De verificatie code is incorrect",
-            "firebaseAuthInternalError": "Er is een interne fout in de Firebase authenticatie opgetreden. Probeer het later opnieuw"
+        "clientServerReload": "Vanwege een fout is de server aan het herladen."
+    },
+    "pages": {
+        "login": {
+            "error": {
+                "emailDoesNotExist": "Er is geen account met dit email adres",
+                "invalidEmail": "Dit is geen geldig email adres",
+                "missingEmail": "Vul een email adres in",
+                "emailAlreadyInUse": "Dit email adres is al in gebruik",
+                "wrongPassword": "Het wachtwoord is incorrect",
+                "weakPassword": "Het wachtwoord is te zwak",
+                "recaptchaNotSolved": "Los de captcha op",
+                "recaptchaExpired": "De captcha is verlopen. Los hem opnieuw op",
+                "recaptchaError": "Probeer de captcha opnieuw op te lossen",
+                "noName": "Vul een naam in",
+                "2faRequired": "2FA is nodig voor dit account",
+                "tooManyRequests": "Te veel pogingen. Probeer het later opnieuw",
+                "invalidVerificationCode": "De verificatie code is incorrect",
+                "firebaseAuthInternalError": "Er is een interne fout in de Firebase authenticatie opgetreden. Probeer het later opnieuw"
+            }
         }
     },
     "httpStatusCodes": {
