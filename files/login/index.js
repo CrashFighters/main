@@ -94,11 +94,13 @@ function redirect() {
             confirmButtonText: 'Yep!'
         }).then((result) => {
             if (result.isConfirmed) {
-                location = redirectLocation;
+                window.open(redirectLocation, '_self')
             } else {
-                location = '/';
+                window.open('/', '_self')
             }
         });
+    else
+        window.open('/', '_self')
 
 
 }
@@ -156,7 +158,7 @@ const recaptchaStateNames = {
 
 let cachedErrorCodeMessages;
 async function getErrorCodeMessages() {
-    if(cachedErrorCodeMessages)
+    if (cachedErrorCodeMessages)
         return cachedErrorCodeMessages;
 
     cachedErrorCodeMessages = await fetch('/api/messages');
@@ -321,6 +323,7 @@ window.verify2fa = async () => {
     const verificationCode = document.getElementById(
         'verificationCodeInput'
     ).value;
+
     try {
         await loginWith2fa(verificationCode);
     } catch (e) {
