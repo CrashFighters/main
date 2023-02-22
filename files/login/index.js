@@ -84,7 +84,6 @@ function redirect() {
         doRedirect &&
         new URL(redirectLocation).origin !== window.location.origin
     )
-       
         Swal.fire({
             title: 'Do you want to continue to the external website?',
             text: redirectLocation,
@@ -101,7 +100,7 @@ function redirect() {
             }
         });
 
-  
+
 }
 
 let preventRedirect = false;
