@@ -31,7 +31,9 @@
         "Name": "Naam",
         "VerificationCode": "Verificatie code",
         "UnknownErrorOccurred": "Er is een onbekende fout opgetreden",
-        "Error": "Fout"
+        "Error": "Fout",
+        "ResetPassword": "Reset wachtwoord",
+        "BackToLogin": "Terug naar inloggen"
     },
     "pages": {
         "/login": {
@@ -61,6 +63,9 @@
             "RedirectQuestionTitle": "Wil je doorgaan naar een externe website?",
             "SendingVerificationCode": "Verificatie code aan het sturen",
             "VerificationCodeSentTo": "Er is een verificatie code verstuurd naar"
+        },
+        "/resetPassword": {
+            "SendEmail": "Stuur email"
         }
     },
     "httpStatusCodes": {

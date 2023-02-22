@@ -31,7 +31,9 @@
         "Name": "Name",
         "VerificationCode": "Verification code",
         "UnknownErrorOccurred": "An unknown error occurred",
-        "Error": "Error"
+        "Error": "Error",
+        "ResetPassword": "Reset password",
+        "BackToLogin": "Back to login"
     },
     "pages": {
         "/login": {
@@ -61,6 +63,9 @@
             "RedirectQuestionTitle": "Do you want to go to an external website?",
             "SendingVerificationCode": "Sending verification code",
             "VerificationCodeSentTo": "A verification code has been sent to"
+        },
+        "/resetPassword": {
+            "SendEmail": "Send email"
         }
     },
     "httpStatusCodes": {
