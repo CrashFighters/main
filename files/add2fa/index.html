@@ -20,12 +20,12 @@
     </button>
     <br />
     <br />
-    <input type="tel" id="phoneNumber" placeholder="Phone number" />
+    <input type="tel" id="phoneNumber" placeholder="Phone number" required />
     <input type="text" id="displayName" placeholder="Phone custom user note" />
     <div id="2faRecaptchaButton"></div>
 
     <button onclick="window.doAdd2fa()" id="enable2faButton" data-template_var="addDisabled"
-      data-template_insert="disabled" data-template_fallback="true" data-template="custom">
+      data-template_insert="disabled" data-template_fallback="true" data-template="custom" disabled>
       Add 2fa
     </button>
   </div>

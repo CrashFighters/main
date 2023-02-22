@@ -29,24 +29,16 @@ window.doAdd2fa = async () => {
     const displayName = displayNameInput.value;
     confirm = await add(phoneNumber, displayName);
     window.twoFactorAuth.readyForVerification = confirm;
-
 }
 
-window.addDisabled = false;
-const checkIfEmpty = () => {
-    return phoneNumberInput.value === '' || displayNameInput.value === '';
+window.addDisabled = true;
+const checkIfValid = () => {
+    return phoneNumberInput.value !== '' && phoneNumberInput.value.match(/^\+?[0-9]\d{9,12}$/);
 }
 
 phoneNumberInput.addEventListener('input', {
     handleEvent: () => {
-        window.addDisabled = checkIfEmpty();
-        replaceTemplates();
-    }
-});
-
-displayNameInput.addEventListener('input', {
-    handleEvent: () => {
-        window.addDisabled = checkIfEmpty();
+        window.addDisabled = !checkIfValid();
         replaceTemplates();
     }
 });
