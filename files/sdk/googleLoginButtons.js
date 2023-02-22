@@ -46,8 +46,13 @@ const googleOnLoadDiv = document.createElement('div');
 googleOnLoadDiv.id = 'g_id_onload';
 googleOnLoadDiv.dataset.client_id = googleSignInKey;
 googleOnLoadDiv.dataset.context = 'signin';
-googleOnLoadDiv.dataset.ux_mode = 'popup';
-googleOnLoadDiv.dataset.callback = 'googleSignInCallback';
+if (window.innerWidth > window.innerHeight) {
+    googleOnLoadDiv.dataset.ux_mode = 'popup';
+    googleOnLoadDiv.dataset.callback = 'googleSignInCallback';
+} else {
+    googleOnLoadDiv.dataset.ux_mode = 'redirect';
+    googleOnLoadDiv.dataset.login_uri = window.location.href
+}
 googleOnLoadDiv.dataset.auto_prompt = 'false';
 
 if (!documentIncludesGoogleTap)
@@ -65,9 +70,34 @@ if ((!documentIncludesGoogleTap) || (documentIncludesGoogleTap && window.googleT
         document.head.appendChild(script);
     };
 
+const googleSignInIdToken = getCookie('g_csrf_token');
+if (googleSignInIdToken) {
+    // user got redirected from login with Google redirect
+    //todo: add error handling
+    const response = await fetch(`/api/getGoogleSignInCredential?token=${googleSignInIdToken}`);
+    if (!response.ok) throw new Error('Failed to get Google Sign In credential')
+    console.log(response)
+    const credential = await response.text();
+
+    signInWithCredential(auth, GoogleAuthProvider.credential(credential));
+}
+
 function doesDocumentIncludeScript(url) {
     const scripts = [...document.getElementsByTagName('script')];
     return Boolean(scripts.find(script => script.src.endsWith(url)));
 };
+
+//todo: improve this function
+function getCookie(name) {
+    const nameEQ = `${name}=`;
+    const ca = document.cookie.split(';');
+
+    for (let c of ca) {
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+
+    return null;
+}
 
 window.googleLoginButtonsHasRun = true;
