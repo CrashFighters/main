@@ -216,6 +216,15 @@ function choose2faMethod(_2faMethods) {
     });
 }
 
+function wait2faRecaptchaSuccess(recaptchaObject) {
+    return new Promise(res => {
+        recaptchaObject.onStateChange(() => {
+            if (['success', 'successBefore'].includes(recaptchaObject.state))
+                res();
+        })
+    });
+}
+
 let _2faError;
 async function enable2fa(error) {
     _2faError = error;
@@ -243,9 +252,7 @@ async function enable2fa(error) {
     signupRecaptchaButton.style.display = 'none';
     forgotPassword.style.display = 'none';
 
-    let recaptchaObject;
-
-    recaptchaObject = await prepare2fa();
+    const recaptchaObject = await prepare2fa();
 
     const _2faMethods = await get2faMethods(error);
     let selectedIndex;
@@ -255,8 +262,8 @@ async function enable2fa(error) {
     else
         selectedIndex = await choose2faMethod(_2faMethods);
 
-    while (!['success', 'successBefore'].includes(recaptchaObject.state))
-        recaptchaObject = await prepare2fa();
+    if (!['success', 'successBefore'].includes(recaptchaObject.state))
+        await wait2faRecaptchaSuccess(recaptchaObject);
 
     _2faRecaptchaContainer.style.display = 'none';
 

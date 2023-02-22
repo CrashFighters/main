@@ -14,20 +14,24 @@ if (!_2FaRecaptchaButton)
     throw new Error(`No element with id "${id}" found`);
 
 let recaptchaDoneCallbacks = [];
-let recaptchaState = 'ready';
-let recaptchaObject = { state: recaptchaState };
+let recaptchaStateChangeCallbacks = [];
+let recaptchaObject = { state: 'ready', onStateChange: (callback) => { recaptchaStateChangeCallbacks.push(callback); } };
 const __recaptchaVerifier = new RecaptchaVerifier(_2FaRecaptchaButton, {
     size: 'normal',
     callback: () => {
+        if (recaptchaObject.state === 'waiting')
+            recaptchaObject.state = 'success'
+        else
+            recaptchaObject.state = 'successBefore';
+        for (const recaptchaStateChangeCallback of recaptchaStateChangeCallbacks)
+            recaptchaStateChangeCallback(recaptchaObject);
         for (const recaptchaDoneCallback of recaptchaDoneCallbacks)
             recaptchaDoneCallback([__recaptchaVerifier, recaptchaObject]);
-        if (recaptchaState === 'waiting')
-            recaptchaState = 'success'
-        else
-            recaptchaState = 'successBefore';
     },
     'expired-callback': () => {
-        recaptchaState = 'expired';
+        recaptchaObject.state = 'expired';
+        for (const recaptchaStateChangeCallback of recaptchaStateChangeCallbacks)
+            recaptchaStateChangeCallback(recaptchaObject);
     }
 }, auth);
 let recaptchaRenderPromise = __recaptchaVerifier.render();
@@ -35,18 +39,21 @@ let recaptchaRenderPromise = __recaptchaVerifier.render();
 export const _ = {
     getRecaptchaVerifier() {
         _2FaRecaptchaButton.style.display = null;
-        recaptchaObject = { state: recaptchaState };
 
-        if (['success', 'expired'].includes(recaptchaState)) {
+        if (['success', 'expired'].includes(recaptchaObject.state)) {
+            recaptchaObject.state = 'ready';
+            recaptchaStateChangeCallbacks = [];
             recaptchaDoneCallbacks = [];
+            recaptchaObject = { state: recaptchaObject.state, onStateChange: (callback) => { recaptchaStateChangeCallbacks.push(callback); } };
+
             __recaptchaVerifier.clear();
             recaptchaRenderPromise = __recaptchaVerifier.render();
         };
-        if (recaptchaState === 'successBefore') {
-            recaptchaState = 'success';
-            return Promise.resolve(__recaptchaVerifier);
+        if (recaptchaObject.state === 'successBefore') {
+            recaptchaObject.state = 'success';
+            return Promise.resolve([__recaptchaVerifier, recaptchaObject]);
         };
-        recaptchaState = 'waiting';
+        recaptchaObject.state = 'waiting';
 
         return new Promise(async res => {
             await recaptchaRenderPromise;
