@@ -3,6 +3,7 @@ import {
     signInWithCredential
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
+import { getCookie, deleteCookie } from '/common/cookie.js';
 import { googleSignInKey } from '/common/apiKeys.js';
 
 const { auth } = (await import('/sdk/auth.js'))._.firebase;
@@ -86,18 +87,5 @@ function doesDocumentIncludeScript(url) {
     const scripts = [...document.getElementsByTagName('script')];
     return Boolean(scripts.find(script => script.src.endsWith(url)));
 };
-
-//todo: improve this function
-function getCookie(name) {
-    const nameEQ = `${name}=`;
-    const ca = document.cookie.split(';');
-
-    for (let c of ca) {
-        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-    }
-
-    return null;
-}
 
 window.googleLoginButtonsHasRun = true;
