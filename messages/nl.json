@@ -15,10 +15,10 @@
         "clientServerReload": "Vanwege een fout is de server aan het herladen."
     },
     "general": {
-        "login": "Inloggen",
-        "logout": "Uitloggen",
-        "yourEmailIs": "Je email is",
-        "welcome": "Welkom",
+        "Login": "Inloggen",
+        "Logout": "Uitloggen",
+        "YourEmailIs": "Je email is",
+        "Welcome": "Welkom",
         "unknownPerson": "onbekende persoon",
         "unknown": "onbekend"
     },

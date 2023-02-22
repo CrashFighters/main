@@ -15,10 +15,10 @@
         "clientServerReload": "The server is restarting due to an error."
     },
     "general": {
-        "login": "Login",
-        "logout": "Logout",
-        "yourEmailIs": "Your email is",
-        "welcome": "Welcome",
+        "Login": "Login",
+        "Logout": "Logout",
+        "YourEmailIs": "Your email is",
+        "Welcome": "Welcome",
         "unknownPerson": "unknown person",
         "unknown": "unknown"
     },
