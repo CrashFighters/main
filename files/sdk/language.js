@@ -18,7 +18,12 @@ function flipFirstLetterCase(string) {
     return ((string[0].toUpperCase() === string[0]) ? string[0].toLowerCase() : string[0].toUpperCase()) + string.slice(1);
 }
 
-const elements = deepQuerySelectorAll('[data-lang_text]');
+const innerTextElements = deepQuerySelectorAll('[data-lang_text]');
 
-for (const element of elements)
+for (const element of innerTextElements)
     element.innerText = getMessage(element.dataset.lang_text);
+
+const placeholderElements = deepQuerySelectorAll('[data-lang_placeholder]');
+
+for (const element of placeholderElements)
+    element.placeholder = getMessage(element.dataset.lang_placeholder);
