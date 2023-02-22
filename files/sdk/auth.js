@@ -3,7 +3,8 @@ import {
     getAuth,
     onAuthStateChanged,
     signOut,
-    updateProfile
+    updateProfile,
+    useDeviceLanguage
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
 import { init } from '/sdk/appCheck.js';
@@ -44,6 +45,8 @@ export const signup = () => {
 };
 
 async function updateUserObject(newUser) {
+    useDeviceLanguage(auth);
+
     if (!newUser) {
         window.auth.user = null;
         return;
