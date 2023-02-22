@@ -1,4 +1,5 @@
 import { onStateChange } from '/sdk/auth.js';
+import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
 
 //check if script on page has the attribute data-debug
 const scriptOnPage = document.querySelector('script[data-template_debug]');
@@ -22,7 +23,7 @@ export function replaceTemplates(user) {
     for (const element of elements) {
         const item = element.dataset.template;
 
-        if(debug)
+        if (debug)
             console.log('[templateSDK] Attempting template ' + item + ' with value ' + templateValues[item] + '.');
 
         if (!(item in templateValues) && debug) {
@@ -89,22 +90,6 @@ export function replaceTemplates(user) {
         throw new Error(
             '[templateSDK] No templates found to replace. Please make sure you have at least one element with the data-template attribute.'
         );
-}
-
-function deepQuerySelectorAll(selector, root = document) {
-    const results = [...root.querySelectorAll(selector)];
-
-    const pushNestedResults = (root) => {
-        for (const element of deepQuerySelectorAll(selector, root))
-            if (!results.includes(element)) results.push(element);
-    };
-
-    if (root.shadowRoot) pushNestedResults(root.shadowRoot);
-
-    for (const element of root.querySelectorAll('*'))
-        if (element.shadowRoot) pushNestedResults(element.shadowRoot);
-
-    return results;
 }
 
 onStateChange((user) => {
