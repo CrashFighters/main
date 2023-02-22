@@ -1,10 +1,10 @@
 {
     "error": {
-        "apiCallNotFound": "API Call not found.",
-        "executeFunctionNotFoundWithFile": "The execute function was not found with file ({file})",
+        "apiCallNotFound": "API endpoint not found",
+        "executeFunctionNotFoundWithFile": "The execute function was not found ({file})",
         "executeFunctionNotFound": "The execute function was not found",
-        "moduleNotInstalledFor": "The api call '{api}' needs '{dependency}",
-        "modulesNotInstalledFor": "The api call '{api}' needs {dependency}",
+        "moduleNotInstalledFor": "The API endpoint '{api}' needs '{dependency}'",
+        "modulesNotInstalledFor": "The API endpoint '{api}' needs '{dependency}'",
         "moduleNotInstalledForShort": "Dependencies not found for {api}",
         "notValid": "Given argument {argument} is not valid",
         "notGiven": "No {argument} specified",
@@ -12,7 +12,23 @@
         "thereAreErrors": "There are {amount} errors!",
         "thereIsError": "There is {amount} error!",
         "reload": "reload",
-        "clientServerReload": "Due to an error, the server is restarting"
+        "clientServerReload": "The server is restarting due to an error.",
+        "loginPage": {
+            "emailDoesNotExist": "There is no account associated with this email address",
+            "invalidEmail": "This is not a valid email address",
+            "missingEmail": "Please enter an email address",
+            "emailAlreadyInUse": "This email address is already in use",
+            "wrongPassword": "The password is incorrect",
+            "weakPassword": "The password is too weak",
+            "recaptchaNotSolved": "Please solve the captcha",
+            "recaptchaExpired": "The captcha has expired. Please solve it again",
+            "recaptchaError": "Please try the captcha again",
+            "noName": "Please enter a name",
+            "2faRequired": "2FA is required for this account",
+            "tooManyRequests": "Too many tries. Please try again later",
+            "invalidVerificationCode": "Invalid verification code",
+            "firebaseAuthInternalError": "An internal error in Firebase authentication occurred. Please try again later"
+        }
     },
     "httpStatusCodes": {
         "400": {

@@ -84,7 +84,6 @@ function redirect() {
         doRedirect &&
         new URL(redirectLocation).origin !== window.location.origin
     )
-       
         Swal.fire({
             title: 'Do you want to continue to the external website?',
             text: redirectLocation,
@@ -101,7 +100,7 @@ function redirect() {
             }
         });
 
-  
+
 }
 
 let preventRedirect = false;
@@ -155,24 +154,17 @@ const recaptchaStateNames = {
     error: 'recaptchaError'
 };
 
-const errorCodeMessages = {
-    //todo: put in en.json
-    emailDoesNotExist: 'There is no account associated with this email address',
-    invalidEmail: 'This is not a valid email address',
-    missingEmail: 'Please enter an email address',
-    emailAlreadyInUse: 'This email address is already in use',
-    wrongPassword: 'The password is incorrect',
-    weakPassword: 'The password is too weak',
-    recaptchaNotSolved: 'Please solve the captcha',
-    recaptchaExpired: 'The captcha has expired. Please solve it again',
-    recaptchaError: 'Please try the captcha again',
-    noName: 'Please enter a name',
-    '2faRequired': '2FA is required for this account',
-    tooManyRequests: 'Too many tries. Please try again later',
-    invalidVerificationCode: 'Invalid verification code',
-    firebaseAuthInternalError:
-        'An internal error in Firebase authentication occurred. Please try again later'
-};
+let cachedErrorCodeMessages;
+async function getErrorCodeMessages() {
+    if(cachedErrorCodeMessages)
+        return cachedErrorCodeMessages;
+
+    cachedErrorCodeMessages = await fetch('/api/messages');
+    cachedErrorCodeMessages = await cachedErrorCodeMessages.json();
+    cachedErrorCodeMessages = cachedErrorCodeMessages.error.loginPage;
+
+    return cachedErrorCodeMessages;
+}
 
 const loginFields = [
     'email',
@@ -181,9 +173,9 @@ const loginFields = [
     'verificationCode',
     '2fa-recaptcha'
 ];
-function handleLoginError({ errorCode, field, error }) {
+async function handleLoginError({ errorCode, field, error }) {
     const message =
-        errorCodeMessages[errorCode] ??
+        (await getErrorCodeMessages())[errorCode] ??
         errorCode ??
         (error?.message
             ? `Error: ${error.message}`
@@ -384,9 +376,9 @@ window.doLogin = async (recaptchaScore) => {
 };
 
 const signupFields = ['name', 'email', 'password', 'recaptcha'];
-function handleSignupError({ errorCode, field, error }) {
+async function handleSignupError({ errorCode, field, error }) {
     const message =
-        errorCodeMessages[errorCode] ??
+        (await getErrorCodeMessages())[errorCode] ??
         errorCode ??
         (error?.message
             ? `Error: ${error.message}`
