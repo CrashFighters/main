@@ -16,13 +16,6 @@ export const setDisplayName = async (displayName) => {
         callback(window.auth.user);
 };
 
-export const setLanguage = async (language) => {
-    auth.languageCode = language;
-    updateUserObject(auth.currentUser);
-    for (const callback of onStateChangeCallbacks)
-        callback(window.auth.user);
-};
-
 export const setPicture = async (picture) => {
     if (!window.auth.user)
         throw new Error('User is not logged in')

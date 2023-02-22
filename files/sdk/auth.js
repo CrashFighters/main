@@ -72,7 +72,6 @@ async function updateUserObject(newUser) {
         loginMethod,
         picture: newUser.photoURL,
         displayName: newUser.displayName,
-        language: auth.languageCode,
         email,
         emailVerified: newUser.email ? newUser.emailVerified : true,
         isAnonymous: newUser.isAnonymous,
