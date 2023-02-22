@@ -84,12 +84,24 @@ function redirect() {
         doRedirect &&
         new URL(redirectLocation).origin !== window.location.origin
     )
-        doRedirect = confirm(
-            `Do you want to continue to the external website '${redirectLocation}'?`
-        );
+       
+        Swal.fire({
+            title: 'Do you want to continue to the external website?',
+            text: redirectLocation,
+            showCancelButton: true,
+            confirmButtonColor: '#000',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Nope!',
+            confirmButtonText: 'Yep!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                location = redirectLocation;
+            } else {
+                location = '/';
+            }
+        });
 
-    if (doRedirect) window.location.replace(redirectLocation);
-    else window.location.replace('/');
+  
 }
 
 let preventRedirect = false;
