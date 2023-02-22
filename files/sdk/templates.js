@@ -6,10 +6,6 @@
 // ░░░██║░░░███████╗██║░╚═╝░██║██║░░░░░███████╗██║░░██║░░░██║░░░███████╗  ██████╔╝██████╔╝██║░╚██╗
 // ░░░╚═╝░░░╚══════╝╚═╝░░░░░╚═╝╚═╝░░░░░╚══════╝╚═╝░░╚═╝░░░╚═╝░░░╚══════╝  ╚═════╝░╚═════╝░╚═╝░░╚═╝
 
-//Licensed under CC BY-NC-ND 4.0
-//https://creativecommons.org/licenses/by-nc-nd/4.0/
-
-
 import { onStateChange } from '/sdk/auth.js';
 import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
 
@@ -28,7 +24,7 @@ const getTemplateValues = (user) => ({
     custom: null
 });
 
-export function replaceTemplates(user) {
+export async function replaceTemplates(user) {
     const templateValues = getTemplateValues(user);
     const elements = deepQuerySelectorAll('[data-template]');
 
@@ -48,14 +44,28 @@ export function replaceTemplates(user) {
         let value = templateValues[item];
 
         if (
-            templateValues[item] === '' &&
-            element.dataset['template_fallback'] !== undefined && templateValues[item] !== null
+            [null, undefined, ''].includes(value) &&
+            element.dataset['template_fallback'] !== undefined && value !== null
         ) {
             if (debug)
                 console.log(
                     `[templateSDK] Using fallback value ${element.dataset['template_fallback']} on template ${item}.`
                 );
             value = element.dataset['template_fallback'];
+        }
+
+        if (
+            [null, undefined, ''].includes(value) &&
+            element.dataset['template_fallback_lang_text'] !== undefined && value !== null
+        ) {
+            if (debug)
+                console.log(
+                    `[templateSDK] Using language fallback value ${element.dataset['template_fallback_lang_text']} on template ${item}.`
+                );
+
+            const message = await import('/sdk/language.js').getMessage(element.dataset['template_fallback_lang_text']);
+
+            value = message;
         }
 
         if (element.dataset['template_var'] !== undefined) {
