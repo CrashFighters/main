@@ -7,6 +7,7 @@ if (isModuleInstalled('requestInfo')) {
     requestInfo = require(`../../../${settings.generic.path.files.modules}requestInfo/getInfo`).execute;
 }
 
+//todo: create one list with ranking of languages and recursively search trough messages and return the first one that is found
 module.exports = {
     execute(argument) {
         let files = argument?.files;
