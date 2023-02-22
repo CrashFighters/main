@@ -23,7 +23,7 @@ module.exports = {
             let middlewareData = {};
             if (middlewares)
                 for (const middleware of middlewares) {
-                    const newMiddlewareData = await middleware({ request, response, extraData });
+                    const newMiddlewareData = await middleware({ request, response, extraData, parseError }) ?? {};
                     middlewareData = { ...middlewareData, ...newMiddlewareData };
                 };
 
