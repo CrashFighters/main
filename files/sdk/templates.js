@@ -12,7 +12,7 @@ const getTemplateValues = (user) => ({
     picture: user?.picture ?? '',
     loggedOut: user !== null,
     loggedIn: user === null,
-    custom: '',
+    custom: null
 });
 
 function replaceTemplates(user) {
@@ -31,15 +31,6 @@ function replaceTemplates(user) {
 
         let value = templateValues[item];
 
-        if (element.dataset['template_update_callback'] !== undefined) {
-            //run callback function with the value as parameter
-            if (debug)
-                console.log(
-                    `[templateSDK] Running callback function ${element.dataset['template_update_callback']} on template ${item} with value ${value}.`
-                );
-            window[element.dataset['template_update_callback']](item, value);
-        }
-
         if (
             templateValues[item] === '' &&
             element.dataset['template_fallback'] !== undefined
@@ -57,6 +48,15 @@ function replaceTemplates(user) {
                     `[templateSDK] Using custom variable ${element.dataset['template_var']} on template ${item}.`
                 );
             value = window[element.dataset['template_var']];
+        }
+
+        if (element.dataset['template_update_callback'] !== undefined) {
+            //run callback function with the value as parameter
+            if (debug)
+                console.log(
+                    `[templateSDK] Running callback function ${element.dataset['template_update_callback']} on template ${item} with value ${value}.`
+                );
+            window[element.dataset['template_update_callback']](item, value);
         }
 
         if (
