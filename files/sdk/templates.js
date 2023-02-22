@@ -21,6 +21,9 @@ function replaceTemplates(user) {
 
     for (const element of elements) {
         const item = element.dataset.template;
+        
+
+        console.log('[templateSDK] Attempting template ' + item + ' with value ' + templateValues[item] + '.');
 
         if (!(item in templateValues) && debug) {
             console.error(
@@ -33,7 +36,7 @@ function replaceTemplates(user) {
 
         if (
             templateValues[item] === '' &&
-            element.dataset['template_fallback'] !== undefined
+            element.dataset['template_fallback'] !== undefined && templateValues[item] !== null
         ) {
             if (debug)
                 console.log(
@@ -108,3 +111,7 @@ onStateChange((user) => {
     replaceTemplates(user);
 });
 replaceTemplates(null);
+
+//add window function to replace templates
+window.replaceTemplates = replaceTemplates;
+
