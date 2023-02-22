@@ -3,7 +3,7 @@ const settings = require('../settings.json')
 
 module.exports = {
     execute(text) {
-        if (!text) text = "";
+        if (!text) text = '';
 
         let cConsole = fs.readFileSync(`.${settings.path.files.console}`);
         cConsole = `${cConsole}${text}\n`;

@@ -1,24 +1,26 @@
 module.exports = {
-	twoColumns(rows, spaceBetweenMax, spaceBetweenChar) {
-		let maxSpace = 0;
-		rows.forEach((val) => {
-			if (val[0].length > maxSpace) maxSpace = val[0].length;
-		});
+    twoColumns(rows, spaceBetweenMax, spaceBetweenChar) {
+        let maxSpace = 0;
 
-		let space = maxSpace + spaceBetweenMax;
-		let out = [];
+        for (const row of rows)
+            if (row[0].length > maxSpace)
+                maxSpace = row[0].length;
 
-		rows.forEach((val) => {
-			let spaceBetweenLength = space - val[0].length;
-			let spaceBetween = '';
+        const space = maxSpace + spaceBetweenMax;
+        const out = [];
 
-			for (let ii = 0; ii < spaceBetweenLength; ii++) {
-				spaceBetween = `${spaceBetween}${spaceBetweenChar}`;
-			}
+        for (const row of rows) {
+            //todo: rewrite this
 
-			out.push(`${val[0]}${spaceBetween}${val[1]}`);
-		});
+            const spaceBetweenLength = space - row[0].length;
+            let spaceBetween = '';
 
-		return out;
-	}
+            for (let ii = 0; ii < spaceBetweenLength; ii++)
+                spaceBetween = `${spaceBetween}${spaceBetweenChar}`;
+
+            out.push(`${row[0]}${spaceBetween}${row[1]}`);
+        };
+
+        return out;
+    }
 };

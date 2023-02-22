@@ -3,9 +3,10 @@ import {
     signInWithCredential
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
+import { getCookie, deleteCookie } from '/common/cookie.js';
 import { googleSignInKey } from '/common/apiKeys.js';
 
-const { app, auth } = (await import('/sdk/auth.js'))._.firebase;
+const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
 window.googleSignInCallback = (a) => {
     signInWithCredential(auth, GoogleAuthProvider.credential(a.credential));
@@ -46,8 +47,13 @@ const googleOnLoadDiv = document.createElement('div');
 googleOnLoadDiv.id = 'g_id_onload';
 googleOnLoadDiv.dataset.client_id = googleSignInKey;
 googleOnLoadDiv.dataset.context = 'signin';
-googleOnLoadDiv.dataset.ux_mode = 'popup';
-googleOnLoadDiv.dataset.callback = 'googleSignInCallback';
+if (window.innerWidth > window.innerHeight) {
+    googleOnLoadDiv.dataset.ux_mode = 'popup';
+    googleOnLoadDiv.dataset.callback = 'googleSignInCallback';
+} else {
+    googleOnLoadDiv.dataset.ux_mode = 'redirect';
+    googleOnLoadDiv.dataset.login_uri = window.location.href
+}
 googleOnLoadDiv.dataset.auto_prompt = 'false';
 
 if (!documentIncludesGoogleTap)
@@ -60,10 +66,25 @@ if ((!documentIncludesGoogleTap) || (documentIncludesGoogleTap && window.googleT
     if (doesDocumentIncludeScript('https://accounts.google.com/gsi/client'))
         throw new Error('Google Sign In script already exists')
     else {
-        let script = document.createElement('script');
+        const script = document.createElement('script');
         script.src = 'https://accounts.google.com/gsi/client';
         document.head.appendChild(script);
     };
+
+const googleSignInIdToken = getCookie('g_csrf_token');
+if (googleSignInIdToken) {
+    // user got redirected from login with Google redirect
+
+    deleteCookie('g_csrf_token');
+
+    //todo: add error handling
+    const response = await fetch(`/api/getGoogleSignInCredential?token=${googleSignInIdToken}`);
+    if (!response.ok) throw new Error('Failed to get Google Sign In credential')
+
+    const credential = await response.text();
+
+    signInWithCredential(auth, GoogleAuthProvider.credential(credential));
+}
 
 function doesDocumentIncludeScript(url) {
     const scripts = [...document.getElementsByTagName('script')];

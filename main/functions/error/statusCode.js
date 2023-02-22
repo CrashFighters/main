@@ -2,7 +2,7 @@ const fs = require('fs');
 const settings = require('../../../settings.json');
 let gMessages;
 try {
-    gMessages = require(`../get/messages`).execute().mainFunction();
+    gMessages = require('../get/messages').execute().mainFunction();
 } catch (err) {
     gMessages = undefined;
 }
@@ -12,8 +12,8 @@ module.exports = {
     execute(response, code, extra) {
         response.writeHead(code, { 'Content-Type': 'text/plain' });
         if (!extra) extra = {};
-        let errorFile = extra.errorFile;
-        let customText = extra.text;
+        const errorFile = extra.errorFile;
+        const customText = extra.text;
         let text = '';
 
         let errorMessage;
@@ -22,7 +22,7 @@ module.exports = {
 
         if (errorMessage) if (errorMessage[code]) text = errorMessage[code];
 
-        let path = settings.generic.path.files.errorFile.replace('{files}', settings.generic.path.files.files);
+        const path = settings.generic.path.files.errorFile.replace('{files}', settings.generic.path.files.files);
 
         fs.readFile(path, async function (err, data) {
             if (err) throw err;

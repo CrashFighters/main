@@ -11,7 +11,7 @@ const repairSettings = {
 
 module.exports = {
     async execute(server) {
-        let t = require(__filename);
+        const t = require(__filename);
 
         let changed = [];
         let logs = [];
@@ -37,10 +37,10 @@ module.exports = {
         messages: {
             main: {
                 fix() {
-                    let t = require(__filename);
+                    const t = require(__filename);
                     if (!t.repairs.messages.main.test()) return;
 
-                    let f = t.repairs.messages.main.fixes;
+                    const f = t.repairs.messages.main.fixes;
 
                     let changed = [];
                     let logs = [];
@@ -85,8 +85,8 @@ module.exports = {
                         const fs = require('fs');
                         const messages = fs.readdirSync(settings.generic.path.files.messages);
 
-                        let changed = [];
-                        let logs = [];
+                        const changed = [];
+                        const logs = [];
 
                         messages.forEach(val => {
                             try {
@@ -123,19 +123,19 @@ module.exports = {
         },
         modules: {
             async node_modules() {
-                let changed = [];
-                let logs = [];
+                const changed = [];
+                const logs = [];
                 try {
                     const settings = require('../../../settings.json');
                     const fs = require('fs');
 
-                    let installmodules = [];
+                    const installModules = [];
 
-                    let installModule = name => {
+                    const installModule = name => {
                         try {
                             require.resolve(name)
                         } catch {
-                            installmodules.push(name);
+                            installModules.push(name);
                             changed.push({
                                 tag: 'installedNodeModule',
                                 value: name
@@ -147,14 +147,14 @@ module.exports = {
                         installModule(val);
                     })
 
-                    let modules = fs.readdirSync(settings.generic.path.files.modules);
+                    const modules = fs.readdirSync(settings.generic.path.files.modules);
                     modules.forEach(val => {
 
-                        let extraDependenciesPath = `${settings.generic.path.files.modules}${val}/${settings.generic.path.files.extraDependencies}`;
+                        const extraDependenciesPath = `${settings.generic.path.files.modules}${val}/${settings.generic.path.files.extraDependencies}`;
                         console.log(extraDependenciesPath)
                         if (fs.existsSync(extraDependenciesPath)) {
                             try {
-                                let extraDependencies = require(extraDependenciesPath);
+                                const extraDependencies = require(extraDependenciesPath);
 
                                 if (extraDependencies?.node_modules)
                                     extraDependencies.node_modules.forEach(val => {
@@ -168,12 +168,12 @@ module.exports = {
                             }
                         }
 
-                        let apiPath = settings.generic.path.files.moduleApi.replace('{modules}', settings.generic.path.files.modules).replace('{name}', val);
+                        const apiPath = settings.generic.path.files.moduleApi.replace('{modules}', settings.generic.path.files.modules).replace('{name}', val);
                         if (fs.existsSync(apiPath)) {
-                            let apis = fs.readdirSync(apiPath);
+                            const apis = fs.readdirSync(apiPath);
                             apis.forEach(api => {
                                 try {
-                                    let apiFile = require(`../../.${settings.generic.path.files.moduleApi.replace('{modules}', settings.generic.path.files.modules).replace('{name}', val)}${api}`);
+                                    const apiFile = require(`../../.${settings.generic.path.files.moduleApi.replace('{modules}', settings.generic.path.files.modules).replace('{name}', val)}${api}`);
                                     if (apiFile.dependencies?.node_modules) {
                                         apiFile.dependencies.node_modules.forEach(val => {
                                             installModule(val);
@@ -189,8 +189,8 @@ module.exports = {
                         }
                     })
 
-                    if (installmodules)
-                        await require(`../installNodeModule`).execute(installmodules)
+                    if (installModules)
+                        await require('../installNodeModule').execute(installModules)
 
                     return {
                         changed,

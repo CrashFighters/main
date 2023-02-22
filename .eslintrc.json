@@ -1,9 +1,11 @@
 {
     "env": {
-        "node": true
+        "node": true,
+        "browser": true
     },
     "parserOptions": {
-        "ecmaVersion": "latest"
+        "ecmaVersion": "latest",
+        "sourceType": "module"
     },
     "rules": {
         "indent": [
@@ -21,7 +23,15 @@
         "no-var": "warn",
         "no-unused-vars": "warn",
         "no-unreachable": "warn",
-        "eqeqeq": "warn"
+        "eqeqeq": "warn",
+        "prefer-const": "warn",
+        "quotes": [
+            "warn",
+            "single",
+            {
+                "avoidEscape": true
+            }
+        ]
     },
     "globals": {
         "WeakMap": true,
@@ -31,6 +41,8 @@
         "Set": true,
         "WeakSet": true,
         "Proxy": true,
-        "Reflect": true
+        "Reflect": true,
+        "grecaptcha": true,
+        "Toastify": true
     }
 }

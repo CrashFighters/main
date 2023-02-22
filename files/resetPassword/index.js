@@ -6,28 +6,28 @@ import {
     sendPasswordResetEmail
 } from '/sdk/login.js';
 
-const emailInput = document.getElementById("emailInput");
+const emailInput = document.getElementById('emailInput');
 
 window.sendResetEmail = async () => {
-    if (emailInput.value == "") {
+    if (emailInput.value === '') {
         return Toastify({
-            text: "Please enter your email address.",
+            text: 'Please enter your email address.',
             duration: 3000,
-            gravity: "top",
-            position: "center",
-            backgroundColor: "#f44336",
+            gravity: 'top',
+            position: 'center',
+            backgroundColor: '#f44336',
         }).showToast();
     }
 
     try {
         sendPasswordResetEmail(emailInput.value);
-        emailInput.value = "";
+        emailInput.value = '';
         Toastify({
-            text: "Password reset email sent! Please check your inbox.",
+            text: 'Password reset email sent! Please check your inbox.',
             duration: 3000,
-            gravity: "top",
-            position: "center",
-            backgroundColor: "#4caf50",
+            gravity: 'top',
+            position: 'center',
+            backgroundColor: '#4caf50',
             //when done, redirect to login page
             callback: () => {
                 login();
@@ -35,46 +35,45 @@ window.sendResetEmail = async () => {
         }).showToast();
     } catch (error) {
         Toastify({
-            text: "An error occurred while sending the password reset email.",
+            text: 'An error occurred while sending the password reset email.',
             duration: 3000,
-            gravity: "top",
-            position: "center",
-            backgroundColor: "#f44336",
+            gravity: 'top',
+            position: 'center',
+            backgroundColor: '#f44336',
         }).showToast();
     }
 }
 
-emailInput.addEventListener("keyup", (event) => {
-    if (event.key === "Enter") //todo: use onSubmit
-        sendResetEmail();
+emailInput.addEventListener('keyup', (event) => {
+    if (event.key === 'Enter')
+        window.sendResetEmail();
 
     //check if email is valid
-    if (emailInput.value.includes("@") && emailInput.value.includes("."))
+    if (emailInput.value.includes('@') && emailInput.value.includes('.'))
         document
-            .getElementById("sendResetEmailButton")
-            .classList.remove("disabled");
+            .getElementById('sendResetEmailButton')
+            .classList.remove('disabled');
     else
         document
-            .getElementById("sendResetEmailButton")
-            .classList.add("disabled");
+            .getElementById('sendResetEmailButton')
+            .classList.add('disabled');
 });
 
 document
-    .getElementById("sendResetEmailButton")
-    .addEventListener("mousedown", () => {
+    .getElementById('sendResetEmailButton')
+    .addEventListener('mousedown', () => {
         if (
             document
-                .getElementById("sendResetEmailButton")
-                .classList.contains("disabled") == true
-        ) {
+                .getElementById('sendResetEmailButton')
+                .classList.contains('disabled') === true
+        )
             return Toastify({
-                text: "Please enter a valid email address.",
+                text: 'Please enter a valid email address.',
                 duration: 3000,
-                gravity: "top",
-                position: "center",
-                backgroundColor: "#f44336",
+                gravity: 'top',
+                position: 'center',
+                backgroundColor: '#f44336',
             }).showToast();
-        } else {
-            sendResetEmail();
-        }
+        else
+            window.sendResetEmail();
     });

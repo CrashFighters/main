@@ -1,3 +1,17 @@
+/*
+
+Hello future self,
+sorry for the spaghetti code. This file grew into something
+out of my control. Normally I like spaghetti, but not this
+much. I'm very sorry, but I'm too lazy to clean this up.
+
+Again sorry,
+your past self
+
+(If you're someone else, this file isn't very interesting, see main/server/main.js instead)
+
+*/
+
 const fs = require('fs');
 const settings = require('../../../settings.json');
 let gMessages;
@@ -31,12 +45,12 @@ module.exports = {
                 require('./statusCode').execute(response, 500);
             } catch { }
 
-        let timeDiff = new Date().getTime() - lastErrorTime;
+        const timeDiff = new Date().getTime() - lastErrorTime;
         if (timeDiff > 1000) amountError = 0;
         let retry = true;
 
-        let currentErr = `${err}`.split('\n')[0];
-        if (currentErr == lastError && timeDiff < 1000) {
+        const currentErr = `${err}`.split('\n')[0];
+        if (currentErr === lastError && timeDiff < 1000) {
             amountError += 1;
         } else {
             lastError = currentErr;
@@ -46,7 +60,7 @@ module.exports = {
         let stack = err.stack;
         if (!stack) stack = new Error('No error stack given').stack.split('\n').splice(1).join('\n');
 
-        let data = `${`${err}`.split('\n')[0]}\n\n\nStack${err.stack ? '' : ' (No stack given)'}:\n${stack}`
+        const data = `${`${err}`.split('\n')[0]}\n\n\nStack${err.stack ? '' : ' (No stack given)'}:\n${stack}`
 
         fs.writeFileSync(`${settings.generic.path.files.errors}RAW1-${amountError}-${Math.floor(Math.random() * 1000)}.txt`, data);
 
@@ -78,9 +92,9 @@ module.exports = {
 
     },
     extremeServer(r, response) {
-        response.writeHead(500, "The server has an extreme error, please try again later");
-        response.end("The server has an extreme error, please try again later");
-        cConsole.warn("New request in extreme error mode")
+        response.writeHead(500, 'The server has an extreme error, please try again later');
+        response.end('The server has an extreme error, please try again later');
+        cConsole.warn('New request in extreme error mode')
     },
     reloadServer(r, response) {
         let messages;
@@ -90,29 +104,29 @@ module.exports = {
             messages = gMessages;
         }
 
-        let reloadingPath = settings.generic.path.files.reloadingFile.replace('{files}', settings.generic.path.files.files);
-        response.writeHead(500, "Because of an extreme error, the server is reloading in 5 seconds");
+        const reloadingPath = settings.generic.path.files.reloadingFile.replace('{files}', settings.generic.path.files.files);
+        response.writeHead(500, 'Because of an extreme error, the server is reloading in 5 seconds');
         try {
-            let data = Buffer.from(fs.readFileSync(reloadingPath).toString('utf-8').replace('|reloadText|', messages ? messages.error.clientServerReload : ''));
+            const data = Buffer.from(fs.readFileSync(reloadingPath).toString('utf-8').replace('|reloadText|', messages ? messages.error.clientServerReload : ''));
             response.end(data);
         } catch (err) {
-            response.end("Because of an extreme error, the server is reloading in 5 seconds")
+            response.end('Because of an extreme error, the server is reloading in 5 seconds')
         }
     },
     serverExecute(a1, a2) {
 
         if (extremeErrorMode) {
-            let t = require(__filename);
+            const t = require(__filename);
             t.extremeServer(a1, a2);
         } else if (reloadMode > 0) {
-            let t = require(__filename);
+            const t = require(__filename);
             t.reloadServer(a1, a2);
         } else {
             try {
                 require('../../server/main').execute(a1, a2);
             } catch (err) {
-                (a => { })(err.stack)
-                let t = require(__filename);
+                err.stack; // generate stack
+                const t = require(__filename);
                 t.execute(err, a2);
             }
         }

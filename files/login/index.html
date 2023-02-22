@@ -1,78 +1,97 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Account Login</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <script type="module" src="/sdk/oneTap.js"></script>
-    <script type="module" src="/sdk/googleLoginButtons.js"></script>
-    <!-- <script type="module" src="/sdk/captcha.js"></script> -->
+<head>
+  <title>Account Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <script type="module" src="/login/index.js"></script>
-    <link rel="stylesheet" type="text/css" href="/login/index.css" />
-    <link rel="stylesheet" type="text/css" href="/sdk/noScroll.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
-      rel="stylesheet"
-    />
-  </head>
+  <script type="module" src="/sdk/googleLoginButtons.js"></script>
+  <script type="module" src="/sdk/recaptcha.js"></script>
 
-  <body>
-    <div class="container" id="container">
-      <div class="row">
-        <div class="form-container sign-up-container">
-          <form action="#">
-            <h1>Create Account</h1>
-            <div class="social-container">
-              <div class="bigGoogleLoginButton"></div>
-            </div>
-            <span>or use your email for registration</span>
-            <input type="text" placeholder="Name" id="signupName" />
-            <input type="email" placeholder="Email" id="signupEmail" />
-            <input type="password" placeholder="Password" id="signupPassword" />
-            <button type="button" onclick="doSignup()">Sign Up</button>
-            <p id="mobile_para">To keep connected with us,please login</p>
-            <button class="ghost_mobile" id="signIn_mobile">Login</button>
-          </form>
-        </div>
-        <div class="form-container sign-in-container">
-          <form action="#">
-            <h1>Login</h1>
-            <div class="social-container">
-              <div class="bigGoogleLoginButton"></div>
-            </div>
-            <span>or use your account</span>
-            <input type="email" placeholder="Email" id="loginEmail" />
-            <input type="password" placeholder="Password" id="loginPassword" />
-            <a href="/resetPassword">Forgot your password?</a>
-            <button type="button" onclick="doLogin()" class="captchaButton">
-              Login
-            </button>
-            <p id="mobile_para">Don't have an account? Sign up here !!</p>
-            <button class="ghost_mobile" id="signUp_mobile">Sign Up</button>
-          </form>
-        </div>
-        <div class="overlay-container">
-          <div class="overlay">
-            <div class="overlay-panel overlay-left">
-              <h1>Welcome!</h1>
-              <p>To create an account, Fill in your information</p>
-              <button class="ghost" id="signIn">Login</button>
-            </div>
-            <div class="overlay-panel overlay-right">
-              <h1>Hello, User!</h1>
-              <p>Enter your information and start enjoying CrashFighters!</p>
-              <button class="ghost" id="signUp">Sign Up</button>
-            </div>
+  <script type="module" src="/login/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="/login/index.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="container" id="container">
+    <div class="row">
+      <div class="form-container sign-up-container">
+        <form onsubmit="return false;">
+          <h1>Create Account</h1>
+          <div class="social-container">
+            <div class="bigGoogleLoginButton"></div>
+          </div>
+          <span>or use email</span>
+          <input type="text" placeholder="Name" onchange="removeSignupErrorFeedback()" id="signupName" />
+          <p id="signup-name-feedback" class="errorFeedback"></p>
+          <input type="email" placeholder="Email" onchange="removeSignupErrorFeedback()" id="signupEmail" />
+          <p id="signup-email-feedback" class="errorFeedback"></p>
+          <input type="password" placeholder="Password" onchange="removeSignupErrorFeedback()" id="signupPassword" />
+          <p id="signup-password-feedback" class="errorFeedback"></p>
+          <div id="signupRecaptchaButton"></div>
+          <p id="signup-recaptcha-feedback" class="errorFeedback"></p>
+          <button type="button" data-recaptcha_callback="doSignup" data-recaptcha_action="loginPage_signup"
+            data-recaptcha_loading_class="disabled" class="invisRecaptchaButton" id="signupButton-1">Sign
+            up</button>
+          <p id="mobile_para">To keep connected with us,please login</p>
+          <button class="ghost_mobile" id="signIn_mobile">Login</button>
+        </form>
+      </div>
+      <div class="form-container sign-in-container">
+        <form onsubmit="return false;">
+          <h1>Login</h1>
+          <div class="social-container">
+            <div class="bigGoogleLoginButton"></div>
+          </div>
+          <span>or use email</span>
+          <input type="email" placeholder="Email" onchange="window.removeLoginErrorFeedback()" id="loginEmail" />
+          <p id="login-email-feedback" class="errorFeedback"></p>
+          <input type="password" placeholder="Password" onchange="window.removeLoginErrorFeedback()"
+            id="loginPassword" />
+          <p id="login-password-feedback" class="errorFeedback"></p>
+          <div id="loginRecaptchaButton"></div>
+          <p id="login-recaptcha-feedback" class="errorFeedback"></p>
+          <div id="_2faRecaptchaContainer" style="display: none">
+            <div id="2faRecaptchaButton"></div>
+          </div>
+          <p id="login-2fa-recaptcha-feedback" class="errorFeedback"></p>
+          <p id="choose2faMethodText" style="display: none">Choose which 2FA method to use:</p>
+          <div id="choose2faMethod" style="display: none"></div>
+          <p id="2faVerificationCodeStatus" style="display: none"></p>
+          <input type="text" placeholder="Verification code" id="verificationCodeInput"
+            onchange="window.removeLoginErrorFeedback()"
+            onkeydown="if(event.key === 'Enter') document.getElementById('verify2faButton').click()"
+            style="display: none" />
+          <p id="login-verificationCode-feedback" class="errorFeedback"></p>
+          <a href="/resetPassword" id="forgotPassword">Forgot your password?</a>
+          <button type="button" data-recaptcha_callback="doLogin" data-recaptcha_action="loginPage_login"
+            data-recaptcha_loading_class="disabled" class="invisRecaptchaButton" id="loginButton-1">Login</button>
+          <button type="button" onclick="verify2fa()" id="verify2faButton" style="display: none">Verify
+            code</button>
+          <p id="mobile_para">Don't have an account? Sign up here !!</p>
+          <button class="ghost_mobile" id="signUp_mobile">Sign Up</button>
+        </form>
+      </div>
+      <div class="overlay-container">
+        <div class="overlay">
+          <div class="overlay-panel overlay-left">
+            <h1>Hi there!</h1>
+            <p>Create an account if you're new here.</p>
+            <button class="ghost" id="signIn">Login</button>
+          </div>
+          <div class="overlay-panel overlay-right">
+            <h1>Welcome!</h1>
+            <p>Login to fully enjoy CrashFighters.</p>
+            <button class="ghost" id="signUp">Sign Up</button>
           </div>
         </div>
       </div>
     </div>
-  </body>
+</body>
+
 </html>

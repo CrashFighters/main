@@ -19,24 +19,24 @@ module.exports = {
             let fileIsSpecial = true;
             let sameFile;
 
-            let files = readdirSync(settings.generic.path.files.errors);
+            const files = readdirSync(settings.generic.path.files.errors);
 
             files.forEach(file => {
-                if (file == settings.generic.path.files.noError) return;
+                if (file === settings.generic.path.files.noError) return;
 
-                let data = require(`../../.${settings.generic.path.files.errors}${file}`);
+                const data = require(`../../.${settings.generic.path.files.errors}${file}`);
 
-                if (data.errorMessage.split(': ')[1] == errorMessage.split('\n')[0].split(': ')[1]) {
+                if (data.errorMessage.split(': ')[1] === errorMessage.split('\n')[0].split(': ')[1]) {
                     fileIsSpecial = false;
                     sameFile = file;
                 }
             });
 
             if (fileIsSpecial) {
-                let date = new Date().getTime();
-                let fileName = `${Math.floor(Math.random() * 100000000)}.json`;
-                let path = `${settings.generic.path.files.errors}${fileName}`;
-                let obj = {
+                const date = new Date().getTime();
+                const fileName = `${Math.floor(Math.random() * 100000000)}.json`;
+                const path = `${settings.generic.path.files.errors}${fileName}`;
+                const obj = {
                     errorMessage: errorMessage.split('\n')[0],
                     occurrences: [
                         {
@@ -56,12 +56,12 @@ module.exports = {
                 writeFileSync(path, JSON.stringify(obj));
                 return `${fileName}`;
             } else {
-                let date = new Date().getTime();
-                let requirePath = `../../.${settings.generic.path.files.errors}${sameFile}`;
-                let fsPath = `${settings.generic.path.files.errors}${sameFile}`;
-                let oldObj = require(requirePath);
+                const date = new Date().getTime();
+                const requirePath = `../../.${settings.generic.path.files.errors}${sameFile}`;
+                const fsPath = `${settings.generic.path.files.errors}${sameFile}`;
+                const oldObj = require(requirePath);
 
-                let obj = {
+                const obj = {
                     time: date,
                     stack: errorMessage.split('\n')
                 };

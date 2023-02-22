@@ -2,6 +2,40 @@
 	box-sizing: border-box;
 }
 
+.errorFeedback {
+	color: red;
+	margin: 0;
+	margin-bottom: 1vh;
+}
+
+#_2faRecaptchaContainer {
+	height: 78px;
+}
+
+#choose2faMethodText {
+	margin: 0;
+	margin-top: 2vh;
+}
+
+#choose2faMethod {
+	border-radius: 5px;
+
+	display: flex;
+	justify-content: start;
+	flex-direction: column;
+	gap: 0.5vh;
+}
+
+#choose2faMethod>button {
+	transform: scale(1);
+	padding: 0.4vmax;
+}
+
+/* smaller when clicked */
+#choose2faMethod>button:active {
+	transform: scale(0.95);
+}
+
 body {
 	background: #f6f5f7;
 	display: flex;
@@ -12,6 +46,7 @@ body {
 	height: 100vh;
 	margin: -20px 0 50px;
 	margin: 20px;
+	overflow: hidden;
 }
 
 h1 {
@@ -36,7 +71,6 @@ span {
 }
 
 a {
-	color: #333;
 	font-size: 14px;
 	text-decoration: none;
 	margin: 15px 0;
@@ -44,24 +78,29 @@ a {
 
 button {
 	border-radius: 20px;
-	border: 1px solid #000000;
 	background-color: #000000;
 	color: #FFFFFF;
 	font-size: 12px;
 	font-weight: bold;
 	padding: 12px 45px;
 	letter-spacing: 1px;
-	text-transform: uppercase;
 	transition: transform 80ms ease-in;
+	cursor: pointer;
+}
+
+button:disabled,
+button.disabled {
+	background-color: #a2a2a2;
+
+	cursor: wait;
 }
 
 button:active {
 	transform: scale(0.95);
 }
 
-
 button:focus {
-	outline: none;
+	outline-color: rgb(255, 0, 255);
 }
 
 button.ghost {
@@ -86,19 +125,24 @@ input {
 	padding: 12px 15px;
 	margin: 8px 0;
 	width: 100%;
-	outline: none;
+}
+
+input:disabled,
+input.disabled {
+	cursor: not-allowed;
+	color: rgb(147, 147, 147);
 }
 
 .container {
 	background-color: #fff;
-	border-radius: 10px;
+	border-radius: 25px;
 	box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
 		0 10px 10px rgba(0, 0, 0, 0.22);
 	position: relative;
 	overflow: hidden;
 	width: 768px;
 	max-width: 100%;
-	min-height: 480px;
+	min-height: 550px;
 }
 
 .form-container {
@@ -106,6 +150,8 @@ input {
 	top: 0;
 	height: 100%;
 	transition: all 0.6s ease-in-out;
+
+	/* border-radius: 50px; */
 }
 
 .sign-in-container {
@@ -156,6 +202,8 @@ input {
 	overflow: hidden;
 	transition: transform 0.6s ease-in-out;
 	z-index: 100;
+
+	border-radius: 25px;
 }
 
 .container.right-panel-active .overlay-container {
@@ -216,6 +264,8 @@ input {
 
 .social-container {
 	margin: 20px 0;
+	height: 44px;
+	/* google sign in button height */
 }
 
 .social-container a {
@@ -274,9 +324,9 @@ footer a {
 		font-weight: 700;
 	}
 
-	.container {
+	/* .container {
 		overflow: auto;
-	}
+	} */
 
 	.overlay-container {
 		display: none;
@@ -319,7 +369,7 @@ ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
-	overflow: hidden;
+	/* overflow: hidden; */
 	background-color: #333;
 	width: 100%;
 	top: 0%;
