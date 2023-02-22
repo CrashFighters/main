@@ -1,8 +1,6 @@
 import {
     signInWithEmailAndPassword,
-    signInWithPopup,
-    signInWithRedirect,
-    GoogleAuthProvider,
+    signInWithCredential,
     createUserWithEmailAndPassword,
     sendEmailVerification,
     sendPasswordResetEmail as firebaseSendPasswordResetEmail,
@@ -13,19 +11,13 @@ import {
 
 const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
-export async function loginWithGoogle() {
+export async function loginWithCredential(credential) {
     try {
-        const googleAuthProvider = new GoogleAuthProvider();
-        googleAuthProvider.setCustomParameters({ prompt: 'select_account' });
-
-        if (window.innerWidth > window.innerHeight)
-            await signInWithPopup(auth, googleAuthProvider);
-        else
-            await signInWithRedirect(auth, googleAuthProvider);
+        await signInWithCredential(auth, credential);
     } catch (e) {
         throw e;
     };
-};
+}
 
 export async function loginWithEmail(email, password) {
     try {
