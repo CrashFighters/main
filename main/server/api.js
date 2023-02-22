@@ -4,6 +4,7 @@ const isModuleInstalled = require('../functions/isModuleInstalled.js').execute;
 const parseErrorOnline = require('../functions/error/parseErrorOnline.js').execute;
 
 const statusCode = (response, code, { text, short }) => {
+    response.writeHead(code, { 'Content-Type': 'application/json' });
     response.end(JSON.stringify({
         error: true,
         code,
