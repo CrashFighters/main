@@ -162,7 +162,7 @@ async function getErrorCodeMessages() {
 
     cachedErrorCodeMessages = await fetch('/api/messages');
     cachedErrorCodeMessages = await cachedErrorCodeMessages.json();
-    cachedErrorCodeMessages = cachedErrorCodeMessages.error.loginPage;
+    cachedErrorCodeMessages = cachedErrorCodeMessages.pages.login.error;
 
     return cachedErrorCodeMessages;
 }
