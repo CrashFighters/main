@@ -63,7 +63,7 @@ export async function replaceTemplates(user) {
                     `[templateSDK] Using language fallback value ${element.dataset['template_fallback_lang_text']} on template ${item}.`
                 );
 
-            const message = await import('/sdk/language.js').getMessage(element.dataset['template_fallback_lang_text']);
+            const message = (await import('/sdk/language.js')).getMessage(element.dataset['template_fallback_lang_text']);
 
             value = message;
         }
