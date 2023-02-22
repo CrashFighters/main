@@ -3,7 +3,7 @@ import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
 let messages = await fetch('/api/messages');
 messages = await messages.json();
 
-function getMessage(message) {
+export function getMessage(message) {
     return messages.pages[window.location.pathname]?.[message] || messages.general[message] || message;
 };
 
