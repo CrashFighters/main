@@ -52,6 +52,12 @@ phoneNumberInput.addEventListener('input', {
         replaceTemplates();
     }
 });
+verificationCodeInput.addEventListener('input', {
+    handleEvent: () => {
+        window.verifyDisabled = verificationCodeInput.value === '' || verificationCodeInput.value.length !== 6;
+        replaceTemplates();
+    }
+});
 
 
 

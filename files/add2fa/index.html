@@ -54,7 +54,13 @@
         id="verificationCode"
         placeholder="Verification code"
       />
-      <button onclick="window.doVerify2fa()" id="verify2faButton" disabled>
+      <button onclick="window.doVerify2fa()" disabled data-template="custom"
+        data-template_var="verifyDisabled"
+        data-template_insert="disabled"
+        data-template_fallback="true"
+
+        disabled="true"
+      >
         Verify 2fa
       </button>
   </body>
