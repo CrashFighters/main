@@ -18,7 +18,9 @@
         "login": "Login",
         "logout": "Logout",
         "yourEmailIs": "Your email is",
-        "welcome": "Welcome"
+        "welcome": "Welcome",
+        "unknownPerson": "unknown person",
+        "unknown": "unknown"
     },
     "pages": {
         "/login": {

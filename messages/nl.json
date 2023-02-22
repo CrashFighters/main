@@ -18,7 +18,9 @@
         "login": "Inloggen",
         "logout": "Uitloggen",
         "yourEmailIs": "Je email is",
-        "welcome": "Welkom"
+        "welcome": "Welkom",
+        "unknownPerson": "onbekende persoon",
+        "unknown": "onbekend"
     },
     "pages": {
         "/login": {
