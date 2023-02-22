@@ -237,6 +237,7 @@ async function enable2fa(error) {
     const nativeButton = document.getElementById('loginButton-1');
     const signupRecaptchaButton = document.getElementById('signupRecaptchaButton');
     const forgotPassword = document.getElementById('forgotPassword');
+    const loginRecaptchaButton = document.getElementById('loginRecaptchaButton');
 
     const verificationCodeInput = document.getElementById('verificationCodeInput');
     const verify2faButton = document.getElementById('verify2faButton');
@@ -251,6 +252,7 @@ async function enable2fa(error) {
     nativeButton.style.display = 'none';
     signupRecaptchaButton.style.display = 'none';
     forgotPassword.style.display = 'none';
+    loginRecaptchaButton.style.display = 'none';
 
     const recaptchaObject = await prepare2fa();
 
