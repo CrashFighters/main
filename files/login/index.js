@@ -43,7 +43,6 @@ import {
 
 import {
     loginWithEmail,
-    loginWithGoogle,
     createEmailAccount,
     prepare2fa,
     get2faMethods,
@@ -68,14 +67,6 @@ const urlParams = new URLSearchParams(window.location.search);
 const signup = urlParams.get('signup') === 'true';
 if (signup)
     document.getElementById('container').classList.add('right-panel-active');
-
-if (window.innerWidth < window.innerHeight)
-    for (const googleLoginOverlay of [...document.getElementsByClassName('googleLoginOverlay')]) {
-        googleLoginOverlay.addEventListener('click', () => {
-            loginWithGoogle();
-        });
-        googleLoginOverlay.style.display = null;
-    };
 
 function redirect() {
     const redirectLocation = urlParams.get('redirect');

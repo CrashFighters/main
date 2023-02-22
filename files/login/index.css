@@ -8,28 +8,6 @@
 	margin-bottom: 1vh;
 }
 
-.googleLoginButtonWrapper {
-	width: fit-content;
-	height: fit-content;
-
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	position: relative;
-}
-
-.googleLoginOverlay {
-	z-index: 10;
-
-	position: absolute;
-	top: 0;
-	left: 0;
-
-	right: 0;
-	bottom: 0;
-}
-
 #_2faRecaptchaContainer {
 	height: 78px;
 }
