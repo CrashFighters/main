@@ -15,10 +15,13 @@ const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
 export async function loginWithGoogle() {
     try {
+        const googleAuthProvider = new GoogleAuthProvider();
+        googleAuthProvider.setCustomParameters({ prompt: 'select_account' });
+
         if (window.innerWidth > window.innerHeight)
-            await signInWithPopup(auth, new GoogleAuthProvider());
+            await signInWithPopup(auth, googleAuthProvider);
         else
-            await signInWithRedirect(auth, new GoogleAuthProvider());
+            await signInWithRedirect(auth, googleAuthProvider);
     } catch (e) {
         throw e;
     };
