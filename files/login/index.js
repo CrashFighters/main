@@ -98,8 +98,12 @@ function redirect() {
             else
                 window.open('/', '_self')
         });
-    else
-        window.open('/', '_self')
+    else {
+        if (redirectLocation)
+            window.open(redirectLocation, '_self')
+        else
+            window.open('/', '_self')
+    }
 
 
 }
