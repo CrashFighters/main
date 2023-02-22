@@ -37,11 +37,11 @@ window.doAdd2fa = async () => {
         window.addTwofaStyle = 'display: none;';
         replaceTemplates();
     }));
+    recaptchaButton.onStateChange(recaptchaButton => {
+        console.log(recaptchaButton.state);
+    })
 }
 
-recaptchaButton.onStateChange(recaptchaButton => {
-    console.log(recaptchaButton.state);
-})
 
 window.addDisabled = true;
 
