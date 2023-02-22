@@ -20,7 +20,18 @@
         "YourEmailIs": "Je email is",
         "Welcome": "Welkom",
         "unknownPerson": "onbekende persoon",
-        "unknown": "onbekend"
+        "unknown": "onbekend",
+        "CreateAccount": "Account aanmaken",
+        "orUseEmail": "of gebruik email",
+        "SignUp": "Aanmelden",
+        "ForgotYourPassword": "Wachtwoord vergeten",
+        "VerifyCode": "Verifiëer code",
+        "Email": "Email",
+        "Password": "Wachtwoord",
+        "Name": "Naam",
+        "VerificationCode": "Verificatie code",
+        "UnknownErrorOccurred": "Er is een onbekende fout opgetreden",
+        "Error": "Fout"
     },
     "pages": {
         "/login": {
@@ -39,7 +50,17 @@
                 "tooManyRequests": "Te veel pogingen. Probeer het later opnieuw",
                 "invalidVerificationCode": "De verificatie code is incorrect",
                 "firebaseAuthInternalError": "Er is een interne fout in de Firebase authenticatie opgetreden. Probeer het later opnieuw"
-            }
+            },
+            "ExperienceLogin": "Log in voor de beste ervaring",
+            "Choose2faMethod": "Kies een 2FA methode",
+            "NoAccountSignUp": "Heb je nog geen account? Meld je aan",
+            "WelcomeTitle1": "Hallo daar!",
+            "WelcomeTitle2": "Welkom!",
+            "CreateAccountIfNew": "Maak een account als je nieuw bent",
+            "LoginFullyEnjoy": "Log in voor de beste ervaring",
+            "RedirectQuestionTitle": "Wil je doorgaan naar een externe website?",
+            "SendingVerificationCode": "Verificatie code aan het sturen",
+            "VerificationCodeSentTo": "Er is een verificatie code verstuurd naar"
         }
     },
     "httpStatusCodes": {

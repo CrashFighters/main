@@ -20,7 +20,18 @@
         "YourEmailIs": "Your email is",
         "Welcome": "Welcome",
         "unknownPerson": "unknown person",
-        "unknown": "unknown"
+        "unknown": "unknown",
+        "CreateAccount": "Create account",
+        "orUseEmail": "or use email",
+        "SignUp": "Sign up",
+        "ForgotYourPassword": "Forgot your password",
+        "VerifyCode": "Verify code",
+        "Email": "Email",
+        "Password": "Password",
+        "Name": "Name",
+        "VerificationCode": "Verification code",
+        "UnknownErrorOccurred": "An unknown error occurred",
+        "Error": "Error"
     },
     "pages": {
         "/login": {
@@ -39,7 +50,17 @@
                 "tooManyRequests": "Too many tries. Please try again later",
                 "invalidVerificationCode": "Invalid verification code",
                 "firebaseAuthInternalError": "An internal error in Firebase authentication occurred. Please try again later"
-            }
+            },
+            "ExperienceLogin": "For the best experience, please log in",
+            "Choose2faMethod": "Choose which 2FA method you want to use",
+            "NoAccountSignUp": "Don't have an account? Sign up",
+            "WelcomeTitle1": "Hi there!",
+            "WelcomeTitle2": "Welcome!",
+            "CreateAccountIfNew": "Create an account if you are new here",
+            "LoginFullyEnjoy": "Login to fully enjoy the experience",
+            "RedirectQuestionTitle": "Do you want to go to an external website?",
+            "SendingVerificationCode": "Sending verification code",
+            "VerificationCodeSentTo": "A verification code has been sent to"
         }
     },
     "httpStatusCodes": {

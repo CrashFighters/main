@@ -64,6 +64,8 @@ import {
 
 import { setDisplayName } from '/sdk/settings.js';
 
+import { getMessage } from '/sdk/language.js';
+
 import {
     minimalLoginRecaptchaScore,
     minimalSignupRecaptchaScore
@@ -85,7 +87,7 @@ function redirect() {
         new URL(redirectLocation).origin !== window.location.origin
     )
         Swal.fire({
-            title: 'Do you want to continue to the external website?',
+            title: getMessage('RedirectQuestionTitle'),
             text: redirectLocation,
             showCancelButton: true,
             confirmButtonColor: '#000',
@@ -166,7 +168,7 @@ async function getErrorCodeMessages() {
 
     cachedErrorCodeMessages = await fetch('/api/messages');
     cachedErrorCodeMessages = await cachedErrorCodeMessages.json();
-    cachedErrorCodeMessages = cachedErrorCodeMessages.pages.login.error;
+    cachedErrorCodeMessages = cachedErrorCodeMessages.pages['/login'].error;
 
     return cachedErrorCodeMessages;
 }
@@ -183,8 +185,8 @@ async function handleLoginError({ errorCode, field, error }) {
         (await getErrorCodeMessages())[errorCode] ??
         errorCode ??
         (error?.message
-            ? `Error: ${error.message}`
-            : 'An unknown error occurred');
+            ? `${getMessage('Error')}: ${error.message}`
+            : getMessage('UnknownErrorOccurred'));
 
     if (!field) return coolAlert(message);
 
@@ -301,13 +303,13 @@ async function enable2fa(error) {
     verify2faButton.style.opacity = 0;
     verify2faButton.style.display = null;
 
-    verificationCodeStatus.innerText = 'Sending a verification code';
+    verificationCodeStatus.innerText = getMessage('SendingVerificationCode');
     verificationCodeStatus.style.display = null;
 
     const { phoneNumber, displayName } = await send2fa(selectedIndex);
 
     verificationCodeStatus.innerText =
-        'A verification code has been sent to {location}'.replace(
+        `${getMessage('VerificationCodeSentTo')} {location}`.replace(
             '{location}',
             displayName ? `${displayName} (${phoneNumber})` : phoneNumber
         );
@@ -387,8 +389,8 @@ async function handleSignupError({ errorCode, field, error }) {
         (await getErrorCodeMessages())[errorCode] ??
         errorCode ??
         (error?.message
-            ? `Error: ${error.message}`
-            : 'An unknown error occurred');
+            ? `${getMessage('Error')}: ${error.message}`
+            : getMessage('UnknownErrorOccurred'));
 
     if (!field) return coolAlert(message);
 
