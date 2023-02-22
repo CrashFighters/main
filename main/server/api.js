@@ -13,7 +13,7 @@ const statusCode = (response, code, { text, short }) => {
 }
 
 module.exports = {
-    execute(request, response, middleWareData) {
+    execute(request, response, { middleWareData, extraData }) {
         const parseError = (error, customText) => parseErrorOnline(error, response, customText);
 
         try {
@@ -42,7 +42,8 @@ module.exports = {
                             isModuleInstalled,
                             params,
                             response,
-                            middleWareData
+                            middleWareData,
+                            extraData
                         });
                     else
                         throw new Error(`Method ${request.method} not implemented`)

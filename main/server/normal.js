@@ -4,7 +4,7 @@ const mime = require('mime-types');
 const statusCode = require('../functions/error/statusCode.js').execute;
 
 module.exports = {
-    // execute(request, response, middleWareData) {
+    // execute(request, response, {middleWareData, extraData}) {
     execute(request, response) {
 
         const path = require('../functions/urlToPath.js').execute(request.url);

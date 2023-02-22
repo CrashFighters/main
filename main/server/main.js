@@ -18,19 +18,19 @@ module.exports = {
             if (request.method === 'POST')
                 body = parsePostBody(await waitPost(request));
 
-            let middlewareData = {
-                body
-            };
+            const extraData = { body };
+
+            let middlewareData = {};
             if (middlewares)
                 for (const middleware of middlewares) {
-                    const newMiddlewareData = await middleware(request, response);
+                    const newMiddlewareData = await middleware({ request, response, extraData });
                     middlewareData = { ...middlewareData, ...newMiddlewareData };
                 };
 
             if (request.url.toLowerCase().startsWith(settings.generic.path.online.api))
-                return require('../server/api.js').execute(request, response, middlewareData);
+                return require('../server/api.js').execute(request, response, { middlewareData, extraData });
             else
-                return require('./normal.js').execute(request, response, middlewareData);
+                return require('./normal.js').execute(request, response, { middlewareData, extraData });
 
         } catch (err) {
             parseError(err);
