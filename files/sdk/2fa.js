@@ -81,7 +81,7 @@ export const add = async (phoneNumber, displayName) => {
         session: multiFactorSession
     };
 
-    const recaptchaVerifier = await _.getRecaptchaVerifier();
+    const [recaptchaVerifier] = await _.getRecaptchaVerifier();
 
     const phoneAuthProvider = new PhoneAuthProvider(auth);
     const verificationId = await phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
