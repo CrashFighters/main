@@ -25,6 +25,10 @@
         "no-unreachable": "warn",
         "eqeqeq": "warn",
         "prefer-const": "warn",
+        "comma-dangle": [
+            "warn",
+            "never"
+        ],
         "quotes": [
             "warn",
             "single",
