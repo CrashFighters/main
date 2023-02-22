@@ -1,0 +1,45 @@
+{
+    "error": {
+        "apiCallNotFound": "API functie niet gevonden",
+        "executeFunctionNotFoundWithFile": "De uitvoer functie is niet gevonden ({file})",
+        "executeFunctionNotFound": "De uitvoer functie is niet gevonden",
+        "moduleNotInstalledFor": "De API functie '{api}' heeft '{dependency}' nodig",
+        "modulesNotInstalledFor": "De API functie heeft '{api}' heeft '{dependency}' nodig",
+        "moduleNotInstalledForShort": "Benodigdheden niet gevonden voor {api}",
+        "notValid": "Het gegeven argument {argument} is niet geldig",
+        "notGiven": "{argument} is niet gegeven",
+        "Unknown error in": "Onbekende fout in {place}",
+        "thereAreErrors": "Er zijn {amount} fouten!",
+        "thereIsError": "Er is {amount} fout!",
+        "reload": "reload",
+        "clientServerReload": "Vanwege een fout is de server aan het herladen.",
+        "loginPage": {
+            "emailDoesNotExist": "Er is geen account met dit email adres",
+            "invalidEmail": "Dit is geen geldig email adres",
+            "missingEmail": "Vul een email adres in",
+            "emailAlreadyInUse": "Dit email adres is al in gebruik",
+            "wrongPassword": "Het wachtwoord is incorrect",
+            "weakPassword": "Het wachtwoord is te zwak",
+            "recaptchaNotSolved": "Los de captcha op",
+            "recaptchaExpired": "De captcha is verlopen. Los hem opnieuw op",
+            "recaptchaError": "Probeer de captcha opnieuw op te lossen",
+            "noName": "Vul een naam in",
+            "2faRequired": "2FA is nodig voor dit account",
+            "tooManyRequests": "Te veel pogingen. Probeer het later opnieuw",
+            "invalidVerificationCode": "De verificatie code is incorrect",
+            "firebaseAuthInternalError": "Er is een interne fout in de Firebase authenticatie opgetreden. Probeer het later opnieuw"
+        }
+    },
+    "httpStatusCodes": {
+        "400": {
+            "400": "Slechte aanvraag",
+            "401": "Niet geautoriseerd",
+            "403": "Verboden",
+            "404": "Pagina niet gevonden",
+            "405": "Manier niet toegestaan"
+        },
+        "500": {
+            "500": "Server fout"
+        }
+    }
+}
