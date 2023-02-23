@@ -19,7 +19,7 @@ function init() {
     admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
         databaseURL
-    });
+    }, 'database');
 
     db = admin.database();
     ref = db.ref();

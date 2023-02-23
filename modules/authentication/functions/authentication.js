@@ -5,6 +5,6 @@ const { serviceAccount, databaseURL } = require('../../../credentials/firebase.j
 firebase.initializeApp({
     credential: firebase.credential.cert(serviceAccount),
     databaseURL
-});
+}), 'authentication';
 
 module.exports = firebase;
