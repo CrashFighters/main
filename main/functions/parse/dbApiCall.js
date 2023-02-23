@@ -1,34 +1,37 @@
 module.exports = {
-    execute(org) {
+    execute(request) {
 
         //todo: parse with require('url')
 
         //Remove api beginning
-        const call = org.split('/dbApi/').join('');
+        const call = request.url.split('/dbApi/').join('');
 
-        const params = {};
+        let params = {};
         let path = call;
 
-        //If path includes params
-        if (path.includes('?') && path.split('?')[1]) {
-            //Set params
-            path
-                .split('?')[1]      //Take only params
-                .split('&')         //Split params
-                .forEach(val => {   //Loop over params
-                    params[
-                        val.split('=')[0]           //Take key
-                    ] =                             //Set the params value
-                        decodeURIComponent(         //Decode URI
-                            val
-                                .split('=')[1]      //Take value
-                                .replace(/\+/g, ' ')//Replace "+" with " "
-                        )
-                })
+        if (request.method === 'GET') {
+            //If path includes params
+            if (path.includes('?') && path.split('?')[1]) {
+                //Set params
+                path
+                    .split('?')[1]      //Take only params
+                    .split('&')         //Split params
+                    .forEach(val => {   //Loop over params
+                        params[
+                            val.split('=')[0]           //Take key
+                        ] =                             //Set the params value
+                            decodeURIComponent(         //Decode URI
+                                val
+                                    .split('=')[1]      //Take value
+                                    .replace(/\+/g, ' ')//Replace "+" with " "
+                            )
+                    })
 
 
-            path = path.split('?')[0];  //Set path to path without params
-        }
+                path = path.split('?')[0];  //Set path to path without params
+            }
+        } else if (request.headers['content-type'] === 'application/json')
+            params = JSON.parse(request.headers.body);
 
         path = `/${path}` //Add "/" to start of path
 
