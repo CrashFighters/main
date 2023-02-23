@@ -13,7 +13,7 @@ const statusCode = (response, code, { text, short }) => {
 }
 
 module.exports = {
-    execute(request, response, { middlewareData, extraData }) {
+    execute(request, response, { middlewareData }) {
         const parseError = (error, customText) => parseErrorOnline(error, response, customText);
 
         try {
