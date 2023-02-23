@@ -9,6 +9,7 @@ type community = {
     posts: post[];
     id: string;
     name: string;
+    owner: string;
 };
 
 type post = {
