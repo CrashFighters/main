@@ -1,10 +1,10 @@
-const { get, set } = require('../modules/database/functions/database.js');
+const { get, set } = require('../../modules/database/functions/database.js');
 const parseErrorOnline = require('../functions/error/parseErrorOnline.js').execute;
 
 const statusCode = (response, code, { text, short }) => {
     response.writeHead(code, { 'Content-Type': 'application/json' });
     response.end(JSON.stringify({
-        error: true,
+        successful: `${code}`.startsWith('2'),
         code,
         text,
         short
@@ -12,14 +12,14 @@ const statusCode = (response, code, { text, short }) => {
 }
 
 module.exports = {
-    execute(request, response, { middleWareData, extraData }) {
+    execute(request, response, { middlewareData, extraData }) {
         const parseError = (error, customText) => parseErrorOnline(error, response, customText);
 
         try {
-            const { path, params } = require('../functions/parse/dbApiCall.js').execute(request.url);
-            const { authentication, authenticated } = middleWareData;
+            const { path, params } = require('../functions/parse/dbApiCall.js').execute(request);
+            const { authentication } = middlewareData;
 
-            let db = get();
+            const db = get();
 
             doApiCall({
                 db,
@@ -27,62 +27,76 @@ module.exports = {
                 path,
                 params,
                 method: request.method,
-                require: (params, { community, post }, types) => {
-                    for (const { name, type } of params) {
-                        if (types.includes('correctType') && !params[name]) {
-                            statusCode(response, 400, { text: `Missing parameter; ${name}`, short: 'missingParameter' });
+                userId: authentication?.uid,
+                end: json => {
+                    response.writeHead(200, { 'Content-Type': 'application/json' });
+                    response.end(JSON.stringify(json));
+                },
+                statusCode: (code, { text, short }) => statusCode(response, code, { text, short }),
+                require: ({ name, type }, { community, post }, checkTypes) => {
+                    if (checkTypes.includes('correctType') && !params[name]) {
+                        statusCode(response, 400, { text: `Missing parameter ${name}`, short: 'missingParameter' });
+                        return false;
+                    }
+
+                    if (type === 'communityId') {
+                        const community = db.communities[params[name]];
+
+                        if (checkTypes.includes('correctType') && !community) {
+                            statusCode(response, 404, { text: `No community found with id ${params[name]}`, short: 'communityNotFound' });
                             return false;
                         }
+                        if (checkTypes.includes('allowChange') && community.owner !== authentication.uid) {
+                            statusCode(response, 403, { text: `You do not have the permission to change community ${params[name]}`, short: 'noPermission' });
+                            return false;
+                        }
+                    } else if (type === 'postId') {
+                        if (!community)
+                            throw new Error("Can't get post without community");
 
-                        if (type === 'communityId') {
-                            const community = db.communities[params[name]];
+                        const post = db.communities[community].posts[params[name]];
 
-                            if (types.includes('correctType') && !community) {
-                                statusCode(response, 404, { text: `No community found with id ${params[name]}`, short: 'communityNotFound' });
+                        if (checkTypes.includes('correctType') && !post) {
+                            statusCode(response, 404, { text: `No post found with id ${params[name]} in community ${community}`, short: 'postNotFound' });
+                            return false;
+                        }
+                        if (checkTypes.includes('allowChange') && post.user !== authentication.uid) {
+                            statusCode(response, 403, { text: `You do not have the permission to change post ${params[name]} in community ${community}`, short: 'noPermission' });
+                            return false;
+                        }
+                    } else if (type === 'voteIndex') {
+                        if (!community)
+                            throw new Error("Can't get vote without community");
+
+                        if (!post)
+                            throw new Error("Can't get vote without post");
+
+                        const vote = db.communities[community].posts[post].votes[params[name]];
+
+                        if (checkTypes.includes('correctType') && !vote) {
+                            statusCode(response, 404, { text: `No vote found with index ${params[name]} in post ${post} in community ${community}`, short: 'voteNotFound' });
+                            return false;
+                        }
+                        if (checkTypes.includes('allowChange') && vote.user !== authentication.uid) {
+                            statusCode(response, 403, { text: `You do not have permission to change vote ${params[name]} in post ${post} in community ${community}`, short: 'noPermission' });
+                            return false;
+                        }
+                    } else if (type === 'communityName') {
+                        if (checkTypes.includes('correctType')) {
+                            const value = params[name];
+                            const correctType = value.length > 2 && value.length <= 20 && value.match(/^[a-zA-Z0-9_\- ]+$/);
+
+                            if (!correctType) {
+                                statusCode(response, 400, { text: 'Invalid community name', short: 'invalidCommunityName' });
                                 return false;
                             }
-                        } else if (type === 'postId') {
-                            if (!community)
-                                throw new Error("Can't get post without community");
-
-                            const post = db.communities[community].posts[params[name]];
-
-                            if (types.includes('correctType') && !post) {
-                                statusCode(response, 404, { text: `No post found with id ${params[name]} in community ${community}`, short: 'postNotFound' });
-                                return false;
-                            }
-                        } else if (type === 'voteIndex') {
-                            if (!community)
-                                throw new Error("Can't get vote without community");
-
-                            if (!post)
-                                throw new Error("Can't get vote without post");
-
-                            const vote = db.communities[community].posts[post].votes[params[name]];
-
-                            if (types.includes('correctType') && !vote) {
-                                statusCode(response, 404, { text: `No vote found with index ${params[name]} in post ${post} in community ${community}`, short: 'voteNotFound' });
-                                return false;
-                            }
-                        } else if (type === 'boolean') {
-                            if (types.includes('correctType') && typeof params[name] !== 'boolean') {
-                                statusCode(response, 400, { text: `Parameter ${name} is not a boolean`, short: 'notBoolean' });
-                                return false;
-                            }
-                        } else if (type === 'string') {
-                            if (types.includes('correctType') && typeof params[name] !== 'string') {
-                                statusCode(response, 400, { text: `Parameter ${name} is not a string`, short: 'notString' });
-                                return false;
-                            }
-                        } else
-                            throw new Error(`Unknown type ${type}`)
-                    }
+                        }
+                    } else
+                        throw new Error(`Unknown type ${type}`)
 
                     return true;
                 }
-            })
-
-            throw new Error('Not implemented');
+            });
 
         } catch (err) {
             parseError(err);
@@ -90,6 +104,54 @@ module.exports = {
     }
 }
 
-function doApiCall({ db, set, path, params, method, require }) {
-    throw new Error('not implemented')
+function doApiCall({ db, set, path, params, method, require, end, statusCode, userId }) {
+    if (path === '/community') {
+        if (method === 'GET') {
+            if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
+                return;
+
+            end(db.communities[params.community]);
+        } else if (method === 'DELETE') {
+            if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType', 'allowChange']))
+                return;
+
+            delete db.communities[params.community];
+
+            set(db);
+
+            statusCode(204, { text: 'Community deleted', short: 'deleted' });
+        } else if (method === 'PUT') {
+            if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType', 'allowChange']))
+                return;
+
+            if (!require({ name: 'name', type: 'communityName' }, {}, ['correctType']))
+                return;
+
+            db.communities[params.community].name = params.name;
+
+            set(db);
+
+            end(db.communities[params.community]);
+        } else if (method === 'POST') {
+            if (!require({ name: 'name', type: 'communityName' }, {}, ['correctType']))
+                return;
+
+            if (!db.communities) db.communities = {}
+
+            let id;
+            while (!id || db.communities[id])
+                id = Math.random().toString(36).substr(2, 9);
+
+            db.communities.push({
+                posts: [],
+                id,
+                name: params.name,
+                owner: userId
+            });
+
+            set(db);
+
+            end(db.communities[id]);
+        }
+    }
 }
