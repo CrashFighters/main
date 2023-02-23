@@ -20,21 +20,6 @@ function coolAlert(message) {
     });
 }
 
-//remove old listeners
-//todo: removeEventListener with new function doesn't do anything. Why is this here?
-signUpButton.removeEventListener('click', () => {
-    container.classList.add('right-panel-active');
-});
-signInButton.removeEventListener('click', () => {
-    container.classList.remove('right-panel-active');
-});
-signUpButton_mobile.removeEventListener('click', () => {
-    container.classList.add('right-panel-active');
-});
-signInButton_mobile.removeEventListener('click', () => {
-    container.classList.remove('right-panel-active');
-});
-
 signUpButton.addEventListener('click', () => {
     container.classList.add('right-panel-active');
 });
