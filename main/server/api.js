@@ -6,7 +6,7 @@ const parseErrorOnline = require('../functions/error/parseErrorOnline.js').execu
 const statusCode = (response, code, { text, short }) => {
     response.writeHead(code, { 'Content-Type': 'application/json' });
     response.end(JSON.stringify({
-        error: true,
+        successful: `${code}`.startsWith('2'),
         code,
         text,
         short
