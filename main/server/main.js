@@ -27,8 +27,10 @@ module.exports = {
                     middlewareData = { ...middlewareData, ...newMiddlewareData };
                 };
 
-            if (request.url.toLowerCase().startsWith(settings.generic.path.online.api))
-                return require('../server/api.js').execute(request, response, { middlewareData, extraData });
+            if (request.url.toLowerCase().startsWith('/dbApi/'))
+                return require('./dbApi.js').execute(request, response, { middlewareData, extraData });
+            else if (request.url.toLowerCase().startsWith('/api/'))
+                return require('./api.js').execute(request, response, { middlewareData, extraData });
             else
                 return require('./normal.js').execute(request, response, { middlewareData, extraData });
 

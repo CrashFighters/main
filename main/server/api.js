@@ -29,7 +29,6 @@ module.exports = {
                     if (!executeFunctionExists)
                         return parseError(new Error(messages.error.executeFunctionNotFoundWithFile.replace('{file}', path)), messages.error.executeFunctionNotFound);
 
-                    //todo: implement other methods
                     if (request.method === 'GET')
                         file.execute({
                             statusCode: (code, short, text) => {
@@ -47,7 +46,7 @@ module.exports = {
                             extraData
                         });
                     else
-                        throw new Error(`Method ${request.method} not implemented`)
+                        statusCode(response, 405, { text: 'Method not allowed', short: 'methodNotAllowed' });
                 } else
                     return parseError(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', path)), messages.error.moduleNotInstalledFor.replace('{api}', path).replace('{dependency}', api[path].enabled.dependencies.dependenciesNotInstalled.join(', ')));
             else
