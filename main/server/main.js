@@ -5,7 +5,6 @@ const middlewares = fs.existsSync(path.resolve(__dirname, './middleware/')) ?
     fs.readdirSync(path.resolve(__dirname, './middleware/')).map(a => require(`./middleware/${a}`)) :
     null;
 
-const settings = require('../../settings.json');
 const parseErrorOnline = require('../functions/error/parseErrorOnline').execute;
 const parsePostBody = require('../functions/parse/postBody');
 

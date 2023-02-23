@@ -1,12 +1,10 @@
-const settings = require('../../../settings.json');
-
 module.exports = {
     execute(org) {
 
         //todo: parse with require('url')
 
         //Remove api beginning
-        const call = org.split(settings.generic.path.online.api).join('');
+        const call = org.split('/dbApi/').join('');
 
         const params = {};
         let path = call;

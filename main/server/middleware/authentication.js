@@ -1,22 +1,20 @@
-// const firebase = require('../../../modules/authentication/functions/authentication.js');
+const firebase = require('../../../modules/authentication/functions/authentication.js');
 
-// module.exports = async ({ request }) => {
-module.exports = async () => {
-    return {};
+module.exports = async ({ request }) => {
 
-    // const authToken = request.headers.authToken;
+    const authToken = request.headers.authToken;
 
-    // if (!authToken)
-    //     return { authenticated: false };
+    if (!authToken)
+        return { authenticated: false };
 
-    // try {
-    //     const authentication = await firebase.auth().verifyIdToken(authToken);
+    try {
+        const authentication = await firebase.auth().verifyIdToken(authToken);
 
-    //     return {
-    //         authenticated: true,
-    //         authentication
-    //     };
-    // } catch {
-    //     return { authenticated: false };
-    // }
+        return {
+            authenticated: true,
+            authentication
+        };
+    } catch {
+        return { authenticated: false };
+    }
 }
