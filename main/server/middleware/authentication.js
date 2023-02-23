@@ -2,7 +2,7 @@ const firebase = require('../../../modules/authentication/functions/authenticati
 
 module.exports = async ({ request }) => {
 
-    const authToken = request.headers.authToken;
+    const authToken = request.headers['auth_token'];
 
     if (!authToken)
         return { authenticated: false };
