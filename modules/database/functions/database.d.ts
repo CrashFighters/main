@@ -3,12 +3,14 @@ export function set(database: database): void;
 
 type database = {
     communities: {
-        [communityName: string]: community;
+        [communityId: string]: community;
     };
 };
 
 type community = {
-    posts: post[];
+    posts: {
+        [postId: string]: post;
+    };
     id: string;
     name: string;
     owner: string;
@@ -18,7 +20,9 @@ type post = {
     id: string;
     user: string;
     message: string;
-    votes: vote[];
+    votes: {
+        [userId: string]: vote;
+    };
     perspective: perspective;
 };
 
