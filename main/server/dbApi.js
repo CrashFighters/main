@@ -1,5 +1,6 @@
 const { get, set } = require('../../modules/database/functions/database.js');
 const parseErrorOnline = require('../functions/error/parseErrorOnline.js').execute;
+const addPostToQueue = require('../../modules/perspective/functions/addPostToQueue.js');
 
 const statusCode = (response, code, { text, short }) => {
     response.writeHead(code, { 'Content-Type': 'application/json' });
@@ -91,6 +92,16 @@ module.exports = {
                                 return false;
                             }
                         }
+                    } else if (type === 'postMessage') {
+                        if (checkTypes.includes('correctType')) {
+                            const value = params[name];
+                            const correctType = value.length > 10 && value.length <= 500;
+
+                            if (!correctType) {
+                                statusCode(response, 400, { text: 'Invalid post message', short: 'invalidPostMessage' });
+                                return false;
+                            }
+                        }
                     } else
                         throw new Error(`Unknown type ${type}`)
 
@@ -143,7 +154,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
                 id = Math.random().toString(36).substr(2, 9);
 
             db.communities[id] = {
-                posts: [],
+                posts: {},
                 id,
                 name: params.name,
                 owner: userId
@@ -152,6 +163,64 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
             set(db);
 
             end(db.communities[id]);
+        }
+    } else if (path === '/post') {
+        if (method === 'GET') {
+            if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
+                return;
+            if (!require({ name: 'post', type: 'postId' }, { community: params.community }, ['correctType']))
+                return;
+
+            end(db.communities[params.community].posts[params.post]);
+        } else if (method === 'DELETE') {
+            if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
+                return;
+            if (!require({ name: 'post', type: 'postId' }, { community: params.community }, ['correctType', 'allowChange']))
+                return;
+
+            delete db.communities[params.community].posts[params.post];
+
+            set(db);
+
+            statusCode(204, { text: 'Post deleted', short: 'deleted' });
+        } else if (method === 'PUT') {
+            if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
+                return;
+            if (!require({ name: 'post', type: 'postId' }, { community: params.community }, ['correctType', 'allowChange']))
+                return;
+
+            if (!require({ name: 'message', type: 'postMessage' }, { community: params.community }, ['correctType']))
+                return;
+
+            db.communities[params.community].posts[params.post].message = params.message;
+
+            set(db);
+
+            end(db.communities[params.community].posts[params.post]);
+        } else if (method === 'POST') {
+            if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
+                return;
+            if (!require({ name: 'message', type: 'postMessage' }, { community: params.community }, ['correctType']))
+                return;
+
+            if (!db.communities[params.community].posts) db.communities[params.community].posts = {};
+            const posts = db.communities[params.community].posts;
+
+            let id;
+            while (!id || posts[id])
+                id = Math.random().toString(36).substr(2, 9);
+
+            posts[id] = {
+                votes: {},
+                id,
+                message: params.message,
+                user: userId,
+                perspective: null
+            };
+
+            addPostToQueue({ community: params.community, post: id });
+
+            end(db.communities[id].posts[id]);
         }
     }
 }
