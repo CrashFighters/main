@@ -2,7 +2,9 @@ export function get(): database;
 export function set(database: database): void;
 
 type database = {
-    communities: community[];
+    communities: {
+        [communityName: string]: community;
+    };
 };
 
 type community = {
