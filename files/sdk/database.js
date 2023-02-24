@@ -13,7 +13,7 @@ const paramsToQuery = params =>
         '?' + Object.entries(params).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&') :
         '';
 
-async function post(path, params) {
+async function postRequest(path, params) {
     const response = await fetch(`/dbApi/${path}`, {
         method: 'POST',
         headers: {
@@ -27,7 +27,7 @@ async function post(path, params) {
     return json;
 };
 
-async function get(path, params) {
+async function getRequest(path, params) {
     const response = await fetch(`/dbApi/${path}${paramsToQuery(params)}`, {
         method: 'GET',
         headers: {
@@ -39,7 +39,7 @@ async function get(path, params) {
     return json;
 };
 
-async function put(path, params) {
+async function putRequest(path, params) {
     const response = await fetch(`/dbApi/${path}`, {
         method: 'PUT',
         headers: {
@@ -53,7 +53,7 @@ async function put(path, params) {
     return json;
 };
 
-async function del(path, params) {
+async function deleteRequest(path, params) {
     const response = await fetch(`/dbApi/${path}${paramsToQuery(params)}`, {
         method: 'DELETE',
         headers: {
@@ -71,12 +71,12 @@ class Database {
     }
 
     async _init() {
-        const communityIds = await get('');
+        const communityIds = await getRequest('');
         const communityCache = {};
 
         const customCommunityProperties = {
             async create(properties) {
-                const community = await post('community', properties);
+                const community = await postRequest('community', properties);
                 communityCache[community] = new Community({ community });
                 communityIds.push(community);
 
@@ -100,7 +100,7 @@ class Database {
 
                 communityIds.splice(communityIds.indexOf(key), 1);
                 delete communityCache[key];
-                del('community', { community: key });
+                deleteRequest('community', { community: key });
 
                 return true;
             }
@@ -114,12 +114,12 @@ class Community {
     }
 
     async _init({ community }) {
-        const { posts: postIds, ...properties } = await get('community', { community });
+        const { posts: postIds, ...properties } = await getRequest('community', { community });
         const postCache = {};
 
         const customPostProperties = {
             async create(properties) {
-                const post = await post('post', properties);
+                const post = await postRequest('post', properties);
                 postCache[post] = new Post({ community, post });
                 postIds.push(post);
 
@@ -134,7 +134,7 @@ class Community {
                 get: () => properties[key],
                 set: async newValue => {
                     properties[key] = newValue;
-                    const newProperties = await put('community', { community, properties: { [key]: newValue } });
+                    const newProperties = await putRequest('community', { community, properties: { [key]: newValue } });
                     for (const [name, value] of Object.entries(newProperties))
                         if (name in properties) properties[name] = value;
                 }
@@ -156,7 +156,7 @@ class Community {
 
                 postIds.splice(postIds.indexOf(key), 1);
                 delete postCache[key];
-                del('post', { community, post: key });
+                deleteRequest('post', { community, post: key });
 
                 return true;
             }
@@ -170,12 +170,12 @@ class Post {
     }
 
     async function({ community, post }) {
-        const { votes: voteIds, ...properties } = await get('post', { community, post });
+        const { votes: voteIds, ...properties } = await getRequest('post', { community, post });
         const voteCache = {};
 
         const customVoteProperties = {
             async create(properties) {
-                const vote = await post('vote', properties);
+                const vote = await postRequest('vote', properties);
                 voteCache[vote] = new Vote({ community, post, vote });
                 voteIds.push(vote);
 
@@ -190,7 +190,7 @@ class Post {
                 get: () => properties[key],
                 set: async newValue => {
                     properties[key] = newValue;
-                    const newProperties = await put('post', { community, post, properties: { [key]: newValue } });
+                    const newProperties = await putRequest('post', { community, post, properties: { [key]: newValue } });
                     for (const [name, value] of Object.entries(newProperties))
                         if (name in properties) properties[name] = value;
                 }
@@ -212,7 +212,7 @@ class Post {
 
                 voteIds.splice(voteIds.indexOf(key), 1);
                 delete voteCache[key];
-                del('vote', { community, post, vote: key });
+                deleteRequest('vote', { community, post, vote: key });
 
                 return true;
             }
@@ -226,7 +226,7 @@ class Vote {
     }
 
     async _init({ community, post, vote }) {
-        const properties = await get('vote', { community, post, vote });
+        const properties = await getRequest('vote', { community, post, vote });
 
         for (const key of Object.keys(properties))
             Object.defineProperty(this, key, {
@@ -235,7 +235,7 @@ class Vote {
                 get: () => properties[key],
                 set: async newValue => {
                     properties[key] = newValue;
-                    const newProperties = put('vote', { community, post, vote, properties: { [key]: newValue } });
+                    const newProperties = putRequest('vote', { community, post, vote, properties: { [key]: newValue } });
                     for (const [name, value] of Object.entries(newProperties))
                         if (name in properties) properties[name] = value;
                 }
