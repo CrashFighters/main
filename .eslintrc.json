@@ -48,6 +48,7 @@
         "Reflect": true,
         "grecaptcha": true,
         "Toastify": true,
-        "Swal": true
+        "Swal": true,
+        "google": true
     }
 }
