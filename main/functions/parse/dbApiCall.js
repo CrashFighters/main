@@ -6,6 +6,7 @@ module.exports = {
         //Remove api beginning
         const call = request.url.split('/dbApi/').join('');
 
+        let success = true;
         let params = {};
         let path = call;
 
@@ -31,10 +32,14 @@ module.exports = {
                 path = path.split('?')[0];  //Set path to path without params
             }
         } else if (request.headers['content-type'] === 'application/json')
-            params = JSON.parse(request.body);
+            try {
+                params = JSON.parse(request.body);
+            } catch {
+                success = false;
+            }
 
         path = `/${path}` //Add "/" to start of path
 
-        return { path, params }
+        return { path, params, success };
     }
 }
