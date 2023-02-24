@@ -7,6 +7,9 @@ import {
 } from '/js/login.js';
 
 const emailInput = document.getElementById('emailInput');
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('redirect'))
+    document.getElementById('loginBackButton').href += `?redirect=${encodeURIComponent(urlParams.get('redirect'))}`;
 
 window.sendResetEmail = async () => {
     if (emailInput.value === '') {
