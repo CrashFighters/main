@@ -65,7 +65,7 @@ module.exports = {
                             statusCode(response, 403, { text: `You do not have the permission to change post ${params[name]} in community ${community}`, short: 'noPermission' });
                             return false;
                         }
-                    } else if (type === 'voteIndex') {
+                    } else if (type === 'voteId') {
                         if (!community)
                             throw new Error("Can't get vote without community");
 
@@ -102,6 +102,12 @@ module.exports = {
                                 return false;
                             }
                         }
+                    } else if (type === 'boolean') {
+                        if (checkTypes.includes('correctType'))
+                            if (typeof params[name] !== 'boolean') {
+                                statusCode(response, 400, { text: `Parameter ${name} must be a boolean`, short: 'invalidParameter' });
+                                return false;
+                            }
                     } else
                         throw new Error(`Unknown type ${type}`)
 
@@ -220,7 +226,67 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
 
             addPostToQueue({ community: params.community, post: id });
 
-            end(db.communities[id].posts[id]);
+            end(db.communities[params.community].posts[id]);
+        }
+    } else if (path === '/post') {
+        if (method === 'GET') {
+            if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
+                return;
+            if (!require({ name: 'post', type: 'postId' }, { community: params.community }, ['correctType']))
+                return;
+            if (!require({ name: 'vote', type: 'voteId' }, { community: params.community, post: params.post }, ['correctType']))
+                return;
+
+            end(db.communities[params.community].posts[params.post].votes[params.vote]);
+        } else if (method === 'DELETE') {
+            if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
+                return;
+            if (!require({ name: 'post', type: 'postId' }, { community: params.community }, ['correctType']))
+                return;
+            if (!require({ name: 'vote', type: 'voteId' }, { community: params.community, post: params.post }, ['correctType', 'allowChange']))
+                return;
+
+            delete db.communities[params.community].posts[params.post].votes[params.vote];
+
+            set(db);
+
+            statusCode(204, { text: 'Post deleted', short: 'deleted' });
+        } else if (method === 'PUT') {
+            if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
+                return;
+            if (!require({ name: 'post', type: 'postId' }, { community: params.community }, ['correctType']))
+                return;
+            if (!require({ name: 'vote', type: 'voteId' }, { community: params.community, post: params.post }, ['correctType', 'allowChange']))
+                return;
+
+            if (!require({ name: 'isUpVote', type: 'boolean' }, { community: params.community, post: params.post, vote: params.vote }, ['correctType']))
+                return;
+
+            db.communities[params.community].posts[params.post].votes[params.vote] = params.isUpVote;
+
+            set(db);
+
+            end(db.communities[params.community].posts[params.post]);
+        } else if (method === 'POST') {
+            if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
+                return;
+            if (!require({ name: 'post', type: 'postId' }, { community: params.community }, ['correctType']))
+                return;
+
+            if (!db.communities[params.community].posts[params.post].votes) db.communities[params.community].posts[params.post].votes = {};
+            const votes = db.communities[params.community].posts[params.post].votes;
+
+            if (votes[userId]) {
+                statusCode(400, { text: 'You have already voted', short: 'voted' });
+                return;
+            }
+
+            votes[userId] = {
+                user: userId,
+                isUpVote: params.isUpVote
+            };
+
+            end(db.communities[params.community].posts[params.post].votes[userId]);
         }
     }
 }
