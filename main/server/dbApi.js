@@ -121,6 +121,7 @@ module.exports = {
     }
 }
 
+// todo: implement partial putting. So that if for example only a name of a community changes, only the name has to be sent
 function doApiCall({ db, set, path, params, method, require, end, statusCode, userId }) {
     if (path === '/') {
         if (method === 'GET') {
