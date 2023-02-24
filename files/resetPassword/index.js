@@ -4,7 +4,7 @@ import {
 
 import {
     sendPasswordResetEmail
-} from '/sdk/login.js';
+} from '/js/login.js';
 
 const emailInput = document.getElementById('emailInput');
 

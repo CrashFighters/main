@@ -8,7 +8,7 @@ import {
     getIdToken
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-import { init } from '/sdk/appCheck.js';
+import { init } from '/js/appCheck.js';
 import { firebaseConfig } from '/common/apiKeys.js';
 
 const app = initializeApp(firebaseConfig);

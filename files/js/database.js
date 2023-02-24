@@ -1,4 +1,4 @@
-const { auth, getAuthHeaders } = (await import('/sdk/auth.js'))._.firebase;
+const { getAuthHeaders } = (await import('/sdk/auth.js'))._.firebase;
 
 const paramsToQuery = params =>
     params ?

@@ -1,6 +1,6 @@
 import {
     add
-} from '/sdk/2fa.js';
+} from '/js/2fa.js';
 
 import {
     replaceTemplates

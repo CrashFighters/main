@@ -48,7 +48,7 @@ export async function sendPasswordResetEmail(email) {
 
 let recaptchaVerifier;
 export async function prepare2fa() {
-    const { getRecaptchaVerifier } = (await import('/sdk/2fa.js'))._;
+    const { getRecaptchaVerifier } = (await import('/js/2fa.js'))._;
     const result = await getRecaptchaVerifier();
 
     recaptchaVerifier = result[0];
@@ -76,7 +76,7 @@ export async function send2fa(selectedIndex) {
     if (!recaptchaVerifier)
         throw new Error('prepare2fa not called');
 
-    const { hide2faRecaptchaButton } = (await import('/sdk/2fa.js'))._;
+    const { hide2faRecaptchaButton } = (await import('/js/2fa.js'))._;
     hide2faRecaptchaButton();
 
     const hint = resolver.hints[selectedIndex];

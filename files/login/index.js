@@ -45,7 +45,7 @@ import {
     get2faMethods,
     send2fa,
     loginWith2fa
-} from '/sdk/login.js';
+} from '/js/login.js';
 
 import { setDisplayName } from '/sdk/settings.js';
 
