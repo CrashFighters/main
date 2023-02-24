@@ -9,7 +9,7 @@ module.exports = {
         let params = {};
         let path = call;
 
-        if (request.method === 'GET') {
+        if (['GET', 'DELETE'].includes(request.method)) {
             //If path includes params
             if (path.includes('?') && path.split('?')[1]) {
                 //Set params
@@ -31,7 +31,7 @@ module.exports = {
                 path = path.split('?')[0];  //Set path to path without params
             }
         } else if (request.headers['content-type'] === 'application/json')
-            params = JSON.parse(request.headers.body);
+            params = JSON.parse(request.body);
 
         path = `/${path}` //Add "/" to start of path
 
