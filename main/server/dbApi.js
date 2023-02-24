@@ -48,7 +48,7 @@ module.exports = {
                     }
 
                     if (type === 'communityId') {
-                        const community = db.communities[value];
+                        const community = db.communities?.[value];
 
                         if (checkTypes.includes('correctType') && !community) {
                             statusCode(response, 404, { text: `No community found with id ${value}`, short: 'communityNotFound' });
@@ -62,7 +62,7 @@ module.exports = {
                         if (!community)
                             throw new Error("Can't get post without community");
 
-                        const post = db.communities[community].posts[value];
+                        const post = db.communities?.[community]?.posts?.[value];
 
                         if (checkTypes.includes('correctType') && !post) {
                             statusCode(response, 404, { text: `No post found with id ${value} in community ${community}`, short: 'postNotFound' });
@@ -79,7 +79,7 @@ module.exports = {
                         if (!post)
                             throw new Error("Can't get vote without post");
 
-                        const vote = db.communities[community].posts[post].votes[value];
+                        const vote = db.communities?.[community].posts?.[post]?.votes?.[value];
 
                         if (checkTypes.includes('correctType') && !vote) {
                             statusCode(response, 404, { text: `No vote found with index ${value} in post ${post} in community ${community}`, short: 'voteNotFound' });
