@@ -16,18 +16,6 @@ window.googleSignInCallback = (a) => {
     signInWithCredential(auth, GoogleAuthProvider.credential(a.credential));
 };
 
-let loaded = false;
-onStateChange(user => {
-    if (!loaded) {
-        if (!user)
-            executeZeroTap();
-
-        loaded = true;
-
-        window.googleTapHasRun = true;
-    }
-});
-
 const googleOnLoadDiv = document.createElement('div');
 googleOnLoadDiv.id = 'g_id_onload';
 googleOnLoadDiv.dataset.client_id = googleSignInKey;
@@ -37,12 +25,31 @@ googleOnLoadDiv.dataset.auto_select = 'true';
 googleOnLoadDiv.dataset.close_on_tap_outside = 'false';
 googleOnLoadDiv.dataset.itp_support = 'true';
 
+let loaded = false;
+onStateChange(user => {
+    if (!loaded) {
+        if (user) {
+            googleOnLoadDiv.dataset.auto_prompt = 'false';
+            addGoogleScript();
+        } else
+            executeZeroTap();
+
+        loaded = true;
+
+        window.googleTapHasRun = true;
+    }
+});
+
 function executeZeroTap() {
     if (document.getElementById('g_id_onload'))
         throw new Error('g_id_onload element already exists')
     else
         document.body.appendChild(googleOnLoadDiv);
 
+    addGoogleScript();
+};
+
+function addGoogleScript() {
     if (!window.defaultGoogleClients || window.defaultGoogleClients.length === 0)
         if (doesDocumentIncludeScript('https://accounts.google.com/gsi/client'))
             throw new Error('Google Sign In script already exists');
