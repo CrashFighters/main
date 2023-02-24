@@ -2,6 +2,9 @@ import {
     updateProfile
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
+import {
+    logout
+} from '/sdk/auth.js';
 const { updateUserObject, onStateChangeCallbacks, getAuthHeaders, firebase: { auth } } = (await import('/sdk/auth.js'))._;
 
 export const setDisplayName = async (displayName) => {
@@ -37,4 +40,6 @@ export const deleteUser = async () => {
             ...await getAuthHeaders()
         }
     });
-}
+
+    await logout();
+};
