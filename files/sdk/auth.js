@@ -4,7 +4,8 @@ import {
     onAuthStateChanged,
     signOut,
     updateProfile,
-    useDeviceLanguage
+    useDeviceLanguage,
+    getIdToken
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
 import { init } from '/sdk/appCheck.js';
@@ -91,13 +92,18 @@ async function updateUserObject(newUser) {
     };
 }
 
+const getAuthHeaders = async () => ({
+    auth_token: auth.currentUser ? await getIdToken(auth.currentUser) : undefined
+});
+
 export const _ = {
     firebase: {
         app,
         auth
     },
     updateUserObject,
-    onStateChangeCallbacks
+    onStateChangeCallbacks,
+    getAuthHeaders
 };
 
 window.auth = {

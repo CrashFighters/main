@@ -1,12 +1,4 @@
-import {
-    getIdToken
-} from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
-
-const { auth } = (await import('/sdk/auth.js'))._.firebase;
-
-const getAuthHeaders = async () => ({
-    auth_token: auth.currentUser ? await getIdToken(auth.currentUser) : undefined
-});
+const { auth, getAuthHeaders } = (await import('/sdk/auth.js'))._.firebase;
 
 const paramsToQuery = params =>
     params ?
