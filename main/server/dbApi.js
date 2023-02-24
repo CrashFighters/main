@@ -317,5 +317,8 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
             statusCode(405, { text: 'Method not allowed', short: 'invalidMethod' });
             return;
         }
+    } else {
+        statusCode(404, { text: 'Not found', short: 'notFound' });
+        return;
     }
 }
