@@ -72,6 +72,9 @@ if ((!documentIncludesGoogleTap) || (documentIncludesGoogleTap && window.googleT
         document.head.appendChild(script);
     };
 
+if (!window.defaultGoogleClients) window.defaultGoogleClients = [];
+window.defaultGoogleClients.push('googleLoginButtons');
+
 const googleSignInIdToken = getCookie('g_csrf_token');
 if (googleSignInIdToken) {
     // user got redirected from login with Google redirect
@@ -86,6 +89,3 @@ if (googleSignInIdToken) {
 
     signInWithCredential(auth, GoogleAuthProvider.credential(credential));
 }
-
-if (!window.defaultGoogleClients) window.defaultGoogleClients = [];
-window.defaultGoogleClients.push('googleLoginButtons');
