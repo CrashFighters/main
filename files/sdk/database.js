@@ -65,7 +65,7 @@ async function del(path, params) {
 
 class Database {
     constructor() {
-        this._init();
+        this.wait = this._init();
     }
 
     async _init() {
@@ -108,7 +108,7 @@ class Database {
 
 class Community {
     constructor(inf) {
-        this._init(inf);
+        this.wait = this._init(inf);
     }
 
     async _init({ community }) {
@@ -162,7 +162,7 @@ class Community {
 
 class Post {
     constructor(inf) {
-        this._init(inf);
+        this.wait = this._init(inf);
     }
 
     async function({ community, post }) {
@@ -216,7 +216,7 @@ class Post {
 
 class Vote {
     constructor(inf) {
-        this._init(inf);
+        this.wait = this._init(inf);
     }
 
     async _init({ community, post, vote }) {
@@ -232,6 +232,7 @@ class Vote {
                     put('vote', { community, post, vote, ...properties });
                 }
             });
+
 
     }
 }
