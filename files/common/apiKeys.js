@@ -10,6 +10,7 @@ export const firebaseConfig = {
 };
 
 export const googleSignInKey = '478395146629-9g1so59tp8p4iqn61g3iruksa99rmk0l.apps.googleusercontent.com';
+export const revokeGoogleTokenKey = '478395146629-kk0nlsvgfqhqjc58ccvp265u6g06mblm.apps.googleusercontent.com';
 
 export const publicRecaptchaV3Key = '6LfA2JIkAAAAAGWMmTI-5OR1Hmj7vKORFHV4aXIj';
 export const publicRecaptchaV2Key = '6Lcz6JYkAAAAACeG5IoqMbYb2YEpe_guo75bc4z2';
