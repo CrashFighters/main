@@ -46,6 +46,8 @@ module.exports = {
                     ]
                 };
 
+                //todo: create a function that creates easyAccessPath
+                //todo: improve easyAccessPath. For example: exclude node_modules and <anonymous> functions
                 let easyAccessPath = null;
                 try {
                     easyAccessPath = errorMessage.split('\n')[1].split('(')[1].split(')')[0];
