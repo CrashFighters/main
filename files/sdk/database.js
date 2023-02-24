@@ -11,7 +11,6 @@ const getAuthHeaders = async () => ({
 const paramsToQuery = params =>
     Object.entries(params).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
 
-//todo implement post
 async function post(path, params) {
     const response = await fetch(`/dbApi/${path}`, {
         method: 'POST',
@@ -73,10 +72,22 @@ class Database {
         const communityIds = await get('');
         const communityCache = {};
 
+        const customCommunityProperties = {
+            async create(properties) {
+                const community = await post('community', properties);
+                communityCache[community] = new Community({ community });
+                communityIds.push(community);
+
+                return communityCache[community];
+            }
+        };
+
         this.communities = new Proxy({}, {
             ownKeys: () => Object.assign([], communityIds),
             has: (target, key) => communityIds.includes(key),
             get: (target, key) => {
+                if (key in customCommunityProperties) return customCommunityProperties[key];
+
                 if (!communityIds.includes(key)) return undefined;
                 if (!(key in communityCache)) communityCache[key] = new Community({ community: key });
 
@@ -104,6 +115,16 @@ class Community {
         const { posts: postIds, ...properties } = await get('community', { community });
         const postCache = {};
 
+        const customPostProperties = {
+            async create(properties) {
+                const post = await post('post', properties);
+                postCache[post] = new Post({ community, post });
+                postIds.push(post);
+
+                return postCache[post];
+            }
+        };
+
         for (const key of Object.keys(properties))
             Object.defineProperty(this, key, {
                 configurable: false,
@@ -119,6 +140,8 @@ class Community {
             ownKeys: () => Object.assign([], postIds),
             has: (target, key) => postIds.includes(key),
             get: (target, key) => {
+                if (key in customPostProperties) return customPostProperties[key];
+
                 if (!postIds.includes(key)) return undefined;
                 if (!(key in postCache)) postCache[key] = new Post({ community, post: key });
 
@@ -146,6 +169,16 @@ class Post {
         const { votes: voteIds, ...properties } = await get('post', { community, post });
         const voteCache = {};
 
+        const customVoteProperties = {
+            async create(properties) {
+                const vote = await post('vote', properties);
+                voteCache[vote] = new Vote({ community, post, vote });
+                voteIds.push(vote);
+
+                return voteCache[vote];
+            }
+        };
+
         for (const key of Object.keys(properties))
             Object.defineProperty(this, key, {
                 configurable: false,
@@ -161,6 +194,8 @@ class Post {
             ownKeys: () => Object.assign([], voteIds),
             has: (target, key) => voteIds.includes(key),
             get: (target, key) => {
+                if (key in customVoteProperties) return customVoteProperties[key];
+
                 if (!voteIds.includes(key)) return undefined;
                 if (!(key in voteCache)) voteCache[key] = new Vote({ community, post, vote: key });
 
