@@ -42,7 +42,7 @@ function executeOneTap() {
     else
         document.body.appendChild(googleOnLoadDiv);
 
-    if ((!doesDocumentIncludeScript('/sdk/googleLoginButtons') || (doesDocumentIncludeScript('/sdk/googleLoginButtons') && !window.googleLoginButtonsHasRun)))
+    if (!window.defaultGoogleClients || window.defaultGoogleClients.length === 0)
         if (doesDocumentIncludeScript('https://accounts.google.com/gsi/client'))
             throw new Error('Google Sign In script already exists');
         else {

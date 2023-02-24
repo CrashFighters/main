@@ -87,4 +87,5 @@ if (googleSignInIdToken) {
     signInWithCredential(auth, GoogleAuthProvider.credential(credential));
 }
 
-window.googleLoginButtonsHasRun = true;
+if (!window.defaultGoogleClients) window.defaultGoogleClients = [];
+window.defaultGoogleClients.push('googleLoginButtons');
