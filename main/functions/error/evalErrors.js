@@ -25,6 +25,9 @@ module.exports = {
 
             if (files[0]) {
                 cConsole.clear();
+                cConsole.log(`Listening on port ${settings.generic.port}...`);
+                cConsole.log();
+                cConsole.log();
                 let message = messages.error.thereAreErrors.replace('{amount}', files.length);
                 if (files.length === 1) message = messages.error.thereIsError.replace('{amount}', files.length);
 
@@ -53,7 +56,6 @@ module.exports = {
                     });
 
                 cConsole.log();
-                cConsole.warn(message);
             }
         } catch (err) {
             require('./lastFallback').execute(err);
