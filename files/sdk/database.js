@@ -18,11 +18,12 @@ async function postRequest(path, params) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            body: JSON.stringify(params),
             ...(await getAuthHeaders())
-        },
-        body: JSON.stringify(params)
+        }
     });
     const json = await response.json();
+    if (!response.ok) throw new Error(JSON.stringify(json));
 
     return json;
 };
@@ -35,6 +36,7 @@ async function getRequest(path, params) {
         }
     });
     const json = await response.json();
+    if (!response.ok) throw new Error(JSON.stringify(json));
 
     return json;
 };
@@ -44,11 +46,12 @@ async function putRequest(path, params) {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
+            body: JSON.stringify(params),
             ...(await getAuthHeaders())
-        },
-        body: JSON.stringify(params)
+        }
     });
     const json = await response.json();
+    if (!response.ok) throw new Error(JSON.stringify(json));
 
     return json;
 };
@@ -61,6 +64,7 @@ async function deleteRequest(path, params) {
         }
     });
     const json = await response.json();
+    if (!response.ok) throw new Error(JSON.stringify(json));
 
     return json;
 };

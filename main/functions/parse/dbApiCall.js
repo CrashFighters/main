@@ -33,7 +33,7 @@ module.exports = {
             }
         } else if (request.headers['content-type'] === 'application/json')
             try {
-                params = JSON.parse(request.body);
+                params = JSON.parse(request.headers.body);
             } catch {
                 success = false;
             }
