@@ -62,6 +62,8 @@ const urlParams = new URLSearchParams(window.location.search);
 const signup = urlParams.get('signup') === 'true';
 if (signup)
     document.getElementById('container').classList.add('right-panel-active');
+if (urlParams.get('redirect'))
+    document.getElementById('forgotPassword').href += `?redirect=${encodeURIComponent(urlParams.get('redirect'))}`;
 
 function redirect() {
     const redirectLocation = urlParams.get('redirect');
