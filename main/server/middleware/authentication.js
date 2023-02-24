@@ -15,6 +15,9 @@ module.exports = async ({ request }) => {
             authentication
         };
     } catch {
-        return { authenticated: false };
+        return {
+            authenticated: false,
+            authentication: null
+        };
     }
 }
