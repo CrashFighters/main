@@ -32,7 +32,6 @@ module.exports = {
                 if (files.length === 1) message = messages.error.thereIsError.replace('{amount}', files.length);
 
                 cConsole.warn(message);
-                cConsole.log();
                 if (isModuleInstalled('text')) {
                     const rows = [];
                     files.forEach((val) => {
