@@ -46,11 +46,11 @@ module.exports = {
                     ]
                 };
 
-                let easyAccesPath = null;
+                let easyAccessPath = null;
                 try {
-                    easyAccesPath = errorMessage.split('\n')[1].split('(')[1].split(')')[0];
+                    easyAccessPath = errorMessage.split('\n')[1].split('(')[1].split(')')[0];
                 } catch { }
-                if (easyAccesPath) obj.occurrences[0].easyAccesPath = easyAccesPath;
+                if (easyAccessPath) obj.occurrences[0].easyAccessPath = easyAccessPath;
 
                 if (customText) obj.occurrences[0].customText = customText;
                 writeFileSync(path, JSON.stringify(obj));
@@ -66,11 +66,11 @@ module.exports = {
                     stack: errorMessage.split('\n')
                 };
 
-                let easyAccesPath = null;
+                let easyAccessPath = null;
                 try {
-                    easyAccesPath = errorMessage.split('\n')[1].split('(')[1].split(')')[0];
+                    easyAccessPath = errorMessage.split('\n')[1].split('(')[1].split(')')[0];
                 } catch { }
-                if (easyAccesPath) obj.easyAccesPath = easyAccesPath;
+                if (easyAccessPath) obj.easyAccessPath = easyAccessPath;
 
                 if (customText) obj.customText = customText;
                 oldObj.occurrences.push(obj);
