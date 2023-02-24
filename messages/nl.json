@@ -32,7 +32,6 @@
         "VerificationCode": "Verificatie code",
         "UnknownErrorOccurred": "Er is een onbekende fout opgetreden",
         "Error": "Fout",
-        "ResetPassword": "Reset wachtwoord",
         "BackToLogin": "Terug naar inloggen"
     },
     "pages": {
@@ -65,7 +64,8 @@
             "VerificationCodeSentTo": "Er is een verificatie code verstuurd naar"
         },
         "/resetPassword": {
-            "SendEmail": "Stuur email"
+            "SendEmail": "Stuur email",
+            "ResetPassword": "Nieuw wachtwoord"
         }
     },
     "httpStatusCodes": {

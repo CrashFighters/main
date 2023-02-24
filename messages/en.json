@@ -32,7 +32,6 @@
         "VerificationCode": "Verification code",
         "UnknownErrorOccurred": "An unknown error occurred",
         "Error": "Error",
-        "ResetPassword": "Reset password",
         "BackToLogin": "Back to login"
     },
     "pages": {
@@ -65,7 +64,8 @@
             "VerificationCodeSentTo": "A verification code has been sent to"
         },
         "/resetPassword": {
-            "SendEmail": "Send email"
+            "SendEmail": "Send email",
+            "ResetPassword": "Reset password"
         }
     },
     "httpStatusCodes": {
