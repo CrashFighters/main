@@ -74,6 +74,12 @@ class Database {
         this.wait = this._init();
     }
 
+    async refresh() {
+        await this.wait;
+        this.wait = this._init();
+        await this.wait;
+    }
+
     async _init() {
         const communityIds = await getRequest('');
         const communityCache = {};
@@ -117,6 +123,12 @@ class Community {
         this.wait = this._init(inf);
     }
 
+    async refresh() {
+        await this.wait;
+        this.wait = this._init(this);
+        await this.wait;
+    }
+
     async _init({ community }) {
         const { posts: postIds, ...properties } = await getRequest('community', { community });
         const postCache = {};
@@ -133,7 +145,7 @@ class Community {
 
         for (const key of Object.keys(properties))
             Object.defineProperty(this, key, {
-                configurable: false,
+                configurable: true,
                 enumerable: true,
                 get: () => properties[key],
                 set: async newValue => {
@@ -173,7 +185,13 @@ class Post {
         this.wait = this._init(inf);
     }
 
-    async function({ community, post }) {
+    async refresh() {
+        await this.wait;
+        this.wait = this._init(this);
+        await this.wait;
+    }
+
+    async _init({ community, post }) {
         const { votes: voteIds, ...properties } = await getRequest('post', { community, post });
         const voteCache = {};
 
@@ -189,7 +207,7 @@ class Post {
 
         for (const key of Object.keys(properties))
             Object.defineProperty(this, key, {
-                configurable: false,
+                configurable: true,
                 enumerable: true,
                 get: () => properties[key],
                 set: async newValue => {
@@ -227,6 +245,12 @@ class Post {
 class Vote {
     constructor(inf) {
         this.wait = this._init(inf);
+    }
+
+    async refresh() {
+        await this.wait;
+        this.wait = this._init(this);
+        await this.wait;
     }
 
     async _init({ community, post, vote }) {
