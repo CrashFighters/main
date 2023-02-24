@@ -172,7 +172,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
         }
     } else if (path === '/communities') {
         if (method === 'GET') {
-            end(Object.keys(db.communities));
+            end(Object.keys(db.communities ?? {}));
         } else {
             statusCode(405, { text: 'Method not allowed', short: 'invalidMethod' });
             return;
@@ -240,7 +240,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
             if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
                 return;
 
-            end(Object.keys(db.communities[params.community].posts));
+            end(Object.keys(db.communities[params.community].posts ?? {}));
         } else {
             statusCode(405, { text: 'Method not allowed', short: 'invalidMethod' });
             return;
@@ -312,7 +312,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
             if (!require({ name: 'post', type: 'postId' }, { community: params.community }, ['correctType']))
                 return;
 
-            end(Object.keys(db.communities[params.community].posts[params.post].votes));
+            end(Object.keys(db.communities[params.community].posts[params.post].votes ?? {}));
         } else {
             statusCode(405, { text: 'Method not allowed', short: 'invalidMethod' });
             return;
