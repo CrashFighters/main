@@ -63,7 +63,6 @@ async function del(path, params) {
     return json;
 };
 
-//todo: set properties when put executed
 class Database {
     constructor() {
         this.wait = this._init();
@@ -131,9 +130,11 @@ class Community {
                 configurable: false,
                 enumerable: true,
                 get: () => properties[key],
-                set: newValue => {
+                set: async newValue => {
                     properties[key] = newValue;
-                    put('community', { community, properties: { [key]: newValue } });
+                    const newProperties = await put('community', { community, properties: { [key]: newValue } });
+                    for (const [name, value] of Object.entries(newProperties))
+                        if (name in properties) properties[name] = value;
                 }
             });
 
@@ -185,9 +186,11 @@ class Post {
                 configurable: false,
                 enumerable: true,
                 get: () => properties[key],
-                set: newValue => {
+                set: async newValue => {
                     properties[key] = newValue;
-                    put('post', { community, post, properties: { [key]: newValue } });
+                    const newProperties = await put('post', { community, post, properties: { [key]: newValue } });
+                    for (const [name, value] of Object.entries(newProperties))
+                        if (name in properties) properties[name] = value;
                 }
             });
 
@@ -228,9 +231,11 @@ class Vote {
                 configurable: false,
                 enumerable: true,
                 get: () => properties[key],
-                set: newValue => {
+                set: async newValue => {
                     properties[key] = newValue;
-                    put('vote', { community, post, vote, properties: { [key]: newValue } });
+                    const newProperties = put('vote', { community, post, vote, properties: { [key]: newValue } });
+                    for (const [name, value] of Object.entries(newProperties))
+                        if (name in properties) properties[name] = value;
                 }
             });
 
