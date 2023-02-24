@@ -63,7 +63,6 @@ async function del(path, params) {
     return json;
 };
 
-//todo: implement new partial putting
 //todo: set properties when put executed
 class Database {
     constructor() {
@@ -134,7 +133,7 @@ class Community {
                 get: () => properties[key],
                 set: newValue => {
                     properties[key] = newValue;
-                    put('community', { community, ...properties });
+                    put('community', { community, properties: { [key]: newValue } });
                 }
             });
 
@@ -188,7 +187,7 @@ class Post {
                 get: () => properties[key],
                 set: newValue => {
                     properties[key] = newValue;
-                    put('post', { community, post, ...properties });
+                    put('post', { community, post, properties: { [key]: newValue } });
                 }
             });
 
@@ -231,7 +230,7 @@ class Vote {
                 get: () => properties[key],
                 set: newValue => {
                     properties[key] = newValue;
-                    put('vote', { community, post, vote, ...properties });
+                    put('vote', { community, post, vote, properties: { [key]: newValue } });
                 }
             });
 
