@@ -6,6 +6,8 @@ https://console.cloud.google.com/apis/credentials/key/4df088bc-21d3-4b06-9d6a-08
 https://console.cloud.google.com/apis/credentials/oauthclient/478395146629-9g1so59tp8p4iqn61g3iruksa99rmk0l.apps.googleusercontent.com?project=crashfighters
 https://console.cloud.google.com/apis/credentials/consent/edit?project=crashfighters
 https://console.cloud.google.com/apis/credentials/oauthclient/478395146629-kk0nlsvgfqhqjc58ccvp265u6g06mblm.apps.googleusercontent.com?project=crashfighters
+/credentials/revokeGoogleToken.json
+/credentials/googleClientId.json
 
 
 These are all the allowed domains:
