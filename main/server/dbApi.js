@@ -122,12 +122,22 @@ module.exports = {
 }
 
 function doApiCall({ db, set, path, params, method, require, end, statusCode, userId }) {
-    if (path === '/community') {
+    if (path === '/') {
+        if (method === 'GET') {
+            end(Object.keys(db.communities ?? {}));
+        } else {
+            statusCode(405, { text: 'Method not allowed', short: 'invalidMethod' });
+            return;
+        }
+    } else if (path === '/community') {
         if (method === 'GET') {
             if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
                 return;
 
-            end(db.communities[params.community]);
+            end({
+                ...db.communities[params.community],
+                posts: Object.keys(db.communities[params.community].posts)
+            });
         } else if (method === 'DELETE') {
             if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType', 'allowChange']))
                 return;
@@ -170,13 +180,6 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
 
             end(db.communities[id]);
         }
-    } else if (path === '/communities') {
-        if (method === 'GET') {
-            end(Object.keys(db.communities ?? {}));
-        } else {
-            statusCode(405, { text: 'Method not allowed', short: 'invalidMethod' });
-            return;
-        }
     } else if (path === '/post') {
         if (method === 'GET') {
             if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
@@ -184,7 +187,10 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
             if (!require({ name: 'post', type: 'postId' }, { community: params.community }, ['correctType']))
                 return;
 
-            end(db.communities[params.community].posts[params.post]);
+            end({
+                ...db.communities[params.community].posts[params.post],
+                votes: Object.keys(db.communities[params.community].posts[params.post].votes)
+            });
         } else if (method === 'DELETE') {
             if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
                 return;
@@ -234,16 +240,6 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
             addPostToQueue({ community: params.community, post: id });
 
             end(db.communities[params.community].posts[id]);
-        }
-    } else if (path === '/posts') {
-        if (method === 'GET') {
-            if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
-                return;
-
-            end(Object.keys(db.communities[params.community].posts ?? {}));
-        } else {
-            statusCode(405, { text: 'Method not allowed', short: 'invalidMethod' });
-            return;
         }
     } else if (path === '/vote') {
         if (method === 'GET') {
@@ -304,18 +300,6 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
             };
 
             end(db.communities[params.community].posts[params.post].votes[userId]);
-        }
-    } else if (path === 'GET') {
-        if (method === 'GET') {
-            if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
-                return;
-            if (!require({ name: 'post', type: 'postId' }, { community: params.community }, ['correctType']))
-                return;
-
-            end(Object.keys(db.communities[params.community].posts[params.post].votes ?? {}));
-        } else {
-            statusCode(405, { text: 'Method not allowed', short: 'invalidMethod' });
-            return;
         }
     } else {
         statusCode(404, { text: 'Endpoint not found', short: 'endpointNotFound' });
