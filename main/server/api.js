@@ -14,7 +14,7 @@ const statusCode = (response, code, { text, short }) => {
 }
 
 module.exports = {
-    execute(request, response, { middleWareData, extraData }) {
+    execute(request, response, { middlewareData, extraData }) {
         const parseError = (error, customText) => parseErrorOnline(error, response, customText);
 
         try {
@@ -42,7 +42,7 @@ module.exports = {
                             isModuleInstalled,
                             params,
                             response,
-                            middleWareData,
+                            middlewareData,
                             extraData
                         });
                     else
