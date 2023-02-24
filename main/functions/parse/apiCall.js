@@ -8,9 +8,9 @@ module.exports = {
         let success = true;
         let params = null;
 
-        if (['GET', 'DELETE'].includes(request.method)) {
-            params = Object.fromEntries(url.query.split('&').map(a => a.split('=')))
-        } else if (request.headers['content-type'] === 'application/json')
+        if (['GET', 'DELETE'].includes(request.method))
+            params = url.query ? Object.fromEntries(url.query.split('&').map(a => a.split('='))) : {};
+        else if (request.headers['content-type'] === 'application/json')
             try {
                 params = JSON.parse(request.headers.body);
             } catch {
