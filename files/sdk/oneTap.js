@@ -8,6 +8,7 @@ import {
 } from '/sdk/auth.js';
 
 import { googleSignInKey } from '/common/apiKeys.js';
+import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 
 const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
@@ -49,9 +50,4 @@ function executeOneTap() {
             script.src = 'https://accounts.google.com/gsi/client';
             document.head.appendChild(script);
         };
-};
-
-function doesDocumentIncludeScript(url) {
-    const scripts = [...document.getElementsByTagName('script')];
-    return Boolean(scripts.find(script => script.src.endsWith(url)));
 };

@@ -2,6 +2,7 @@ import {
     publicRecaptchaV3Key,
     publicRecaptchaV2Key
 } from '/common/apiKeys.js';
+import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 
 async function getScoreFromV3Token(token) {
     const res = await fetch(`/api/recaptchaV3?token=${token}`);
@@ -134,8 +135,3 @@ if (!doesDocumentIncludeScript('https://www.google.com/recaptcha/api.js')) {
     script.src = `https://www.google.com/recaptcha/api.js?render=${publicRecaptchaV3Key}`;
     document.head.appendChild(script);
 }
-
-function doesDocumentIncludeScript(url) {
-    const scripts = [...document.getElementsByTagName('script')];
-    return Boolean(scripts.find(script => script.src.endsWith(url)));
-};

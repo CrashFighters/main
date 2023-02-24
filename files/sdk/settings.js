@@ -27,3 +27,12 @@ export const setPicture = async (picture) => {
     for (const callback of onStateChangeCallbacks)
         callback(window.auth.user);
 };
+
+export const deleteAccount = async () => {
+    if (!window.auth.user)
+        throw new Error('User is not logged in')
+
+    if (window.auth.user.loginMethod === 'google') {
+
+    }
+}

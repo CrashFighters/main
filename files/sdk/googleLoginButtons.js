@@ -5,6 +5,7 @@ import {
 
 import { getCookie, deleteCookie } from '/common/cookie.js';
 import { googleSignInKey } from '/common/apiKeys.js';
+import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 
 const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
@@ -85,10 +86,5 @@ if (googleSignInIdToken) {
 
     signInWithCredential(auth, GoogleAuthProvider.credential(credential));
 }
-
-function doesDocumentIncludeScript(url) {
-    const scripts = [...document.getElementsByTagName('script')];
-    return Boolean(scripts.find(script => script.src.endsWith(url)));
-};
 
 window.googleLoginButtonsHasRun = true;
