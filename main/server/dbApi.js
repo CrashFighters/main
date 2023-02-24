@@ -34,35 +34,37 @@ module.exports = {
                     response.end(JSON.stringify(json));
                 },
                 statusCode: (code, { text, short }) => statusCode(response, code, { text, short }),
-                require: ({ name, type }, { community, post }, checkTypes) => {
-                    if (checkTypes.includes('correctType') && !params[name]) {
+                require: ({ name, value: v, type }, { community, post }, checkTypes) => {
+                    const value = name ? params[name] : v;
+
+                    if (checkTypes.includes('correctType') && !value) {
                         statusCode(response, 400, { text: `Missing parameter ${name}`, short: 'missingParameter' });
                         return false;
                     }
 
                     if (type === 'communityId') {
-                        const community = db.communities[params[name]];
+                        const community = db.communities[value];
 
                         if (checkTypes.includes('correctType') && !community) {
-                            statusCode(response, 404, { text: `No community found with id ${params[name]}`, short: 'communityNotFound' });
+                            statusCode(response, 404, { text: `No community found with id ${value}`, short: 'communityNotFound' });
                             return false;
                         }
                         if (checkTypes.includes('allowChange') && community.owner !== authentication.uid) {
-                            statusCode(response, 403, { text: `You do not have the permission to change community ${params[name]}`, short: 'noPermission' });
+                            statusCode(response, 403, { text: `You do not have the permission to change community ${value}`, short: 'noPermission' });
                             return false;
                         }
                     } else if (type === 'postId') {
                         if (!community)
                             throw new Error("Can't get post without community");
 
-                        const post = db.communities[community].posts[params[name]];
+                        const post = db.communities[community].posts[value];
 
                         if (checkTypes.includes('correctType') && !post) {
-                            statusCode(response, 404, { text: `No post found with id ${params[name]} in community ${community}`, short: 'postNotFound' });
+                            statusCode(response, 404, { text: `No post found with id ${value} in community ${community}`, short: 'postNotFound' });
                             return false;
                         }
                         if (checkTypes.includes('allowChange') && post.user !== authentication.uid) {
-                            statusCode(response, 403, { text: `You do not have the permission to change post ${params[name]} in community ${community}`, short: 'noPermission' });
+                            statusCode(response, 403, { text: `You do not have the permission to change post ${value} in community ${community}`, short: 'noPermission' });
                             return false;
                         }
                     } else if (type === 'voteId') {
@@ -72,19 +74,18 @@ module.exports = {
                         if (!post)
                             throw new Error("Can't get vote without post");
 
-                        const vote = db.communities[community].posts[post].votes[params[name]];
+                        const vote = db.communities[community].posts[post].votes[value];
 
                         if (checkTypes.includes('correctType') && !vote) {
-                            statusCode(response, 404, { text: `No vote found with index ${params[name]} in post ${post} in community ${community}`, short: 'voteNotFound' });
+                            statusCode(response, 404, { text: `No vote found with index ${value} in post ${post} in community ${community}`, short: 'voteNotFound' });
                             return false;
                         }
                         if (checkTypes.includes('allowChange') && vote.user !== authentication.uid) {
-                            statusCode(response, 403, { text: `You do not have permission to change vote ${params[name]} in post ${post} in community ${community}`, short: 'noPermission' });
+                            statusCode(response, 403, { text: `You do not have permission to change vote ${value} in post ${post} in community ${community}`, short: 'noPermission' });
                             return false;
                         }
                     } else if (type === 'communityName') {
                         if (checkTypes.includes('correctType')) {
-                            const value = params[name];
                             const correctType = value.length > 2 && value.length <= 20 && value.match(/^[a-zA-Z0-9_\- ]+$/);
 
                             if (!correctType) {
@@ -94,7 +95,6 @@ module.exports = {
                         }
                     } else if (type === 'postMessage') {
                         if (checkTypes.includes('correctType')) {
-                            const value = params[name];
                             const correctType = value.length > 10 && value.length <= 500;
 
                             if (!correctType) {
@@ -104,8 +104,18 @@ module.exports = {
                         }
                     } else if (type === 'boolean') {
                         if (checkTypes.includes('correctType'))
-                            if (typeof params[name] !== 'boolean') {
+                            if (typeof value !== 'boolean') {
                                 statusCode(response, 400, { text: `Parameter ${name} must be a boolean`, short: 'invalidParameter' });
+                                return false;
+                            }
+                    } else if (type === 'object') {
+                        if (checkTypes.includes('correctType'))
+                            if (
+                                typeof value !== 'object' ||
+                                Array.isArray(value) ||
+                                value === null
+                            ) {
+                                statusCode(response, 400, { text: `Parameter ${name} must be an object`, short: 'invalidParameter' });
                                 return false;
                             }
                     } else
@@ -121,7 +131,6 @@ module.exports = {
     }
 }
 
-// todo: implement partial putting. So that if for example only a name of a community changes, only the name has to be sent
 function doApiCall({ db, set, path, params, method, require, end, statusCode, userId }) {
     if (path === '/') {
         if (method === 'GET') {
@@ -151,13 +160,22 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
         } else if (method === 'PUT') {
             if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType', 'allowChange']))
                 return;
-
-            if (!require({ name: 'name', type: 'communityName' }, {}, ['correctType']))
+            if (!require({ name: 'properties', type: 'object' }, {}, ['correctType']))
                 return;
 
-            db.communities[params.community].name = params.name;
+            let changed = false;
 
-            set();
+            for (const name of Object.keys(params.properties))
+                if (name === 'name') {
+                    if (!require({ name: 'name', type: 'communityName' }, {}, ['correctType']))
+                        return;
+
+                    db.communities[params.community].name = params.name;
+                    changed = true;
+                }
+
+            if (changed)
+                set();
 
             end(db.communities[params.community]);
         } else if (method === 'POST') {
@@ -207,13 +225,22 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
                 return;
             if (!require({ name: 'post', type: 'postId' }, { community: params.community }, ['correctType', 'allowChange']))
                 return;
-
-            if (!require({ name: 'message', type: 'postMessage' }, { community: params.community }, ['correctType']))
+            if (!require({ name: 'properties', type: 'object' }, {}, ['correctType']))
                 return;
 
-            db.communities[params.community].posts[params.post].message = params.message;
+            let changed = false;
 
-            set();
+            for (const name of Object.keys(params.properties))
+                if (name === 'message') {
+                    if (!require({ name: 'message', type: 'postMessage' }, { community: params.community }, ['correctType']))
+                        return;
+
+                    db.communities[params.community].posts[params.post].message = params.message;
+                    changed = true;
+                }
+
+            if (changed)
+                set();
 
             end(db.communities[params.community].posts[params.post]);
         } else if (method === 'POST') {
@@ -272,15 +299,24 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
                 return;
             if (!require({ name: 'vote', type: 'voteId' }, { community: params.community, post: params.post }, ['correctType', 'allowChange']))
                 return;
-
-            if (!require({ name: 'isUpVote', type: 'boolean' }, { community: params.community, post: params.post, vote: params.vote }, ['correctType']))
+            if (!require({ name: 'properties', type: 'object' }, {}, ['correctType']))
                 return;
 
-            db.communities[params.community].posts[params.post].votes[params.vote] = params.isUpVote;
+            let changed = false;
 
-            set();
+            for (const name of Object.keys(params.properties))
+                if (name === 'isUpVote') {
+                    if (!require({ name: 'isUpVote', type: 'boolean' }, { community: params.community, post: params.post, vote: params.vote }, ['correctType']))
+                        return;
 
-            end(db.communities[params.community].posts[params.post]);
+                    db.communities[params.community].posts[params.post].votes[params.vote] = params.isUpVote;
+                    changed = true;
+                }
+
+            if (changed)
+                set();
+
+            end(db.communities[params.community].posts[params.post].votes[userId]);
         } else if (method === 'POST') {
             if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
                 return;
