@@ -63,7 +63,7 @@ if (!documentIncludesGoogleTap)
     else
         document.head.appendChild(googleOnLoadDiv);
 
-if ((!documentIncludesGoogleTap) || (documentIncludesGoogleTap && window.googleTapHasRun))
+if ((!documentIncludesGoogleTap) && ((!window.defaultGoogleClients) || window.defaultGoogleClients.length === 0))
     if (doesDocumentIncludeScript('https://accounts.google.com/gsi/client'))
         throw new Error('Google Sign In script already exists')
     else {

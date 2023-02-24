@@ -49,12 +49,11 @@ function executeOneTap() {
 };
 
 function addGoogleScript() {
-    if (!window.defaultGoogleClients || window.defaultGoogleClients.length === 0)
-        if (doesDocumentIncludeScript('https://accounts.google.com/gsi/client'))
-            throw new Error('Google Sign In script already exists');
-        else {
-            const script = document.createElement('script');
-            script.src = 'https://accounts.google.com/gsi/client';
-            document.head.appendChild(script);
-        };
+    if (doesDocumentIncludeScript('https://accounts.google.com/gsi/client'))
+        throw new Error('Google Sign In script already exists');
+    else {
+        const script = document.createElement('script');
+        script.src = 'https://accounts.google.com/gsi/client';
+        document.head.appendChild(script);
+    };
 };
