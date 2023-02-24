@@ -24,7 +24,7 @@ module.exports = {
 
             doApiCall({
                 db,
-                set,
+                set: () => set(db),
                 path,
                 params,
                 method: request.method,
@@ -145,7 +145,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
 
             delete db.communities[params.community];
 
-            set(db);
+            set();
 
             statusCode(204, { text: 'Community deleted', short: 'deleted' });
         } else if (method === 'PUT') {
@@ -157,7 +157,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
 
             db.communities[params.community].name = params.name;
 
-            set(db);
+            set();
 
             end(db.communities[params.community]);
         } else if (method === 'POST') {
@@ -177,9 +177,8 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
                 owner: userId
             };
 
-            set(db);
-
-            end(db.communities[id]);
+            set();
+            end(id);
         }
     } else if (path === '/post') {
         if (method === 'GET') {
@@ -200,7 +199,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
 
             delete db.communities[params.community].posts[params.post];
 
-            set(db);
+            set();
 
             statusCode(204, { text: 'Post deleted', short: 'deleted' });
         } else if (method === 'PUT') {
@@ -214,7 +213,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
 
             db.communities[params.community].posts[params.post].message = params.message;
 
-            set(db);
+            set();
 
             end(db.communities[params.community].posts[params.post]);
         } else if (method === 'POST') {
@@ -240,7 +239,8 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
 
             addPostToQueue({ community: params.community, post: id });
 
-            end(db.communities[params.community].posts[id]);
+            set();
+            end(id);
         }
     } else if (path === '/vote') {
         if (method === 'GET') {
@@ -262,7 +262,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
 
             delete db.communities[params.community].posts[params.post].votes[params.vote];
 
-            set(db);
+            set();
 
             statusCode(204, { text: 'Post deleted', short: 'deleted' });
         } else if (method === 'PUT') {
@@ -278,7 +278,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
 
             db.communities[params.community].posts[params.post].votes[params.vote] = params.isUpVote;
 
-            set(db);
+            set();
 
             end(db.communities[params.community].posts[params.post]);
         } else if (method === 'POST') {
@@ -300,7 +300,8 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
                 isUpVote: params.isUpVote
             };
 
-            end(db.communities[params.community].posts[params.post].votes[userId]);
+            set();
+            end(userId);
         }
     } else {
         statusCode(404, { text: 'Endpoint not found', short: 'endpointNotFound' });
