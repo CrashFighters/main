@@ -151,7 +151,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
 
             end({
                 ...db.communities[params.community],
-                posts: Object.keys(db.communities[params.community].posts)
+                posts: Object.keys(db.communities[params.community]?.posts ?? {})
             });
         } else if (method === 'DELETE') {
             if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType', 'allowChange']))
@@ -184,6 +184,10 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
 
             end(db.communities[params.community]);
         } else if (method === 'POST') {
+            if (!userId) {
+                statusCode(403, { text: 'You do not have the permission to create a community', short: 'noPermission' });
+                return;
+            };
             if (!require({ name: 'name', type: 'communityName' }, {}, ['correctType']))
                 return;
 
@@ -212,7 +216,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
 
             end({
                 ...db.communities[params.community].posts[params.post],
-                votes: Object.keys(db.communities[params.community].posts[params.post].votes)
+                votes: Object.keys(db.communities[params.community].posts[params.post]?.votes ?? {})
             });
         } else if (method === 'DELETE') {
             if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
@@ -249,6 +253,10 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
 
             end(db.communities[params.community].posts[params.post]);
         } else if (method === 'POST') {
+            if (!userId) {
+                statusCode(403, { text: 'You do not have the permission to create a post', short: 'noPermission' });
+                return;
+            };
             if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
                 return;
             if (!require({ name: 'message', type: 'postMessage' }, { community: params.community }, ['correctType']))
@@ -323,6 +331,10 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
 
             end(db.communities[params.community].posts[params.post].votes[userId]);
         } else if (method === 'POST') {
+            if (!userId) {
+                statusCode(403, { text: 'You do not have the permission to create a vote', short: 'noPermission' });
+                return;
+            };
             if (!require({ name: 'community', type: 'communityId' }, {}, ['correctType']))
                 return;
             if (!require({ name: 'post', type: 'postId' }, { community: params.community }, ['correctType']))
