@@ -63,6 +63,8 @@ async function del(path, params) {
     return json;
 };
 
+//todo: implement new partial putting
+//todo: set properties when put executed
 class Database {
     constructor() {
         this.wait = this._init();
