@@ -17,8 +17,13 @@ module.exports = {
         const parseError = (error, customText) => parseErrorOnline(error, response, customText);
 
         try {
-            const { path, params } = require('../functions/parse/dbApiCall.js').execute(request);
+            const { path, params, success } = require('../functions/parse/dbApiCall.js').execute(request);
             const { authentication } = middlewareData;
+
+            if (!success) {
+                statusCode(response, 400, { text: 'Invalid request', short: 'invalidRequest' });
+                return;
+            }
 
             const db = get();
 
@@ -167,7 +172,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
 
             for (const name of Object.keys(params.properties))
                 if (name === 'name') {
-                    if (!require({ name: 'name', type: 'communityName' }, {}, ['correctType']))
+                    if (!require({ value: params.properties[name], type: 'communityName' }, {}, ['correctType']))
                         return;
 
                     db.communities[params.community].name = params.name;
@@ -232,7 +237,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
 
             for (const name of Object.keys(params.properties))
                 if (name === 'message') {
-                    if (!require({ name: 'message', type: 'postMessage' }, { community: params.community }, ['correctType']))
+                    if (!require({ value: params.properties[name], type: 'postMessage' }, { community: params.community }, ['correctType']))
                         return;
 
                     db.communities[params.community].posts[params.post].message = params.message;
@@ -306,7 +311,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
 
             for (const name of Object.keys(params.properties))
                 if (name === 'isUpVote') {
-                    if (!require({ name: 'isUpVote', type: 'boolean' }, { community: params.community, post: params.post, vote: params.vote }, ['correctType']))
+                    if (!require({ value: params.properties[name], type: 'boolean' }, { community: params.community, post: params.post, vote: params.vote }, ['correctType']))
                         return;
 
                     db.communities[params.community].posts[params.post].votes[params.vote] = params.isUpVote;
