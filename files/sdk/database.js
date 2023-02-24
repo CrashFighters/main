@@ -9,7 +9,9 @@ const getAuthHeaders = async () => ({
 });
 
 const paramsToQuery = params =>
-    Object.entries(params).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+    params ?
+        '?' + Object.entries(params).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&') :
+        '';
 
 async function post(path, params) {
     const response = await fetch(`/dbApi/${path}`, {
@@ -26,7 +28,7 @@ async function post(path, params) {
 };
 
 async function get(path, params) {
-    const response = await fetch(`/dbApi/${path}?${paramsToQuery(params)}`, {
+    const response = await fetch(`/dbApi/${path}${paramsToQuery(params)}`, {
         method: 'GET',
         headers: {
             ...(await getAuthHeaders())
@@ -52,7 +54,7 @@ async function put(path, params) {
 };
 
 async function del(path, params) {
-    const response = await fetch(`/dbApi/${path}?${paramsToQuery(params)}`, {
+    const response = await fetch(`/dbApi/${path}${paramsToQuery(params)}`, {
         method: 'DELETE',
         headers: {
             ...(await getAuthHeaders())
