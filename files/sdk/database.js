@@ -95,6 +95,10 @@ class Database {
         };
 
         this.communities = new Proxy({}, {
+            getOwnPropertyDescriptor: () => ({
+                enumerable: true,
+                configurable: true
+            }),
             ownKeys: () => Object.assign([], communityIds),
             has: (target, key) => communityIds.includes(key),
             get: (target, key) => {
@@ -157,6 +161,10 @@ class Community {
             });
 
         this.posts = new Proxy({}, {
+            getOwnPropertyDescriptor: () => ({
+                enumerable: true,
+                configurable: true
+            }),
             ownKeys: () => Object.assign([], postIds),
             has: (target, key) => postIds.includes(key),
             get: (target, key) => {
@@ -219,6 +227,10 @@ class Post {
             });
 
         this.votes = new Proxy({}, {
+            getOwnPropertyDescriptor: () => ({
+                enumerable: true,
+                configurable: true
+            }),
             ownKeys: () => Object.assign([], voteIds),
             has: (target, key) => voteIds.includes(key),
             get: (target, key) => {
