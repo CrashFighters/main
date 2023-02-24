@@ -19,7 +19,12 @@ module.exports = {
 
         try {
             const messages = require('../functions/get/messages').execute({ request }).mainFunction();
-            const { path, params } = require('../functions/parse/apiCall.js').execute(request.url);
+            const { path, params, success } = require('../functions/parse/apiCall.js').execute(request);
+
+            if (!success) {
+                statusCode(response, 400, { text: 'Invalid request', short: 'invalidRequest' });
+                return;
+            }
 
             if (api[path])
                 if (api[path].enabled.dependencies.installed) {

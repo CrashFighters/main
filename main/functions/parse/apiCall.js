@@ -1,39 +1,22 @@
-const settings = require('../../../settings.json');
+const urlLibrary = require('url');
 
 module.exports = {
-    execute(org) {
+    execute(request) {
+        const url = urlLibrary.parse(request.url);
+        const path = `/${url.pathname.split('/api/').slice(1).join('/api/')}`;
 
-        //todo: parse with require('url')
+        let success = true;
+        let params = null;
 
-        //Remove api beginning
-        const call = org.split(settings.generic.path.online.api).join('');
+        if (['GET', 'DELETE'].includes(request.method)) {
+            params = Object.fromEntries(url.query.split('&').map(a => a.split('=')))
+        } else if (request.headers['content-type'] === 'application/json')
+            try {
+                params = JSON.parse(request.headers.body);
+            } catch {
+                success = false;
+            }
 
-        const params = {};
-        let path = call;
-
-        //If path includes params
-        if (path.includes('?') && path.split('?')[1]) {
-            //Set params
-            path
-                .split('?')[1]      //Take only params
-                .split('&')         //Split params
-                .forEach(val => {   //Loop over params
-                    params[
-                        val.split('=')[0]           //Take key
-                    ] =                             //Set the params value
-                        decodeURIComponent(         //Decode URI
-                            val
-                                .split('=')[1]      //Take value
-                                .replace(/\+/g, ' ')//Replace "+" with " "
-                        )
-                })
-
-
-            path = path.split('?')[0];  //Set path to path without params
-        }
-
-        path = `/${path}` //Add "/" to start of path
-
-        return { path, params }
+        return { path, params, success };
     }
 }
