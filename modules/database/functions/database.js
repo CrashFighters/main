@@ -9,12 +9,12 @@ let data = null;
 let err;
 
 let hasInit = false;
-function init() {
+async function init() {
     admin = require('firebase-admin');
     serviceAccount = require('../../../credentials/firebase.json').serviceAccount;
     databaseURL = require('../../../credentials/firebase.json').databaseURL;
 
-    admin.initializeApp({
+    await admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
         databaseURL
     }, 'database');
@@ -32,15 +32,15 @@ function init() {
 };
 
 module.exports = {
-    set(val) {
+    async set(val) {
         if (!hasInit)
-            init();
+            await init();
 
         ref.set(val)
     },
-    get() {
+    async get() {
         if (!hasInit)
-            init()
+            await init()
 
         if (err)
             throw err;
