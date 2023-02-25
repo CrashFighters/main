@@ -1,73 +1,48 @@
 const settings = require('../../../settings.json');
-const isModuleInstalled = require('../isModuleInstalled').execute;
-const fs = require('fs');
+const requestInfo = require('../../../modules/requestInfo/getInfo').execute;
 
-let requestInfo;
-if (isModuleInstalled('requestInfo')) {
-    requestInfo = require(`../../../${settings.generic.path.files.modules}requestInfo/getInfo`).execute;
-}
-
-//todo: create one list with ranking of languages and recursively search trough messages and return the first one that is found
 module.exports = {
-    execute(argument) {
-        let files = argument?.files;
-        const request = argument?.request;
+    execute({ request } = {}) {
+        const languages = getLanguages(request);
+        let messages = {};
 
-        const options = [];
-        if (!files)
-            files = fs.readdirSync(settings.generic.path.files.messages);
+        for (const lang of languages) {
+            const langMessages = require(`../../../messages/${lang}.json`);
+            messages = combineMessages(messages, langMessages);
+        };
 
-        files.forEach(val => {
-            options.push(val.split('.json')[0]);
-        })
-
-        if (options.length < 1) {
-            return null;
+        return {
+            languages,
+            mainFunction: () => { return messages }
         }
-
-        let userOptions = [];
-        if (request && requestInfo)
-            userOptions = requestInfo(request).lang || [];
-        else {
-            if (request && request.headers['accept-language'])
-                userOptions = [
-                    {
-                        name:
-                            request.headers['accept-language']
-                                .split(',')
-                                .split(';')[0]
-                                .split('-')[0],
-                        quality: 1
-                    }
-                ]
-        }
-
-        let lang;
-        let found = false;
-
-        if (request)
-            userOptions.forEach(val => {
-                if (found) return;
-                if (options.includes(val.name)) {
-                    lang = val.name;
-                    found = true;
-                }
-            });
-
-        settings.generic.lang.forEach(val => {
-            if (found) return;
-            if (options.includes(val)) {
-                lang = val;
-                found = true;
-            }
-        })
-
-        if (!found) {
-            lang = options[0];
-            found = true;
-        }
-
-        return { lang, file: `${lang}.json`, mainPath: settings.generic.path.files.messages, mainFunction: () => { return JSON.parse(fs.readFileSync(`${settings.generic.path.files.messages}${lang}.json`)) } }
 
     }
+}
+
+function combineMessages(oldMessages, newMessages) {
+    const messages = Object.assign({}, oldMessages);
+
+    for (const [key, newValue] of Object.entries(newMessages))
+        if (messages[key] === undefined)
+            messages[key] = newValue;
+        else if (typeof newValue === 'object')
+            messages[key] = combineMessages(newValue, newMessages[key]);
+        else
+            messages[key] = newValue;
+
+    return messages;
+}
+
+function getLanguages(request) {
+    if (!request) return settings.generic.lang;
+
+    let languages =
+        (requestInfo(request).lang?.map?.(({ name }) => name) ?? [])
+            .filter(lang => settings.generic.lang.includes(lang));
+
+    languages.push(...settings.generic.lang);
+
+    languages = [...new Set(languages)];
+
+    return languages;
 }
