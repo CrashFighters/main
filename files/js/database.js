@@ -1,3 +1,4 @@
+import { onStateChange } from '/sdk/auth.js';
 const { getAuthHeaders } = (await import('/sdk/auth.js'))._;
 
 const paramsToQuery = params =>
@@ -63,7 +64,11 @@ async function deleteRequest(path, params) {
 
 class Database {
     constructor() {
-        this.wait = this._init();
+        this.wait = new Promise(res => {
+            onStateChange(async () => {
+                res(await this._init());
+            })
+        });
     }
 
     async refresh() {
