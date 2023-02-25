@@ -51,7 +51,9 @@
                 "tooManyRequests": "Te veel pogingen. Probeer het later opnieuw",
                 "invalidVerificationCode": "De verificatie code is incorrect",
                 "firebaseAuthInternalError": "Er is een interne fout in de Firebase authenticatie opgetreden. Probeer het later opnieuw",
-                "popupCancelled": "De popup geannuleerd"
+                "popupClosedByUser": "De popup is gesloten door de gebruiker",
+                "popupCancelled": "De popup is geannuleerd",
+                "userCancelled": "De gebruiker heeft de actie geannuleerd"
             },
             "ExperienceLogin": "Log in voor de beste ervaring",
             "Choose2faMethod": "Kies een 2FA methode",

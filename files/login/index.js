@@ -75,7 +75,7 @@ for (const githubLoginButton of githubLoginButtons)
         try {
             await loginWithGithub();
         } catch (e) {
-            if (!['auth/popup-closed-by-user', 'auth/cancelled-popup-request'].includes(e.code)) {
+            if (!['auth/popup-closed-by-user', 'auth/cancelled-popup-request', 'auth/user-cancelled'].includes(e.code)) {
                 const firebaseErrorCode = firebaseErrorCodes[e.code];
                 return handleSignupError({
                     errorCode: firebaseErrorCode?.errorCode,
@@ -125,10 +125,13 @@ const firebaseErrorCodes = {
         errorCode: 'firebaseAuthInternalError'
     },
     'auth/popup-closed-by-user': {
-        errorCode: 'popupCancelled'
+        errorCode: 'popupClosedByUser'
     },
     'auth/cancelled-popup-request': {
         errorCode: 'popupCancelled'
+    },
+    'auth/user-cancelled': {
+        errorCode: 'userCancelled'
     }
 };
 

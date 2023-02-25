@@ -51,7 +51,9 @@
                 "tooManyRequests": "Too many tries. Please try again later",
                 "invalidVerificationCode": "Invalid verification code",
                 "firebaseAuthInternalError": "An internal error in Firebase authentication occurred. Please try again later",
-                "popupCancelled": "The popup was cancelled"
+                "popupClosedByUser": "The popup was closed by the user",
+                "popupCancelled": "The popup was cancelled",
+                "userCancelled": "The user cancelled the action"
             },
             "ExperienceLogin": "For the best experience, please log in",
             "Choose2faMethod": "Choose which 2FA method you want to use",
