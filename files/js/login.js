@@ -1,14 +1,33 @@
 import {
+    signInWithPopup,
+    signInWithRedirect,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     sendEmailVerification,
     sendPasswordResetEmail as firebaseSendPasswordResetEmail,
     getMultiFactorResolver,
+    GithubAuthProvider,
     PhoneAuthProvider,
     PhoneMultiFactorGenerator
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
 const { auth } = (await import('/sdk/auth.js'))._.firebase;
+
+export async function loginWithGithub() {
+    try {
+        const githubProvider = new GithubAuthProvider();
+        githubProvider.addScope('user:email');
+
+        if (window.innerWidth > window.innerHeight)
+            await signInWithPopup(auth, githubProvider);
+        else
+            await signInWithRedirect(auth, githubProvider);
+    } catch (e) {
+        throw e;
+    };
+}
+
+window.e = loginWithGithub; //todo: remove
 
 export async function loginWithEmail(email, password) {
     try {
