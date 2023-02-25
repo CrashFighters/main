@@ -10,7 +10,7 @@ module.exports = {
                 return { authenticated: false };
 
             try {
-                const authentication = await firebase.auth().verifyIdToken(authToken);
+                const authentication = await firebase.auth().verifyIdToken(authToken, true);
 
                 return {
                     authenticated: true,
