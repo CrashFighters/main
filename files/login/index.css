@@ -1,5 +1,10 @@
 * {
 	box-sizing: border-box;
+	font-family: 'Roboto', sans-serif;
+}
+
+body {
+	margin: 0;
 }
 
 .githubLoginButton {
@@ -62,17 +67,20 @@
 	transform: scale(0.95);
 }
 
-body {
+.pageWrapper {
+	position: fixed;
+	top: 0;
+	left: 0;
+
+	width: 100vw;
+	height: 100vh;
+
+	overflow: hidden;
 	background: #f6f5f7;
+
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	flex-direction: column;
-	font-family: 'Roboto', sans-serif;
-	height: 100vh;
-	margin: -20px 0 50px;
-	margin: 20px;
-	overflow: hidden;
 }
 
 h1 {
