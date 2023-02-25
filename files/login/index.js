@@ -238,9 +238,6 @@ async function enable2fa(error) {
         '_2faRecaptchaContainer'
     );
 
-    const emailElement = document.getElementById('loginEmail');
-    const passwordElement = document.getElementById('loginPassword');
-
     const nativeButton = document.getElementById('loginButton-1');
     const signupRecaptchaButton = document.getElementById(
         'signupRecaptchaButton'
@@ -249,6 +246,9 @@ async function enable2fa(error) {
     const loginRecaptchaButton = document.getElementById(
         'loginRecaptchaButton'
     );
+
+    const passwordElement = document.getElementById('loginPassword');
+    const emailElement = document.getElementById('loginEmail');
 
     const verificationCodeInput = document.getElementById(
         'verificationCodeInput'
@@ -261,18 +261,20 @@ async function enable2fa(error) {
 
     _2faRecaptchaContainer.style.display = null;
 
-    emailElement.disabled = true;
-    passwordElement.disabled = true;
-
     nativeButton.style.display = 'none';
     signupRecaptchaButton.style.display = 'none';
     forgotPassword.style.display = 'none';
     loginRecaptchaButton.style.display = 'none';
 
+    passwordElement.disabled = true;
+    emailElement.disabled = true;
+
     const recaptchaObject = await prepare2fa();
 
     const _2faMethods = await get2faMethods(error);
     let selectedIndex;
+
+    passwordElement.style.display = 'none';
 
     if (_2faMethods.length === 1) selectedIndex = 0;
     else selectedIndex = await choose2faMethod(_2faMethods);
