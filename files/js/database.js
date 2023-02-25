@@ -152,8 +152,9 @@ class Community {
                 set: async newValue => {
                     properties[key] = newValue;
                     const newProperties = await putRequest('community', { community, properties: { [key]: newValue } });
-                    for (const [name, value] of Object.entries(newProperties))
-                        if (name in properties) properties[name] = value;
+                    if (newProperties)
+                        for (const [name, value] of Object.entries(newProperties))
+                            if (name in properties) properties[name] = value;
                 }
             });
 
@@ -218,8 +219,9 @@ class Post {
                 set: async newValue => {
                     properties[key] = newValue;
                     const newProperties = await putRequest('post', { community, post, properties: { [key]: newValue } });
-                    for (const [name, value] of Object.entries(newProperties))
-                        if (name in properties) properties[name] = value;
+                    if (newProperties)
+                        for (const [name, value] of Object.entries(newProperties))
+                            if (name in properties) properties[name] = value;
                 }
             });
 
@@ -273,8 +275,9 @@ class Vote {
                 set: async newValue => {
                     properties[key] = newValue;
                     const newProperties = putRequest('vote', { community, post, vote, properties: { [key]: newValue } });
-                    for (const [name, value] of Object.entries(newProperties))
-                        if (name in properties) properties[name] = value;
+                    if (newProperties)
+                        for (const [name, value] of Object.entries(newProperties))
+                            if (name in properties) properties[name] = value;
                 }
             });
 
