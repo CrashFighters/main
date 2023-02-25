@@ -11,10 +11,9 @@ document.head.appendChild(alertScript);
 function coolAlert(message) {
     Swal.fire({
         backdrop: true,
-        title: 'Thats a crash!',
+        title: 'Thats a crash!', //todo: translate
         text: message,
-        type: 'error',
-        confirmButtonText: 'Alright',
+        confirmButtonText: 'Alright', //todo: translate
         //button color
         confirmButtonColor: '#000'
     });
@@ -76,8 +75,14 @@ for (const githubLoginButton of githubLoginButtons)
         try {
             await loginWithGithub();
         } catch (e) {
-            console.log(e)
-            handleLoginError(e);
+            if (!['auth/popup-closed-by-user', 'auth/cancelled-popup-request'].includes(e.code)) {
+                const firebaseErrorCode = firebaseErrorCodes[e.code];
+                return handleSignupError({
+                    errorCode: firebaseErrorCode?.errorCode,
+                    field: firebaseErrorCode?.field,
+                    error: e
+                });
+            };
         }
     });
 
@@ -120,7 +125,10 @@ const firebaseErrorCodes = {
         errorCode: 'firebaseAuthInternalError'
     },
     'auth/popup-closed-by-user': {
-        errorCode: 'popupClosedByUser'
+        errorCode: 'popupCancelled'
+    },
+    'auth/cancelled-popup-request': {
+        errorCode: 'popupCancelled'
     }
 };
 
