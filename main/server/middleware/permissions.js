@@ -9,7 +9,7 @@ module.exports = {
     },
     async execute({ middlewareData, parseError }) {
         try {
-            return { permissions: getPermissions(middlewareData.authentication, middlewareData.customClaim) };
+            return { permissions: getPermissions(middlewareData.authentication, middlewareData.customClaims) };
         } catch (e) {
             parseError(e);
         }
