@@ -115,6 +115,10 @@ const firebaseErrorCodes = {
         errorCode: 'invalidVerificationCode',
         field: 'verificationCode'
     },
+    'auth/missing-code': {
+        errorCode: 'missingVerificationCode',
+        field: 'verificationCode'
+    },
     'auth/too-many-requests': {
         errorCode: 'tooManyRequests'
     },
