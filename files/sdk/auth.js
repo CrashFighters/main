@@ -25,6 +25,17 @@ export const onStateChange = (callback) => {
     });
 };
 
+export async function getPermission(permission) {
+    const response = await fetch(`/api/getPermission?permission=${encodeURIComponent(permission)}`, {
+        headers: {
+            ...await getAuthHeaders()
+        }
+    });
+    const result = await response.json();
+
+    return result;
+};
+
 export const logout = async () => {
     try {
         await signOut(auth);
@@ -108,6 +119,7 @@ export const _ = {
 
 window.auth = {
     onStateChange,
+    getPermission,
     logout,
     login,
     signup,
