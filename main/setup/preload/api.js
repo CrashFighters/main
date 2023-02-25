@@ -1,7 +1,6 @@
 const fs = require('fs');
 const { readdirSync, existsSync, statSync } = fs;
 
-const isModuleInstalled = require('../../functions/isModuleInstalled').execute;
 const parseErrorRaw = require('../../functions/error/parseErrorRaw').execute;
 const evalErrors = require('../../functions/error/evalErrors').execute;
 const messages = require('../../functions/get/messages').execute().mainFunction()
@@ -44,11 +43,10 @@ function addApiCalls(websitePath, path) {
                     }
                 };
 
-                if (!dependenciesInstalled)
-                    if (isModuleInstalled('text')) {
-                        parseErrorRaw(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', `${websitePath}${apiName}`)), messages.error.moduleNotInstalledFor.replace('{api}', `${websitePath}${apiName}`).replace('{dependency}', dependenciesNotInstalled.join(', ')));
-                        evalErrors();
-                    }
+                if (!dependenciesInstalled) {
+                    parseErrorRaw(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', `${websitePath}${apiName}`)), messages.error.moduleNotInstalledFor.replace('{api}', `${websitePath}${apiName}`).replace('{dependency}', dependenciesNotInstalled.join(', ')));
+                    evalErrors();
+                }
             }
     }
 }

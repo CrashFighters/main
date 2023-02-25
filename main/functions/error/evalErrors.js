@@ -2,7 +2,6 @@ const readdir = require('util').promisify(require('fs').readdir);
 
 const settings = require('../../../settings.json');
 const messages = require('../get/messages').execute().mainFunction();
-const isModuleInstalled = require('../isModuleInstalled').execute;
 
 let cConsole = console;
 if (require('../../functions/isModuleInstalled').execute('console')) {
@@ -32,27 +31,10 @@ module.exports = {
                 if (files.length === 1) message = messages.error.thereIsError.replace('{amount}', files.length);
 
                 cConsole.warn(message);
-                if (isModuleInstalled('text')) {
-                    const rows = [];
-                    files.forEach((val) => {
-                        if (val.endsWith('.json')) {
-                            const occurrences = require(`../../../${settings.generic.path.files.errors}${val}`).occurrences.length;
-                            rows.push([`${settings.generic.path.files.errors}${val}`, occurrences]);
-                        } else
-                            rows.push([`${settings.generic.path.files.errors}${val}`, -1])
-                    });
-
-                    const createDiagram = require(`../../../${settings.generic.path.files.modules}text/createDiagram.js`);
-                    const diagram = createDiagram.twoColumns(rows, 4, ' ');
-
-                    diagram.forEach((val) => {
-                        cConsole.warn(val);
-                    });
-                } else
-                    files.forEach((val) => {
-                        const occurrences = require(`../../../${settings.generic.path.files.errors}${val}`).occurrences.length;
-                        cConsole.warn(`${settings.generic.path.files.errors}${val}\t\t${occurrences}`);
-                    });
+                files.forEach((val) => {
+                    const occurrences = require(`../../../${settings.generic.path.files.errors}${val}`).occurrences.length;
+                    cConsole.warn(`${settings.generic.path.files.errors}${val}\t\t${occurrences}`);
+                });
 
                 cConsole.log();
             }
