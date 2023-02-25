@@ -35,7 +35,7 @@
                     }
                 }
             },
-            "loggedIn": {
+            "authenticated": {
                 "database": {
                     "get": {
                         "community": "always",
@@ -83,6 +83,7 @@
                     }
                 }
             }
-        }
+        },
+        "customRoles": {}
     }
 }
