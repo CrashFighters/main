@@ -6,6 +6,7 @@ import {
 import { getCookie, deleteCookie } from '/common/cookie.js';
 import { googleSignInKey } from '/common/apiKeys.js';
 import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
+import { isMobile } from '/common/isMobile.js';
 
 const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
@@ -48,12 +49,12 @@ const googleOnLoadDiv = document.createElement('div');
 googleOnLoadDiv.id = 'g_id_onload';
 googleOnLoadDiv.dataset.client_id = googleSignInKey;
 googleOnLoadDiv.dataset.context = 'signin';
-if (window.innerWidth > window.innerHeight) {
-    googleOnLoadDiv.dataset.ux_mode = 'popup';
-    googleOnLoadDiv.dataset.callback = 'googleSignInCallback';
-} else {
+if (isMobile()) {
     googleOnLoadDiv.dataset.ux_mode = 'redirect';
     googleOnLoadDiv.dataset.login_uri = window.location.href
+} else {
+    googleOnLoadDiv.dataset.ux_mode = 'popup';
+    googleOnLoadDiv.dataset.callback = 'googleSignInCallback';
 }
 googleOnLoadDiv.dataset.auto_prompt = 'false';
 

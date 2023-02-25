@@ -11,6 +11,8 @@ import {
     PhoneMultiFactorGenerator
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
+import { isMobile } from '/common/isMobile.js';
+
 const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
 export async function loginWithGithub() {
@@ -18,10 +20,10 @@ export async function loginWithGithub() {
         const githubProvider = new GithubAuthProvider();
         githubProvider.addScope('user:email');
 
-        if (window.innerWidth > window.innerHeight)
-            await signInWithPopup(auth, githubProvider);
-        else
+        if (isMobile())
             await signInWithRedirect(auth, githubProvider);
+        else
+            await signInWithPopup(auth, githubProvider);
     } catch (e) {
         throw e;
     };
