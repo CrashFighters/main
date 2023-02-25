@@ -18,8 +18,8 @@ type community = {
 
 type post = {
     id: string;
-    user: string; //todo: change to owner
-    message: string;
+    user: string; //todo: rename to owner
+    message: string; //todo: rename to content
     votes: {
         [userId: string]: vote;
     };
@@ -28,7 +28,7 @@ type post = {
 
 type vote = {
     //todo: add separate id value
-    user: string; //todo: change to owner
+    user: string; //todo: rename to owner
     isUpvote: boolean;
 };
 
