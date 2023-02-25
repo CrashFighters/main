@@ -1,6 +1,6 @@
-module.exports = (user) => {
-    if (user?.customClaims?.permissions)
-        return user.customClaims.permissions;
+module.exports = (user, customClaims) => {
+    if (customClaims?.permissions)
+        return customClaims.permissions;
     else
         return {};
 }

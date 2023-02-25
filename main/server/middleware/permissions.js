@@ -3,12 +3,13 @@ const getPermissions = require('../../../modules/authentication/functions/getPer
 module.exports = {
     info: {
         requires: [
-            'authentication'
+            'authentication',
+            'customClaims'
         ]
     },
     async execute({ middlewareData, parseError }) {
         try {
-            return { permissions: getPermissions(middlewareData.authentication) };
+            return { permissions: getPermissions(middlewareData.authentication, middlewareData.customClaim) };
         } catch (e) {
             parseError(e);
         }
