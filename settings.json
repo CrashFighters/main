@@ -26,61 +26,41 @@
     },
     "permissions": {
         "roles": {
-            "default": {
+            "empty": {
                 "database": {
                     "get": {
-                        "community": "always",
-                        "post": "always",
-                        "vote": "always"
+                        "community": "never",
+                        "post": "never",
+                        "vote": "never"
+                    },
+                    "delete": {
+                        "community": "never",
+                        "post": "never",
+                        "vote": "never"
+                    },
+                    "modify": {
+                        "community": "never",
+                        "post": "never",
+                        "vote": "never"
+                    },
+                    "create": {
+                        "community": "never",
+                        "post": "never",
+                        "vote": "never"
                     }
+                }
+            },
+            "default": {
+                "database": {
+                    "get": "always"
                 }
             },
             "authenticated": {
                 "database": {
-                    "get": {
-                        "community": "always",
-                        "post": "always",
-                        "vote": "always"
-                    },
-                    "delete": {
-                        "community": "ifOwner",
-                        "post": "ifOwner",
-                        "vote": "ifOwner"
-                    },
-                    "modify": {
-                        "community": "ifOwner",
-                        "post": "ifOwner",
-                        "vote": "ifOwner"
-                    },
-                    "create": {
-                        "community": "always",
-                        "post": "always",
-                        "vote": "always"
-                    }
-                }
-            },
-            "full": {
-                "database": {
-                    "get": {
-                        "community": "always",
-                        "post": "always",
-                        "vote": "always"
-                    },
-                    "delete": {
-                        "community": "always",
-                        "post": "always",
-                        "vote": "always"
-                    },
-                    "modify": {
-                        "community": "always",
-                        "post": "always",
-                        "vote": "always"
-                    },
-                    "create": {
-                        "community": "always",
-                        "post": "always",
-                        "vote": "always"
-                    }
+                    "get": "always",
+                    "delete": "ifOwner",
+                    "modify": "ifOwner",
+                    "create": "always"
                 }
             }
         },
