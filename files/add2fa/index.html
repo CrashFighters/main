@@ -1,21 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Add 2fa method</title>
 
-    <script type="module" src="/sdk/auth.js"></script>
-    <script type="module" src="/add2fa/index.js"></script>
-    <script type="module" src="/sdk/templates.js"></script>    <noscript>
-        <link
-          rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"
-        />
-  
-        <div
-          style="
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add 2fa method</title>
+
+  <script type="module" src="/sdk/auth.js"></script>
+  <script type="module" src="/add2fa/index.js"></script>
+  <script type="module" src="/sdk/templates.js"></script> <noscript>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+
+    <div style="
             position: fixed;
             top: 0;
             left: 0;
@@ -23,97 +20,63 @@
             height: 100%;
             background-color: #fff;
             z-index: 999;
-          "
-        >
-          <div
-            style="
+          ">
+      <div style="
               position: absolute;
               top: 50%;
               left: 50%;
               transform: translate(-50%, -50%);
               text-align: center;
-            "
-          >
-            <h1
-              style="
+            ">
+        <h1 style="
                 font-size: 2rem;
                 font-weight: 700;
                 margin-bottom: 1rem;
                 font-family: 'Roboto', sans-serif;
                 color: #f00;
-              "
-            >
-              <i class="fa fa-exclamation-triangle"></i>
-              JavaScript is disabled
-            </h1>
-            <p
-              style="
+              ">
+          <i class="fa fa-exclamation-triangle"></i>
+          JavaScript is disabled
+        </h1>
+        <p style="
                 font-size: 1.5rem;
                 font-weight: 400;
                 margin-bottom: 1rem;
                 font-family: 'Roboto', sans-serif;
-              "
-            >
-              This site requires JavaScript to function properly. Please enable
-              JavaScript in your browser.
-            </p>
-          </div>
-        </div>
-      </noscript>
-  
-  </head>
-
-  <body>
-    <div
-      data-template="custom"
-      data-template_insert="style"
-      data-template_fallback="display: block;"
-      data-template_var="addTwofaStyle"
-    >
-      <button onclick="window.auth.logout().then(() => window.auth.login())">
-        Re login
-      </button>
-      <br />
-      <br />
-      <input type="tel" id="phoneNumber" placeholder="Phone number" required />
-      <input
-        type="text"
-        id="displayName"
-        placeholder="Phone custom user note"
-      />
-      <div id="2faRecaptchaButton"></div>
-
-      <button
-        onclick="window.doAdd2fa()"
-        id="enable2faButton"
-        data-template_var="addDisabled"
-        data-template_insert="disabled"
-        data-template_fallback="true"
-        data-template="custom"
-        disabled
-      >
-        Add 2fa
-      </button>
+              ">
+          This site requires JavaScript to function properly. Please enable
+          JavaScript in your browser.
+        </p>
+      </div>
     </div>
-    <div
-      data-template="custom"
-      data-template_insert="style"
-      data-template_fallback="display: none;"
-      data-template_var="verificationStyle"
-    >
-      <input
-        type="text"
-        id="verificationCode"
-        placeholder="Verification code"
-      />
-      <button onclick="window.doVerify2fa()" disabled data-template="custom"
-        data-template_var="verifyDisabled"
-        data-template_insert="disabled"
-        data-template_fallback="true"
+  </noscript>
 
-        disabled="true"
-      >
-        Verify 2fa
-      </button>
-  </body>
+</head>
+
+<body>
+  <div data-template="custom" data-template_insert="style" data-template_fallback="display: block;"
+    data-template_var="addTwofaStyle">
+    <button onclick="window.auth.logout().then(() => window.auth.login())">
+      Re login
+    </button>
+    <br />
+    <br />
+    <input type="tel" id="phoneNumber" placeholder="Phone number" required />
+    <input type="text" id="displayName" placeholder="Phone custom user note" />
+    <div id="2faRecaptchaButton"></div>
+
+    <button onclick="window.doAdd2fa()" id="enable2faButton" data-template_var="addDisabled"
+      data-template_insert="disabled" data-template_fallback="true" data-template="custom" disabled>
+      Add 2fa
+    </button>
+  </div>
+  <div data-template="custom" data-template_insert="style" data-template_fallback="display: none;"
+    data-template_var="verificationStyle">
+    <input type="text" id="verificationCode" placeholder="Verification code" />
+    <button onclick="window.doVerify2fa()" disabled data-template="custom" data-template_var="verifyDisabled"
+      data-template_insert="disabled" data-template_fallback="true" id="verify2faButton" disabled="true">
+      Verify 2fa
+    </button>
+</body>
+
 </html>
