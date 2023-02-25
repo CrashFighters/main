@@ -1,23 +1,30 @@
 const firebase = require('../../../modules/authentication/functions/authentication.js');
 
-module.exports = async ({ request }) => {
+module.exports = {
+    async execute({ request, parseError }) {
+        try {
 
-    const authToken = request.headers['auth_token'];
+            const authToken = request.headers['auth_token'];
 
-    if (!authToken)
-        return { authenticated: false };
+            if (!authToken)
+                return { authenticated: false };
 
-    try {
-        const authentication = await firebase.auth().verifyIdToken(authToken);
+            try {
+                const authentication = await firebase.auth().verifyIdToken(authToken);
 
-        return {
-            authenticated: true,
-            authentication
-        };
-    } catch {
-        return {
-            authenticated: false,
-            authentication: null
-        };
+                return {
+                    authenticated: true,
+                    authentication
+                };
+            } catch {
+                return {
+                    authenticated: false,
+                    authentication: null
+                };
+            }
+
+        } catch (e) {
+            parseError(e);
+        }
     }
 }

@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 
 const middlewares = fs.existsSync(path.resolve(__dirname, './middleware/')) ?
-    fs.readdirSync(path.resolve(__dirname, './middleware/')).map(a => require(`./middleware/${a}`)) :
-    null;
+    fs.readdirSync(path.resolve(__dirname, './middleware/')).map(a => ({ ...require(`./middleware/${a}`), name: a.split('.')[0] })) :
+    [];
 
 const parseErrorOnline = require('../functions/error/parseErrorOnline').execute;
 const parsePostBody = require('../functions/parse/postBody');
@@ -20,10 +20,17 @@ module.exports = {
             const extraData = { body };
 
             let middlewareData = {};
-            if (middlewares)
-                for (const middleware of middlewares) {
-                    const newMiddlewareData = await middleware({ request, response, extraData, parseError }) ?? {};
+            const executedMiddlewares = [];
+
+            while (middlewares.length > executedMiddlewares.length)
+                for (const { execute, info, name } of middlewares) {
+                    if (executedMiddlewares.includes(name)) continue;
+                    if (info?.requires && info.requires.some(name => !executedMiddlewares.includes(name))) continue;
+
+                    const newMiddlewareData = await execute({ request, response, extraData, parseError, middlewareData }) ?? {};
                     middlewareData = { ...middlewareData, ...newMiddlewareData };
+
+                    executedMiddlewares.push(name);
                 };
 
             if (request.url.startsWith('/dbApi/'))
