@@ -64,7 +64,9 @@
             "LoginFullyEnjoy": "Login to fully enjoy the experience",
             "RedirectQuestionTitle": "Do you want to go to an external website?",
             "SendingVerificationCode": "Sending verification code",
-            "VerificationCodeSentTo": "A verification code has been sent to"
+            "VerificationCodeSentTo": "A verification code has been sent to",
+            "ErrorDialogueTitle": "Something went wrong",
+            "ErrorDialogueConfirm": "Ok"
         },
         "/resetPassword": {
             "SendEmail": "Send email",

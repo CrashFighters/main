@@ -64,7 +64,9 @@
             "LoginFullyEnjoy": "Log in voor de beste ervaring",
             "RedirectQuestionTitle": "Wil je doorgaan naar een externe website?",
             "SendingVerificationCode": "Verificatie code aan het sturen",
-            "VerificationCodeSentTo": "Er is een verificatie code verstuurd naar"
+            "VerificationCodeSentTo": "Er is een verificatie code verstuurd naar",
+            "ErrorDialogueTitle": "Er is iets mis gegaan",
+            "ErrorDialogueConfirm": "Oké"
         },
         "/resetPassword": {
             "SendEmail": "Stuur email",

@@ -11,10 +11,9 @@ document.head.appendChild(alertScript);
 function coolAlert(message) {
     Swal.fire({
         backdrop: true,
-        title: 'Thats a crash!', //todo: translate
+        title: getMessage('ErrorDialogueTitle'),
         text: message,
-        confirmButtonText: 'Alright', //todo: translate
-        //button color
+        confirmButtonText: getMessage('ErrorDialogueConfirm'),
         confirmButtonColor: '#000'
     });
 }
