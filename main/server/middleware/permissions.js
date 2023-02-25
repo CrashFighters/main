@@ -1,4 +1,4 @@
-const getPermissions = require('../../../modules/authentication/getPermissions.js');
+const getPermissions = require('../../../modules/authentication/functions/getPermissions.js');
 
 module.exports = {
     info: {
