@@ -182,7 +182,6 @@ async function handleLoginError({ errorCode, field, error }) {
         else feedbackElement.innerText = '';
     }
 }
-window.g = handleLoginError; //todo: remove
 window.removeLoginErrorFeedback = () => {
     for (const loginFieldId of loginFields) {
         const feedbackElement = document.getElementById(
