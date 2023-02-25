@@ -21,7 +21,7 @@ body {
 }
 
 .googleLoginButtonWrapper {
-	width: 230px;
+	width: 265px;
 	height: 44px;
 }
 
@@ -30,7 +30,7 @@ body {
 
 	display: flex;
 	justify-content: center;
-	gap: 2vw;
+	gap: 1vw;
 }
 
 .errorFeedback {
