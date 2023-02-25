@@ -11,6 +11,7 @@ document.head.appendChild(alertScript);
 function coolAlert(message) {
     Swal.fire({
         backdrop: true,
+        icon: 'warning',
         title: getMessage('ErrorDialogueTitle'),
         text: message,
         confirmButtonText: getMessage('ErrorDialogueConfirm'),
