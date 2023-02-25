@@ -1,15 +1,11 @@
-//todo: improve
+export function getCookies() {
+    return Object.fromEntries(
+        document.cookie.split('; ').map((cookie) => [cookie.split('=')[0], cookie.split('=')[1]])
+    );
+}
 
 export function getCookie(name) {
-    const nameEQ = `${name}=`;
-    const ca = document.cookie.split(';');
-
-    for (let c of ca) {
-        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-    }
-
-    return null;
+    return getCookies()[name] ?? null;
 }
 
 export function deleteCookie(name) {
