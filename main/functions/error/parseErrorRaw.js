@@ -46,16 +46,11 @@ module.exports = {
                     ]
                 };
 
-                //todo: create a function that creates easyAccessPath
-                //todo: improve easyAccessPath. For example: exclude node_modules and <anonymous> functions
-                let easyAccessPath = null;
-                try {
-                    easyAccessPath = errorMessage.split('\n')[1].split('(')[1].split(')')[0];
-                } catch { }
+                const easyAccessPath = createEasyAccessPath(errorMessage);
                 if (easyAccessPath) obj.occurrences[0].easyAccessPath = easyAccessPath;
 
                 if (customText) obj.occurrences[0].customText = customText;
-                writeFileSync(path, JSON.stringify(obj));
+                writeFileSync(path, JSON.stringify(obj, null, 4));
                 return `${fileName}`;
             } else {
                 const date = new Date().getTime();
@@ -68,19 +63,32 @@ module.exports = {
                     stack: errorMessage.split('\n')
                 };
 
-                let easyAccessPath = null;
-                try {
-                    easyAccessPath = errorMessage.split('\n')[1].split('(')[1].split(')')[0];
-                } catch { }
+                const easyAccessPath = createEasyAccessPath(error);
                 if (easyAccessPath) obj.easyAccessPath = easyAccessPath;
 
                 if (customText) obj.customText = customText;
                 oldObj.occurrences.push(obj);
-                writeFileSync(fsPath, JSON.stringify(oldObj));
+                writeFileSync(fsPath, JSON.stringify(oldObj, null, 4));
                 return sameFile;
             }
         } catch (err) {
             require('./lastFallback').execute(err)
         }
     }
+}
+
+function createEasyAccessPath(errorMessage) {
+    try {
+        const easyAccessPath = errorMessage.split('\n')
+            .slice(1)
+            .filter(line => line.includes('at'))
+            .filter(line => !line.includes('internal'))
+            .filter(line => !line.includes('node:'))
+            .filter(line => !line.includes('<anonymous>'))
+            .filter(line => !line.includes('node_modules'))[0]
+            ?.split?.('(')?.[1]
+            ?.split?.(')')?.[0]
+
+        return easyAccessPath;
+    } catch { }
 }
