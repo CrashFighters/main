@@ -10,7 +10,7 @@ module.exports = {
 
             const firebaseUser = await firebase.auth().getUser(authentication.sub);
             const customClaims = firebaseUser.customClaims;
-            return customClaims;
+            return { customClaims };
         } catch (e) {
             parseError(e);
         }
