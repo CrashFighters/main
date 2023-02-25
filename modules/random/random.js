@@ -1,1 +1,0 @@
-module.exports={execute(n,t){const e=t.split("");return Array(n).fill().map((()=>e[Math.floor(Math.random()*e.length)])).join("")},chars:{nonConfusingNumsAndLetters:"23456789ABCDEFGHJKMNPQRSTUVWXYZ"}};

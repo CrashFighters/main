@@ -1,26 +1,86 @@
 {
     "error": {
-        "apiCallNotFound": "Api oproep niet gevonden",
-        "executeFunctionNotFoundWithFile": "De uitvoer functie kan niet worden gevonden ({file})",
-        "executeFunctionNotFound": "De uitvoer functie kan niet worden gevonden",
-        "moduleNotInstalledFor": "De api call '{api}' heeft de module '{dependency}' nodig",
-        "modulesNotInstalledFor": "De api call '{api}' heeft de module(s) {dependency} nodig",
-        "moduleNotInstalledForShort": "Dependencie(s) niet geïnstalleerd voor {api}",
-        "notValid": "Het opgegeven {argument} is niet geldig",
-        "notGiven": "Geen {argument} opgegeven",
-        "Unknown error in": "Niet bekende error in {place}",
-        "thereAreErrors": "Er zijn {amount} errors!",
-        "thereIsError": "Er is {amount} error!",
-        "reload": "herladen",
-        "clientServerReload": "Vanwege een error, is de server aan het opnieuw opstarten"
+        "apiCallNotFound": "API functie niet gevonden",
+        "executeFunctionNotFoundWithFile": "De uitvoer functie is niet gevonden ({file})",
+        "executeFunctionNotFound": "De uitvoer functie is niet gevonden",
+        "moduleNotInstalledFor": "De API functie '{api}' heeft '{dependency}' nodig",
+        "modulesNotInstalledFor": "De API functie heeft '{api}' heeft '{dependency}' nodig",
+        "moduleNotInstalledForShort": "Benodigdheden niet gevonden voor {api}",
+        "notValid": "Het gegeven argument {argument} is niet geldig",
+        "notGiven": "{argument} is niet gegeven",
+        "Unknown error in": "Onbekende fout in {place}",
+        "thereAreErrors": "Er zijn {amount} fouten!",
+        "thereIsError": "Er is {amount} fout!",
+        "reload": "reload",
+        "clientServerReload": "Vanwege een fout is de server aan het herladen."
+    },
+    "general": {
+        "Login": "Inloggen",
+        "Logout": "Uitloggen",
+        "YourEmailIs": "Je email is",
+        "Welcome": "Welkom",
+        "unknownPerson": "onbekende persoon",
+        "unknown": "onbekend",
+        "CreateAccount": "Account aanmaken",
+        "orUseEmail": "of gebruik email",
+        "SignUp": "Aanmelden",
+        "ForgotYourPassword": "Wachtwoord vergeten",
+        "VerifyCode": "Verifiëer code",
+        "Email": "Email",
+        "Password": "Wachtwoord",
+        "Name": "Naam",
+        "VerificationCode": "Verificatie code",
+        "UnknownErrorOccurred": "Er is een onbekende fout opgetreden",
+        "Error": "Fout",
+        "BackToLogin": "Terug naar inloggen"
+    },
+    "pages": {
+        "/login": {
+            "error": {
+                "emailDoesNotExist": "Er is geen account met dit email",
+                "invalidEmail": "Dit is geen geldig email",
+                "missingEmail": "Vul een email in",
+                "emailAlreadyInUse": "Dit email is al in gebruik",
+                "wrongPassword": "Het wachtwoord is incorrect",
+                "weakPassword": "Het wachtwoord is te zwak",
+                "recaptchaNotSolved": "Los de captcha op",
+                "recaptchaExpired": "De captcha is verlopen. Los hem opnieuw op",
+                "recaptchaError": "Probeer de captcha opnieuw op te lossen",
+                "noName": "Vul een naam in",
+                "2faRequired": "2FA is nodig voor dit account",
+                "tooManyRequests": "Te veel pogingen. Probeer het later opnieuw",
+                "invalidVerificationCode": "De verificatie code is incorrect",
+                "missingVerificationCode": "Vul een verificatie code in",
+                "firebaseAuthInternalError": "Er is een interne fout in de Firebase authenticatie opgetreden. Probeer het later opnieuw",
+                "popupClosedByUser": "De popup is gesloten door de gebruiker",
+                "popupCancelled": "De popup is geannuleerd",
+                "userCancelled": "De gebruiker heeft de actie geannuleerd"
+            },
+            "ExperienceLogin": "Log in voor de beste ervaring",
+            "Choose2faMethod": "Kies een 2FA methode",
+            "NoAccountSignUp": "Heb je nog geen account? Meld je aan",
+            "WelcomeTitle1": "Hallo daar!",
+            "WelcomeTitle2": "Welkom!",
+            "CreateAccountIfNew": "Maak een account als je nieuw bent",
+            "LoginFullyEnjoy": "Log in voor de beste ervaring",
+            "RedirectQuestionTitle": "Wil je doorgaan naar een externe website?",
+            "SendingVerificationCode": "De verificatie code is aan het sturen",
+            "VerificationCodeSentTo": "Er is een verificatie code verstuurd naar",
+            "ErrorDialogueTitle": "Er is iets mis gegaan",
+            "ErrorDialogueConfirm": "Oké"
+        },
+        "/resetPassword": {
+            "SendEmail": "Stuur email",
+            "ResetPassword": "Nieuw wachtwoord"
+        }
     },
     "httpStatusCodes": {
         "400": {
-            "400": "Foute aanvraag",
+            "400": "Slechte aanvraag",
             "401": "Niet geautoriseerd",
-            "403": "Verboden toegang",
+            "403": "Verboden",
             "404": "Pagina niet gevonden",
-            "405": "Methode niet toegestaan"
+            "405": "Manier niet toegestaan"
         },
         "500": {
             "500": "Server fout"

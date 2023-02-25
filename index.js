@@ -1,1 +1,14 @@
-const http=require("http"),{generic:{port:port}}=require("./settings.json"),server=http.createServer(require("./main/functions/error/lastFallback").serverExecute);try{require("./main/functions/error/evalErrors").execute()}catch(r){}server.listen(port);
+const http = require('http');
+const { generic: { port } } = require('./settings.json');
+
+const server = http.createServer(require('./main/functions/error/lastFallback').serverExecute);
+
+try {
+    require('./main/functions/error/evalErrors').execute();
+} catch (e) { }
+
+try {
+    require('./modules/perspective/functions/start.js')();
+} catch (e) { }
+
+server.listen(port);

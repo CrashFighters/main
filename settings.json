@@ -23,5 +23,49 @@
                 "api": "/api/"
             }
         }
+    },
+    "permissions": {
+        "roles": {
+            "empty": {
+                "database": {
+                    "get": {
+                        "community": "never",
+                        "post": "never",
+                        "vote": "never"
+                    },
+                    "delete": {
+                        "community": "never",
+                        "post": "never",
+                        "vote": "never"
+                    },
+                    "modify": {
+                        "community": "never",
+                        "post": "never",
+                        "vote": "never"
+                    },
+                    "create": {
+                        "community": "never",
+                        "post": "never",
+                        "vote": "never"
+                    }
+                }
+            },
+            "default": {
+                "database": {
+                    "get": "always"
+                }
+            },
+            "authenticated": {
+                "database": {
+                    "get": "always",
+                    "delete": "ifOwner",
+                    "modify": "ifOwner",
+                    "create": "always"
+                }
+            }
+        },
+        "customRoles": {
+            "admin": "always"
+        }
     }
 }

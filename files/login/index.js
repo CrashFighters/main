@@ -1,1 +1,471 @@
-const signUpButton=document.getElementById("signUp"),signInButton=document.getElementById("signIn"),container=document.getElementById("container"),signUpButton_mobile=document.getElementById("signUp_mobile"),signInButton_mobile=document.getElementById("signIn_mobile");signUpButton.removeEventListener("click",(()=>{container.classList.add("right-panel-active")})),signInButton.removeEventListener("click",(()=>{container.classList.remove("right-panel-active")})),signUpButton_mobile.removeEventListener("click",(()=>{container.classList.add("right-panel-active")})),signInButton_mobile.removeEventListener("click",(()=>{container.classList.remove("right-panel-active")})),signUpButton.addEventListener("click",(()=>{container.classList.add("right-panel-active")})),signInButton.addEventListener("click",(()=>{container.classList.remove("right-panel-active")})),signUpButton_mobile.addEventListener("click",(()=>{container.classList.add("right-panel-active")})),signInButton_mobile.addEventListener("click",(()=>{container.classList.remove("right-panel-active")}));import{onStateChange}from"/sdk/auth.js";import{loginWithEmail,createEmailAccount,prepare2fa,get2faMethods,send2fa,loginWith2fa}from"/sdk/login.js";import{setDisplayName}from"/sdk/settings.js";import{minimalLoginRecaptchaScore,minimalSignupRecaptchaScore}from"/common/settings.js";import{createButton}from"/sdk/recaptcha.js";const urlParams=new URLSearchParams(window.location.search),signup="true"===urlParams.get("signup");function redirect(){const e=urlParams.get("redirect");let t=null!==e;t&&new URL(e).origin!==window.location.origin&&(t=confirm(`Do you want to continue to the external website "${e}"?`)),t?window.location.replace(e):window.location.replace("/")}signup&&document.getElementById("container").classList.add("right-panel-active");let preventRedirect=!1;onStateChange((e=>{e&&!preventRedirect&&redirect()}));const firebaseErrorCodes={"auth/user-not-found":{errorCode:"emailDoesNotExist",field:"email"},"auth/missing-email":{errorCode:"missingEmail",field:"email"},"auth/invalid-email":{errorCode:"invalidEmail",field:"email"},"auth/email-already-in-use":{errorCode:"emailAlreadyInUse",field:"email"},"auth/wrong-password":{errorCode:"wrongPassword",field:"password"},"auth/weak-password":{errorCode:"weakPassword",field:"password"},"auth/too-many-requests":{errorCode:"tooManyRequests"},"auth/multi-factor-auth-required":{errorCode:"2faRequired"},"auth/invalid-verification-code":{errorCode:"invalidVerificationCode",field:"verificationCode"},"auth/internal-error":{errorCode:"firebaseAuthInternalError"}},recaptchaStateNames={ready:"recaptchaNotSolved",expired:"recaptchaExpired",error:"recaptchaError"},errorCodeMessages={emailDoesNotExist:"There is no account associated with this email address",invalidEmail:"This isn't a valid email address",missingEmail:"Please enter an email address",emailAlreadyInUse:"This email address is already in use",wrongPassword:"The password is incorrect",weakPassword:"The password is too weak",recaptchaNotSolved:"Please solve the captcha",recaptchaExpired:"The captcha has expired. Please solve it again",recaptchaError:"Please try the captcha again",noName:"Please enter a name","2faRequired":"2FA is required for this account",tooManyRequests:"Too many tries. Please try again later",invalidVerificationCode:"Invalid verification code",firebaseAuthInternalError:"An internal error in Firebase authentication occurred. Please try again later"},loginFields=["email","password","recaptcha","verificationCode","2fa-recaptcha"];function handleLoginError({errorCode:e,field:t,error:n}){const a=errorCodeMessages[e]??e??(n?.message?`Error: ${n.message}`:"An unknown error occurred");if(!t)return alert(a);if(!loginFields.includes(t))throw new Error(`Invalid field: ${t}`);for(const e of loginFields){const n=document.getElementById(`login-${e}-feedback`);n.innerText=e===t?a:""}}function choose2faMethod(e){const t=document.getElementById("choose2faMethodText"),n=document.getElementById("choose2faMethod");return new Promise((a=>{for(const r in e){const{displayName:i,phoneNumber:o}=e[r],s=document.createElement("button");s.innerText=i?`${i} (${o})`:o,s.addEventListener("click",(()=>{t.style.display="none",n.style.display="none",a(r)})),n.appendChild(s)}t.style.display=null,n.style.display=null}))}function wait2faRecaptchaSuccess(e){return new Promise((t=>{e.onStateChange((()=>{["success","successBefore"].includes(e.state)&&t()}))}))}let _2faError,loginRecaptcha;async function enable2fa(e){_2faError=e;const t=document.getElementById("_2faRecaptchaContainer"),n=document.getElementById("loginEmail"),a=document.getElementById("loginPassword"),r=document.getElementById("loginButton-1"),i=document.getElementById("signupRecaptchaButton"),o=document.getElementById("forgotPassword"),s=document.getElementById("loginRecaptchaButton"),c=document.getElementById("verificationCodeInput"),d=document.getElementById("verify2faButton"),l=document.getElementById("2faVerificationCodeStatus");t.style.display=null,n.disabled=!0,a.disabled=!0,r.style.display="none",i.style.display="none",o.style.display="none",s.style.display="none";const u=await prepare2fa(),m=await get2faMethods(e);let g;g=1===m.length?0:await choose2faMethod(m),["success","successBefore"].includes(u.state)||await wait2faRecaptchaSuccess(u),t.style.display="none",c.style.display=null,d.style.opacity=0,d.style.display=null,l.innerText="Sending a verification code",l.style.display=null;const{phoneNumber:p,displayName:h}=await send2fa(g);l.innerText="A verification code has been sent to {location}".replace("{location}",h?`${h} (${p})`:p),d.addEventListener("click",(()=>d.disabled=!0)),d.style.opacity=null}window.removeLoginErrorFeedback=()=>{for(const e of loginFields){document.getElementById(`login-${e}-feedback`).innerText=""}},window.verify2fa=async()=>{if(!_2faError)throw new Error("No 2FA error found");const e=document.getElementById("verify2faButton"),t=document.getElementById("verificationCodeInput").value;try{await loginWith2fa(t)}catch(e){const t=firebaseErrorCodes[e.code];return handleLoginError({errorCode:t?.errorCode,field:t?.field,error:e})}finally{e.disabled=!1}},window.doLogin=async e=>{const t=document.getElementById("loginEmail").value,n=document.getElementById("loginPassword").value,a=document.getElementById("loginButton-1");if(e<minimalLoginRecaptchaScore&&!loginRecaptcha&&(loginRecaptcha=await createButton(document.getElementById("loginRecaptchaButton"))),loginRecaptcha&&"success"!==loginRecaptcha.state)return handleLoginError({errorCode:recaptchaStateNames[loginRecaptcha.state],field:"recaptcha"});a.disabled=!0,preventRedirect=!0;try{window.removeLoginErrorFeedback(),await loginWithEmail(t,n)}catch(e){if("auth/multi-factor-auth-required"===e.code)return enable2fa(e);const t=firebaseErrorCodes[e.code];return handleLoginError({errorCode:t?.errorCode,field:t?.field,error:e})}finally{a.disabled=!1,preventRedirect=!1}redirect()};const signupFields=["name","email","password","recaptcha"];function handleSignupError({errorCode:e,field:t,error:n}){const a=errorCodeMessages[e]??e??(n?.message?`Error: ${n.message}`:"An unknown error occurred");if(!t)return alert(a);if(!signupFields.includes(t))throw new Error(`Invalid field: ${t}`);for(const e of signupFields){const n=document.getElementById(`signup-${e}-feedback`);n.innerText=e===t?a:""}}let signupRecaptcha;window.removeSignupErrorFeedback=()=>{for(const e of signupFields){document.getElementById(`signup-${e}-feedback`).innerText=""}},window.doSignup=async e=>{const t=document.getElementById("signupName").value,n=document.getElementById("signupEmail").value,a=document.getElementById("signupPassword").value,r=document.getElementById("signupButton-1");if(0===t.length)return handleSignupError({errorCode:"noName",field:"name"});if(e<minimalSignupRecaptchaScore&&!signupRecaptcha&&(signupRecaptcha=await createButton(document.getElementById("signupRecaptchaButton"))),signupRecaptcha&&"success"!==signupRecaptcha.state)return handleSignupError({errorCode:recaptchaStateNames[loginRecaptcha.state],field:"recaptcha"});r.disabled=!0,preventRedirect=!0;try{await createEmailAccount(n,a),await setDisplayName(t)}catch(e){const t=firebaseErrorCodes[e.code];return handleSignupError({errorCode:t?.errorCode,field:t?.field,error:e})}finally{r.disabled=!1,preventRedirect=!1}redirect()};
+const signUpButton = document.getElementById('signUp');
+const signInButton = document.getElementById('signIn');
+const container = document.getElementById('container');
+const signUpButton_mobile = document.getElementById('signUp_mobile');
+const signInButton_mobile = document.getElementById('signIn_mobile');
+
+const alertScript = document.createElement('script');
+alertScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+document.head.appendChild(alertScript);
+
+function coolAlert(message) {
+    Swal.fire({
+        backdrop: true,
+        icon: 'warning',
+        title: getMessage('ErrorDialogueTitle'),
+        text: message,
+        confirmButtonText: getMessage('ErrorDialogueConfirm'),
+        confirmButtonColor: '#000'
+    });
+}
+
+signUpButton.addEventListener('click', () => {
+    container.classList.add('right-panel-active');
+});
+
+signInButton.addEventListener('click', () => {
+    container.classList.remove('right-panel-active');
+});
+
+signUpButton_mobile.addEventListener('click', () => {
+    container.classList.add('right-panel-active');
+});
+
+signInButton_mobile.addEventListener('click', () => {
+    container.classList.remove('right-panel-active');
+});
+
+
+import { setDisplayName } from '/js/settings.js';
+import {
+    loginWithEmail,
+    loginWithGithub,
+    createEmailAccount,
+    prepare2fa,
+    get2faMethods,
+    send2fa,
+    loginWith2fa
+} from '/js/login.js';
+
+import { getMessage } from '/sdk/language.js';
+import { onStateChange } from '/sdk/auth.js';
+import { createButton } from '/sdk/recaptcha.js';
+
+import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
+import {
+    minimalLoginRecaptchaScore,
+    minimalSignupRecaptchaScore
+} from '/common/settings.js';
+
+const urlParams = new URLSearchParams(window.location.search);
+const signup = urlParams.get('signup') === 'true';
+if (signup)
+    document.getElementById('container').classList.add('right-panel-active');
+if (urlParams.get('redirect'))
+    document.getElementById('forgotPassword').href += `?redirect=${encodeURIComponent(urlParams.get('redirect'))}`;
+
+let preventRedirect = false;
+onStateChange((user) => {
+    if (user && !preventRedirect) redirect();
+});
+
+const githubLoginButtons = [...deepQuerySelectorAll('.githubLoginButton')];
+for (const githubLoginButton of githubLoginButtons)
+    githubLoginButton.addEventListener('click', async () => {
+        try {
+            await loginWithGithub();
+        } catch (e) {
+            if (!['auth/popup-closed-by-user', 'auth/cancelled-popup-request', 'auth/user-cancelled'].includes(e.code)) {
+                const firebaseErrorCode = firebaseErrorCodes[e.code];
+                return handleSignupError({
+                    errorCode: firebaseErrorCode?.errorCode,
+                    field: firebaseErrorCode?.field,
+                    error: e
+                });
+            };
+        }
+    });
+
+const firebaseErrorCodes = {
+    'auth/user-not-found': {
+        errorCode: 'emailDoesNotExist',
+        field: 'email'
+    },
+    'auth/missing-email': {
+        errorCode: 'missingEmail',
+        field: 'email'
+    },
+    'auth/invalid-email': {
+        errorCode: 'invalidEmail',
+        field: 'email'
+    },
+    'auth/email-already-in-use': {
+        errorCode: 'emailAlreadyInUse',
+        field: 'email'
+    },
+    'auth/wrong-password': {
+        errorCode: 'wrongPassword',
+        field: 'password'
+    },
+    'auth/weak-password': {
+        errorCode: 'weakPassword',
+        field: 'password'
+    },
+    'auth/invalid-verification-code': {
+        errorCode: 'invalidVerificationCode',
+        field: 'verificationCode'
+    },
+    'auth/missing-code': {
+        errorCode: 'missingVerificationCode',
+        field: 'verificationCode'
+    },
+    'auth/too-many-requests': {
+        errorCode: 'tooManyRequests'
+    },
+    'auth/multi-factor-auth-required': {
+        errorCode: '2faRequired'
+    },
+    'auth/internal-error': {
+        errorCode: 'firebaseAuthInternalError'
+    },
+    'auth/popup-closed-by-user': {
+        errorCode: 'popupClosedByUser'
+    },
+    'auth/cancelled-popup-request': {
+        errorCode: 'popupCancelled'
+    },
+    'auth/user-cancelled': {
+        errorCode: 'userCancelled'
+    }
+};
+
+const recaptchaStateNames = {
+    ready: 'recaptchaNotSolved',
+    expired: 'recaptchaExpired',
+    error: 'recaptchaError'
+};
+
+let cachedErrorCodeMessages;
+async function getErrorCodeMessages() {
+    if (cachedErrorCodeMessages)
+        return cachedErrorCodeMessages;
+
+    cachedErrorCodeMessages = await fetch('/api/messages');
+    cachedErrorCodeMessages = await cachedErrorCodeMessages.json();
+    cachedErrorCodeMessages = cachedErrorCodeMessages.pages['/login'].error;
+
+    return cachedErrorCodeMessages;
+}
+
+const loginFields = [
+    'email',
+    'password',
+    'recaptcha',
+    'verificationCode',
+    '2fa-recaptcha'
+];
+async function handleLoginError({ errorCode, field, error }) {
+    const message =
+        (await getErrorCodeMessages())[errorCode] ??
+        errorCode ??
+        (error?.message
+            ? `${getMessage('Error')}: ${error.message}`
+            : getMessage('UnknownErrorOccurred'));
+
+    if (!field) return coolAlert(message);
+
+    if (!loginFields.includes(field))
+        throw new Error(`Invalid field: ${field}`);
+
+    for (const loginFieldId of loginFields) {
+        const feedbackElement = document.getElementById(
+            `login-${loginFieldId}-feedback`
+        );
+
+        if (loginFieldId === field) feedbackElement.innerText = message;
+        else feedbackElement.innerText = '';
+    }
+}
+window.removeLoginErrorFeedback = () => {
+    for (const loginFieldId of loginFields) {
+        const feedbackElement = document.getElementById(
+            `login-${loginFieldId}-feedback`
+        );
+        feedbackElement.innerText = '';
+    }
+};
+
+function choose2faMethod(_2faMethods) {
+    const chooseText = document.getElementById('choose2faMethodText');
+    const choose = document.getElementById('choose2faMethod');
+
+    return new Promise((res) => {
+        for (const index in _2faMethods) {
+            const { displayName, phoneNumber } = _2faMethods[index];
+
+            const button = document.createElement('button');
+            button.innerText = displayName
+                ? `${displayName} (${phoneNumber})`
+                : phoneNumber;
+            button.addEventListener('click', () => {
+                chooseText.style.display = 'none';
+                choose.style.display = 'none';
+                res(index);
+            });
+
+            choose.appendChild(button);
+        }
+
+        chooseText.style.display = null;
+        choose.style.display = null;
+    });
+}
+
+function wait2faRecaptchaSuccess(recaptchaObject) {
+    return new Promise((res) => {
+        recaptchaObject.onStateChange(() => {
+            if (['success', 'successBefore'].includes(recaptchaObject.state))
+                res();
+        });
+    });
+}
+
+let _2faError;
+async function enable2fa(error) {
+    _2faError = error;
+
+    const _2faRecaptchaContainer = document.getElementById('_2faRecaptchaContainer');
+
+    const nativeButton = document.getElementById('loginButton-1');
+    const signupRecaptchaButton = document.getElementById('signupRecaptchaButton');
+    const forgotPassword = document.getElementById('forgotPassword');
+    const loginRecaptchaButton = document.getElementById('loginRecaptchaButton');
+
+    const passwordElement = document.getElementById('loginPassword');
+    const emailElement = document.getElementById('loginEmail');
+
+    const verificationCodeInput = document.getElementById('verificationCodeInput');
+    const verify2faButton = document.getElementById('verify2faButton');
+
+    const verificationCodeStatus = document.getElementById('2faVerificationCodeStatus');
+
+    _2faRecaptchaContainer.style.display = null;
+
+    nativeButton.style.display = 'none';
+    signupRecaptchaButton.style.display = 'none';
+    forgotPassword.style.display = 'none';
+    loginRecaptchaButton.style.display = 'none';
+
+    passwordElement.disabled = true;
+    emailElement.disabled = true;
+
+    const recaptchaObject = await prepare2fa();
+
+    const _2faMethods = await get2faMethods(error);
+    let selectedIndex;
+
+    passwordElement.style.display = 'none';
+
+    if (_2faMethods.length === 1) selectedIndex = 0;
+    else selectedIndex = await choose2faMethod(_2faMethods);
+
+    if (!['success', 'successBefore'].includes(recaptchaObject.state))
+        await wait2faRecaptchaSuccess(recaptchaObject);
+
+    _2faRecaptchaContainer.style.display = 'none';
+
+    verificationCodeInput.style.cursor = 'wait';
+    verificationCodeInput.disabled = true;
+
+    verificationCodeInput.style.display = null;
+    verify2faButton.disabled = true;
+    verify2faButton.style.display = null;
+
+    verificationCodeStatus.innerText = getMessage('SendingVerificationCode');
+    verificationCodeStatus.style.display = null;
+
+    const { phoneNumber, displayName } = await send2fa(selectedIndex);
+
+    verificationCodeStatus.innerText =
+        `${getMessage('VerificationCodeSentTo')} {location}`.replace(
+            '{location}',
+            displayName ? `${displayName} (${phoneNumber})` : phoneNumber
+        );
+
+    verify2faButton.addEventListener(
+        'click',
+        () => (verify2faButton.disabled = true)
+    );
+    verify2faButton.disabled = false;
+
+    verificationCodeInput.disabled = false;
+    verificationCodeInput.style.cursor = null;
+}
+
+window.verify2fa = async () => {
+    if (!_2faError) throw new Error('No 2FA error found');
+
+    const verify2faButton = document.getElementById('verify2faButton');
+    const verificationCode = document.getElementById(
+        'verificationCodeInput'
+    ).value;
+
+    try {
+        await loginWith2fa(verificationCode);
+    } catch (e) {
+        const firebaseErrorCode = firebaseErrorCodes[e.code];
+        return handleLoginError({
+            errorCode: firebaseErrorCode?.errorCode,
+            field: firebaseErrorCode?.field,
+            error: e
+        });
+    } finally {
+        verify2faButton.disabled = false;
+    }
+};
+
+let loginRecaptcha;
+window.doLogin = async (recaptchaScore) => {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    const nativeButton = document.getElementById('loginButton-1');
+
+    // create login captcha if user is likely a bot
+    if (recaptchaScore < minimalLoginRecaptchaScore && !loginRecaptcha)
+        loginRecaptcha = await createButton(
+            document.getElementById('loginRecaptchaButton')
+        );
+
+    if (loginRecaptcha && loginRecaptcha.state !== 'success')
+        return handleLoginError({
+            errorCode: recaptchaStateNames[loginRecaptcha.state],
+            field: 'recaptcha'
+        });
+
+    nativeButton.disabled = true;
+    preventRedirect = true;
+    try {
+        window.removeLoginErrorFeedback();
+        await loginWithEmail(email, password);
+    } catch (e) {
+        if (e.code === 'auth/multi-factor-auth-required') return enable2fa(e);
+
+        const firebaseErrorCode = firebaseErrorCodes[e.code];
+        return handleLoginError({
+            errorCode: firebaseErrorCode?.errorCode,
+            field: firebaseErrorCode?.field,
+            error: e
+        });
+    } finally {
+        nativeButton.disabled = false;
+        preventRedirect = false;
+    }
+
+    redirect();
+};
+
+const signupFields = ['name', 'email', 'password', 'recaptcha'];
+async function handleSignupError({ errorCode, field, error }) {
+    const message =
+        (await getErrorCodeMessages())[errorCode] ??
+        errorCode ??
+        (error?.message
+            ? `${getMessage('Error')}: ${error.message}`
+            : getMessage('UnknownErrorOccurred'));
+
+    if (!field) return coolAlert(message);
+
+    if (!signupFields.includes(field))
+        throw new Error(`Invalid field: ${field}`);
+
+    for (const signupFieldId of signupFields) {
+        const feedbackElement = document.getElementById(
+            `signup-${signupFieldId}-feedback`
+        );
+
+        if (signupFieldId === field) feedbackElement.innerText = message;
+        else feedbackElement.innerText = '';
+    }
+}
+window.removeSignupErrorFeedback = () => {
+    for (const signupFieldId of signupFields) {
+        const feedbackElement = document.getElementById(
+            `signup-${signupFieldId}-feedback`
+        );
+        feedbackElement.innerText = '';
+    }
+};
+
+let signupRecaptcha;
+window.doSignup = async (recaptchaScore) => {
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    const nativeButton = document.getElementById('signupButton-1');
+
+    if (name.length === 0)
+        return handleSignupError({ errorCode: 'noName', field: 'name' });
+
+    // create login captcha if user is likely a bot
+    if (recaptchaScore < minimalSignupRecaptchaScore && !signupRecaptcha)
+        signupRecaptcha = await createButton(
+            document.getElementById('signupRecaptchaButton')
+        );
+
+    if (signupRecaptcha && signupRecaptcha.state !== 'success')
+        return handleSignupError({
+            errorCode: recaptchaStateNames[loginRecaptcha.state],
+            field: 'recaptcha'
+        });
+
+    nativeButton.disabled = true;
+    preventRedirect = true;
+    try {
+        await createEmailAccount(email, password);
+        await setDisplayName(name);
+    } catch (e) {
+        const firebaseErrorCode = firebaseErrorCodes[e.code];
+        return handleSignupError({
+            errorCode: firebaseErrorCode?.errorCode,
+            field: firebaseErrorCode?.field,
+            error: e
+        });
+    } finally {
+        nativeButton.disabled = false;
+        preventRedirect = false;
+    }
+
+    redirect();
+};
+
+function redirect() {
+    const redirectLocation = urlParams.get('redirect');
+
+    const doRedirect = redirectLocation !== null;
+    if (
+        doRedirect &&
+        new URL(redirectLocation).origin !== window.location.origin
+    )
+        Swal.fire({
+            title: getMessage('RedirectQuestionTitle'),
+            text: redirectLocation,
+            showCancelButton: true,
+            confirmButtonColor: '#000',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Nope!',
+            confirmButtonText: 'Yep!'
+        }).then((result) => {
+            if (result.isConfirmed)
+                window.open(redirectLocation, '_self')
+            else
+                window.open('/', '_self')
+        });
+    else {
+        if (redirectLocation)
+            window.open(redirectLocation, '_self')
+        else
+            window.open('/', '_self')
+    }
+
+
+}

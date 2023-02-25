@@ -1,1 +1,48 @@
-const settings=require("../../../settings.json"),isModuleInstalled=require("../isModuleInstalled").execute,fs=require("fs");let requestInfo;isModuleInstalled("requestInfo")&&(requestInfo=require(`../../../${settings.generic.path.files.modules}requestInfo/getInfo`).execute),module.exports={execute(e){let s=e?.files;const t=e?.request,n=[];if(s||(s=fs.readdirSync(settings.generic.path.files.messages)),s.forEach((e=>{n.push(e.split(".json")[0])})),n.length<1)return null;let i,l=[];t&&requestInfo?l=requestInfo(t).lang||[]:t&&t.headers["accept-language"]&&(l=[{name:t.headers["accept-language"].split(",").split(";")[0].split("-")[0],quality:1}]);let a=!1;return t&&l.forEach((e=>{a||n.includes(e.name)&&(i=e.name,a=!0)})),settings.generic.lang.forEach((e=>{a||n.includes(e)&&(i=e,a=!0)})),a||(i=n[0],a=!0),{lang:i,file:`${i}.json`,mainPath:settings.generic.path.files.messages,mainFunction:()=>JSON.parse(fs.readFileSync(`${settings.generic.path.files.messages}${i}.json`))}}};
+const settings = require('../../../settings.json');
+const requestInfo = require('../../../modules/requestInfo/getInfo').execute;
+
+module.exports = {
+    execute({ request } = {}) {
+        const languages = getLanguages(request);
+        let messages = {};
+
+        for (const lang of languages) {
+            const langMessages = require(`../../../messages/${lang}.json`);
+            messages = combineMessages(messages, langMessages);
+        };
+
+        return {
+            languages,
+            mainFunction: () => { return messages }
+        }
+
+    }
+}
+
+function combineMessages(oldMessages, newMessages) {
+    const messages = Object.assign({}, oldMessages);
+
+    for (const [key, newValue] of Object.entries(newMessages))
+        if (messages[key] === undefined)
+            messages[key] = newValue;
+        else if (typeof newValue === 'object')
+            messages[key] = combineMessages(newValue, newMessages[key]);
+        else
+            messages[key] = newValue;
+
+    return messages;
+}
+
+function getLanguages(request) {
+    if (!request) return settings.generic.lang;
+
+    let languages =
+        (requestInfo(request).lang?.map?.(({ name }) => name) ?? [])
+            .filter(lang => settings.generic.lang.includes(lang));
+
+    languages.push(...settings.generic.lang);
+
+    languages = [...new Set(languages)];
+
+    return languages;
+}

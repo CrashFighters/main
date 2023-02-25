@@ -1,1 +1,18 @@
-const npm=require("npm");module.exports={execute(r){if(!JSON.stringify(r).startsWith("["))throw new Error(`Modules (${r}) (${JSON.stringify(r)}) is not an array`);return new Promise((n=>{npm.load((t=>{if(t)throw t;npm.commands.install(r,(r=>{if(r)throw r;n()}))}))}))}};
+const npm = require('npm');
+module.exports = {
+    execute(modules) {
+        if (!JSON.stringify(modules).startsWith('['))
+            throw new Error(`Modules (${modules}) (${JSON.stringify(modules)}) is not an array`)
+
+        return new Promise(resolve => {
+            npm.load(err => {
+                if (err) throw err;
+
+                npm.commands.install(modules, err => {
+                    if (err) throw err;
+                    resolve()
+                })
+            })
+        })
+    }
+}

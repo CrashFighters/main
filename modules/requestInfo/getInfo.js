@@ -1,1 +1,67 @@
-const sniffr=require("sniffr");module.exports={dependencies:{},execute(e,n){const s=new sniffr;s.sniff(e.headers["user-agent"]);const o=(e.headers["x-forwarded-for"]||"").split(",").pop().trim()||e.connection.remoteAddress||e.socket.remoteAddress||e.connection.socket.remoteAddress,r={};o&&(r.ip={value:o}),n&&(r.cookie=n);const t={name:"Unknown"===s.browser.name?null:s.browser.name,version:"Unknown"===s.browser.version?null:s.browser.version};(t.name||t.version)&&(r.browser=t);const i={name:"Unknown"===s.os.name?null:s.os.name,version:"Unknown"===s.os.version?null:s.os.version};(i.name||i.version)&&(r.os=i);const l={name:"Unknown"===s.device.name?null:s.device.name};l.name&&(r.device=l);const a=[],c=e.headers["accept-language"];if(c){c.split(",").forEach((e=>{const n=e.split(";")[0].split("-")[0];let s=null;e.split(";")[0].split("-").length>1&&(s=e.split(";")[0].split("-")[1]);let o=1;e.split(";").length>1&&(o=parseFloat(e.split(";")[1].split("q=")[1]));const r={name:n,quality:o};s&&(r.region=s),a.push(r)})),r.lang=a}return r}};
+const sniffr = require('sniffr');
+
+module.exports = {
+    dependencies: {},
+    execute(request, cookie) {
+        const s = new sniffr();
+        s.sniff(request.headers['user-agent']);
+
+        const ip = (request.headers['x-forwarded-for'] || '').split(',').pop().trim() || request.connection.remoteAddress || request.socket.remoteAddress || request.connection.socket.remoteAddress;
+
+        const object = {};
+
+        if (ip)
+            object.ip = {
+                value: ip
+            };
+        if (cookie) object.cookie = cookie;
+
+        const browser = {
+            name: s.browser.name === 'Unknown' ? null : s.browser.name,
+            version: s.browser.version === 'Unknown' ? null : s.browser.version
+        };
+        if (browser.name || browser.version) object.browser = browser;
+
+        const os = {
+            name: s.os.name === 'Unknown' ? null : s.os.name,
+            version: s.os.version === 'Unknown' ? null : s.os.version
+        };
+        if (os.name || os.version) object.os = os;
+
+        const device = {
+            name: s.device.name === 'Unknown' ? null : s.device.name
+        };
+        if (device.name) object.device = device;
+
+        const langObject = [];
+
+        const langHeader = request.headers['accept-language'];
+        if (langHeader) {
+            const langs = langHeader.split(',');
+
+            langs.forEach((val) => {
+                const lang = val.split(';')[0].split('-')[0];
+                let region = null;
+                if (val.split(';')[0].split('-').length > 1) region = val.split(';')[0].split('-')[1];
+
+                let quality = 1;
+                if (val.split(';').length > 1) {
+                    quality = parseFloat(val.split(';')[1].split('q=')[1]);
+                }
+
+                const out = {
+                    name: lang,
+                    quality
+                };
+
+                if (region) out.region = region;
+
+                langObject.push(out);
+            });
+
+            object.lang = langObject;
+        }
+
+        return object;
+    }
+};

@@ -1,1 +1,22 @@
-const settings=require("../../../settings.json");module.exports={execute(t){const e=t.split(settings.generic.path.online.api).join(""),s={};let i=e;return i.includes("?")&&i.split("?")[1]&&(i.split("?")[1].split("&").forEach((t=>{s[t.split("=")[0]]=decodeURIComponent(t.split("=")[1].replace(/\+/g," "))})),i=i.split("?")[0]),i=`/${i}`,{path:i,params:s}}};
+const urlLibrary = require('url');
+
+module.exports = {
+    execute(request) {
+        const url = urlLibrary.parse(request.url);
+        const path = `/${url.pathname.split('/api/').slice(1).join('/api/')}`;
+
+        let success = true;
+        let params = null;
+
+        if (['GET', 'DELETE'].includes(request.method))
+            params = url.query ? Object.fromEntries(url.query.split('&').map(a => a.split('='))) : {};
+        else if (request.headers['content-type'] === 'application/json')
+            try {
+                params = JSON.parse(request.headers.body);
+            } catch {
+                success = false;
+            }
+
+        return { path, params, success };
+    }
+}

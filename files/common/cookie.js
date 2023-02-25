@@ -1,1 +1,13 @@
-export function getCookie(e){const t=`${e}=`,o=document.cookie.split(";");for(let e of o){for(;" "===e.charAt(0);)e=e.substring(1,e.length);if(0===e.indexOf(t))return e.substring(t.length,e.length)}return null}export function deleteCookie(e){document.cookie=e+"=; expires=Thu, 01 Jan 1970 00:00:01 GMT;"}
+export function getCookies() {
+    return Object.fromEntries(
+        document.cookie.split('; ').map((cookie) => [cookie.split('=')[0], cookie.split('=')[1]])
+    );
+}
+
+export function getCookie(name) {
+    return getCookies()[name] ?? null;
+}
+
+export function deleteCookie(name) {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}

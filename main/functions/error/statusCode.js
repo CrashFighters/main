@@ -1,1 +1,48 @@
-const fs=require("fs"),settings=require("../../../settings.json");let gMessages;try{gMessages=require("../get/messages").execute().mainFunction()}catch(e){gMessages=void 0}const mime=require("mime-types");module.exports={execute(e,r,t){e.writeHead(r,{"Content-Type":"text/plain"}),t||(t={});const s=t.errorFile,o=t.text;let i,a="";gMessages&&(i=gMessages.httpStatusCodes[100*(r+"").split("")[0]]),i&&i[r]&&(a=i[r]);const g=settings.generic.path.files.errorFile.replace("{files}",settings.generic.path.files.files);fs.readFile(g,(async function(t,i){if(t)throw t;let n=i,f=n.toString("utf-8").replace("|errorCode|",r).replace("|errorCodeMessage|",a).replace("|reloadText|",gMessages?gMessages.error.reload:"Reload");return n=Buffer.from(f,"utf-8"),s&&(f=n.toString("utf-8").replace("|errorFile|",s),n=Buffer.from(f,"utf-8")),o&&(f=n.toString("utf-8").replace("|errorMessage|",o),n=Buffer.from(f,"utf-8")),e.writeHead(r,{"Content-Type":mime.lookup(g)}),e.end(n)}))}};
+const fs = require('fs');
+const settings = require('../../../settings.json');
+let gMessages;
+try {
+    gMessages = require('../get/messages').execute().mainFunction();
+} catch (err) {
+    gMessages = undefined;
+}
+const mime = require('mime-types');
+
+module.exports = {
+    execute(response, code, extra) {
+        response.writeHead(code, { 'Content-Type': 'text/plain' });
+        if (!extra) extra = {};
+        const errorFile = extra.errorFile;
+        const customText = extra.text;
+        let text = '';
+
+        let errorMessage;
+        if (gMessages)
+            errorMessage = gMessages.httpStatusCodes[(code + '').split('')[0] * 100];
+
+        if (errorMessage) if (errorMessage[code]) text = errorMessage[code];
+
+        const path = settings.generic.path.files.errorFile.replace('{files}', settings.generic.path.files.files);
+
+        fs.readFile(path, async function (err, data) {
+            if (err) throw err;
+            let newData = data;
+
+            let newText = newData.toString('utf-8').replace('|errorCode|', code).replace('|errorCodeMessage|', text).replace('|reloadText|', gMessages ? gMessages.error.reload : 'Reload');
+            newData = Buffer.from(newText, 'utf-8');
+
+            if (errorFile) {
+                newText = newData.toString('utf-8').replace('|errorFile|', errorFile);
+                newData = Buffer.from(newText, 'utf-8');
+            }
+
+            if (customText) {
+                newText = newData.toString('utf-8').replace('|errorMessage|', customText);
+                newData = Buffer.from(newText, 'utf-8');
+            }
+
+            response.writeHead(code, { 'Content-Type': mime.lookup(path) });
+            return response.end(newData);
+        });
+    }
+}

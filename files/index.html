@@ -1,1 +1,87 @@
-<!doctype html><html lang=en><meta charset=UTF-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><title>Home</title><script type=module src=/sdk/auth.js></script><script type=module src=/sdk/zeroTap.js></script><script type=module src=/sdk/templates.js></script><script>function test(t,e){console.log("Got template update: "+t+" = "+e)}</script><button type=button onclick=window.auth.logout() data-template=loggedIn data-template_insert=disabled data-template_fallback=true>log out</button> <button type=button onclick=window.auth.login() data-template=loggedOut data-template_insert=disabled data-template_fallback=false>login</button> Welcome <span data-template=displayName data-template_fallback="unknown person"></span>! Your email is <span data-template=email data-template_fallback=unknown data-template_update_callback=test></span>. <img data-template=picture data-template_insert=src referrerpolicy=no-referrer>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home</title>
+
+  <script type="module" src="/sdk/auth.js"></script>
+  <script type="module" src="/sdk/zeroTap.js"></script>
+  <script type="module" src="/sdk/templates.js"></script>
+  <script type="module" src="/sdk/language.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+  <noscript>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+
+    <div style="
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: #fff;
+          z-index: 999;
+        ">
+      <div style="
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+          ">
+        <h1 style="
+              font-size: 2rem;
+              font-weight: 700;
+              margin-bottom: 1rem;
+              font-family: 'Roboto', sans-serif;
+              color: #f00;
+            ">
+          <i class="fa fa-exclamation-triangle"></i>
+          JavaScript is disabled
+        </h1>
+        <p style="
+              font-size: 1.5rem;
+              font-weight: 400;
+              margin-bottom: 1rem;
+              font-family: 'Roboto', sans-serif;
+            ">
+          This site requires JavaScript to function properly. Please enable
+          JavaScript in your browser.
+        </p>
+      </div>
+    </div>
+  </noscript>
+
+  <script>
+    function test(template, value) {
+      console.log("Got template update: " + template + " = " + value);
+    }
+    var localVar = "localVar";
+  </script>
+</head>
+
+<body>
+  <button type="button" onclick="window.auth.logout()" data-template="loggedIn" data-template_insert="disabled"
+    data-template_fallback="true">
+    <span data-lang_text="Logout"> log out </span>
+  </button>
+  <button type="button" onclick="window.auth.login()" data-template="loggedOut" data-template_insert="disabled"
+    data-template_fallback="false">
+    <span data-lang_text="Login">login</span>
+  </button>
+
+  <span data-lang_text="Welcome">Welcome</span>
+  <span data-template="displayName" data-template_fallback_lang_text="unknownPerson"></span>. <span
+    data-lang_text="YourEmailIs">Your email is</span>
+  <span data-template="email" data-template_fallback_lang_text="unknown" data-template_update_callback="test"></span>.
+  <img data-template="picture" data-template_insert="src" referrerpolicy="no-referrer" />
+
+  <div data-template="custom" data-template_var="localVar"></div>
+</body>
+
+</html>

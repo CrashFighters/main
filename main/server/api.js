@@ -1,1 +1,64 @@
-const api=require("../setup/preload/api.js").execute(),isModuleInstalled=require("../functions/isModuleInstalled.js").execute,parseErrorOnline=require("../functions/error/parseErrorOnline.js").execute,statusCode=(e,r,{text:t,short:o})=>{e.writeHead(r,{"Content-Type":"application/json"}),e.end(JSON.stringify({error:!0,code:r,text:t,short:o}))};module.exports={execute(e,r,{middleWareData:t,extraData:o}){const n=(e,t)=>parseErrorOnline(e,r,t);try{const a=require("../functions/get/messages").execute({request:e}).mainFunction(),{path:s,params:i}=require("../functions/parse/apiCall.js").execute(e.url);if(!api[s])return statusCode(r,404,{text:a.error.apiCallNotFound});if(!api[s].enabled.dependencies.installed)return n(new Error(a.error.moduleNotInstalledForShort.replace("{api}",s)),a.error.moduleNotInstalledFor.replace("{api}",s).replace("{dependency}",api[s].enabled.dependencies.dependenciesNotInstalled.join(", ")));{const d=api[s].file;if(!Boolean(d?.execute))return n(new Error(a.error.executeFunctionNotFoundWithFile.replace("{file}",s)),a.error.executeFunctionNotFound);if("GET"!==e.method)throw new Error(`Method ${e.method} not implemented`);d.execute({statusCode:(e,t,o)=>{statusCode(r,e,{text:o,short:t})},parseError:n,end:e=>{r.end(e)},request:e,isModuleInstalled:isModuleInstalled,params:i,response:r,middleWareData:t,extraData:o})}}catch(e){n(e)}}};
+const api = require('../setup/preload/api.js').execute();
+
+const isModuleInstalled = require('../functions/isModuleInstalled.js').execute;
+const parseErrorOnline = require('../functions/error/parseErrorOnline.js').execute;
+
+const statusCode = (response, code, { text, short }) => {
+    response.writeHead(code, { 'Content-Type': 'application/json' });
+    response.end(JSON.stringify({
+        successful: `${code}`.startsWith('2'),
+        code,
+        text,
+        short
+    }));
+}
+
+module.exports = {
+    execute(request, response, { middlewareData, extraData }) {
+        const parseError = (error, customText) => parseErrorOnline(error, response, customText);
+
+        try {
+            const messages = require('../functions/get/messages').execute({ request }).mainFunction();
+            const { path, params, success } = require('../functions/parse/apiCall.js').execute(request);
+
+            if (!success) {
+                statusCode(response, 400, { text: 'Invalid request', short: 'invalidRequest' });
+                return;
+            }
+
+            if (api[path])
+                if (api[path].enabled.dependencies.installed) {
+                    const file = api[path].file;
+                    const executeFunctionExists = Boolean(file?.execute);
+
+                    if (!executeFunctionExists)
+                        return parseError(new Error(messages.error.executeFunctionNotFoundWithFile.replace('{file}', path)), messages.error.executeFunctionNotFound);
+
+                    if (request.method === 'GET')
+                        file.execute({
+                            statusCode: (code, short, text) => {
+                                statusCode(response, code, { text, short });
+                            },
+                            parseError,
+                            end: data => {
+                                response.end(data);
+                            },
+                            request,
+                            isModuleInstalled,
+                            params,
+                            response,
+                            middlewareData,
+                            extraData
+                        });
+                    else
+                        statusCode(response, 405, { text: 'Method not allowed', short: 'methodNotAllowed' });
+                } else
+                    return parseError(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', path)), messages.error.moduleNotInstalledFor.replace('{api}', path).replace('{dependency}', api[path].enabled.dependencies.dependenciesNotInstalled.join(', ')));
+            else
+                return statusCode(response, 404, { text: messages.error.apiCallNotFound });
+
+        } catch (err) {
+            parseError(err);
+        }
+    }
+}

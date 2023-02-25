@@ -1,1 +1,3 @@
-module.exports=t=>Object.fromEntries(t.split("&").map((t=>t.split("="))));
+module.exports = (body) => {
+    return Object.fromEntries(body.split('&').map(a => a.split('=')));
+}

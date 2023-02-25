@@ -1,1 +1,58 @@
-const fs=require("fs"),{readdirSync:readdirSync,existsSync:existsSync,statSync:statSync}=fs,isModuleInstalled=require("../../functions/isModuleInstalled").execute,parseErrorRaw=require("../../functions/error/parseErrorRaw").execute,evalErrors=require("../../functions/error/evalErrors").execute,messages=require("../../functions/get/messages").execute().mainFunction(),generic=require("../../../settings.json").generic,api={};for(const e of readdirSync(generic.path.files.modules))addApiCalls("/",generic.path.files.moduleApi.replace("{modules}",generic.path.files.modules).replace("{name}",e));function addApiCalls(e,r){if(existsSync(r))for(const s of readdirSync(r))if(statSync(`${r}${s}`).isDirectory())addApiCalls(`${e}${s}/`,`${r}${s}/`);else{const i=s.split(".js")[0],n=require(`../../../${r}${i}`);let a=!0;const l=[];if(n.dependencies&&n.dependencies.modules)for(const e of n.dependencies.modules)existsSync(`${generic.path.files.modules}${e}/`)||(a=!1,l.push(e));api[`${e}${i}`]={file:require(`../../../${r}${i}`),enabled:{dependencies:{installed:a,dependenciesNotInstalled:l}}},a||isModuleInstalled("text")&&(parseErrorRaw(new Error(messages.error.moduleNotInstalledForShort.replace("{api}",`${e}${i}`)),messages.error.moduleNotInstalledFor.replace("{api}",`${e}${i}`).replace("{dependency}",l.join(", "))),evalErrors())}}addApiCalls("/",generic.path.files.api),module.exports={execute:()=>api};
+const fs = require('fs');
+const { readdirSync, existsSync, statSync } = fs;
+
+const parseErrorRaw = require('../../functions/error/parseErrorRaw').execute;
+const evalErrors = require('../../functions/error/evalErrors').execute;
+const messages = require('../../functions/get/messages').execute().mainFunction()
+
+const generic = require('../../../settings.json').generic;
+const api = {};
+
+//Load module api
+for (const moduleName of readdirSync(generic.path.files.modules))
+    addApiCalls('/', generic.path.files.moduleApi.replace('{modules}', generic.path.files.modules).replace('{name}', moduleName));
+
+//Load website api
+addApiCalls('/', generic.path.files.api);
+
+function addApiCalls(websitePath, path) {
+    if (existsSync(path)) {
+        for (const name of readdirSync(path))
+            if (statSync(`${path}${name}`).isDirectory())
+                addApiCalls(`${websitePath}${name}/`, `${path}${name}/`);
+            else {
+                const apiName = name.split('.js')[0];
+                const file = require(`../../../${path}${apiName}`);
+
+                let dependenciesInstalled = true;
+                const dependenciesNotInstalled = [];
+                if (file.dependencies && file.dependencies.modules)
+                    for (const dependency of file.dependencies.modules)
+                        if (!existsSync(`${generic.path.files.modules}${dependency}/`)) {
+                            dependenciesInstalled = false;
+                            dependenciesNotInstalled.push(dependency);
+                        }
+
+                api[`${websitePath}${apiName}`] = {
+                    file: require(`../../../${path}${apiName}`),
+                    enabled: {
+                        dependencies: {
+                            installed: dependenciesInstalled,
+                            dependenciesNotInstalled
+                        }
+                    }
+                };
+
+                if (!dependenciesInstalled) {
+                    parseErrorRaw(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', `${websitePath}${apiName}`)), messages.error.moduleNotInstalledFor.replace('{api}', `${websitePath}${apiName}`).replace('{dependency}', dependenciesNotInstalled.join(', ')));
+                    evalErrors();
+                }
+            }
+    }
+}
+
+module.exports = {
+    execute() {
+        return api;
+    }
+}

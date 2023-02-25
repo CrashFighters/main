@@ -1,1 +1,65 @@
-const fs=require("fs"),path=require("path"),middlewares=fs.existsSync(path.resolve(__dirname,"./middleware/"))?fs.readdirSync(path.resolve(__dirname,"./middleware/")).map((e=>require(`./middleware/${e}`))):null,settings=require("../../settings.json"),parseErrorOnline=require("../functions/error/parseErrorOnline").execute,parsePostBody=require("../functions/parse/postBody");function waitPost(e){return new Promise((r=>{let t="";e.on("data",(r=>{t+=r,t.length>1e6&&e.connection.destroy()})),e.on("end",(()=>{r(t)}))}))}module.exports={async execute(e,r){const t=(e,t)=>parseErrorOnline(e,r,t);try{let a;"POST"===e.method&&(a=parsePostBody(await waitPost(e)));const s={body:a};let n={};if(middlewares)for(const a of middlewares){const i=await a({request:e,response:r,extraData:s,parseError:t})??{};n={...n,...i}}return e.url.toLowerCase().startsWith(settings.generic.path.online.api)?require("../server/api.js").execute(e,r,{middlewareData:n,extraData:s}):require("./normal.js").execute(e,r,{middlewareData:n,extraData:s})}catch(e){t(e)}}};
+const fs = require('fs');
+const path = require('path');
+
+const middlewares = fs.existsSync(path.resolve(__dirname, './middleware/')) ?
+    fs.readdirSync(path.resolve(__dirname, './middleware/')).map(a => ({ ...require(`./middleware/${a}`), name: a.split('.')[0] })) :
+    [];
+
+const parseErrorOnline = require('../functions/error/parseErrorOnline').execute;
+const parsePostBody = require('../functions/parse/postBody');
+
+module.exports = {
+    async execute(request, response) {
+        const parseError = (error, customText) => parseErrorOnline(error, response, customText);
+
+        try {
+            let body;
+            if (request.method === 'POST')
+                body = parsePostBody(await waitPost(request));
+
+            const extraData = { body };
+
+            let middlewareData = {};
+            const executedMiddlewares = [];
+
+            while (middlewares.length > executedMiddlewares.length)
+                for (const { execute, info, name } of middlewares) {
+                    if (executedMiddlewares.includes(name)) continue;
+                    if (info?.requires && info.requires.some(name => !executedMiddlewares.includes(name))) continue;
+
+                    const newMiddlewareData = await execute({ request, response, extraData, parseError, middlewareData }) ?? {};
+                    middlewareData = { ...middlewareData, ...newMiddlewareData };
+
+                    executedMiddlewares.push(name);
+                };
+
+            if (request.url.startsWith('/dbApi/'))
+                return require('./dbApi.js').execute(request, response, { middlewareData, extraData });
+            else if (request.url.startsWith('/api/'))
+                return require('./api.js').execute(request, response, { middlewareData, extraData });
+            else
+                return require('./normal.js').execute(request, response, { middlewareData, extraData });
+
+        } catch (err) {
+            parseError(err);
+        }
+    }
+}
+
+function waitPost(request) {
+    return new Promise(res => {
+
+        let body = '';
+        request.on('data', data => {
+            body += data;
+
+            if (body.length > 1e6)
+                request.connection.destroy();
+        });
+
+        request.on('end', () => {
+            res(body);
+        });
+
+    });
+}

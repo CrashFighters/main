@@ -1,1 +1,0 @@
-const settings=require("./settings.json");module.exports={execute(s){const e={numbers:!0,confusingNumbers:!0,letters:!0,confusingLetters:!0,...s};let t="";return e.numbers&&(t+=settings.chars.numbers),e.confusingNumbers&&(t+=settings.chars.confusingNumbers),e.letters&&(t+=settings.chars.confusingLetters),e.confusingLetters&&(t+=settings.chars.confusingLetters),t}};

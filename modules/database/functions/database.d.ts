@@ -2,25 +2,33 @@ export function get(): database;
 export function set(database: database): void;
 
 type database = {
-    communities: community[];
+    communities: {
+        [communityId: string]: community;
+    };
 };
 
 type community = {
-    posts: post[];
+    posts: {
+        [postId: string]: post;
+    };
     id: string;
     name: string;
+    owner: string;
 };
 
 type post = {
     id: string;
-    user: string;
-    message: string;
-    votes: vote[];
+    user: string; //todo: rename to owner
+    message: string; //todo: rename to content
+    votes: {
+        [userId: string]: vote;
+    };
     perspective: perspective;
 };
 
 type vote = {
-    user: string;
+    //todo: add separate id value
+    user: string; //todo: rename to owner
     isUpvote: boolean;
 };
 

@@ -1,1 +1,0 @@
-const messages=require("../../main/functions/get/messages").execute().mainFunction(),and=messages.and,comma=",";module.exports={createList(e){if(0===e.length)return"";if(1===e.length)return e[0];if(2===e.length)return`${e[0]} ${and} ${e[1]}`;let n=e.slice(0,-1).join(",");return n+=` ${and} ${e[e.length-1]}`,n}};

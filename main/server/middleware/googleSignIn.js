@@ -1,1 +1,32 @@
-const{client_id:client_id}=require("../../../credentials/googleClientId.json"),{setCredential:setCredential}=require("../../../api/getGoogleSignInCredential.js"),{OAuth2Client:OAuth2Client}=require("google-auth-library"),client=new OAuth2Client(client_id);module.exports=async({extraData:e,parseError:t})=>{try{if(!e.body?.g_csrf_token)return;const{credential:t,clientId:i,g_csrf_token:n}=e.body,r=await client.verifyIdToken({idToken:t,audience:i}),l=r.getPayload().sub;return setCredential(n,t),{googleUserId:l}}catch(e){t(e)}};
+const { client_id } = require('../../../credentials/googleClientId.json');
+
+const { setCredential } = require('../../../api/getGoogleSignInCredential.js');
+
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(client_id);
+
+module.exports = {
+    async execute({ extraData, parseError }) {
+        try {
+
+            if (!extraData.body?.g_csrf_token) return;
+
+            const { credential, clientId, g_csrf_token } = extraData.body;
+
+            //todo: add error handling with invalid token instead of server error
+            const ticket = await client.verifyIdToken({
+                idToken: credential,
+                audience: clientId
+            });
+            const payload = ticket.getPayload();
+            const userid = payload['sub'];
+
+            setCredential(g_csrf_token, credential);
+
+            return { googleUserId: userid }
+
+        } catch (e) {
+            parseError(e);
+        }
+    }
+}

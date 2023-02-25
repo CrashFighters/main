@@ -25,6 +25,10 @@
         "no-unreachable": "warn",
         "eqeqeq": "warn",
         "prefer-const": "warn",
+        "comma-dangle": [
+            "warn",
+            "never"
+        ],
         "quotes": [
             "warn",
             "single",
@@ -43,6 +47,8 @@
         "Proxy": true,
         "Reflect": true,
         "grecaptcha": true,
-        "Toastify": true
+        "Toastify": true,
+        "Swal": true,
+        "google": true
     }
 }
