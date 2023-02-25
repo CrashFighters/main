@@ -15,6 +15,7 @@ async function postRequest(path, params) {
             ...(await getAuthHeaders())
         }
     });
+    if ([401, 403].includes(response.status)) throw new Error('Unauthorized');
     const result = await response.json();
     if (!response.ok) throw new Error(JSON.stringify(result));
 
@@ -28,6 +29,7 @@ async function getRequest(path, params) {
             ...(await getAuthHeaders())
         }
     });
+    if ([401, 403].includes(response.status)) throw new Error('Unauthorized');
     const result = await response.json();
     if (!response.ok) throw new Error(JSON.stringify(result));
 
@@ -43,6 +45,7 @@ async function putRequest(path, params) {
             ...(await getAuthHeaders())
         }
     });
+    if ([401, 403].includes(response.status)) throw new Error('Unauthorized');
     const result = await response.json();
     if (!response.ok) throw new Error(JSON.stringify(result));
 
@@ -56,6 +59,7 @@ async function deleteRequest(path, params) {
             ...(await getAuthHeaders())
         }
     });
+    if ([401, 403].includes(response.status)) throw new Error('Unauthorized');
     const result = await response.json();
     if (!response.ok) throw new Error(JSON.stringify(result));
 
