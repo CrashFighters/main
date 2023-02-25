@@ -82,7 +82,6 @@ if (googleSignInIdToken) {
 
     deleteCookie('g_csrf_token');
 
-    //todo: add error handling
     const response = await fetch(`/api/getGoogleSignInCredential?token=${googleSignInIdToken}`);
     if (!response.ok) throw new Error('Failed to get Google Sign In credential')
 
