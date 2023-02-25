@@ -1,4 +1,5 @@
+const queue = require('../data/queue.json');
+
 module.exports = ({ community, post }) => {
-    //todo
-    console.warn('todo: modules/perspective/functions/addPostToQueue')
-}
+    queue.push({ community, post });
+};
