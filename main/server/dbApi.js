@@ -13,7 +13,7 @@ const statusCode = (response, code, { text, short }) => {
 }
 
 module.exports = {
-    execute(request, response, { middlewareData }) {
+    async execute(request, response, { middlewareData }) {
         const parseError = (error, customText) => parseErrorOnline(error, response, customText);
 
         try {
@@ -25,7 +25,7 @@ module.exports = {
                 return;
             }
 
-            const db = get();
+            const db = await get();
 
             doApiCall({
                 db,
