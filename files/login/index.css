@@ -2,6 +2,32 @@
 	box-sizing: border-box;
 }
 
+.githubLoginButton {
+	height: 80%;
+	aspect-ratio: 1 / 1;
+
+	border-radius: 50%;
+	cursor: pointer;
+
+	background-image: url('/img/logo/github.svg');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+.googleLoginButtonWrapper {
+	width: 230px;
+	height: 44px;
+}
+
+.social-container {
+	margin: 20px 0;
+
+	display: flex;
+	justify-content: center;
+	gap: 2vw;
+}
+
 .errorFeedback {
 	color: red;
 	margin: 0;
@@ -260,12 +286,6 @@ input.disabled {
 
 .container.right-panel-active .overlay-right {
 	transform: translateX(20%);
-}
-
-.social-container {
-	margin: 20px 0;
-	height: 44px;
-	/* google sign in button height */
 }
 
 .social-container a {
