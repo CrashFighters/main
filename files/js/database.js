@@ -140,7 +140,7 @@ class Community {
 
         const customPostProperties = {
             async create(properties) {
-                const post = await postRequest('post', properties);
+                const post = await postRequest('post', { community, ...properties });
                 postCache[post] = new Post({ community, post });
                 postIds.push(post);
 
@@ -207,7 +207,7 @@ class Post {
 
         const customVoteProperties = {
             async create(properties) {
-                const vote = await postRequest('vote', properties);
+                const vote = await postRequest('vote', { community, post, ...properties });
                 voteCache[vote] = new Vote({ community, post, vote });
                 voteIds.push(vote);
 
