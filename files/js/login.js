@@ -29,8 +29,6 @@ export async function loginWithGithub() {
     };
 }
 
-window.e = loginWithGithub; //todo: remove
-
 export async function loginWithEmail(email, password) {
     try {
         await signInWithEmailAndPassword(auth, email, password);
