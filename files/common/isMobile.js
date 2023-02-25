@@ -5,9 +5,8 @@ function isTouchDevice() {
 }
 
 export function isMobile() {
-    if (!isTouchDevice()) return false;
-
-    //todo: add more checks
-
-    return true;
+    if ('matchMedia' in window)
+        return window.matchMedia('(any-hover: none)').matches;
+    else
+        return isTouchDevice();
 }
