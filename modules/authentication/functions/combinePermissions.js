@@ -10,32 +10,28 @@ function combinePermissions(permissions) {
 }
 
 function combinePermissionsRecursive(oldPermissions, newPermissions) {
-    const currentPermissions = Object.assign({}, oldPermissions);
+    if (typeof oldPermissions !== 'object') return newPermissions;
+    else if (typeof oldPermissions === 'object' && typeof newPermissions !== 'object')
+        return setPermissionsRecursive(oldPermissions, newPermissions);
+    else if (typeof oldPermissions === 'object' && typeof newPermissions === 'object') {
 
-    for (const [name, newPermission] of Object.entries(newPermissions)) {
-        const currentPermission = currentPermissions[name];
+        const currentPermissions = Object.assign({}, oldPermissions);
 
-        if (typeof currentPermission !== 'object')
-            currentPermissions[name] = newPermission;
-        else if (typeof currentPermission === 'object' && typeof newPermission === 'object')
-            currentPermissions[name] = combinePermissionsRecursive(currentPermission, newPermission);
-        else if (typeof currentPermission === 'object' && typeof newPermission !== 'object')
-            currentPermissions[name] = setPermissionsRecursive(currentPermission, newPermission);
-        else
-            throw new Error(`Don't know how to combine ${typeof currentPermission} and ${typeof newPermission}`)
-    }
+        for (const [name, newPermission] of Object.entries(newPermissions))
+            currentPermissions[name] = combinePermissionsRecursive(currentPermissions[name], newPermission);
 
-    return currentPermissions;
+        return currentPermissions;
+
+    } else
+        throw new Error(`Don't know how to combine ${typeof currentPermission} and ${typeof newPermission}`)
 }
 
 function setPermissionsRecursive(o, permission) {
+    if (typeof o !== 'object') return permission;
     const obj = Object.assign({}, o);
 
     for (const [name, value] of Object.entries(obj))
-        if (typeof value === 'object')
-            obj[name] = setPermissionsRecursive(value, permission);
-        else
-            obj[name] = permission;
+        obj[name] = setPermissionsRecursive(value, permission);
 
     return obj;
 }
