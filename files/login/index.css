@@ -69,11 +69,6 @@ body {
 	padding: 0.4vmax;
 }
 
-/* smaller when clicked */
-#choose2faMethod>button:active {
-	transform: scale(0.95);
-}
-
 .pageWrapper {
 	position: fixed;
 	top: 0;

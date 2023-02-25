@@ -234,30 +234,20 @@ let _2faError;
 async function enable2fa(error) {
     _2faError = error;
 
-    const _2faRecaptchaContainer = document.getElementById(
-        '_2faRecaptchaContainer'
-    );
+    const _2faRecaptchaContainer = document.getElementById('_2faRecaptchaContainer');
 
     const nativeButton = document.getElementById('loginButton-1');
-    const signupRecaptchaButton = document.getElementById(
-        'signupRecaptchaButton'
-    );
+    const signupRecaptchaButton = document.getElementById('signupRecaptchaButton');
     const forgotPassword = document.getElementById('forgotPassword');
-    const loginRecaptchaButton = document.getElementById(
-        'loginRecaptchaButton'
-    );
+    const loginRecaptchaButton = document.getElementById('loginRecaptchaButton');
 
     const passwordElement = document.getElementById('loginPassword');
     const emailElement = document.getElementById('loginEmail');
 
-    const verificationCodeInput = document.getElementById(
-        'verificationCodeInput'
-    );
+    const verificationCodeInput = document.getElementById('verificationCodeInput');
     const verify2faButton = document.getElementById('verify2faButton');
 
-    const verificationCodeStatus = document.getElementById(
-        '2faVerificationCodeStatus'
-    );
+    const verificationCodeStatus = document.getElementById('2faVerificationCodeStatus');
 
     _2faRecaptchaContainer.style.display = null;
 
@@ -284,6 +274,9 @@ async function enable2fa(error) {
 
     _2faRecaptchaContainer.style.display = 'none';
 
+    verificationCodeInput.style.cursor = 'wait';
+    verificationCodeInput.disabled = true;
+
     verificationCodeInput.style.display = null;
     verify2faButton.disabled = true;
     verify2faButton.style.display = null;
@@ -304,6 +297,9 @@ async function enable2fa(error) {
         () => (verify2faButton.disabled = true)
     );
     verify2faButton.disabled = false;
+
+    verificationCodeInput.disabled = false;
+    verificationCodeInput.style.cursor = null;
 }
 
 window.verify2fa = async () => {
