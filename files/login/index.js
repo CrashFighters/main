@@ -285,8 +285,7 @@ async function enable2fa(error) {
     _2faRecaptchaContainer.style.display = 'none';
 
     verificationCodeInput.style.display = null;
-
-    verify2faButton.style.opacity = 0;
+    verify2faButton.disabled = true;
     verify2faButton.style.display = null;
 
     verificationCodeStatus.innerText = getMessage('SendingVerificationCode');
@@ -304,7 +303,7 @@ async function enable2fa(error) {
         'click',
         () => (verify2faButton.disabled = true)
     );
-    verify2faButton.style.opacity = null;
+    verify2faButton.disabled = false;
 }
 
 window.verify2fa = async () => {
