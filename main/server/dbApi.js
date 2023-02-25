@@ -27,7 +27,6 @@ module.exports = {
 
             const db = get();
 
-            //todo: use new permission system
             doApiCall({
                 db,
                 set: () => set(db),
