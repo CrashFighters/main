@@ -14,10 +14,10 @@ async function postRequest(path, params) {
             ...(await getAuthHeaders())
         }
     });
-    const json = await response.json();
-    if (!response.ok) throw new Error(JSON.stringify(json));
+    const result = await response.json();
+    if (!response.ok) throw new Error(JSON.stringify(result));
 
-    return json;
+    return result;
 };
 
 async function getRequest(path, params) {
@@ -27,10 +27,10 @@ async function getRequest(path, params) {
             ...(await getAuthHeaders())
         }
     });
-    const json = await response.json();
-    if (!response.ok) throw new Error(JSON.stringify(json));
+    const result = await response.json();
+    if (!response.ok) throw new Error(JSON.stringify(result));
 
-    return json;
+    return result;
 };
 
 async function putRequest(path, params) {
@@ -42,10 +42,10 @@ async function putRequest(path, params) {
             ...(await getAuthHeaders())
         }
     });
-    const json = await response.json();
-    if (!response.ok) throw new Error(JSON.stringify(json));
+    const result = await response.json();
+    if (!response.ok) throw new Error(JSON.stringify(result));
 
-    return json;
+    return result;
 };
 
 async function deleteRequest(path, params) {
@@ -55,10 +55,10 @@ async function deleteRequest(path, params) {
             ...(await getAuthHeaders())
         }
     });
-    const json = await response.json();
-    if (!response.ok) throw new Error(JSON.stringify(json));
+    const result = await response.json();
+    if (!response.ok) throw new Error(JSON.stringify(result));
 
-    return json;
+    return result;
 };
 
 class Database {
