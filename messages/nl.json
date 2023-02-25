@@ -50,7 +50,8 @@
                 "2faRequired": "2FA is nodig voor dit account",
                 "tooManyRequests": "Te veel pogingen. Probeer het later opnieuw",
                 "invalidVerificationCode": "De verificatie code is incorrect",
-                "firebaseAuthInternalError": "Er is een interne fout in de Firebase authenticatie opgetreden. Probeer het later opnieuw"
+                "firebaseAuthInternalError": "Er is een interne fout in de Firebase authenticatie opgetreden. Probeer het later opnieuw",
+                "popupClosedByUser": "De popup is handmatig gesloten"
             },
             "ExperienceLogin": "Log in voor de beste ervaring",
             "Choose2faMethod": "Kies een 2FA methode",

@@ -36,10 +36,11 @@ signInButton_mobile.addEventListener('click', () => {
     container.classList.remove('right-panel-active');
 });
 
-import { onStateChange } from '/sdk/auth.js';
 
+import { setDisplayName } from '/js/settings.js';
 import {
     loginWithEmail,
+    loginWithGithub,
     createEmailAccount,
     prepare2fa,
     get2faMethods,
@@ -47,16 +48,15 @@ import {
     loginWith2fa
 } from '/js/login.js';
 
-import { setDisplayName } from '/js/settings.js';
-
 import { getMessage } from '/sdk/language.js';
+import { onStateChange } from '/sdk/auth.js';
+import { createButton } from '/sdk/recaptcha.js';
 
+import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
 import {
     minimalLoginRecaptchaScore,
     minimalSignupRecaptchaScore
 } from '/common/settings.js';
-
-import { createButton } from '/sdk/recaptcha.js';
 
 const urlParams = new URLSearchParams(window.location.search);
 const signup = urlParams.get('signup') === 'true';
@@ -65,42 +65,21 @@ if (signup)
 if (urlParams.get('redirect'))
     document.getElementById('forgotPassword').href += `?redirect=${encodeURIComponent(urlParams.get('redirect'))}`;
 
-function redirect() {
-    const redirectLocation = urlParams.get('redirect');
-
-    const doRedirect = redirectLocation !== null;
-    if (
-        doRedirect &&
-        new URL(redirectLocation).origin !== window.location.origin
-    )
-        Swal.fire({
-            title: getMessage('RedirectQuestionTitle'),
-            text: redirectLocation,
-            showCancelButton: true,
-            confirmButtonColor: '#000',
-            cancelButtonColor: '#d33',
-            cancelButtonText: 'Nope!',
-            confirmButtonText: 'Yep!'
-        }).then((result) => {
-            if (result.isConfirmed)
-                window.open(redirectLocation, '_self')
-            else
-                window.open('/', '_self')
-        });
-    else {
-        if (redirectLocation)
-            window.open(redirectLocation, '_self')
-        else
-            window.open('/', '_self')
-    }
-
-
-}
-
 let preventRedirect = false;
 onStateChange((user) => {
     if (user && !preventRedirect) redirect();
 });
+
+const githubLoginButtons = [...deepQuerySelectorAll('.githubLoginButton')];
+for (const githubLoginButton of githubLoginButtons)
+    githubLoginButton.addEventListener('click', async () => {
+        try {
+            await loginWithGithub();
+        } catch (e) {
+            console.log(e)
+            handleLoginError(e);
+        }
+    });
 
 const firebaseErrorCodes = {
     'auth/user-not-found': {
@@ -127,18 +106,21 @@ const firebaseErrorCodes = {
         errorCode: 'weakPassword',
         field: 'password'
     },
+    'auth/invalid-verification-code': {
+        errorCode: 'invalidVerificationCode',
+        field: 'verificationCode'
+    },
     'auth/too-many-requests': {
         errorCode: 'tooManyRequests'
     },
     'auth/multi-factor-auth-required': {
         errorCode: '2faRequired'
     },
-    'auth/invalid-verification-code': {
-        errorCode: 'invalidVerificationCode',
-        field: 'verificationCode'
-    },
     'auth/internal-error': {
         errorCode: 'firebaseAuthInternalError'
+    },
+    'auth/popup-closed-by-user': {
+        errorCode: 'popupClosedByUser'
     }
 };
 
@@ -443,3 +425,35 @@ window.doSignup = async (recaptchaScore) => {
 
     redirect();
 };
+
+function redirect() {
+    const redirectLocation = urlParams.get('redirect');
+
+    const doRedirect = redirectLocation !== null;
+    if (
+        doRedirect &&
+        new URL(redirectLocation).origin !== window.location.origin
+    )
+        Swal.fire({
+            title: getMessage('RedirectQuestionTitle'),
+            text: redirectLocation,
+            showCancelButton: true,
+            confirmButtonColor: '#000',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Nope!',
+            confirmButtonText: 'Yep!'
+        }).then((result) => {
+            if (result.isConfirmed)
+                window.open(redirectLocation, '_self')
+            else
+                window.open('/', '_self')
+        });
+    else {
+        if (redirectLocation)
+            window.open(redirectLocation, '_self')
+        else
+            window.open('/', '_self')
+    }
+
+
+}
