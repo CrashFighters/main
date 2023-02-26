@@ -39,6 +39,7 @@ module.exports = {
 }
 
 function getAuthHeadersFromCookie(cookie) {
+    if (!cookie) return null;
     let authHeaders = cookie.split(';').find(c => c.trim().startsWith('authHeaders='));
     if (!authHeaders) return null;
 
