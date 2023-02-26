@@ -33,7 +33,6 @@
     "permissions": {
         "roles": {
             "empty": {
-                "_other": "never",
                 "privateFiles": "never",
                 "database": {
                     "get": {
