@@ -23,7 +23,8 @@ type post = {
     votes: {
         [userId: string]: vote;
     };
-    visibility: 'visible' | 'automaticFlagged' | 'automaticHidden' | 'manualHidden'; //todo-imp: implement
+    visibility: 'pending' | 'verified' | 'flagged' | 'hidden';
+    visibilityAuthor: 'automatic' | 'manual';
     perspective: perspective;
 };
 

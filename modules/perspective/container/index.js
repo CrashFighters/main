@@ -3,6 +3,7 @@ const debugLog = () => { };
 
 const { get, set } = require('../../database/functions/database.js');
 const perspective = require('./functions/perspective.js');
+const actOnScore = require('./functions/actOnScore.js');
 
 const fs = require('fs');
 const path = require('path');
@@ -42,8 +43,11 @@ async function execute() {
         debugLog('Saving to database...')
         dbPost.perspective = result;
         await set(db);
+
+        debugLog('Acting on score...')
+        await actOnScore(community, post);
     } else
-        debugLog('Post not found in database. Skipping...')
+        console.log('[PERSPECTIVE ANALYSER] Post not found in database.', community, post)
 
     debugLog('Updating queue...')
     const newQueue = queue.slice(1);
