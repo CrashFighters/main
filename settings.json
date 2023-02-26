@@ -58,14 +58,9 @@
                     }
                 },
                 "dashboard": {
-                    "query": {
-                        "user": "never"
-                    },
-                    "modify": {
-                        "user": "never"
-                    },
-                    "delete": {
-                        "user": "never"
+                    "getUserFrom": {
+                        "email": "never",
+                        "phoneNumber": "never"
                     }
                 },
                 "user": {
@@ -109,7 +104,7 @@
                     }
                 },
                 "user": {
-                    "delete": "always"
+                    "getUserFrom": "always"
                 }
             },
             "admin": "always"
