@@ -25,6 +25,8 @@
     </div>
 
     <script>
+        const waitF = ms => new Promise(res => setTimeout(res, ms));
+
         async function onload() {
             let reloadText = document.getElementById('reloadText');
             if (reloadText.innerText == '' || reloadText.innerText == '|reloadText|') {
@@ -33,26 +35,26 @@
 
             let bar = document.getElementById('bar');
 
-            await asyncTimeout(100);
+            await waitF(100);
 
             bar.style.transition = 'margin-top 0.5s ease';
 
-            await asyncTimeout(250);
+            await waitF(250);
 
             bar.style.marginTop = '5vh';
 
-            await asyncTimeout(600);
+            await waitF(600);
 
-            loadBar();
+            await loadBar();
         }
 
-        function loadBar() {
+        async function loadBar() {
             let oBar = document.getElementById('bar')
             let bar = document.getElementById("gBar");
 
             let randomOffset = 10;
 
-            countDown(0, 100 / 6, 6, 1000, ii => {
+            await countDown(0, 100 / 6, 6, 1000, ii => {
                 if (ii >= 100) {
                     bar.style.width = `100%`;
                     countDownDone();
@@ -68,18 +70,14 @@
         }
 
         async function countDownDone() {
-            await asyncTimeout(1000);
+            await waitF(1500);
 
             let outer = document.getElementById('outer');
             outer.style.left = '-120vw'
 
-            await asyncTimeout(600);
+            await waitF(600);
 
             location.reload();
-        }
-
-        function asyncTimeout(wait) {
-            return new Promise(resolve => setTimeout(resolve, wait))
         }
 
         async function countDown(start, add, repeat, wait, callback) {
@@ -87,7 +85,7 @@
             for (let iii = 0; iii < repeat; iii++) {
                 callback(ii);
                 ii += add;
-                await asyncTimeout(wait);
+                await waitF(wait);
             }
             callback(ii);
         }
@@ -118,7 +116,9 @@
         #bar {
             width: 75vw;
             height: 12vh;
-            background-color: rgb(189, 189, 189);
+
+            background-color: rgb(248, 248, 248);
+            border: 1px solid rgb(161, 161, 161);
 
             display: flex;
             justify-content: flex-start;
@@ -133,8 +133,8 @@
             height: 12vh;
             width: 0;
 
-            background-color: rgb(0, 226, 0);
-            transition: width 0.8s ease;
+            background-color: rgb(0, 0, 0);
+            transition: width 1.2s ease;
         }
 
         #outer {
