@@ -58,7 +58,7 @@
                     }
                 },
                 "dashboard": {
-                    "get": {
+                    "query": {
                         "user": "never"
                     },
                     "modify": {
@@ -98,7 +98,7 @@
                     "dashboard": "always"
                 },
                 "dashboard": {
-                    "get": {
+                    "query": {
                         "user": "always"
                     },
                     "modify": {
