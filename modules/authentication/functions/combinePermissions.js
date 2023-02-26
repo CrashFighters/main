@@ -10,6 +10,8 @@ function combinePermissions(permissions) {
 }
 
 function combinePermissionsRecursive(oldPermissions, newPermissions) {
+    if (newPermissions === undefined) return oldPermissions;
+
     if (typeof oldPermissions !== 'object')
         return {
             _other: oldPermissions,
