@@ -11,7 +11,7 @@
                 "messages": "./messages/",
                 "api": "./api/",
                 "errors": "./logs/errors/",
-                "files": "./files",
+                "files": "./publicFiles",
                 "errorFile": "{files}/error/general/index.html",
                 "reloadingFile": "{files}/error/reloading/index.html",
                 "modules": "./modules/",
@@ -34,11 +34,7 @@
         "roles": {
             "empty": {
                 "database": {
-                    "get": {
-                        "community": "never",
-                        "post": "never",
-                        "vote": "never"
-                    },
+                    "get": "never",
                     "delete": {
                         "community": "never",
                         "post": "never",
@@ -58,7 +54,11 @@
             },
             "default": {
                 "database": {
-                    "get": "always"
+                    "get": {
+                        "community": "always",
+                        "post": "always",
+                        "vote": "always"
+                    }
                 }
             },
             "authenticated": {
