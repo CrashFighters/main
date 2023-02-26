@@ -12,7 +12,7 @@ module.exports = {
 
         if (fs.existsSync(privatePath) && getPermission(['privateFiles', ...permissionParts], middlewareData?.authentication, middlewareData?.customClaims) === 'always')
             respond(privatePath, response, true);
-        if (fs.existsSync(publicPath))
+        else if (fs.existsSync(publicPath))
             respond(publicPath, response, false);
         else
             statusCode(response, 404);
