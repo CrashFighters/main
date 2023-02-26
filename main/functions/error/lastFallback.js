@@ -113,21 +113,21 @@ module.exports = {
             response.end('Because of an extreme error, the server is reloading in 5 seconds')
         }
     },
-    serverExecute(a1, a2) {
+    serverExecute(request, response) {
 
         if (extremeErrorMode) {
             const t = require(__filename);
-            t.extremeServer(a1, a2);
+            t.extremeServer(request, response);
         } else if (reloadMode > 0) {
             const t = require(__filename);
-            t.reloadServer(a1, a2);
+            t.reloadServer(request, response);
         } else {
             try {
-                require('../../server/main').execute(a1, a2);
+                require('../../server/main').execute(request, response);
             } catch (err) {
                 err.stack; // generate stack
                 const t = require(__filename);
-                t.execute(err, a2);
+                t.execute(err, response);
             }
         }
     }
