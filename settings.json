@@ -93,18 +93,13 @@
                     "dashboard": "always"
                 },
                 "dashboard": {
-                    "query": {
-                        "user": "always"
-                    },
-                    "modify": {
-                        "user": "always"
-                    },
-                    "delete": {
-                        "user": "always"
+                    "getUserFrom": {
+                        "email": "always",
+                        "phoneNumber": "always"
                     }
                 },
                 "user": {
-                    "getUserFrom": "always"
+                    "delete": "always"
                 }
             },
             "admin": "always"
