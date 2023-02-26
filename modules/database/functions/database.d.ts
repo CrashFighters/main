@@ -23,6 +23,7 @@ type post = {
     votes: {
         [userId: string]: vote;
     };
+    visibility: 'visible' | 'automaticFlagged' | 'automaticHidden' | 'manualHidden'; //todo-imp: implement
     perspective: perspective;
 };
 
