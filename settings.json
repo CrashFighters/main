@@ -28,7 +28,7 @@
         "login": 0.7,
         "signup": 0.8,
         "postFlagged": 0.5,
-        "postHidden": 0.9
+        "postHidden": 0.8
     },
     "permissions": {
         "roles": {
