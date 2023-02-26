@@ -1,10 +1,26 @@
 const firebase = require('../modules/authentication/functions/authentication.js');
+const getPermission = require('../modules/authentication/functions/getPermission.js');
 
 module.exports = {
-    async execute({ end, middlewareData: { authentication, explicitAuthentication }, statusCode, parseError }) {
+    async execute({ end, params, middlewareData: { authentication, explicitAuthentication, customClaims }, statusCode, parseError }) {
         try {
-            if (!authentication) return statusCode(401, 'unauthorized', 'Unauthorized');
-            if (!explicitAuthentication) return statusCode(401, 'unauthorized', 'Unauthorized');
+            const userId = params.user;
+            if (!userId) return statusCode(400, 'noUserProvided', 'No user provided');
+
+            const permission = await getPermission('user.delete', authentication?.uid, customClaims);
+            let hasPermission;
+
+            if (permission === 'always')
+                hasPermission = true;
+            else if (permission === 'ifOwner')
+                hasPermission = (explicitAuthentication) && (authentication.uid === userId);
+            else if (permission === 'never')
+                hasPermission = false;
+            else
+                throw new Error(`Unknown permission: ${permission}`);
+
+            if (!hasPermission) return statusCode(403, 'invalidPermission', 'You do not have permission to delete this user');
+
             const auth = firebase.auth();
 
             const authTime = new Date(authentication.auth_time * 1000);
