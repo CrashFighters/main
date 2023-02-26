@@ -18,7 +18,7 @@ module.exports = (_permissionParts, user, customClaims) => {
     }
 
     if (typeof currentPermission === 'object')
-        throw new Error(`Permission ${_permissionParts} is object`)
+        throw new Error(`Permission ${_permissionParts} is object (${require('util').inspect(currentPermission)}`)
     else
         return currentPermission ?? getPermissionFromUndefined(fullPermissions, permissionParts);
 }
