@@ -12,8 +12,12 @@ module.exports = {
             path = `${path}index.html`;
         };
 
-        path = pathLib.resolve(__dirname, `../../files${path}`);
+        const publicPath = pathLib.resolve(__dirname, `../../publicFiles${path}`);
+        const privatePath = pathLib.resolve(__dirname, `../../privateFiles${path}`);
 
-        return path;
+        return {
+            publicPath,
+            privatePath
+        };
     }
 }

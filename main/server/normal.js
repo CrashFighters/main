@@ -7,7 +7,9 @@ module.exports = {
     // execute(request, response, {middlewareData, extraData}) {
     execute(request, response) {
 
-        const path = require('../functions/urlToPath.js').execute(request.url);
+        const { publicPath, privatePath } = require('../functions/urlToPath.js').execute(request.url);
+        const path = publicPath;
+        //todo
 
         if (fs.existsSync(path))
             fs.readFile(path, async (err, data) => {
