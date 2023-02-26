@@ -17,12 +17,12 @@ type community = {
 };
 
 type post = {
-    id: string;
-    user: string; //todo: rename to owner
-    message: string; //todo: rename to content
     votes: {
         [userId: string]: vote;
     };
+    id: string;
+    user: string; //todo: rename to owner
+    message: string; //todo: rename to content
     visibility: 'pending' | 'verified' | 'flagged' | 'hidden';
     visibilityAuthor: 'automatic' | 'manual';
     perspective: perspective;
