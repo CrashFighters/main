@@ -34,7 +34,11 @@
         "roles": {
             "empty": {
                 "database": {
-                    "get": "never",
+                    "get": {
+                        "community": "never",
+                        "post": "never",
+                        "vote": "never"
+                    },
                     "delete": {
                         "community": "never",
                         "post": "never",
