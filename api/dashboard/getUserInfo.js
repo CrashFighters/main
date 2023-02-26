@@ -1,7 +1,7 @@
-const firebase = require('../../../modules/authentication/functions/authentication.js');
+const firebase = require('../../modules/authentication/functions/authentication.js');
 
 module.exports = {
-    async execute({ params, statusCode, parseError, end, middlewareData: { getPermission } }) {
+    async execute({ params, statusCode, parseError, end, middlewareData: { getPermission, authentication, explicitAuthentication } }) {
         try {
             if (!params.user) return statusCode(400, 'nosUserProved', 'No user provided');
 
@@ -55,6 +55,8 @@ module.exports = {
                 let hasPermission;
                 if (permission === 'always')
                     hasPermission = true;
+                else if (permission === 'ifOwner')
+                    hasPermission = explicitAuthentication && authentication.uid === user.uid;
                 else if (hasPermission === 'never')
                     hasPermission = false;
                 else
