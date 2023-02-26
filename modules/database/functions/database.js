@@ -1,9 +1,12 @@
+const wait = ms => new Promise(res => setTimeout(res, ms));
+
 let admin;
 let serviceAccount
 let databaseURL;
 
 let db;
 let ref;
+let app;
 
 let data = null;
 let err;
@@ -14,12 +17,12 @@ async function init() {
     serviceAccount = require('../../../credentials/firebase.json').serviceAccount;
     databaseURL = require('../../../credentials/firebase.json').databaseURL;
 
-    await admin.initializeApp({
+    app = await admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
         databaseURL
     }, 'database');
 
-    db = admin.database();
+    db = app.database();
     ref = db.ref();
 
     ref.on('value', snapshot => {
