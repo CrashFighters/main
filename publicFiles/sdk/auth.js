@@ -101,10 +101,12 @@ async function updateUserObject(newUser) {
         loginMethod = 'google';
     else if (newUser.providerData[0].providerId === 'github.com')
         loginMethod = 'github';
+    else if (newUser.providerData[0].providerId === 'anonymous')
+        loginMethod = 'anonymous';
 
     const email = newUser.email ?? newUser.providerData[0]?.email ?? null;
 
-    const multiFactorUser = multiFactor(auth.currentUser);
+    const multiFactorUser = multiFactor(newUser);
 
     window.auth.user = {
         loginMethod,
@@ -112,7 +114,7 @@ async function updateUserObject(newUser) {
         displayName: newUser.displayName,
         email,
         emailVerified: newUser.email ? newUser.emailVerified : true,
-        isAnonymous: newUser.isAnonymous,
+        phoneNumber: newUser.phoneNumber,
         creationTime: new Date(newUser.metadata.creationTime),
         lastSignInTime: new Date(newUser.metadata.lastSignInTime),
         id: newUser.uid,
