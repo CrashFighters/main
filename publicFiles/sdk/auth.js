@@ -11,6 +11,7 @@ import {
 
 import { init } from '/js/appCheck.js';
 import { firebaseConfig } from '/common/apiKeys.js';
+import { setCookie } from '/common/cookie.js';
 
 const app = initializeApp(firebaseConfig);
 
@@ -59,6 +60,7 @@ export const signup = () => {
 
 async function updateUserObject(newUser) {
     useDeviceLanguage(auth);
+    setCookie('authHeaders', JSON.stringify(await getAuthHeaders()));
 
     if (!newUser) {
         window.auth.user = null;
