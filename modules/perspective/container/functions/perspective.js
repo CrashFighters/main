@@ -1,4 +1,4 @@
-const { google } = require('googleapis'); //todo: install googleapis
+const { google } = require('googleapis');
 
 const { apiKey, discoveryUrl } = require('../../../../credentials/perspective.json');
 
