@@ -24,6 +24,10 @@
             }
         }
     },
+    "minimalScores": {
+        "login": 0.7,
+        "signup": 0.8
+    },
     "permissions": {
         "roles": {
             "empty": {
