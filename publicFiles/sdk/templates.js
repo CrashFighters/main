@@ -109,4 +109,3 @@ export async function replaceTemplates(user) {
 onStateChange((user) => {
     replaceTemplates(user);
 });
-replaceTemplates(null);
