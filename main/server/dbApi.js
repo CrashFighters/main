@@ -18,7 +18,7 @@ module.exports = {
 
         try {
             const { path, params, success } = require('../functions/parse/dbApiCall.js').execute(request);
-            const { authentication, permissions: { database: databasePermissions } } = middlewareData;
+            const { authentication, getPermission } = middlewareData;
 
             if (!success) {
                 statusCode(response, 400, { text: 'Invalid request', short: 'invalidRequest' });
@@ -72,14 +72,14 @@ module.exports = {
                                 throw new Error('checkPermissionType is undefined');
 
                             let hasPermission;
-                            if (databasePermissions[checkPermissionType].community === 'always')
+                            if (getPermission(['database', checkPermissionType, 'community']) === 'always')
                                 hasPermission = true;
-                            else if (databasePermissions[checkPermissionType].community === 'ifOwner')
+                            else if (getPermission(['database', checkPermissionType, 'community']) === 'ifOwner')
                                 hasPermission = community.owner === authentication.uid;
-                            else if (databasePermissions[checkPermissionType].community === 'never')
+                            else if (getPermission(['database', checkPermissionType, 'community']) === 'never')
                                 hasPermission = false;
                             else
-                                throw new Error(`Don't know what to do with permissions.database.${checkPermissionType}.community ${databasePermissions[checkPermissionType].community}`);
+                                throw new Error(`Don't know what to do with permissions.database.${checkPermissionType}.community ${getPermission(['database', checkPermissionType, 'community'])}`);
 
                             if (!hasPermission) {
                                 if (!preventError) statusCode(response, 403, { text: `Invalid permission to ${checkPermissionType} community ${value}`, short: 'invalidPermission' });
@@ -114,14 +114,14 @@ module.exports = {
                                 throw new Error('checkPermissionType is undefined');
 
                             let hasPermission;
-                            if (databasePermissions[checkPermissionType].post === 'always')
+                            if (getPermission(['database', checkPermissionType, 'post']) === 'always')
                                 hasPermission = true;
-                            else if (databasePermissions[checkPermissionType].post === 'ifOwner')
+                            else if (getPermission(['database', checkPermissionType, 'post']) === 'ifOwner')
                                 hasPermission = post.user === authentication.uid;
-                            else if (databasePermissions[checkPermissionType].post === 'never')
+                            else if (getPermission(['database', checkPermissionType, 'post']) === 'never')
                                 hasPermission = false;
                             else
-                                throw new Error(`Don't know what to do with permissions.database.${checkPermissionType}.post ${databasePermissions[checkPermissionType].post}`);
+                                throw new Error(`Don't know what to do with permissions.database.${checkPermissionType}.post ${getPermission(['database', checkPermissionType, 'post'])}`);
 
                             if (!hasPermission) {
                                 if (!preventError) statusCode(response, 403, { text: `Invalid permission to ${checkPermissionType} post ${value} in community ${community}`, short: 'invalidPermission' });
@@ -159,14 +159,14 @@ module.exports = {
                                 throw new Error('checkPermissionType is undefined');
 
                             let hasPermission;
-                            if (databasePermissions[checkPermissionType].vote === 'always')
+                            if (getPermission(['database', checkPermissionType, 'post']) === 'always')
                                 hasPermission = true;
-                            else if (databasePermissions[checkPermissionType].vote === 'ifOwner')
+                            else if (getPermission(['database', checkPermissionType, 'post']) === 'ifOwner')
                                 hasPermission = vote.user === authentication.uid;
-                            else if (databasePermissions[checkPermissionType].vote === 'never')
+                            else if (getPermission(['database', checkPermissionType, 'post']) === 'never')
                                 hasPermission = false;
                             else
-                                throw new Error(`Don't know what to do with permissions.database.${checkPermissionType}.vote ${databasePermissions[checkPermissionType].vote}`);
+                                throw new Error(`Don't know what to do with permissions.database.${checkPermissionType}.vote ${getPermission(['database', checkPermissionType, 'post'])}`);
 
                             if (!hasPermission) {
                                 if (!preventError) statusCode(response, 403, { text: `Invalid permission to ${checkPermissionType} vote ${value} in post ${post} in community ${community}`, short: 'invalidPermission' });

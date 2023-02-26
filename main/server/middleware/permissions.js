@@ -1,4 +1,4 @@
-const getPermissions = require('../../../modules/authentication/functions/getPermissions.js');
+const getPermission = require('../../../modules/authentication/functions/getPermission.js');
 
 module.exports = {
     info: {
@@ -7,11 +7,10 @@ module.exports = {
             'customClaims'
         ]
     },
-    async execute({ middlewareData, parseError }) {
-        try {
-            return { permissions: getPermissions(middlewareData.authentication, middlewareData.customClaims) };
-        } catch (e) {
-            parseError(e);
-        }
+    execute({ middlewareData }) {
+        return {
+            getPermission: permission =>
+                getPermission(permission, middlewareData.authentication, middlewareData.customClaims)
+        };
     }
 }
