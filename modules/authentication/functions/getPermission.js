@@ -24,13 +24,12 @@ module.exports = (_permissionParts, user, customClaims) => {
 }
 
 function getPermissionFromUndefined(permissions, permissionParts) {
-    for (let ii = permissionParts.length; ii >= 0; ii--) {
-        const currentPermission = getObjectValueFromPropertyArray(permissions, permissionParts.slice(0, ii));
+    const permission = getObjectValueFromPropertyArray(permissions, permissionParts);
 
-        if (currentPermission?._other) return currentPermission._other;
-    }
-
-    return 'never';
+    if (permission?._other)
+        return permission._other;
+    else
+        return 'never';
 }
 
 function getObjectValueFromPropertyArray(object, propertyArray) {
