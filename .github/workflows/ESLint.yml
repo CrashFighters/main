@@ -17,8 +17,5 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Debug directory
-        run: ls -la
-
       - name: Run ESLint
-        run: npx eslint api/ publicFiles/ privateFiles/ main/ modules/ --max-warnings 0
+        run: npx eslint api/** publicFiles/** privateFiles/** main/** modules/** --max-warnings 0
