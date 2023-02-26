@@ -3,12 +3,12 @@ const firebase = require('../../modules/authentication/functions/authentication.
 module.exports = {
     async execute({ params, statusCode, parseError, end, middlewareData: { getPermission, authentication, explicitAuthentication } }) {
         try {
-            if (!params.user) return statusCode(400, 'nosUserProved', 'No user provided');
+            if (!params.user) return statusCode(400, 'noUserProved', 'No user provided');
 
             const auth = firebase.auth();
             let user;
             try {
-                user = await auth.getUser(params.email);
+                user = await auth.getUser(params.user);
             } catch {
                 return statusCode(404, 'noUserFound', 'No user found');
             }
@@ -57,7 +57,7 @@ module.exports = {
                     hasPermission = true;
                 else if (permission === 'ifOwner')
                     hasPermission = explicitAuthentication && authentication.uid === user.uid;
-                else if (hasPermission === 'never')
+                else if (permission === 'never')
                     hasPermission = false;
                 else
                     throw new Error(`Don't know how to handle permission ${permission} (${permissionParts.join('.')})`)
