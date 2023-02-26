@@ -7,7 +7,7 @@ let ref;
 let app;
 
 let dataResolve;
-let data = new Promise(res => dataResolve = res);
+let data = new Promise(res => { dataResolve = res });
 let dataResolved = false;
 let err;
 
