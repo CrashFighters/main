@@ -278,7 +278,7 @@ class Vote {
                 get: () => properties[key],
                 set: async newValue => {
                     properties[key] = newValue;
-                    const newProperties = putRequest('vote', { community, post, vote, properties: { [key]: newValue } });
+                    const newProperties = await putRequest('vote', { community, post, vote, properties: { [key]: newValue } });
                     if (newProperties)
                         for (const [name, value] of Object.entries(newProperties))
                             if (name in properties) properties[name] = value;
