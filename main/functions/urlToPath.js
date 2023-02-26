@@ -3,21 +3,22 @@ const pathLib = require('path');
 
 module.exports = {
     execute(p) {
-        let path = url.parse(p).pathname;
+        let localPath = url.parse(p).pathname;
 
-        if (!path.split('/').at(-1).includes('.')) {
-            if (!path.endsWith('/'))
-                path = `${path}/`;
+        if (!localPath.split('/').at(-1).includes('.')) {
+            if (!localPath.endsWith('/'))
+                localPath = `${localPath}/`;
 
-            path = `${path}index.html`;
+            localPath = `${localPath}index.html`;
         };
 
-        const publicPath = pathLib.resolve(__dirname, `../../publicFiles${path}`);
-        const privatePath = pathLib.resolve(__dirname, `../../privateFiles${path}`);
+        const publicPath = pathLib.resolve(__dirname, `../../publicFiles${localPath}`);
+        const privatePath = pathLib.resolve(__dirname, `../../privateFiles${localPath}`);
 
         return {
             publicPath,
-            privatePath
+            privatePath,
+            localPath
         };
     }
 }
