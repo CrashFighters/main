@@ -20,9 +20,27 @@ module.exports = {
 };
 
 function respond(path, response, privateFile) {
-    const data = fs.readFileSync(path).toString()
     const contentType = mime.lookup(path);
 
-    response.writeHead(200, { 'Content-Type': contentType });
-    return response.end(data + (privateFile && contentType === 'text/html' ? '<script>window.privateFile = true;</script>' : ''));
+    if (contentType === 'text/html') {
+        const data = fs.readFileSync(path).toString()
+        const finalData = data + (privateFile ? '<script>window.privateFile = true;</script>' : '');
+
+        response.writeHead(200, {
+            'Content-Type': contentType,
+            'Content-Length': Buffer.byteLength(finalData)
+        });
+
+        response.end(finalData);
+    } else {
+        const size = fs.statSync(path).size;
+        const readStream = fs.createReadStream(path);
+
+        response.writeHead(200, {
+            'Content-Type': contentType,
+            'Content-Length': size
+        });
+
+        readStream.pipe(response);
+    }
 }
