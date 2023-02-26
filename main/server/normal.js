@@ -11,19 +11,17 @@ module.exports = {
         const permissionParts = localPath.split('/').slice(1);
 
         if (fs.existsSync(privatePath) && getPermission(['privateFiles', ...permissionParts], middlewareData?.authentication, middlewareData?.customClaims) === 'always')
-            respond(privatePath, response);
+            respond(privatePath, response, true);
         if (fs.existsSync(publicPath))
-            respond(publicPath, response);
+            respond(publicPath, response, false);
         else
             statusCode(response, 404);
     }
 };
 
-function respond(path, response) {
-    fs.readFile(path, (err, data) => {
-        if (err) throw err;
+function respond(path, response, privateFile) {
+    const data = fs.readFileSync(path).toString()
 
-        response.writeHead(200, { 'Content-Type': mime.lookup(path) });
-        return response.end(data);
-    });
+    response.writeHead(200, { 'Content-Type': mime.lookup(path) });
+    return response.end(data + (privateFile ? '<script>window.privateFile = true;</script>' : ''));
 }
