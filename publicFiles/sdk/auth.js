@@ -22,10 +22,22 @@ const auth = getAuth(app);
 const onStateChangeCallbacks = [];
 export const onStateChange = (callback) => {
     onStateChangeCallbacks.push(callback);
-    onAuthStateChanged(auth, () => {
-        callback(window.auth.user);
-    });
 };
+
+let first = true;
+onAuthStateChanged(auth, async () => {
+    const promises = [];
+    for (const callback of onStateChangeCallbacks)
+        promises.push(callback(window.auth.user));
+
+    await Promise.all(promises);
+
+    if (!first)
+        if (window.privateFile === true)
+            window.location.reload();
+
+    first = false;
+});
 
 export async function getPermission(permission) {
     const response = await fetch(`/api/getPermission?permission=${encodeURIComponent(JSON.stringify(permission))}`, {
