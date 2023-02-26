@@ -58,9 +58,15 @@ export const signup = () => {
             window.open(`/login?signup=true&redirect=${encodeURIComponent(location.href)}`, '_self');
 };
 
-async function updateUserObject(newUser) {
-    useDeviceLanguage(auth);
+async function updateCookies() {
     setCookie('authHeaders', JSON.stringify(await getAuthHeaders()));
+}
+
+function updateDeviceLanguage() {
+    useDeviceLanguage(auth);
+}
+
+async function updateUserObject(newUser) {
 
     if (!newUser) {
         window.auth.user = null;
@@ -131,3 +137,5 @@ window.auth = {
 };
 
 onStateChange(() => updateUserObject(auth.currentUser));
+onStateChange(updateCookies);
+onStateChange(updateDeviceLanguage);
