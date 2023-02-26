@@ -19,6 +19,7 @@ module.exports = {
 
             const extraData = { body };
 
+            let parseErrorCalled = false;
             let middlewareData = {};
             const executedMiddlewares = [];
 
@@ -27,18 +28,30 @@ module.exports = {
                     if (executedMiddlewares.includes(name)) continue;
                     if (info?.requires && info.requires.some(name => !executedMiddlewares.includes(name))) continue;
 
-                    const newMiddlewareData = await execute({ request, response, extraData, parseError, middlewareData }) ?? {};
+                    const newMiddlewareData = await execute({
+                        request,
+                        extraData,
+                        parseError: (...arg) => {
+                            parseErrorCalled = true;
+                            parseError(...arg);
+                        },
+                        middlewareData
+                    }) ?? {};
                     middlewareData = { ...middlewareData, ...newMiddlewareData };
 
                     executedMiddlewares.push(name);
+
+                    if (parseErrorCalled)
+                        break;
                 };
 
-            if (request.url.startsWith('/dbApi/'))
-                return require('./dbApi.js').execute(request, response, { middlewareData, extraData });
-            else if (request.url.startsWith('/api/'))
-                return require('./api.js').execute(request, response, { middlewareData, extraData });
-            else
-                return require('./normal.js').execute(request, response, { middlewareData, extraData });
+            if (!parseErrorCalled)
+                if (request.url.startsWith('/dbApi/'))
+                    return require('./dbApi.js').execute(request, response, { middlewareData, extraData });
+                else if (request.url.startsWith('/api/'))
+                    return require('./api.js').execute(request, response, { middlewareData, extraData });
+                else
+                    return require('./normal.js').execute(request, response, { middlewareData, extraData });
 
         } catch (err) {
             parseError(err);
