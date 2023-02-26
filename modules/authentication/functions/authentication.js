@@ -1,3 +1,5 @@
+//todo: rename to getFirebase
+
 const firebase = require('firebase-admin');
 
 const { serviceAccount, databaseURL } = require('../../../credentials/firebase.json');
