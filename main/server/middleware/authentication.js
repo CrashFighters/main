@@ -4,7 +4,7 @@ module.exports = {
     async execute({ request, parseError }) {
         try {
 
-            const explicitAuthentication = Boolean(request.headers['auth_token']);
+            const explicitAuthentication = Boolean(request.headers['auth_token']); // todo: rename to explicitlyAuthenticated
             let authHeaders;
             if (explicitAuthentication)
                 authHeaders = request.headers['auth_token'];
