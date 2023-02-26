@@ -15,7 +15,7 @@ if (!fs.existsSync(path.resolve(__dirname, '../data/queue.json')))
 
 (async () => {
     while (true) {
-        await wait(1500); // Perspective API has a rate limit of 60 requests per minute, so with 1.5s we're safe
+        await wait(1500); // Perspective API has a rate limit of 60 requests per minute, so with a 1.5s wait per request we're safe
         await execute();
     }
 })();
