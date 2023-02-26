@@ -18,7 +18,7 @@ module.exports = {
             else
                 throw new Error(`Unknown permission: ${permission}`);
 
-            if (!hasPermission) return statusCode(403, 'invalidPermission', 'You do not have permission to delete this user');
+            if (!hasPermission) return statusCode(403, 'invalidPermission', 'You do not have permission to delete this user (user.delete)');
 
             const auth = firebase.auth();
 
