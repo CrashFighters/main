@@ -99,6 +99,8 @@ async function updateUserObject(newUser) {
         loginMethod = 'email';
     else if (newUser.providerData[0].providerId === 'google.com')
         loginMethod = 'google';
+    else if (newUser.providerData[0].providerId === 'github.com')
+        loginMethod = 'github';
 
     const email = newUser.email ?? newUser.providerData[0]?.email ?? null;
 
