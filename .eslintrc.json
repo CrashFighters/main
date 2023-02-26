@@ -12,6 +12,7 @@
         "no-const-assign": "error",
         "no-this-before-super": "error",
         "constructor-super": "error",
+        "no-cond-assign": "error",
         "no-eval": "error",
         "indent": [
             "warn",
@@ -20,6 +21,8 @@
                 "SwitchCase": 1
             }
         ],
+        "no-return-assign": "warn",
+        "operator-assignment": "warn",
         "require-await": "warn",
         "no-var": "warn",
         "no-unused-vars": "warn",
