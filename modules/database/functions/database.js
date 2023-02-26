@@ -8,7 +8,9 @@ let db;
 let ref;
 let app;
 
-let data = null;
+let dataResolve;
+let data = new Promise(res => dataResolve = res);
+let dataResolved = false;
 let err;
 
 let hasInit = false;
@@ -26,7 +28,12 @@ async function init() {
     ref = db.ref();
 
     ref.on('value', snapshot => {
-        data = snapshot.val();
+        if (dataResolved)
+            data = Promise.resolve(snapshot.val());
+        else {
+            dataResolve(snapshot.val());
+            dataResolved = true;
+        }
     }, error => {
         err = error;
     });
@@ -48,7 +55,6 @@ module.exports = {
         if (err)
             throw err;
 
-        if (!data) return {};
-        return data;
+        return await data;
     }
 }
