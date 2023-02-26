@@ -77,7 +77,7 @@ export async function prepare2fa() {
 };
 
 let resolver;
-export async function get2faMethods(error) {
+export function get2faMethods(error) {
     if (!recaptchaVerifier)
         throw new Error('prepare2fa not called');
 

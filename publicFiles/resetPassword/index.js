@@ -23,7 +23,7 @@ window.sendResetEmail = async () => {
     }
 
     try {
-        sendPasswordResetEmail(emailInput.value);
+        await sendPasswordResetEmail(emailInput.value);
         emailInput.value = '';
         Toastify({
             text: 'Password reset email sent! Please check your inbox.',
