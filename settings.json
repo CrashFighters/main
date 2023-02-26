@@ -61,6 +61,21 @@
                     "getUserFrom": {
                         "email": "never",
                         "phoneNumber": "never"
+                    },
+                    "get": {
+                        "userInfo": {
+                            "_other": "never",
+                            "id": "never",
+                            "loginMethod": "never",
+                            "picture": "never",
+                            "displayName": "never",
+                            "email": "never",
+                            "emailVerified": "never",
+                            "phoneNumber": "never",
+                            "creationTime": "never",
+                            "lastSignInTime": "never",
+                            "2fa": "never"
+                        }
                     }
                 },
                 "user": {
@@ -93,9 +108,9 @@
                     "dashboard": "always"
                 },
                 "dashboard": {
-                    "getUserFrom": {
-                        "email": "always",
-                        "phoneNumber": "always"
+                    "getUserFrom": "always",
+                    "get": {
+                        "userInfo": "always"
                     }
                 },
                 "user": {
