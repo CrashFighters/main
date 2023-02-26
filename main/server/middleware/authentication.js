@@ -7,14 +7,14 @@ module.exports = {
             const explicitAuthentication = Boolean(request.headers['auth_token']); // todo: rename to explicitlyAuthenticated
             let authHeaders;
             if (explicitAuthentication)
-                authHeaders = request.headers['auth_token'];
+                authHeaders = request.headers;
             else
                 authHeaders = getAuthHeadersFromCookie(request.headers.cookie);
 
             const authToken = authHeaders?.['auth_token'];
 
-            if (!authHeaders || !authToken)
-                return { authenticated: false, explicitAuthentication };
+            if ((!authHeaders) || (!authToken))
+                return { authenticated: false, authentication: null, explicitAuthentication };
 
             try {
                 const authentication = await firebase.auth().verifyIdToken(authToken, true);
