@@ -74,7 +74,11 @@ export async function replaceTemplates(user) {
                 console.log(
                     `[templateSDK] Running callback function ${element.dataset['template_update_callback']} on template ${item} with value ${value}.`
                 );
-            window[element.dataset['template_update_callback']](item, value);
+
+            if (window[element.dataset['template_update_callback']])
+                window[element.dataset['template_update_callback']](item, value);
+            else
+                console.error(new Error(`[templateSDK] Callback function ${element.dataset['template_update_callback']} not found.`));
         }
 
         if (
