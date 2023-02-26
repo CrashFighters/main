@@ -34,6 +34,7 @@
         "roles": {
             "empty": {
                 "_other": "never",
+                "privateFiles": "never",
                 "database": {
                     "get": {
                         "community": "never",
@@ -56,15 +57,27 @@
                         "vote": "never"
                     }
                 },
-                "privateFiles": "never"
+                "dashboard": {
+                    "get": {
+                        "user": "never"
+                    },
+                    "modify": {
+                        "user": "never"
+                    },
+                    "delete": {
+                        "user": "never"
+                    }
+                },
+                "user": {
+                    "delete": "never"
+                }
             },
             "default": {
                 "database": {
-                    "get": {
-                        "community": "always",
-                        "post": "always",
-                        "vote": "always"
-                    }
+                    "get": "always"
+                },
+                "user": {
+                    "delete": "ifOwner"
                 }
             },
             "authenticated": {
@@ -73,13 +86,33 @@
                     "delete": "ifOwner",
                     "modify": "ifOwner",
                     "create": "always"
+                },
+                "user": {
+                    "delete": "ifOwner"
                 }
             }
         },
         "customRoles": {
-            "admin": {
-                "privateFiles": "always"
-            }
+            "support": {
+                "privateFiles": {
+                    "dashboard": "always"
+                },
+                "dashboard": {
+                    "get": {
+                        "user": "always"
+                    },
+                    "modify": {
+                        "user": "always"
+                    },
+                    "delete": {
+                        "user": "always"
+                    }
+                },
+                "user": {
+                    "delete": "always"
+                }
+            },
+            "admin": "always"
         }
     }
 }
