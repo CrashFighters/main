@@ -1,7 +1,5 @@
-const getPermission = require('../modules/authentication/functions/getPermission.js');
-
 module.exports = {
-    execute({ end, middlewareData, params, statusCode }) {
+    execute({ end, middlewareData: { getPermission }, params, statusCode }) {
         if (!params.permission) return statusCode(400, 'noPermissionProvided', 'No permission provided');
         let permissionName;
         try {
@@ -10,7 +8,7 @@ module.exports = {
             return statusCode(400, 'invalidPermission', 'Invalid permission');
         };
 
-        const permission = getPermission(permissionName, middlewareData.authentication.user, middlewareData.authentication.customClaims);
+        const permission = getPermission(permissionName);
         if (permission === undefined) return statusCode(400, 'invalidPermission', 'Invalid permission');
 
         end(permission);

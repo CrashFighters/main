@@ -1,13 +1,12 @@
 const firebase = require('../modules/authentication/functions/authentication.js');
-const getPermission = require('../modules/authentication/functions/getPermission.js');
 
 module.exports = {
-    async execute({ end, params, middlewareData: { authentication, explicitAuthentication, customClaims }, statusCode, parseError }) {
+    async execute({ end, params, middlewareData: { authentication, explicitAuthentication, getPermission }, statusCode, parseError }) {
         try {
             const userId = params.user;
             if (!userId) return statusCode(400, 'noUserProvided', 'No user provided');
 
-            const permission = await getPermission('user.delete', authentication?.uid, customClaims);
+            const permission = await getPermission('user.delete');
             let hasPermission;
 
             if (permission === 'always')

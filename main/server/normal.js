@@ -2,15 +2,14 @@ const fs = require('fs');
 const mime = require('mime-types');
 
 const statusCode = require('../functions/error/statusCode.js').execute;
-const getPermission = require('../../modules/authentication/functions/getPermission.js');
 
 module.exports = {
-    execute(request, response, { middlewareData }) {
+    execute(request, response, { middlewareData: { getPermission } }) {
 
         const { publicPath, privatePath, localPath } = require('../functions/urlToPath.js').execute(request.url);
         const permissionParts = localPath.split('/').slice(1);
 
-        if (fs.existsSync(privatePath) && getPermission(['privateFiles', ...permissionParts], middlewareData?.authentication, middlewareData?.customClaims) === 'always')
+        if (fs.existsSync(privatePath) && getPermission(['privateFiles', ...permissionParts]) === 'always')
             respond(privatePath, response, true);
         else if (fs.existsSync(publicPath))
             respond(publicPath, response, false);
