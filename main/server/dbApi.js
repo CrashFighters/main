@@ -18,7 +18,10 @@ module.exports = {
 
         try {
             const { path, params, success } = require('../functions/parse/dbApiCall.js').execute(request);
-            const { authentication, getPermission } = middlewareData;
+            const { authentication: a, explicitAuthentication, getPermission } = middlewareData;
+            let authentication = a;
+            if (!explicitAuthentication)
+                authentication = null;
 
             if (!success) {
                 statusCode(response, 400, { text: 'Invalid request', short: 'invalidRequest' });

@@ -1,9 +1,10 @@
 const firebase = require('../modules/authentication/functions/authentication.js');
 
 module.exports = {
-    async execute({ end, middlewareData: { authentication }, statusCode, parseError }) {
+    async execute({ end, middlewareData: { authentication, explicitAuthentication }, statusCode, parseError }) {
         try {
             if (!authentication) return statusCode(401, 'unauthorized', 'Unauthorized');
+            if (!explicitAuthentication) return statusCode(401, 'unauthorized', 'Unauthorized');
             const auth = firebase.auth();
 
             const authTime = new Date(authentication.auth_time * 1000);
