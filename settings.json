@@ -33,6 +33,7 @@
     "permissions": {
         "roles": {
             "empty": {
+                "_other": "never",
                 "database": {
                     "get": {
                         "community": "never",
