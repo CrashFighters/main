@@ -28,7 +28,7 @@ module.exports = {
             const multiFactorUser = user.multiFactor;
 
             const userInfo = {
-                id: user,
+                id: user.uid,
                 loginMethod,
                 picture: user.photoURL,
                 displayName: user.displayName,
