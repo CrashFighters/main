@@ -11,7 +11,7 @@
         "Unknown error in": "Unknown error in {place}",
         "thereAreErrors": "There are {amount} errors!",
         "thereIsError": "There is {amount} error!",
-        "reload": "reload",
+        "reload": "Reload",
         "clientServerReload": "The server is restarting due to an error."
     },
     "general": {

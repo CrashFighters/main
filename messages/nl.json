@@ -11,7 +11,7 @@
         "Unknown error in": "Onbekende fout in {place}",
         "thereAreErrors": "Er zijn {amount} fouten!",
         "thereIsError": "Er is {amount} fout!",
-        "reload": "reload",
+        "reload": "Herladen",
         "clientServerReload": "Vanwege een fout is de server aan het herladen."
     },
     "general": {
