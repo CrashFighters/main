@@ -4,9 +4,9 @@ module.exports = {
     async execute({ request, parseError }) {
         try {
 
-            const explicitAuth = Boolean(request.headers['auth_token']);
+            const explicitAuthentication = Boolean(request.headers['auth_token']);
             let authHeaders;
-            if (explicitAuth)
+            if (explicitAuthentication)
                 authHeaders = request.headers['auth_token'];
             else
                 authHeaders = getAuthHeadersFromCookie(request.headers.cookie);
@@ -14,7 +14,7 @@ module.exports = {
             const authToken = authHeaders?.['auth_token'];
 
             if (!authHeaders || !authToken)
-                return { authenticated: false, explicitAuth };
+                return { authenticated: false, explicitAuthentication };
 
             try {
                 const authentication = await firebase.auth().verifyIdToken(authToken, true);
@@ -22,13 +22,13 @@ module.exports = {
                 return {
                     authenticated: true,
                     authentication,
-                    explicitAuth
+                    explicitAuthentication
                 };
             } catch {
                 return {
                     authenticated: false,
                     authentication: null,
-                    explicitAuth
+                    explicitAuthentication
                 };
             }
 
