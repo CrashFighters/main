@@ -6,9 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+
+    <script type="module" src="/sdk/auth.js"></script>
 </head>
 
 <body>
+    <button type="button" onclick="window.auth.logout()" data-template="loggedIn" data-template_insert="disabled"
+        data-template_fallback="true">
+        <span data-lang_text="Logout"> log out </span>
+    </button>
+
     This is private!
 </body>
 
