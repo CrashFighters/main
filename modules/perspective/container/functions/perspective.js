@@ -1,6 +1,6 @@
-const { google } = require('googleapis');
+const { google } = require('googleapis'); //todo: install googleapis
 
-const { apiKey, discoveryUrl } = require('../../../credentials/perspective.json');
+const { apiKey, discoveryUrl } = require('../../../../credentials/perspective.json');
 
 module.exports = async (message) => {
     const client = await google.discoverAPI(discoveryUrl);
