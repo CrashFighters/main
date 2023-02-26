@@ -8,6 +8,11 @@
         "sourceType": "module"
     },
     "rules": {
+        "no-undef": "error",
+        "no-const-assign": "error",
+        "no-this-before-super": "error",
+        "constructor-super": "error",
+        "no-eval": "error",
         "indent": [
             "warn",
             4,
@@ -15,11 +20,7 @@
                 "SwitchCase": 1
             }
         ],
-        "no-undef": "error",
-        "no-const-assign": "error",
-        "no-this-before-super": "error",
-        "constructor-super": "error",
-        "no-eval": "error",
+        "require-await": "warn",
         "no-var": "warn",
         "no-unused-vars": "warn",
         "no-unreachable": "warn",
