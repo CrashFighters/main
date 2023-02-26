@@ -42,7 +42,7 @@ function getLanguages(request) {
 
     languages.push(...settings.generic.lang);
 
-    languages = [...new Set(languages)];
+    languages = [...new Set(languages)].reverse();
 
     return languages;
 }
