@@ -7,10 +7,10 @@ module.exports = {
             'customClaims'
         ]
     },
-    execute({ middlewareData }) {
+    execute({ middlewareData: { authentication, explicitAuthentication, customClaims } }) {
         return {
             getPermission: permission =>
-                getPermission(permission, middlewareData.authentication, middlewareData.customClaims)
+                getPermission(permission, explicitAuthentication ? authentication : undefined, explicitAuthentication ? customClaims : undefined)
         };
     }
 }
