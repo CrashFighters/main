@@ -92,3 +92,13 @@ export const add = async (phoneNumber, displayName) => {
         await multiFactor(auth.currentUser).enroll(multiFactorAssertion, displayName);
     }, recaptchaButton];
 };
+
+export const remove = async (index) => {
+    if (!window.auth.user)
+        throw new Error('User is not logged in');
+
+    const multiFactorUser = multiFactor(auth.currentUser);
+    const uid = multiFactorUser.enrolledFactors[index].uid;
+
+    await multiFactorUser.unenroll(uid);
+}
