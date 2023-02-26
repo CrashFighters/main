@@ -21,7 +21,8 @@ module.exports = {
 
 function respond(path, response, privateFile) {
     const data = fs.readFileSync(path).toString()
+    const contentType = mime.lookup(path);
 
-    response.writeHead(200, { 'Content-Type': mime.lookup(path) });
-    return response.end(data + (privateFile ? '<script>window.privateFile = true;</script>' : ''));
+    response.writeHead(200, { 'Content-Type': contentType });
+    return response.end(data + (privateFile && contentType === 'text/html' ? '<script>window.privateFile = true;</script>' : ''));
 }
