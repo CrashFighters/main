@@ -4,6 +4,12 @@ const path = require('path');
 const inlineCssStartString = '<!-- inlineCss: ';
 const inlineCssEndString = ' -->';
 
+const cssPreloadUrls = [
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
+    'https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css',
+    'https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css'
+]
+
 module.exports = (html, isPrivate) => {
 
     if (isPrivate)
@@ -15,6 +21,12 @@ module.exports = (html, isPrivate) => {
         <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"></noscript>
     `);
+
+    for (const url of cssPreloadUrls)
+        html = html.replaceAll(`<link href="${url}" rel="stylesheet" />`, `
+            <link rel="preload" href="${url}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+            <noscript><link href="${url}" rel="stylesheet"></noscript>
+        `)
 
     let inlineCssIndex = html.indexOf(inlineCssStartString);
     while (inlineCssIndex !== -1) {
