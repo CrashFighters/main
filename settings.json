@@ -93,7 +93,7 @@
                 },
                 "moderate": {
                     "getPost": "never",
-                    "updatePostStatus": {
+                    "updatePostVisibility": {
                         "verified": "never",
                         "flagged": "never",
                         "hidden": "never"
@@ -130,7 +130,7 @@
                 },
                 "moderate": {
                     "getPost": "always",
-                    "updatePostStatus": {
+                    "updatePostVisibility": {
                         "verified": "always",
                         "flagged": "always",
                         "hidden": "always"
