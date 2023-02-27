@@ -1,4 +1,11 @@
 {
+    "cache": {
+        "js": {
+            "cacheMinutes": 30,
+            "staleUseMinutes": 180,
+            "errorUseMinutes": 60
+        }
+    },
     "generic": {
         "websiteUrl": "localhost",
         "port": "80",
