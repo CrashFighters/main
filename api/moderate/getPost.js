@@ -1,5 +1,5 @@
 const getModerationPosts = require('../../modules/database/functions/getModerationPosts.js');
-const { get } = require('../../modules/database/database.js');
+const { get } = require('../../modules/database/functions/database.js');
 const moderationPostIds = {};
 
 module.exports = {

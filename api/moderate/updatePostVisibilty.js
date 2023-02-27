@@ -1,5 +1,5 @@
 const { getModerationPostIds } = require('./getPost.js');
-const { get, set } = require('../../modules/database/database.js');
+const { get, set } = require('../../modules/database/functions/database.js');
 
 module.exports = {
     async execute({ parseError, statusCode, end, middlewareData: { getPermission }, params }) {
