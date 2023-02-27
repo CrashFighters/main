@@ -9,8 +9,8 @@ module.exports = (html, request, isPrivate) => {
     html = html.replaceAll('<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />', `
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link rel="preload" href="styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="styles.css"></noscript>
+        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"></noscript>
     `);
 
     const inlineCssStartString = '<!-- inlineCss: ';
