@@ -36,7 +36,6 @@ module.exports = {
                         if (!await executeMiddleware(name)) return false;
                 }
 
-                console.time(name)
                 const newMiddlewareData = await middleware.execute({
                     request,
                     extraData,
@@ -48,7 +47,6 @@ module.exports = {
                     },
                     middlewareData: cachedMiddlewareData
                 }) ?? {};
-                console.timeEnd(name)
 
                 cachedMiddlewareData = { ...cachedMiddlewareData, ...newMiddlewareData };
 
