@@ -3,9 +3,10 @@ These are all the places where there is a list of allowed domains:
 https://www.google.com/recaptcha/admin/site/613603520/settings
 https://console.firebase.google.com/project/crashfighters/authentication/settings
 https://console.cloud.google.com/apis/credentials/key/4df088bc-21d3-4b06-9d6a-080c2724c96d?project=crashfighters
+https://console.cloud.google.com/apis/credentials/oauthclient/478395146629-2v5dr1294gkdgp2v6v9ou7qoakq56bpi.apps.googleusercontent.com?project=crashfighters
+https://console.cloud.google.com/apis/credentials/oauthclient/478395146629-r847fe0meru30uh5hnfjomgcc27prlcq.apps.googleusercontent.com?project=crashfighters
 https://console.cloud.google.com/apis/credentials/oauthclient/478395146629-9g1so59tp8p4iqn61g3iruksa99rmk0l.apps.googleusercontent.com?project=crashfighters
 https://console.cloud.google.com/apis/credentials/consent/edit?project=crashfighters
-https://console.cloud.google.com/apis/credentials/oauthclient/478395146629-kk0nlsvgfqhqjc58ccvp265u6g06mblm.apps.googleusercontent.com?project=crashfighters
 /credentials/revokeGoogleToken.json
 /credentials/googleClientId.json
 
@@ -19,4 +20,3 @@ https://crashfighters.web.app
 https://crashfighters.loca.lt
 https://crashfighters.com
 https://crashfighters.nl
-http://crashfighters.nl
