@@ -8,8 +8,10 @@ import {
     deleteCookie
 } from '/common/cookie.js';
 
+import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
+
 import { onStateChange } from '/sdk/auth.js';
-const { auth } = (await import('/sdk/auth.js'))._;
+const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
 let first = true;
 onStateChange(() => {
@@ -24,7 +26,7 @@ onStateChange(() => {
     first = false;
 });
 
-export function setLanguage(language) {
+export async function setLanguage(language) {
     if (!language) {
         deleteCookie('language');
         useDeviceLanguage(auth);
@@ -32,6 +34,9 @@ export function setLanguage(language) {
         setCookie('language', language);
         auth.languageCode = language;
     }
+
+    if (doesDocumentIncludeScript('/sdk/language.js'))
+        (await import('/sdk/language.js'))._.execute();
 }
 
 window.z = setLanguage; //todo: remove
