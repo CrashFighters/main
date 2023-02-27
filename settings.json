@@ -75,6 +75,17 @@
                             "lastSignInTime": "never",
                             "2fa": "never"
                         }
+                    },
+                    "modify": {
+                        "userInfo": {
+                            "_other": "never",
+                            "email": "never",
+                            "emailVerified": "never",
+                            "phoneNumber": "never",
+                            "password": "never",
+                            "displayName": "never",
+                            "picture": "never"
+                        }
                     }
                 },
                 "user": {
@@ -110,6 +121,17 @@
                     "getUserFrom": "always",
                     "get": {
                         "userInfo": "always"
+                    },
+                    "modify": {
+                        "userInfo": {
+                            "_other": "never",
+                            "email": "always",
+                            "emailVerified": "never",
+                            "phoneNumber": "always",
+                            "password": "never",
+                            "displayName": "always",
+                            "picture": "always"
+                        }
                     }
                 },
                 "user": {
