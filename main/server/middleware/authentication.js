@@ -38,6 +38,7 @@ module.exports = {
     }
 }
 
+//todo: use parse cookie function
 function getAuthHeadersFromCookie(cookie) {
     if (!cookie) return null;
     let authHeaders = cookie.split(';').find(c => c.trim().startsWith('authHeaders='));
