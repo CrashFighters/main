@@ -91,6 +91,14 @@
                         "2fa": "never"
                     }
                 },
+                "moderate": {
+                    "getPost": "never",
+                    "updatePostStatus": {
+                        "verified": "never",
+                        "flagged": "never",
+                        "hidden": "never"
+                    }
+                },
                 "user": {
                     "delete": "never"
                 }
@@ -116,6 +124,19 @@
             }
         },
         "customRoles": {
+            "moderator": {
+                "privateFiles": {
+                    "moderate": "always"
+                },
+                "moderate": {
+                    "getPost": "always",
+                    "updatePostStatus": {
+                        "verified": "always",
+                        "flagged": "always",
+                        "hidden": "always"
+                    }
+                }
+            },
             "support": {
                 "privateFiles": {
                     "dashboard": "always"
