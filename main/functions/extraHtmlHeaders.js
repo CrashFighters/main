@@ -22,31 +22,32 @@ const requirements = {
     '/js/settings.js': ['/sdk/auth.js']
 };
 
-// module.exports = (html, request, isPrivate) => {
-module.exports = (html) => {
+//todo: preload user profile picture based on authentication middleware
+
+module.exports = ({ data, authentication }) => {
     const headers = {};
 
-    const loadedScripts = [];
+    const loadedFiles = [];
     for (const preloadScript of preloadScripts)
-        if (html.includes(`<script type="module" src="${preloadScript}"></script>`))
-            loadedScripts.push(preloadScript);
+        if (data.includes(`<script type="module" src="${preloadScript}"></script>`))
+            loadedFiles.push({ path: preloadScript, type: 'script' });
 
-    // add all requirements to loadedScripts
+    // add all requirements to loadedFiles
     let changed = true;
     while (changed) {
         changed = false;
         for (const preloadScript of preloadScripts)
             if (requirements[preloadScript])
                 for (const requirement of requirements[preloadScript])
-                    if (!loadedScripts.includes(requirement)) {
-                        loadedScripts.push(requirement);
+                    if (!loadedFiles.find(({ path }) => path === requirement)) {
+                        loadedFiles.push({ path: requirement, type: 'script' });
                         changed = true;
                     }
     };
 
     const links = [];
-    for (const loadedScript of loadedScripts)
-        links.push(`<${loadedScript}>; rel=modulepreload; as=script`);
+    for (const { path, type } of loadedFiles)
+        links.push(`<${path}>; rel=modulepreload; as=${type}`);
 
     if (links.length > 0)
         headers['Link'] = links.join(', ');
