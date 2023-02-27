@@ -9,8 +9,8 @@ module.exports = {
     },
     execute({ middlewareData: { authentication, explicitAuthentication, customClaims } }) {
         return {
-            getPermission: permission =>
-                getPermission(permission, explicitAuthentication ? authentication : undefined, explicitAuthentication ? customClaims : undefined)
+            getPermission: (permission, allowCookie) =>
+                getPermission(permission, (explicitAuthentication || allowCookie) ? authentication : undefined, (explicitAuthentication || allowCookie) ? customClaims : undefined)
         };
     }
 }

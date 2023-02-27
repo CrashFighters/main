@@ -9,7 +9,7 @@ module.exports = {
         const { publicPath, privatePath, localPath } = require('../functions/urlToPath.js').execute(request.url);
         const permissionParts = localPath.split('/').slice(1);
 
-        if (fs.existsSync(privatePath) && getPermission(['privateFiles', ...permissionParts]) === 'always')
+        if (fs.existsSync(privatePath) && getPermission(['privateFiles', ...permissionParts], true) === 'always')
             respond(privatePath, response, true);
         else if (fs.existsSync(publicPath))
             respond(publicPath, response, false);
