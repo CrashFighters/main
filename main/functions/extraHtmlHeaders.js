@@ -14,7 +14,12 @@ const requirements = {
     '/sdk/oneTap.js': ['/sdk/auth.js', '/common/apiKeys.js', '/common/doesDocumentIncludeScript.js'],
     '/sdk/recaptcha.js': ['/common/apiKeys.js', '/common/doesDocumentIncludeScript.js'],
     '/sdk/templates.j': ['/sdk/auth.js', '/common/deepQuerySelectorAll.js'],
-    '/sk/zeroTap.js': ['/sdk/auth.js', '/common/apiKeys.js', '/common/doesDocumentIncludeScript.js']
+    '/sk/zeroTap.js': ['/sdk/auth.js', '/common/apiKeys.js', '/common/doesDocumentIncludeScript.js'],
+    '/js/2fa': ['/sdk/auth.js'],
+    '/js/appCheck.js': ['/common/apiKeys.js'],
+    '/js/database.js': ['/sdk/auth.js'],
+    '/js/login.js': ['/sdk/auth.js', '/common/isMobile.js'],
+    '/js/settings.js': ['/sdk/auth.js']
 };
 
 // module.exports = (html, request, isPrivate) => {
