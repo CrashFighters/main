@@ -8,6 +8,10 @@ const middlewares = fs.existsSync(path.resolve(__dirname, './middleware/')) ?
 const parseErrorOnline = require('../functions/error/parseErrorOnline').execute;
 const parsePostBody = require('../functions/parse/postBody');
 
+const dbApi = require('./dbApi.js');
+const api = require('./api.js');
+const normal = require('./normal.js');
+
 module.exports = {
     async execute(request, response) {
         const parseError = (error, customText) => parseErrorOnline(error, response, customText);
@@ -49,11 +53,11 @@ module.exports = {
 
             if (!parseErrorCalled)
                 if (request.url.startsWith('/dbApi/'))
-                    return require('./dbApi.js').execute(request, response, { middlewareData, extraData });
+                    return dbApi.execute(request, response, { middlewareData, extraData });
                 else if (request.url.startsWith('/api/'))
-                    return require('./api.js').execute(request, response, { middlewareData, extraData });
+                    return api.execute(request, response, { middlewareData, extraData });
                 else
-                    return require('./normal.js').execute(request, response, { middlewareData, extraData });
+                    return normal.execute(request, response, { middlewareData, extraData });
 
         } catch (err) {
             parseError(err);

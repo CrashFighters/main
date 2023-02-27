@@ -6,6 +6,8 @@ const serverSideRenderHtml = require('../functions/serverSideRenderHtml.js');
 const getExtraHtmlHeaders = require('../functions/extraHtmlHeaders.js');
 const getExtraHeaders = require('../functions/extraHeaders.js');
 
+const publicFiles = require('../setup/preload/publicFiles.js');
+
 module.exports = {
     execute(request, response, { middlewareData: { getPermission, authentication } }) {
 
@@ -28,15 +30,31 @@ module.exports = {
     }
 };
 
-function respond({ path, response, request, privateFile, authentication }) {
+function respond({ path, response, request, privateFile }) {
+    let pathname = request.url.split('?')[0];
+    if (pathname.endsWith('/')) pathname = pathname.slice(0, -1);
+
+    if (!privateFile && publicFiles[pathname]) {
+        const { statusCode, headers, data, path } = publicFiles[pathname];
+        response.writeHead(statusCode, headers);
+
+        if (data)
+            response.end(data);
+        else
+            fs.createReadStream(path).pipe(response);
+        return
+    }
+
+    console.log(pathname)
+
     const contentType = mime.lookup(path);
 
     if (contentType === 'text/html') {
         const data = fs.readFileSync(path).toString()
 
-        const finalData = serverSideRenderHtml(data, request, privateFile);
-        const extraHeaders = getExtraHeaders(request, privateFile);
-        const extraHtmlHeaders = getExtraHtmlHeaders({ data, request, privateFile, authentication });
+        const finalData = serverSideRenderHtml(data, privateFile);
+        const extraHeaders = getExtraHeaders(privateFile);
+        const extraHtmlHeaders = getExtraHtmlHeaders({ data });
 
         response.writeHead(200, {
             ...extraHeaders,
@@ -50,7 +68,7 @@ function respond({ path, response, request, privateFile, authentication }) {
         const size = fs.statSync(path).size;
         const readStream = fs.createReadStream(path);
 
-        const extraHeaders = getExtraHeaders(request, privateFile);
+        const extraHeaders = getExtraHeaders(privateFile);
 
         response.writeHead(200, {
             ...extraHeaders,

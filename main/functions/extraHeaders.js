@@ -1,6 +1,6 @@
 const { cache: { js: { cacheMinutes: jsCache, staleUseMinutes: jsStaleCache, errorUseMinutes: jsErrorCache } } } = require('../../settings.json');
 
-module.exports = (request, isPrivate) => {
+module.exports = (isPrivate) => {
     const headers = {};
 
     if (isPrivate)

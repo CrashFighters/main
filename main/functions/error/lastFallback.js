@@ -12,6 +12,10 @@ your past self
 
 */
 
+try {
+    require('../../server/main')
+} catch { }
+
 const fs = require('fs');
 const settings = require('../../../settings.json');
 let gMessages;

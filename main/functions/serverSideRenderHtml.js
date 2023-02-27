@@ -4,7 +4,7 @@ const path = require('path');
 const inlineCssStartString = '<!-- inlineCss: ';
 const inlineCssEndString = ' -->';
 
-module.exports = (html, request, isPrivate) => {
+module.exports = (html, isPrivate) => {
 
     if (isPrivate)
         html += '<script>window.privateFile = true;</script>';
