@@ -3,6 +3,7 @@ const mime = require('mime-types');
 
 const statusCode = require('../functions/error/statusCode.js').execute;
 const serverSideRenderHtml = require('../functions/serverSideRenderHtml.js');
+const extraHtmlHeaders = require('../functions/extraHtmlHeaders.js');
 
 module.exports = {
     execute(request, response, { middlewareData: { getPermission } }) {
@@ -24,9 +25,12 @@ function respond(path, response, request, privateFile) {
 
     if (contentType === 'text/html') {
         const data = fs.readFileSync(path).toString()
+
         const finalData = serverSideRenderHtml(data, request, privateFile);
+        const extraHeaders = extraHtmlHeaders(data, request, privateFile);
 
         response.writeHead(200, {
+            ...extraHeaders,
             'Content-Type': contentType,
             'Content-Length': Buffer.byteLength(finalData)
         });

@@ -1,6 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
+const inlineCssStartString = '<!-- inlineCss: ';
+const inlineCssEndString = ' -->';
+
 module.exports = (html, request, isPrivate) => {
 
     if (isPrivate)
@@ -12,9 +15,6 @@ module.exports = (html, request, isPrivate) => {
         <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"></noscript>
     `);
-
-    const inlineCssStartString = '<!-- inlineCss: ';
-    const inlineCssEndString = ' -->';
 
     let inlineCssIndex = html.indexOf(inlineCssStartString);
     while (inlineCssIndex !== -1) {
