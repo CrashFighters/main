@@ -44,8 +44,6 @@ module.exports = (html) => {
                     }
     };
 
-    console.log(loadedScripts)
-
     const links = [];
     for (const loadedScript of loadedScripts)
         links.push(`<${loadedScript}>; rel=preload; as=script`);
