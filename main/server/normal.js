@@ -2,6 +2,7 @@ const fs = require('fs');
 const mime = require('mime-types');
 
 const statusCode = require('../functions/error/statusCode.js').execute;
+const serverSideRenderHtml = require('../functions/serverSideRenderHtml.js');
 
 module.exports = {
     execute(request, response, { middlewareData: { getPermission } }) {
@@ -23,7 +24,7 @@ function respond(path, response, privateFile) {
 
     if (contentType === 'text/html') {
         const data = fs.readFileSync(path).toString()
-        const finalData = data + (privateFile ? '<script>window.privateFile = true;</script>' : '');
+        const finalData = serverSideRenderHtml(data, privateFile);
 
         response.writeHead(200, {
             'Content-Type': contentType,
