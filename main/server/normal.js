@@ -11,20 +11,20 @@ module.exports = {
         const permissionParts = localPath.split('/').slice(1);
 
         if (fs.existsSync(privatePath) && getPermission(['privateFiles', ...permissionParts], true) === 'always')
-            respond(privatePath, response, true);
+            respond(privatePath, response, request, true);
         else if (fs.existsSync(publicPath))
-            respond(publicPath, response, false);
+            respond(publicPath, response, request, false);
         else
             statusCode(response, 404);
     }
 };
 
-function respond(path, response, privateFile) {
+function respond(path, response, request, privateFile) {
     const contentType = mime.lookup(path);
 
     if (contentType === 'text/html') {
         const data = fs.readFileSync(path).toString()
-        const finalData = serverSideRenderHtml(data, privateFile);
+        const finalData = serverSideRenderHtml(data, request, privateFile);
 
         response.writeHead(200, {
             'Content-Type': contentType,
