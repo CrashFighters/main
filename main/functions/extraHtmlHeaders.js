@@ -22,8 +22,6 @@ const requirements = {
     '/js/settings.js': ['/sdk/auth.js']
 };
 
-//todo: preload user profile picture based on authentication middleware
-
 module.exports = ({ data }) => {
     const headers = {};
 
