@@ -5,7 +5,6 @@ import {
     onAuthStateChanged,
     signOut,
     updateProfile,
-    useDeviceLanguage,
     getIdToken
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
@@ -39,17 +38,6 @@ onAuthStateChanged(auth, async () => {
     first = false;
 });
 
-export async function getPermission(permission) {
-    const response = await fetch(`/api/getPermission?permission=${encodeURIComponent(JSON.stringify(permission))}`, {
-        headers: {
-            ...await getAuthHeaders()
-        }
-    });
-    const result = await response.json();
-
-    return result;
-};
-
 export const logout = async () => {
     try {
         await signOut(auth);
@@ -72,10 +60,6 @@ export const signup = () => {
 
 async function updateCookies() {
     setCookie('authHeaders', JSON.stringify(await getAuthHeaders()));
-}
-
-function updateDeviceLanguage() {
-    useDeviceLanguage(auth);
 }
 
 async function updateUserObject(newUser) {
@@ -144,7 +128,6 @@ export const _ = {
 
 window.auth = {
     onStateChange,
-    getPermission,
     logout,
     login,
     signup,
@@ -154,4 +137,3 @@ window.auth = {
 
 onStateChange(() => updateUserObject(auth.currentUser));
 onStateChange(updateCookies);
-onStateChange(updateDeviceLanguage);
