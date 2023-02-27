@@ -18,14 +18,14 @@ module.exports = (html, isPrivate) => {
     html = html.replaceAll('<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />', `
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"></noscript>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" fetchpriority="low" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" fetchpriority="low" rel="stylesheet"></noscript>
     `);
 
     for (const url of cssPreloadUrls)
         html = html.replaceAll(`<link href="${url}" rel="stylesheet" />`, `
-            <link rel="preload" href="${url}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-            <noscript><link href="${url}" rel="stylesheet"></noscript>
+            <link href="${url}" fetchpriority="low" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
+            <noscript><link href="${url}" fetchpriority="low" rel="stylesheet"></noscript>
         `)
 
     let inlineCssIndex = html.indexOf(inlineCssStartString);

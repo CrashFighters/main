@@ -22,6 +22,24 @@ const requirements = {
     '/js/settings.js': ['/sdk/auth.js']
 };
 
+const highPriority = [
+    '/sdk/language.js',
+    '/sdk/templates.js',
+    '/sdk/auth.js',
+    '/sdk/googleLoginButtons.js'
+];
+
+const lowPriority = [
+    '/sdk/oneTap.js',
+    '/sdk/recaptcha.js',
+    '/sdk/zeroTap.js',
+    '/js/2fa.js',
+    '/js/appCheck.js',
+    '/js/database.js',
+    '/js/login.js',
+    '/js/settings.js'
+];
+
 module.exports = ({ data }) => {
     const headers = {};
 
@@ -45,7 +63,7 @@ module.exports = ({ data }) => {
 
     const links = [];
     for (const { path, type } of loadedFiles)
-        links.push(`<${path}>; rel=modulepreload; as=${type}`);
+        links.push(`<${path}>; rel=modulepreload; as=${type};${highPriority.includes(path) ? ' fetchpriority=high' : ''}${lowPriority.includes(path) ? ' fetchpriority=low' : ''}`);
 
     if (links.length > 0)
         headers['Link'] = links.join(', ');
