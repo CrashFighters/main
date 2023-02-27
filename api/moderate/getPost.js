@@ -5,6 +5,8 @@ const moderationPostIds = {};
 module.exports = {
     async execute({ parseError, statusCode, end, middlewareData: { getPermission } }) {
         try {
+
+            getPermission = await getPermission;
             if (getPermission('moderate.getPost') !== 'always')
                 return statusCode(403, 'invalidPermission', 'Invalid permission to get post (moderate.getPost)');
 

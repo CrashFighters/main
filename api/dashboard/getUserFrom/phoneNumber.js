@@ -3,7 +3,10 @@ const firebase = require('../../../modules/authentication/functions/authenticati
 module.exports = {
     async execute({ params, statusCode, parseError, end, middlewareData: { getPermission } }) {
         try {
+
+            getPermission = await getPermission;
             const permission = await getPermission('dashboard.getUserFrom.phoneNumber');
+
             let hasPermission;
             if (permission === 'always')
                 hasPermission = true;

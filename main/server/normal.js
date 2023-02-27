@@ -9,12 +9,16 @@ const getExtraHeaders = require('../functions/extraHeaders.js');
 const publicFiles = require('../setup/preload/publicFiles.js');
 
 module.exports = {
-    execute(request, response, { middlewareData: { getPermission, authentication } }) {
+    async execute(request, response, { middlewareData: { getPermission } }) {
 
         const { publicPath, privatePath, localPath } = require('../functions/urlToPath.js').execute(request.url);
         const permissionParts = localPath.split('/').slice(1);
 
-        const isPrivate = fs.existsSync(privatePath) && getPermission(['privateFiles', ...permissionParts], true) === 'always';
+        let isPrivate = false;
+        if (fs.existsSync(privatePath)) {
+            getPermission = await getPermission;
+            isPrivate = getPermission(['privateFiles', ...permissionParts], true) === 'always';
+        };
         const isPublic = fs.existsSync(publicPath);
 
         if ((!isPrivate) && (!isPublic))
@@ -24,8 +28,7 @@ module.exports = {
             path: isPrivate ? privatePath : publicPath,
             response,
             request,
-            privateFile: isPrivate,
-            authentication
+            privateFile: isPrivate
         });
     }
 };

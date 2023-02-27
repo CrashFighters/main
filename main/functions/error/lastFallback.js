@@ -118,6 +118,7 @@ module.exports = {
         }
     },
     serverExecute(request, response) {
+        if (request.url !== '/') return; //todo-imp: remove
 
         if (extremeErrorMode) {
             const t = require(__filename);

@@ -23,6 +23,9 @@ module.exports = {
 
             const newProperties = {};
 
+            getPermission = await getPermission;
+            authentication = await authentication;
+            explicitAuthentication = await explicitAuthentication;
             for (const [key, value] of Object.entries(properties)) {
                 if (!possibleProperties[key]) return statusCode(400, 'unknownProperty', `Unknown property ${key}`);
 

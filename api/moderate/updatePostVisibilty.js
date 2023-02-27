@@ -8,6 +8,7 @@ module.exports = {
             // Check visibility parameter
             if (!params.visibility) return statusCode(400, 'noVisibilityProvided', 'No visibility provided');
             if (!['verified', 'flagged', 'hidden'].includes(params.visibility)) return statusCode(400, 'invalidVisibility', 'Invalid visibility provided');
+            getPermission = await getPermission;
             if (getPermission(['moderate', 'updatePostVisibility', params.visibility]) !== 'always') return statusCode(403, 'invalidPermission', `Invalid permission to update post visibility (moderate.updatePostVisibility.${params.visibility})`);
 
             // Check moderationPost parameter
