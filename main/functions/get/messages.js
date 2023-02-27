@@ -1,5 +1,6 @@
 const settings = require('../../../settings.json');
 const requestInfo = require('../../../modules/requestInfo/getInfo').execute;
+const parseCookie = require('../parse/cookie.js');
 
 module.exports = {
     execute({ request } = {}) {
@@ -36,12 +37,18 @@ function combineMessages(oldMessages, newMessages) {
 function getLanguages(request) {
     if (!request) return settings.generic.lang;
 
-    let languages =
-        (requestInfo(request).lang?.map?.(({ name }) => name) ?? [])
-            .filter(lang => settings.generic.lang.includes(lang));
+    let languages = [];
+
+    if (request.headers.cookie && parseCookie(request.headers.cookie).language)
+        languages.push(parseCookie(request.headers.cookie).language);
+
+    languages.push(
+        ...(requestInfo(request).lang?.map?.(({ name }) => name) ?? [])
+    );
 
     languages.push(...settings.generic.lang);
 
+    languages = languages.filter(lang => settings.generic.lang.includes(lang));
     languages = [...new Set(languages)].reverse();
 
     return languages;
