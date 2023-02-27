@@ -62,7 +62,7 @@ function respond({ path, response, request, privateFile }) {
         response.writeHead(200, {
             ...extraHeaders,
             ...extraHtmlHeaders,
-            'Content-Type': contentType,
+            'Content-Type': contentType + '; charset=UTF-8',
             'Content-Length': Buffer.byteLength(finalData)
         });
 

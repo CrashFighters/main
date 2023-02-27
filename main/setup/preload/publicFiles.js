@@ -42,7 +42,7 @@ function getPublicFile(path) {
             headers: {
                 ...extraHeaders,
                 ...extraHtmlHeaders,
-                'Content-Type': contentType,
+                'Content-Type': contentType + '; charset=UTF-8',
                 'Content-Length': Buffer.byteLength(finalData)
             },
             data: finalData
