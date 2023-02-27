@@ -26,12 +26,12 @@ const requirements = {
 module.exports = (html) => {
     const headers = {};
 
-
     const loadedScripts = [];
     for (const preloadScript of preloadScripts)
         if (html.includes(`<script type="module" src="${preloadScript}"></script>`))
             loadedScripts.push(preloadScript);
 
+    // add all requirements to loadedScripts
     let changed = true;
     while (changed) {
         changed = false;
@@ -46,7 +46,7 @@ module.exports = (html) => {
 
     const links = [];
     for (const loadedScript of loadedScripts)
-        links.push(`<${loadedScript}>; rel=preload; as=script`);
+        links.push(`<${loadedScript}>; rel=modulepreload; as=script`);
 
     if (links.length > 0)
         headers['Link'] = links.join(', ');
