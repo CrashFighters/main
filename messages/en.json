@@ -54,7 +54,8 @@
                 "firebaseAuthInternalError": "An internal error in Firebase authentication occurred. Please try again later",
                 "popupClosedByUser": "The popup was closed by the user",
                 "popupCancelled": "The popup was cancelled",
-                "userCancelled": "The user cancelled the action"
+                "userCancelled": "The user cancelled the action",
+                "operationNotAllowed": "This operation is currently not allowed"
             },
             "ExperienceLogin": "For the best experience, please log in",
             "Choose2faMethod": "Choose which 2FA method you want to use",

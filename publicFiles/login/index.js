@@ -134,6 +134,9 @@ const firebaseErrorCodes = {
     },
     'auth/user-cancelled': {
         errorCode: 'userCancelled'
+    },
+    'auth/operation-not-allowed': {
+        errorCode: 'operationNotAllowed'
     }
 };
 
