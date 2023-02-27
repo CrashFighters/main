@@ -3,7 +3,8 @@ const mime = require('mime-types');
 
 const statusCode = require('../functions/error/statusCode.js').execute;
 const serverSideRenderHtml = require('../functions/serverSideRenderHtml.js');
-const extraHtmlHeaders = require('../functions/extraHtmlHeaders.js');
+const getExtraHtmlHeaders = require('../functions/extraHtmlHeaders.js');
+const getExtraHeaders = require('../functions/extraHeaders.js');
 
 module.exports = {
     execute(request, response, { middlewareData: { getPermission } }) {
@@ -27,10 +28,12 @@ function respond(path, response, request, privateFile) {
         const data = fs.readFileSync(path).toString()
 
         const finalData = serverSideRenderHtml(data, request, privateFile);
-        const extraHeaders = extraHtmlHeaders(data, request, privateFile);
+        const extraHeaders = getExtraHeaders(request, privateFile);
+        const extraHtmlHeaders = getExtraHtmlHeaders(data, request, privateFile);
 
         response.writeHead(200, {
             ...extraHeaders,
+            ...extraHtmlHeaders,
             'Content-Type': contentType,
             'Content-Length': Buffer.byteLength(finalData)
         });
@@ -40,7 +43,10 @@ function respond(path, response, request, privateFile) {
         const size = fs.statSync(path).size;
         const readStream = fs.createReadStream(path);
 
+        const extraHeaders = getExtraHeaders(request, privateFile);
+
         response.writeHead(200, {
+            ...extraHeaders,
             'Content-Type': contentType,
             'Content-Length': size
         });
