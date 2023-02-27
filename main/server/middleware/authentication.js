@@ -41,10 +41,9 @@ module.exports = {
 
 function getAuthHeadersFromCookie(cookie) {
     if (!cookie) return null;
-    let authHeaders = parseCookie(cookie, 'authHeaders');
+    let authHeaders = parseCookie(cookie).authHeaders;
     if (!authHeaders) return null;
 
-    authHeaders = authHeaders.split('=')[1];
     try {
         authHeaders = JSON.parse(authHeaders);
     } catch {
