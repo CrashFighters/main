@@ -38,5 +38,3 @@ export async function setLanguage(language) {
     if (doesDocumentIncludeScript('/sdk/language.js'))
         (await import('/sdk/language.js'))._.execute();
 }
-
-window.z = setLanguage; //todo: remove
