@@ -7,21 +7,28 @@ const getExtraHtmlHeaders = require('../functions/extraHtmlHeaders.js');
 const getExtraHeaders = require('../functions/extraHeaders.js');
 
 module.exports = {
-    execute(request, response, { middlewareData: { getPermission } }) {
+    execute(request, response, { middlewareData: { getPermission, authentication } }) {
 
         const { publicPath, privatePath, localPath } = require('../functions/urlToPath.js').execute(request.url);
         const permissionParts = localPath.split('/').slice(1);
 
-        if (fs.existsSync(privatePath) && getPermission(['privateFiles', ...permissionParts], true) === 'always')
-            respond(privatePath, response, request, true);
-        else if (fs.existsSync(publicPath))
-            respond(publicPath, response, request, false);
-        else
-            statusCode(response, 404);
+        const isPrivate = fs.existsSync(privatePath) && getPermission(['privateFiles', ...permissionParts], true) === 'always';
+        const isPublic = fs.existsSync(publicPath);
+
+        if ((!isPrivate) && (!isPublic))
+            return statusCode(response, 404);
+
+        respond({
+            path: isPrivate ? privatePath : publicPath,
+            response,
+            request,
+            privateFile: isPrivate,
+            authentication
+        });
     }
 };
 
-function respond(path, response, request, privateFile) {
+function respond({ path, response, request, privateFile, authentication }) {
     const contentType = mime.lookup(path);
 
     if (contentType === 'text/html') {
@@ -29,7 +36,7 @@ function respond(path, response, request, privateFile) {
 
         const finalData = serverSideRenderHtml(data, request, privateFile);
         const extraHeaders = getExtraHeaders(request, privateFile);
-        const extraHtmlHeaders = getExtraHtmlHeaders(data, request, privateFile);
+        const extraHtmlHeaders = getExtraHtmlHeaders({ data, request, privateFile, authentication });
 
         response.writeHead(200, {
             ...extraHeaders,

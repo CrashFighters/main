@@ -32,8 +32,10 @@ module.exports = {
                         request,
                         extraData,
                         parseError: (...arg) => {
-                            parseErrorCalled = true;
-                            parseError(...arg);
+                            if (!parseErrorCalled) {
+                                parseErrorCalled = true;
+                                parseError(...arg);
+                            }
                         },
                         middlewareData
                     }) ?? {};

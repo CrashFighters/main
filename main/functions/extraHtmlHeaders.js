@@ -24,7 +24,7 @@ const requirements = {
 
 //todo: preload user profile picture based on authentication middleware
 
-module.exports = ({ data, authentication }) => {
+module.exports = ({ data }) => {
     const headers = {};
 
     const loadedFiles = [];
