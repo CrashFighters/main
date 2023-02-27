@@ -22,6 +22,9 @@ async function execute() {
     messages = await fetch('/api/messages');
     messages = await messages.json();
 
+    const html = document.querySelector('html');
+    html.lang = messages.info.code;
+
     const innerTextElements = deepQuerySelectorAll('[data-lang_text]');
 
     for (const element of innerTextElements)
