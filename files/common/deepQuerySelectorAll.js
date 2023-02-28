@@ -1,15 +1,1 @@
-export function deepQuerySelectorAll(selector, root = document) {
-    const results = [...root.querySelectorAll(selector)];
-
-    const pushNestedResults = (root) => {
-        for (const element of deepQuerySelectorAll(selector, root))
-            if (!results.includes(element)) results.push(element);
-    };
-
-    if (root.shadowRoot) pushNestedResults(root.shadowRoot);
-
-    for (const element of root.querySelectorAll('*'))
-        if (element.shadowRoot) pushNestedResults(element.shadowRoot);
-
-    return results;
-}
+export function deepQuerySelectorAll(o,e=document){const t=[...e.querySelectorAll(o)],l=e=>{for(const l of deepQuerySelectorAll(o,e))t.includes(l)||t.push(l)};e.shadowRoot&&l(e.shadowRoot);for(const o of e.querySelectorAll("*"))o.shadowRoot&&l(o.shadowRoot);return t}

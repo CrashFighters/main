@@ -1,6 +1,1 @@
-module.exports = (user, customClaims) => {
-    if (customClaims?.permissions)
-        return customClaims.permissions;
-    else
-        return {};
-}
+module.exports=(s,e)=>e?.permissions?e.permissions:{};

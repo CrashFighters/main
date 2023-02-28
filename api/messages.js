@@ -1,9 +1,1 @@
-const getMessages = require('../main/functions/get/messages');
-
-module.exports = {
-    execute({ request, end }) {
-        const messages = getMessages.execute({ request }).mainFunction();
-
-        end(JSON.stringify(messages));
-    }
-}
+const getMessages=require("../main/functions/get/messages");module.exports={execute({request:e,end:s}){const t=getMessages.execute({request:e}).mainFunction();s(JSON.stringify(t))}};

@@ -1,4 +1,1 @@
-export function doesDocumentIncludeScript(url) {
-    const scripts = [...document.getElementsByTagName('script')];
-    return Boolean(scripts.find(script => script.src.endsWith(url)));
-};
+export function doesDocumentIncludeScript(e){const n=[...document.getElementsByTagName("script")];return Boolean(n.find((n=>n.src.endsWith(e))))}

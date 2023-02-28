@@ -1,17 +1,1 @@
-const getPermissions = require('../../../modules/authentication/functions/getPermissions.js');
-
-module.exports = {
-    info: {
-        requires: [
-            'authentication',
-            'customClaims'
-        ]
-    },
-    async execute({ middlewareData, parseError }) {
-        try {
-            return { permissions: getPermissions(middlewareData.authentication, middlewareData.customClaims) };
-        } catch (e) {
-            parseError(e);
-        }
-    }
-}
+const getPermissions=require("../../../modules/authentication/functions/getPermissions.js");module.exports={info:{requires:["authentication","customClaims"]},async execute({middlewareData:e,parseError:s}){try{return{permissions:getPermissions(e.authentication,e.customClaims)}}catch(e){s(e)}}};

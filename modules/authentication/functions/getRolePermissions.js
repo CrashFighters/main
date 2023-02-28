@@ -1,13 +1,1 @@
-const { roles, customRoles } = require('../../../settings.json').permissions;
-
-module.exports = (role) => {
-    const roleType = role.split(':')[0];
-    const roleName = role.split(':')[1];
-
-    if (roleType === 'roles')
-        return roles[roleName];
-    else if (roleType === 'customRoles')
-        return customRoles[roleName];
-    else
-        throw new Error(`Invalid role type ${roleType}`);
-}
+const{roles:roles,customRoles:customRoles}=require("../../../settings.json").permissions;module.exports=s=>{const o=s.split(":")[0],e=s.split(":")[1];if("roles"===o)return roles[e];if("customRoles"===o)return customRoles[e];throw new Error(`Invalid role type ${o}`)};
