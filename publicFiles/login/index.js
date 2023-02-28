@@ -81,7 +81,11 @@ onStateChange((user) => {
     if (user && !preventRedirect) redirect();
 });
 
-const getMinimalScores = async () => await fetch('/api/minimalScores').then(a => a.json()); //todo: make use preloaded data
+const getMinimalScores = async () => await fetch('/api/minimalScores', {
+    method: 'GET',
+    credentials: 'include',
+    mode: 'no-cors' //to allow to use the preload
+}).then(a => a.json());
 
 const githubLoginButtons = [...deepQuerySelectorAll('.githubLoginButton')];
 for (const githubLoginButton of githubLoginButtons)
