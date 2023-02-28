@@ -3,7 +3,7 @@
 --fetchPriority--: low
 
 --fileRequirements--
-/sk/auth.js
+/sdk/auth.js
 --endFileRequirements--
 
 */
