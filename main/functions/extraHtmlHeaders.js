@@ -45,7 +45,7 @@ const requirements = {
 module.exports = ({ data }) => {
     const headers = {};
 
-    const loadedFiles = [];
+    let loadedFiles = [];
     for (const preloadScript of preloadScripts)
         if (data.includes(`<script type="module" src="${preloadScript}"></script>`))
             loadedFiles.push({ path: preloadScript });
@@ -62,28 +62,46 @@ module.exports = ({ data }) => {
                 changed = true;
             }
 
+            if ((![null, undefined].includes(loadedFile.fallbackFetchPriority)) && [null, undefined].includes(fetchPriority)) {
+                loadedFile.fetchPriority = loadedFile.fallbackFetchPriority;
+                delete loadedFile.fallbackFetchPriority;
+                changed = true;
+            }
+
             if (loadedFile.fetchPriority === undefined) {
-                if (loadedFile.fallbackFetchPriority !== undefined && fetchPriority === undefined) {
-                    loadedFile.fetchPriority = loadedFile.fallbackFetchPriority;
-                    delete loadedFile.fallbackFetchPriority;
-                    changed = true;
-                } else {
-                    loadedFile.fetchPriority = fetchPriority;
-                    changed = true;
-                }
+                loadedFile.fetchPriority = fetchPriority;
+                changed = true;
             }
 
             for (const preloadPublicFile of filePreloadPublicFiles)
                 if (!loadedFiles.find(({ path }) => path === preloadPublicFile)) {
                     loadedFiles.push({ path: preloadPublicFile, fallbackFetchPriority: fetchPriority });
                     changed = true;
+                } else if (
+                    ![null, undefined].includes(loadedFile.fetchPriority) && (
+                        [null, undefined].includes(loadedFiles.find(({ path }) => path === preloadPublicFile).fetchPriority) ||
+                        (loadedFiles.find(({ path }) => path === preloadPublicFile).fetchPriority === 'low' && loadedFile.fetchPriority === 'high')
+                    )
+                ) {
+                    loadedFiles.find(({ path }) => path === preloadPublicFile).fetchPriority = loadedFile.fetchPriority;
+                    changed = true;
                 }
         }
     };
 
+    loadedFiles = loadedFiles.sort((a, b) => {
+        if (a.fetchPriority === 'high' && b.fetchPriority !== 'high') return -1;
+        if (a.fetchPriority !== 'high' && b.fetchPriority === 'high') return 1;
+
+        if (a.fetchPriority === 'low' && b.fetchPriority !== 'low') return 1;
+        if (a.fetchPriority !== 'low' && b.fetchPriority === 'low') return -1;
+
+        return 0;
+    })
+
     const links = [];
-    for (const { path, type, fetchpriority } of loadedFiles)
-        links.push(`<${path}>; rel=modulepreload; as=${type}${fetchpriority ? `; fetchpriority=${fetchpriority}` : ''}`);
+    for (const { path, type, fetchPriority } of loadedFiles)
+        links.push(`<${path}>; rel=modulepreload; as=${type}${fetchPriority ? `; fetchpriority=${fetchPriority}` : ''}`);
 
     if (links.length > 0)
         headers['Link'] = links.join(', ');
@@ -123,6 +141,6 @@ function getPreloadPublicFiles(file) {
 }
 
 function getFetchpriority(file) {
-    if (!file.includes('--fetchpriority--: ')) return null;
-    return file.split('\n').find(a => a.includes('--fetchpriority--: ')).split(':').slice(1).join(':').trim()
+    if (!file.includes('--fetchPriority--: ')) return null;
+    return file.split('\n').find(a => a.includes('--fetchPriority--: ')).split(':').slice(1).join(':').trim() || null;
 }
