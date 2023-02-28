@@ -7,41 +7,6 @@ const preloadScripts = [
     ...fs.readdirSync(pathLib.resolve(__dirname, '../../publicFiles/common/')).map(f => `/common/${f}`)
 ];
 
-/*
-const requirements = {
-    '/sdk/auth.js': ['/js/appCheck.js', '/common/apiKeys.js', '/common/cookie.js'],
-    '/sdk/googleLoginButtons.js': ['/common/cookie.js', '/common/apiKeys.js', '/common/doesDocumentIncludeScript.js', '/common/isMobile.js', '/sdk/auth.js'],
-    '/sdk/language.js': ['/common/deepQuerySelectorAll.js'],
-    '/sdk/oneTap.js': ['/sdk/auth.js', '/common/apiKeys.js', '/common/doesDocumentIncludeScript.js'],
-    '/sdk/recaptcha.js': ['/common/apiKeys.js', '/common/doesDocumentIncludeScript.js'],
-    '/sdk/templates.j': ['/sdk/auth.js', '/common/deepQuerySelectorAll.js'],
-    '/sk/zeroTap.js': ['/sdk/auth.js', '/common/apiKeys.js', '/common/doesDocumentIncludeScript.js'],
-    '/js/2fa': ['/sdk/auth.js'],
-    '/js/appCheck.js': ['/common/apiKeys.js'],
-    '/js/database.js': ['/sdk/auth.js'],
-    '/js/login.js': ['/sdk/auth.js', '/common/isMobile.js'],
-    '/js/settings.js': ['/sdk/auth.js']
-};
-*/
-
-// const highPriority = [
-//     '/sdk/language.js',
-//     '/sdk/templates.js',
-//     '/sdk/auth.js',
-//     '/sdk/googleLoginButtons.js'
-// ];
-
-// const lowPriority = [
-//     '/sdk/oneTap.js',
-//     '/sdk/recaptcha.js',
-//     '/sdk/zeroTap.js',
-//     '/js/2fa.js',
-//     '/js/appCheck.js',
-//     '/js/database.js',
-//     '/js/login.js',
-//     '/js/settings.js'
-// ];
-
 module.exports = ({ data }) => {
     const headers = {};
 
