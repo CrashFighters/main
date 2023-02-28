@@ -1,3 +1,14 @@
+/*
+
+--fetchPriority--: high
+
+--preloadPublicFiles--
+/sdk/auth.js
+/common/deepQuerySelectorAll.js
+--endPreloadPublicFiles--
+
+*/
+
 import { onStateChange } from '/sdk/auth.js';
 import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
 

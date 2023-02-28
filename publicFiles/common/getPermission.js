@@ -1,3 +1,11 @@
+/*
+
+--preloadPublicFiles--
+/sdk/auth.js
+--endPreloadPublicFiles--
+
+*/
+
 const { getAuthHeaders } = (await import('/sdk/auth.js'))._;
 
 export async function getPermission(permission) {

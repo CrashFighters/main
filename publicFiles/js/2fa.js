@@ -1,3 +1,11 @@
+/*
+
+--preloadPublicFiles--
+/sdk/auth.js
+--endPreloadPublicFiles--
+
+*/
+
 import {
     multiFactor,
     PhoneAuthProvider,

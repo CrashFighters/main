@@ -1,3 +1,13 @@
+/*
+
+--preloadPublicFiles--
+/common/cookie.js
+/common/doesDocumentIncludeScript.js
+/sdk/auth.js
+--endPreloadPublicFiles--
+
+*/
+
 import {
     useDeviceLanguage
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';

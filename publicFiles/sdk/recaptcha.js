@@ -1,3 +1,12 @@
+/*
+
+--preloadPublicFiles--
+/common/apiKeys.js
+/common/doesDocumentIncludeScript.js
+--endPreloadPublicFiles--
+
+*/
+
 import {
     publicRecaptchaV3Key,
     publicRecaptchaV2Key

@@ -1,3 +1,11 @@
+/*
+
+--preloadPublicFiles--
+/common/apiKeys.js
+--endPreloadPublicFiles--
+
+*/
+
 import {
     initializeAppCheck,
     ReCaptchaV3Provider

@@ -1,3 +1,15 @@
+/*
+
+--fetchPriority--: low
+
+--preloadPublicFiles--
+/sdk/auth.js
+/common/apiKeys.js
+/common/doesDocumentIncludeScript.js
+--endPreloadPublicFiles--
+
+*/
+
 import {
     GoogleAuthProvider,
     signInWithCredential

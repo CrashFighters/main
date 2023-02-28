@@ -1,3 +1,13 @@
+/*
+
+--fetchPriority--: high
+
+--preloadPublicFiles--
+/common/deepQuerySelectorAll.js
+--endPreloadPublicFiles--
+
+*/
+
 import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
 
 let messages;

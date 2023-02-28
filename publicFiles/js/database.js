@@ -1,3 +1,11 @@
+/*
+
+--preloadPublicFiles--
+/sdk/auth.js
+--endPreloadPublicFiles--
+
+*/
+
 import { onStateChange } from '/sdk/auth.js';
 const { getAuthHeaders } = (await import('/sdk/auth.js'))._;
 

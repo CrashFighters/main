@@ -1,3 +1,12 @@
+/*
+
+--preloadPublicFiles--
+/common/isMobile.js
+/sdk/auth.js
+--endPreloadPublicFiles--
+
+*/
+
 import {
     signInWithPopup,
     signInWithRedirect,
