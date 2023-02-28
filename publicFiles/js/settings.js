@@ -1,5 +1,7 @@
 /*
 
+--fetchPriority--: defer
+
 --fileRequirements--
 /sk/auth.js
 --endFileRequirements--

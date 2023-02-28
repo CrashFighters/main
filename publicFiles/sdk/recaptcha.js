@@ -1,5 +1,7 @@
 /*
 
+--fetchPriority--: low
+
 --fileRequirements--
 /common/apiKeys.js
 /common/doesDocumentIncludeScript.js
