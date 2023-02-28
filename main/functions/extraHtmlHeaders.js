@@ -27,6 +27,12 @@ module.exports = ({ data }) => {
                 changed = true;
             }
 
+            if (fetchPriority === 'defer') {
+                loadedFiles = loadedFiles.filter(({ path }) => path !== loadedFile.path);
+                changed = true;
+                break;
+            }
+
             if ((![null, undefined].includes(loadedFile.fallbackFetchPriority)) && [null, undefined].includes(fetchPriority)) {
                 loadedFile.fetchPriority = loadedFile.fallbackFetchPriority;
                 delete loadedFile.fallbackFetchPriority;
@@ -40,7 +46,7 @@ module.exports = ({ data }) => {
 
             for (const preloadPublicFile of fileRequirements)
                 if (!loadedFiles.find(({ path }) => path === preloadPublicFile)) {
-                    loadedFiles.push({ path: preloadPublicFile, fallbackFetchPriority: fetchPriority });
+                    loadedFiles.push({ path: preloadPublicFile, fallbackFetchPriority: loadedFile.fetchPriority });
                     changed = true;
                 } else if (
                     ![null, undefined].includes(loadedFile.fetchPriority) && (
