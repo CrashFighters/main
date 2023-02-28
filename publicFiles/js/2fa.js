@@ -1,5 +1,7 @@
 /*
 
+--fetchPriority--: low
+
 --fileRequirements--
 /sdk/auth.js
 --endFileRequirements--

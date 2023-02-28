@@ -2,7 +2,6 @@
 
 --fileRequirements--
 /common/cookie.js
-/common/doesDocumentIncludeScript.js
 /sdk/auth.js
 --endFileRequirements--
 
@@ -17,8 +16,6 @@ import {
     setCookie,
     deleteCookie
 } from '/common/cookie.js';
-
-import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 
 import { onStateChange } from '/sdk/auth.js';
 const { auth } = (await import('/sdk/auth.js'))._.firebase;
@@ -36,6 +33,7 @@ onStateChange(() => {
     first = false;
 });
 
+let doesDocumentIncludeScript;
 export async function setLanguage(language) {
     if (!language) {
         deleteCookie('language');
@@ -44,6 +42,9 @@ export async function setLanguage(language) {
         setCookie('language', language);
         auth.languageCode = language;
     }
+
+    if (!doesDocumentIncludeScript)
+        ({ doesDocumentIncludeScript } = await import('/common/doesDocumentIncludeScript.js'));
 
     if (doesDocumentIncludeScript('/sdk/language.js'))
         (await import('/sdk/language.js'))._.execute();
