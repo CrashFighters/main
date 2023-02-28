@@ -1,0 +1,29 @@
+name: Auto minify & compatibility layer
+on:
+  push:
+    branches: [ prod ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Minify Action
+        uses: anthonyftwang/minify-action@v1.0.1
+      # Job for transpiler the code
+      - name: 'Transpiler-JS Action'
+        uses: jossydevers/transpiler-js@v1.0.0
+      - name: Obfuscate JavaScript code
+        run: |
+          npm install --save-dev javascript-obfuscator
+          javascript-obfuscator ./files
+          
+      # Auto-commit to repository
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Auto minify & compatibility layer
+          branch: ${{ github.ref }}
