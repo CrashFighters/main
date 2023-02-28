@@ -20,7 +20,7 @@ module.exports = ({ data }) => {
     while (changed) {
         changed = false;
         for (const loadedFile of loadedFiles) {
-            const { filePreloadPublicFiles, type, fetchPriority } = getPublicFilePreloadInfo(loadedFile.path);
+            const { fileRequirements, type, fetchPriority } = getPublicFilePreloadInfo(loadedFile.path);
 
             if (!loadedFile.type) {
                 loadedFile.type = type;
@@ -38,7 +38,7 @@ module.exports = ({ data }) => {
                 changed = true;
             }
 
-            for (const preloadPublicFile of filePreloadPublicFiles)
+            for (const preloadPublicFile of fileRequirements)
                 if (!loadedFiles.find(({ path }) => path === preloadPublicFile)) {
                     loadedFiles.push({ path: preloadPublicFile, fallbackFetchPriority: fetchPriority });
                     changed = true;
@@ -79,7 +79,7 @@ function getPublicFilePreloadInfo(path) {
         fs.readFileSync(pathLib.resolve(__dirname, `../../publicFiles${path}`)).toString() :
         '';
 
-    const filePreloadPublicFiles = getPreloadPublicFiles(file);
+    const fileRequirements = getFileRequirements(file);
     const fetchPriority = getFetchpriority(file)
 
     const type = Object.entries({
@@ -90,17 +90,17 @@ function getPublicFilePreloadInfo(path) {
     if (!type)
         throw new Error('Unknown type for file: ' + path)
 
-    return { filePreloadPublicFiles, type, fetchPriority };
+    return { fileRequirements, type, fetchPriority };
 }
 
-function getPreloadPublicFiles(file) {
-    if (!(file.includes('--preloadPublicFiles--') && file.includes('--endPreloadPublicFiles--'))) return [];
+function getFileRequirements(file) {
+    if (!(file.includes('--fileRequirements--') && file.includes('--endFileRequirements--'))) return [];
     file = file.split('\n');
 
     return file
         .slice(
-            file.findIndex(a => a.includes('--preloadPublicFiles--')) + 1,
-            file.findIndex(a => a.includes('--endPreloadPublicFiles--'))
+            file.findIndex(a => a.includes('--fileRequirements--')) + 1,
+            file.findIndex(a => a.includes('--endFileRequirements--'))
         )
         .filter(a => a.trim() !== '')
 }
