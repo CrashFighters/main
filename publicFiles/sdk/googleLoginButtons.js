@@ -1,6 +1,6 @@
 /*
 
---fetchPriority--: high
+--fetchPriority--: low
 
 --fileRequirements--
 /common/cookie.js
