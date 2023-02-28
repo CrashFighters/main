@@ -1,10 +1,10 @@
 /*
 
---preloadPublicFiles--
+--fileRequirements--
 /js/appCheck.js
 /common/apiKeys.js
 /common/cookie.js
---endPreloadPublicFiles--
+--endFileRequirements--
 
 */
 

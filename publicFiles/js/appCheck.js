@@ -1,8 +1,8 @@
 /*
 
---preloadPublicFiles--
+--fileRequirements--
 /common/apiKeys.js
---endPreloadPublicFiles--
+--endFileRequirements--
 
 */
 

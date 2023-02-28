@@ -1,8 +1,8 @@
 /*
 
---preloadPublicFiles--
+--fileRequirements--
 /sk/auth.js
---endPreloadPublicFiles--
+--endFileRequirements--
 
 */
 

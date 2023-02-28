@@ -2,11 +2,11 @@
 
 --fetchPriority--: low
 
---preloadPublicFiles--
+--fileRequirements--
 /sdk/auth.js
 /common/apiKeys.js
 /common/doesDocumentIncludeScript.js
---endPreloadPublicFiles--
+--endFileRequirements--
 
 */
 

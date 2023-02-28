@@ -2,9 +2,9 @@
 
 --fetchPriority--: high
 
---preloadPublicFiles--
+--fileRequirements--
 /common/deepQuerySelectorAll.js
---endPreloadPublicFiles--
+--endFileRequirements--
 
 */
 

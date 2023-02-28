@@ -1,9 +1,9 @@
 /*
 
---preloadPublicFiles--
+--fileRequirements--
 /common/apiKeys.js
 /common/doesDocumentIncludeScript.js
---endPreloadPublicFiles--
+--endFileRequirements--
 
 */
 

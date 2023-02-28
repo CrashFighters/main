@@ -2,10 +2,10 @@
 
 --fetchPriority--: high
 
---preloadPublicFiles--
+--fileRequirements--
 /sdk/auth.js
 /common/deepQuerySelectorAll.js
---endPreloadPublicFiles--
+--endFileRequirements--
 
 */
 

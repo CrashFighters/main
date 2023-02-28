@@ -1,9 +1,9 @@
 /*
 
---preloadPublicFiles--
+--fileRequirements--
 /common/isMobile.js
 /sdk/auth.js
---endPreloadPublicFiles--
+--endFileRequirements--
 
 */
 

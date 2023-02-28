@@ -1,10 +1,10 @@
 /*
 
---preloadPublicFiles--
+--fileRequirements--
 /common/cookie.js
 /common/doesDocumentIncludeScript.js
 /sdk/auth.js
---endPreloadPublicFiles--
+--endFileRequirements--
 
 */
 

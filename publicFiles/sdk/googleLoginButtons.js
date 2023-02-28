@@ -2,13 +2,13 @@
 
 --fetchPriority--: high
 
---preloadPublicFiles--
+--fileRequirements--
 /common/cookie.js
 /common/apiKeys.js
 /common/doesDocumentIncludeScript.js
 /common/isMobile.js
 /sdk/auth.js
---endPreloadPublicFiles--
+--endFileRequirements--
 
 */
 

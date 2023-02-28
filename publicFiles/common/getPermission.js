@@ -1,8 +1,8 @@
 /*
 
---preloadPublicFiles--
+--fileRequirements--
 /sdk/auth.js
---endPreloadPublicFiles--
+--endFileRequirements--
 
 */
 
