@@ -1,6 +1,6 @@
 /*
 
---fetchPriority--: defer
+--fetchPriority--: low
 
 --fileRequirements--
 /sdk/auth.js
