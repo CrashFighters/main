@@ -4,6 +4,7 @@
 
 --fileRequirements--
 /common/deepQuerySelectorAll.js
+/api/messages
 --endFileRequirements--
 
 */
@@ -29,7 +30,11 @@ function flipFirstLetterCase(string) {
 }
 
 async function execute() {
-    messages = await fetch('/api/messages');
+    messages = await fetch('/api/messages', {
+        method: 'GET',
+        credentials: 'include',
+        mode: 'no-cors' //to allow to use the preload
+    });
     messages = await messages.json();
 
     const html = document.querySelector('html');
