@@ -60,6 +60,10 @@ module.exports = ({ data }) => {
         }
     };
 
+    for (const loadedFile of loadedFiles)
+        if (loadedFile.fallbackFetchPriority !== undefined)
+            delete loadedFile.fallbackFetchPriority
+
     loadedFiles = loadedFiles.sort((a, b) => {
         if (a.fetchPriority === 'high' && b.fetchPriority !== 'high') return -1;
         if (a.fetchPriority !== 'high' && b.fetchPriority === 'high') return 1;
@@ -72,7 +76,7 @@ module.exports = ({ data }) => {
 
     const links = [];
     for (const { path, type, fetchPriority } of loadedFiles)
-        links.push(`<${path}>; rel=modulepreload; as=${type}${fetchPriority ? `; fetchpriority=${fetchPriority}` : ''}`);
+        links.push(`<${path}>; rel=${type === 'script' ? 'modulepreload' : 'preload'}; as=${type}${fetchPriority ? `; fetchpriority=${fetchPriority}` : ''}`);
 
     if (links.length > 0)
         headers['Link'] = links.join(', ');
@@ -88,10 +92,15 @@ function getPublicFilePreloadInfo(path) {
     const fileRequirements = getFileRequirements(file);
     const fetchPriority = getFetchpriority(file)
 
-    const type = Object.entries({
-        '.js': 'script',
-        '.css': 'style'
-    }).find(([key]) => path.endsWith(key))?.[1];
+    let type;
+    if (path.endsWith('.js'))
+        type = 'script';
+    else if (path.endsWith('.css'))
+        type = 'style';
+    else if (path.startsWith('/api/'))
+        type = 'fetch';
+    else
+        throw new Error(`Unknown type for file: ${path}`)
 
     if (!type)
         throw new Error('Unknown type for file: ' + path)
