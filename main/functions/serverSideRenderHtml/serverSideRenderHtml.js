@@ -4,11 +4,13 @@ const path = require('path');
 const inlineCssStartString = '<!-- inlineCss: ';
 const inlineCssEndString = ' -->';
 
-const cssPreloadUrls = [
+const cssDeferLoadUrls = [
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
     'https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css',
     'https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css'
-]
+];
+
+const noscriptMessage = fs.readFileSync(path.resolve(__dirname, './noscriptMessage.html')).toString();
 
 module.exports = (html, isPrivate) => {
 
@@ -22,7 +24,7 @@ module.exports = (html, isPrivate) => {
         <noscript><link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" fetchpriority="low" rel="stylesheet"></noscript>
     `);
 
-    for (const url of cssPreloadUrls)
+    for (const url of cssDeferLoadUrls)
         html = html.replaceAll(`<link href="${url}" rel="stylesheet" />`, `
             <link href="${url}" fetchpriority="low" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
             <noscript><link href="${url}" fetchpriority="low" rel="stylesheet"></noscript>
@@ -47,6 +49,8 @@ module.exports = (html, isPrivate) => {
 
         inlineCssIndex = html.indexOf(inlineCssStartString, inlineCssIndex + 1);
     }
+
+    html = html.replace('</head>', `${noscriptMessage}</head>`);
 
     return html;
 }

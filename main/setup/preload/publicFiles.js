@@ -1,7 +1,7 @@
 const fs = require('fs');
 const mime = require('mime-types');
 
-const serverSideRenderHtml = require('../../functions/serverSideRenderHtml.js');
+const serverSideRenderHtml = require('../../functions/serverSideRenderHtml/serverSideRenderHtml.js');
 const getExtraHeaders = require('../../functions/extraHeaders.js');
 const getExtraHtmlHeaders = require('../../functions/extraHtmlHeaders.js');
 

@@ -2,7 +2,7 @@ const fs = require('fs');
 const mime = require('mime-types');
 
 const statusCode = require('../functions/error/statusCode.js').execute;
-const serverSideRenderHtml = require('../functions/serverSideRenderHtml.js');
+const serverSideRenderHtml = require('../functions/serverSideRenderHtml/serverSideRenderHtml.js');
 const getExtraHtmlHeaders = require('../functions/extraHtmlHeaders.js');
 const getExtraHeaders = require('../functions/extraHeaders.js');
 
