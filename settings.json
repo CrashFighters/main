@@ -1,6 +1,6 @@
 {
     "cache": {
-        "js": {
+        "publicFiles": {
             "cacheMinutes": 30,
             "staleUseMinutes": 180,
             "errorUseMinutes": 60
