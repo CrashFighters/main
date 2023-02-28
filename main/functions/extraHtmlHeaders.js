@@ -1,19 +1,21 @@
 const fs = require('fs');
 const pathLib = require('path');
 
-const preloadScripts = [
-    ...fs.readdirSync(pathLib.resolve(__dirname, '../../publicFiles/sdk/')).map(f => `/sdk/${f}`),
-    ...fs.readdirSync(pathLib.resolve(__dirname, '../../publicFiles/js/')).map(f => `/js/${f}`),
-    ...fs.readdirSync(pathLib.resolve(__dirname, '../../publicFiles/common/')).map(f => `/common/${f}`)
-];
-
 module.exports = ({ data }) => {
     const headers = {};
 
     let loadedFiles = [];
-    for (const preloadScript of preloadScripts)
-        if (data.includes(`<script type="module" src="${preloadScript}"></script>`))
-            loadedFiles.push({ path: preloadScript });
+    let scriptIndex = data.indexOf('<script type="module" src="');
+    while (scriptIndex !== -1) {
+
+        const scriptEndIndex = data.indexOf('</script>', scriptIndex);
+        const scriptPath = data.slice(scriptIndex, scriptEndIndex + 9).split('<script type="module" src="')[1].split('"></script>')[0];
+
+        loadedFiles.push({ path: scriptPath });
+
+        scriptIndex = data.indexOf('<script type="module" src="', scriptEndIndex);
+
+    }
 
     // add all preloadPublicFiles to loadedFiles
     let changed = true;
@@ -72,7 +74,7 @@ module.exports = ({ data }) => {
         if (a.fetchPriority !== 'low' && b.fetchPriority === 'low') return -1;
 
         return 0;
-    })
+    });
 
     const links = [];
     for (const { path, type, fetchPriority } of loadedFiles)
