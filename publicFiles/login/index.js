@@ -69,6 +69,12 @@ import { createButton } from '/sdk/recaptcha.js';
 
 import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
 
+const minimalScores = await fetch('/api/minimalScores', {
+    method: 'GET',
+    credentials: 'include',
+    mode: 'no-cors' //to allow to use the preload
+}).then(a => a.json());;
+
 const urlParams = new URLSearchParams(window.location.search);
 const signup = urlParams.get('signup') === 'true';
 if (signup)
@@ -80,12 +86,6 @@ let preventRedirect = false;
 onStateChange((user) => {
     if (user && !preventRedirect) redirect();
 });
-
-const getMinimalScores = async () => await fetch('/api/minimalScores', {
-    method: 'GET',
-    credentials: 'include',
-    mode: 'no-cors' //to allow to use the preload
-}).then(a => a.json());
 
 const githubLoginButtons = [...deepQuerySelectorAll('.githubLoginButton')];
 for (const githubLoginButton of githubLoginButtons)
@@ -351,7 +351,7 @@ window.doLogin = async (recaptchaScore) => {
     const password = document.getElementById('loginPassword').value;
     const nativeButton = document.getElementById('loginButton-1');
 
-    const { login } = await getMinimalScores();
+    const { login } = minimalScores;
 
     // create login captcha if user is likely a bot
     if (recaptchaScore < login && !loginRecaptcha)
@@ -429,7 +429,7 @@ window.doSignup = async (recaptchaScore) => {
     if (name.length === 0)
         return handleSignupError({ errorCode: 'noName', field: 'name' });
 
-    const { signup } = await getMinimalScores();
+    const { signup } = minimalScores;
 
     // create login captcha if user is likely a bot
     if (recaptchaScore < signup && !signupRecaptcha)
