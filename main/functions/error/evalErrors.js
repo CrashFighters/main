@@ -32,7 +32,12 @@ module.exports = {
 
                 cConsole.warn(message);
                 files.forEach((val) => {
-                    const occurrences = require(`../../../${settings.generic.path.files.errors}${val}`).occurrences.length;
+                    let occurrences;
+                    try {
+                        occurrences = require(`../../../${settings.generic.path.files.errors}${val}`).occurrences.length;
+                    } catch {
+                        occurrences = -1;
+                    }
                     cConsole.warn(`${settings.generic.path.files.errors}${val}\t\t${occurrences}`);
                 });
 

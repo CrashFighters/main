@@ -1,3 +1,11 @@
+/*
+
+--fileRequirements--
+/sdk/auth.js
+--endFileRequirements--
+
+*/
+
 import { onStateChange } from '/sdk/auth.js';
 const { getAuthHeaders } = (await import('/sdk/auth.js'))._;
 

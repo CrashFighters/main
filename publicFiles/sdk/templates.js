@@ -1,3 +1,14 @@
+/*
+
+--fetchPriority--: high
+
+--fileRequirements--
+/sdk/auth.js
+/common/deepQuerySelectorAll.js
+--endFileRequirements--
+
+*/
+
 import { onStateChange } from '/sdk/auth.js';
 import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
 

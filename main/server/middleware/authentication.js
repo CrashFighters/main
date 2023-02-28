@@ -1,4 +1,5 @@
 const firebase = require('../../../modules/authentication/functions/authentication.js');
+const parseCookie = require('../../functions/parse/cookie.js');
 
 module.exports = {
     async execute({ request, parseError }) {
@@ -38,13 +39,11 @@ module.exports = {
     }
 }
 
-//todo: use parse cookie function
 function getAuthHeadersFromCookie(cookie) {
     if (!cookie) return null;
-    let authHeaders = cookie.split(';').find(c => c.trim().startsWith('authHeaders='));
+    let authHeaders = parseCookie(cookie).authHeaders;
     if (!authHeaders) return null;
 
-    authHeaders = authHeaders.split('=')[1];
     try {
         authHeaders = JSON.parse(authHeaders);
     } catch {

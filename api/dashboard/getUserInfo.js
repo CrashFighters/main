@@ -48,6 +48,9 @@ module.exports = {
 
             const accessibleUserInfo = {};
 
+            getPermission = await getPermission;
+            authentication = await authentication;
+            explicitAuthentication = await explicitAuthentication;
             for (const [key, value] of Object.entries(userInfo)) {
                 const permissionParts = ['dashboard', 'get', 'userInfo', key];
                 const permission = getPermission(permissionParts);

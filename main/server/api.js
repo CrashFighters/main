@@ -34,6 +34,12 @@ module.exports = {
                     if (!executeFunctionExists)
                         return parseError(new Error(messages.error.executeFunctionNotFoundWithFile.replace('{file}', path)), messages.error.executeFunctionNotFound);
 
+                    let cacheHeader;
+                    if (!file.info?.cache?.enabled)
+                        cacheHeader = 'private, max-age=0, no-cache, no-store, must-revalidate';
+                    else
+                        cacheHeader = `public, max-age=${file.info.cache.minutes * 60}, stale-while-revalidate=${file.info.cache.staleUseMinutes * 60}, stale-if-error=${file.info.cache.errorUseMinutes * 60}`;
+
                     if (request.method === 'GET')
                         file.execute({
                             statusCode: (code, short, text) => {
@@ -41,6 +47,18 @@ module.exports = {
                             },
                             parseError,
                             end: data => {
+                                let type;
+                                if (typeof data === 'string')
+                                    type = 'text/plain';
+                                else if (typeof data === 'object')
+                                    type = 'application/json';
+
+                                response.writeHead(200, {
+                                    'Content-Type': type,
+                                    'Content-Length': Buffer.byteLength(data),
+                                    'Cache-Control': cacheHeader
+                                });
+
                                 response.end(data);
                             },
                             request,

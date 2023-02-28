@@ -5,13 +5,17 @@ module.exports = {
         try {
             if (!params.user) return statusCode(400, 'noUserProved', 'No user provided');
 
+            getPermission = await getPermission;
             const permission = getPermission('dashboard.remove.2fa');
             let hasPermission;
             if (permission === 'always')
                 hasPermission = true;
-            else if (permission === 'ifOwner')
+            else if (permission === 'ifOwner') {
+                authentication = await authentication;
+                explicitAuthentication = await explicitAuthentication;
+
                 hasPermission = explicitAuthentication && authentication.uid === params.user;
-            else if (permission === 'never')
+            } else if (permission === 'never')
                 hasPermission = false;
             else
                 throw new Error(`Don't know how to handle permission ${permission}`);

@@ -63,7 +63,7 @@ module.exports = {
                     stack: errorMessage.split('\n')
                 };
 
-                const easyAccessPath = createEasyAccessPath(error);
+                const easyAccessPath = createEasyAccessPath(errorMessage);
                 if (easyAccessPath) obj.easyAccessPath = easyAccessPath;
 
                 if (customText) obj.customText = customText;
@@ -80,11 +80,9 @@ module.exports = {
 function createEasyAccessPath(errorMessage) {
     try {
         const easyAccessPath = errorMessage.split('\n')
-            .slice(1)
-            .filter(line => line.includes('at'))
+            .filter(line => line.trim().startsWith('at'))
             .filter(line => !line.includes('internal'))
             .filter(line => !line.includes('node:'))
-            .filter(line => !line.includes('<anonymous>'))
             .filter(line => !line.includes('node_modules'))[0]
             ?.split?.('(')?.[1]
             ?.split?.(')')?.[0]

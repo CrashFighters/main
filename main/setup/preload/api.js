@@ -16,7 +16,7 @@ for (const moduleName of readdirSync(generic.path.files.modules))
 addApiCalls('/', generic.path.files.api);
 
 function addApiCalls(websitePath, path) {
-    if (existsSync(path)) {
+    if (existsSync(path))
         for (const name of readdirSync(path))
             if (statSync(`${path}${name}`).isDirectory())
                 addApiCalls(`${websitePath}${name}/`, `${path}${name}/`);
@@ -48,7 +48,6 @@ function addApiCalls(websitePath, path) {
                     evalErrors();
                 }
             }
-    }
 }
 
 module.exports = {

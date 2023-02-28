@@ -1,3 +1,11 @@
+/*
+
+--fileRequirements--
+/common/apiKeys.js
+--endFileRequirements--
+
+*/
+
 import {
     initializeAppCheck,
     ReCaptchaV3Provider

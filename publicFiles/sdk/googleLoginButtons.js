@@ -1,3 +1,17 @@
+/*
+
+--fetchPriority--: high
+
+--fileRequirements--
+/common/cookie.js
+/common/apiKeys.js
+/common/doesDocumentIncludeScript.js
+/common/isMobile.js
+/sdk/auth.js
+--endFileRequirements--
+
+*/
+
 import {
     GoogleAuthProvider,
     signInWithCredential

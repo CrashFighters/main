@@ -10,6 +10,9 @@ const path = require('path');
 
 const wait = ms => new Promise(res => setTimeout(res, ms));
 
+if (!fs.existsSync(path.resolve(__dirname, '../data/')))
+    fs.mkdirSync(path.resolve(__dirname, '../data/'));
+
 if (!fs.existsSync(path.resolve(__dirname, '../data/queue.json')))
     fs.writeFileSync(path.resolve(__dirname, '../data/queue.json'), JSON.stringify([]));
 

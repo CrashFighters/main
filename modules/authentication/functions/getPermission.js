@@ -1,12 +1,12 @@
 const getPermissions = require('./getPermissions.js');
 
 module.exports = (_permissionParts, user, customClaims) => {
-    const fullPermissions = getPermissions(user, customClaims);
-    let currentPermission = fullPermissions;
-
     let permissionParts = _permissionParts;
     if (typeof permissionParts === 'string')
         permissionParts = permissionParts.split('.');
+
+    const fullPermissions = getPermissions(user, customClaims);
+    let currentPermission = fullPermissions;
 
     for (const permissionPartIndex in permissionParts) {
         const permissionPart = permissionParts[permissionPartIndex];

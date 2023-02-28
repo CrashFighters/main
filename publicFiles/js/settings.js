@@ -1,3 +1,13 @@
+/*
+
+--fetchPriority--: defer
+
+--fileRequirements--
+/sk/auth.js
+--endFileRequirements--
+
+*/
+
 import {
     updateProfile
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';

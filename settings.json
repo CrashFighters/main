@@ -1,4 +1,11 @@
 {
+    "cache": {
+        "publicFiles": {
+            "cacheMinutes": 30,
+            "staleUseMinutes": 180,
+            "errorUseMinutes": 60
+        }
+    },
     "generic": {
         "websiteUrl": "localhost",
         "port": "80",
@@ -91,6 +98,14 @@
                         "2fa": "never"
                     }
                 },
+                "moderate": {
+                    "getPost": "never",
+                    "updatePostVisibility": {
+                        "verified": "never",
+                        "flagged": "never",
+                        "hidden": "never"
+                    }
+                },
                 "user": {
                     "delete": "never"
                 }
@@ -116,6 +131,19 @@
             }
         },
         "customRoles": {
+            "moderator": {
+                "privateFiles": {
+                    "moderate": "always"
+                },
+                "moderate": {
+                    "getPost": "always",
+                    "updatePostVisibility": {
+                        "verified": "always",
+                        "flagged": "always",
+                        "hidden": "always"
+                    }
+                }
+            },
             "support": {
                 "privateFiles": {
                     "dashboard": "always"

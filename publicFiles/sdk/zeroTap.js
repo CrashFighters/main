@@ -1,3 +1,15 @@
+/*
+
+--fetchPriority--: defer
+
+--fileRequirements--
+/sdk/auth.js
+/common/apiKeys.js
+/common/doesDocumentIncludeScript.js
+--endFileRequirements--
+
+*/
+
 import {
     GoogleAuthProvider,
     signInWithCredential

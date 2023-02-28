@@ -1,3 +1,13 @@
+/*
+
+--fetchPriority--: low
+
+--fileRequirements--
+/sdk/auth.js
+--endFileRequirements--
+
+*/
+
 import {
     multiFactor,
     PhoneAuthProvider,

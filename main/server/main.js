@@ -8,6 +8,10 @@ const middlewares = fs.existsSync(path.resolve(__dirname, './middleware/')) ?
 const parseErrorOnline = require('../functions/error/parseErrorOnline').execute;
 const parsePostBody = require('../functions/parse/postBody');
 
+const dbApi = require('./dbApi.js');
+const api = require('./api.js');
+const normal = require('./normal.js');
+
 module.exports = {
     async execute(request, response) {
         const parseError = (error, customText) => parseErrorOnline(error, response, customText);
@@ -20,38 +24,55 @@ module.exports = {
             const extraData = { body };
 
             let parseErrorCalled = false;
-            let middlewareData = {};
+            let cachedMiddlewareData = {};
             const executedMiddlewares = [];
 
-            while (middlewares.length > executedMiddlewares.length)
-                for (const { execute, info, name } of middlewares) {
-                    if (executedMiddlewares.includes(name)) continue;
-                    if (info?.requires && info.requires.some(name => !executedMiddlewares.includes(name))) continue;
+            async function executeMiddleware(name) {
+                if (executedMiddlewares.includes(name)) return true;
+                const middleware = middlewares.find(a => a.name === name);
 
-                    const newMiddlewareData = await execute({
-                        request,
-                        extraData,
-                        parseError: (...arg) => {
+                if (middleware.info?.requires) {
+                    for (const { name } of middleware.info.requires)
+                        if (!await executeMiddleware(name)) return false;
+                }
+
+                const newMiddlewareData = await middleware.execute({
+                    request,
+                    extraData,
+                    parseError: (...arg) => {
+                        if (!parseErrorCalled) {
                             parseErrorCalled = true;
                             parseError(...arg);
-                        },
-                        middlewareData
-                    }) ?? {};
-                    middlewareData = { ...middlewareData, ...newMiddlewareData };
+                        }
+                    },
+                    middlewareData: cachedMiddlewareData
+                }) ?? {};
 
-                    executedMiddlewares.push(name);
+                cachedMiddlewareData = { ...cachedMiddlewareData, ...newMiddlewareData };
 
-                    if (parseErrorCalled)
-                        break;
-                };
+                executedMiddlewares.push(name);
+
+                return !parseErrorCalled;
+            };
+
+            const middlewareData = {};
+            for (const { name } of middlewares)
+                Object.defineProperty(middlewareData, name, {
+                    configurable: false,
+                    enumerable: true,
+                    get: async () => {
+                        if (!await executeMiddleware(name)) return undefined;
+                        return cachedMiddlewareData[name];
+                    }
+                });
 
             if (!parseErrorCalled)
                 if (request.url.startsWith('/dbApi/'))
-                    return require('./dbApi.js').execute(request, response, { middlewareData, extraData });
+                    return dbApi.execute(request, response, { middlewareData, extraData });
                 else if (request.url.startsWith('/api/'))
-                    return require('./api.js').execute(request, response, { middlewareData, extraData });
+                    return api.execute(request, response, { middlewareData, extraData });
                 else
-                    return require('./normal.js').execute(request, response, { middlewareData, extraData });
+                    return normal.execute(request, response, { middlewareData, extraData });
 
         } catch (err) {
             parseError(err);

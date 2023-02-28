@@ -1,4 +1,8 @@
 {
+    "info": {
+        "code": "nl",
+        "name": "Nederlands"
+    },
     "error": {
         "apiCallNotFound": "API functie niet gevonden",
         "executeFunctionNotFoundWithFile": "De uitvoer functie is niet gevonden ({file})",

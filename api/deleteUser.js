@@ -6,14 +6,18 @@ module.exports = {
             const userId = params.user;
             if (!userId) return statusCode(400, 'noUserProvided', 'No user provided');
 
+            getPermission = await getPermission;
+            authentication = await authentication;
             const permission = await getPermission('user.delete');
             let hasPermission;
 
             if (permission === 'always')
                 hasPermission = true;
-            else if (permission === 'ifOwner')
+            else if (permission === 'ifOwner') {
+                explicitAuthentication = await explicitAuthentication;
+
                 hasPermission = (explicitAuthentication) && (authentication.uid === userId);
-            else if (permission === 'never')
+            } else if (permission === 'never')
                 hasPermission = false;
             else
                 throw new Error(`Unknown permission: ${permission}`);

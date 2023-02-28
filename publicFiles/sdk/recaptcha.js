@@ -1,3 +1,14 @@
+/*
+
+--fetchPriority--: low
+
+--fileRequirements--
+/common/apiKeys.js
+/common/doesDocumentIncludeScript.js
+--endFileRequirements--
+
+*/
+
 import {
     publicRecaptchaV3Key,
     publicRecaptchaV2Key

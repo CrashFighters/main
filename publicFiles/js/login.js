@@ -1,3 +1,11 @@
+/*
+
+--fileRequirements--
+/sdk/auth.js
+--endFileRequirements--
+
+*/
+
 import {
     signInWithPopup,
     signInWithRedirect,
@@ -11,12 +19,14 @@ import {
     PhoneMultiFactorGenerator
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-import { isMobile } from '/common/isMobile.js';
-
 const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
+let isMobile;
 export async function loginWithGithub() {
     try {
+        if (!isMobile)
+            ({ isMobile } = await import('/common/isMobile.js'));
+
         const githubProvider = new GithubAuthProvider();
         githubProvider.addScope('user:email');
 
