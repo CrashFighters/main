@@ -48,8 +48,6 @@ function respond({ path, response, request, privateFile }) {
         return
     }
 
-    console.log(pathname)
-
     const contentType = mime.lookup(path);
 
     if (contentType === 'text/html') {
