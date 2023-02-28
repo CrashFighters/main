@@ -1,3 +1,14 @@
+/*
+
+--fetchPriority--: high
+
+--fileRequirements--
+/sdk/auth.js
+/js/login.js
+--endFileRequirements--
+
+*/
+
 import {
     login
 } from '/sdk/auth.js';

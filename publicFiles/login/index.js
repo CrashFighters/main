@@ -1,3 +1,19 @@
+/*
+
+--fetchPriority--: low
+
+--fileRequirements--
+/js/settings.js
+/js/login.js
+/sdk/language.js
+/sdk/auth.js
+/sdk/recaptcha.js
+/common/deepQuerySelectorAll.js
+/api/minimalScores
+--endFileRequirements--
+
+*/
+
 const signUpButton = document.getElementById('signUp');
 const signInButton = document.getElementById('signIn');
 const container = document.getElementById('container');
@@ -65,7 +81,7 @@ onStateChange((user) => {
     if (user && !preventRedirect) redirect();
 });
 
-const getMinimalScores = async () => await fetch('/api/minimalScores').then(a => a.json());
+const getMinimalScores = async () => await fetch('/api/minimalScores').then(a => a.json()); //todo: make use preloaded data
 
 const githubLoginButtons = [...deepQuerySelectorAll('.githubLoginButton')];
 for (const githubLoginButton of githubLoginButtons)

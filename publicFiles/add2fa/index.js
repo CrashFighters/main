@@ -1,3 +1,14 @@
+/*
+
+--fetchPriority--: high
+
+--fileRequirements--
+/js/2fa.js
+/sdk/templates.js
+--endFileRequirements--
+
+*/
+
 import {
     add
 } from '/js/2fa.js';
