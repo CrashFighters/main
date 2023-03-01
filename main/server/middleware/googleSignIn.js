@@ -9,7 +9,7 @@ module.exports = {
     async execute({ extraData, parseError }) {
         try {
 
-            if (!extraData.body?.g_csrf_token) return;
+            if (!extraData.body?.g_csrf_token) return { googleUserId: null };
 
             const { credential, clientId, g_csrf_token } = extraData.body;
 
