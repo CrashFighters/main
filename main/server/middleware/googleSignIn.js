@@ -6,6 +6,9 @@ const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(client_id);
 
 module.exports = {
+    info: {
+        requireRun: true
+    },
     async execute({ extraData, parseError }) {
         try {
 
