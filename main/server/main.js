@@ -62,7 +62,7 @@ module.exports = {
 
             const middlewareData = {};
             for (const { name } of middlewares)
-                Object.defineProperty(middlewareData, name, {
+                Object.defineProperty(middlewareData, name, { //todo-imp: middlewares can set other stuff than the name of the middleware. For example: authentication also sets explicitAuthentication property
                     configurable: false,
                     enumerable: true,
                     get: async () => {
