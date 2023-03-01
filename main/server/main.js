@@ -7,7 +7,6 @@ const middlewares = fs.existsSync(path.resolve(__dirname, './middleware/')) ?
 
 const parseErrorOnline = require('../functions/error/parseErrorOnline.js').execute;
 const parsePostBody = require('../functions/parse/postBody.js');
-const generalStatusCode = require('../functions/error/statusCode.js');
 
 const dbApi = require('./dbApi.js');
 const api = require('./api.js');
@@ -16,7 +15,6 @@ const normal = require('./normal.js');
 module.exports = {
     async execute(request, response) {
         const parseError = (error, customText) => parseErrorOnline(error, response, customText);
-        const statusCode = (code, text) => generalStatusCode(response, code, { text });
 
         try {
             let body;
@@ -40,7 +38,6 @@ module.exports = {
 
                 const newMiddlewareData = await middleware.execute({
                     request,
-                    response,
                     extraData,
                     parseError: (...arg) => {
                         if (!responded) {
@@ -48,13 +45,7 @@ module.exports = {
                             parseError(...arg);
                         }
                     },
-                    middlewareData: cachedMiddlewareData,
-                    statusCode: (...arg) => {
-                        if (!responded) {
-                            responded = true;
-                            statusCode(...arg);
-                        }
-                    }
+                    middlewareData: cachedMiddlewareData
                 });
 
                 executedMiddlewares.push(name);
@@ -65,13 +56,17 @@ module.exports = {
                 return !responded;
             };
 
+            for (const { name, info } of middlewares)
+                if (info?.requireRun)
+                    if (!await executeMiddleware(name)) return;
+
             const middlewareData = {};
             for (const { name } of middlewares)
                 Object.defineProperty(middlewareData, name, {
                     configurable: false,
                     enumerable: true,
                     get: async () => {
-                        if (!await executeMiddleware(name)) return undefined;
+                        if (!await executeMiddleware(name)) return;
                         return cachedMiddlewareData[name];
                     }
                 });
