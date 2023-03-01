@@ -31,9 +31,6 @@
             }
         }
     },
-    "security": {
-        "requireAppCheck": true
-    },
     "minimalScores": {
         "login": 0.7,
         "signup": 0.8,
