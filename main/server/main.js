@@ -5,8 +5,9 @@ const middlewares = fs.existsSync(path.resolve(__dirname, './middleware/')) ?
     fs.readdirSync(path.resolve(__dirname, './middleware/')).map(a => ({ ...require(`./middleware/${a}`), name: a.split('.')[0] })) :
     [];
 
-const parseErrorOnline = require('../functions/error/parseErrorOnline').execute;
-const parsePostBody = require('../functions/parse/postBody');
+const parseErrorOnline = require('../functions/error/parseErrorOnline.js').execute;
+const parsePostBody = require('../functions/parse/postBody.js');
+const generalStatusCode = require('../functions/error/statusCode.js');
 
 const dbApi = require('./dbApi.js');
 const api = require('./api.js');
@@ -15,6 +16,7 @@ const normal = require('./normal.js');
 module.exports = {
     async execute(request, response) {
         const parseError = (error, customText) => parseErrorOnline(error, response, customText);
+        const statusCode = (code, text) => generalStatusCode(response, code, { text });
 
         try {
             let body;
@@ -23,7 +25,7 @@ module.exports = {
 
             const extraData = { body };
 
-            let parseErrorCalled = false;
+            let responded = false;
             let cachedMiddlewareData = {};
             const executedMiddlewares = [];
 
@@ -38,21 +40,29 @@ module.exports = {
 
                 const newMiddlewareData = await middleware.execute({
                     request,
+                    response,
                     extraData,
                     parseError: (...arg) => {
-                        if (!parseErrorCalled) {
-                            parseErrorCalled = true;
+                        if (!responded) {
+                            responded = true;
                             parseError(...arg);
                         }
                     },
-                    middlewareData: cachedMiddlewareData
-                }) ?? {};
+                    middlewareData: cachedMiddlewareData,
+                    statusCode: (...arg) => {
+                        if (!responded) {
+                            responded = true;
+                            statusCode(...arg);
+                        }
+                    }
+                });
+
+                executedMiddlewares.push(name);
+                if (!newMiddlewareData) return false;
 
                 cachedMiddlewareData = { ...cachedMiddlewareData, ...newMiddlewareData };
 
-                executedMiddlewares.push(name);
-
-                return !parseErrorCalled;
+                return !responded;
             };
 
             const middlewareData = {};
@@ -66,7 +76,7 @@ module.exports = {
                     }
                 });
 
-            if (!parseErrorCalled)
+            if (!responded)
                 if (request.url.startsWith('/dbApi/'))
                     return dbApi.execute(request, response, { middlewareData, extraData });
                 else if (request.url.startsWith('/api/'))
