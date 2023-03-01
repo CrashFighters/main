@@ -18,9 +18,11 @@ import {
     getIdToken
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-import { init } from '/js/appCheck.js';
 import { firebaseConfig } from '/common/apiKeys.js';
 import { setCookie } from '/common/cookie.js';
+import { init, _ as appCheck_ } from '/js/appCheck.js';
+
+const { getAppCheckHeaders } = appCheck_;
 
 const app = initializeApp(firebaseConfig);
 
@@ -123,7 +125,8 @@ async function updateUserObject(newUser) {
 }
 
 const getAuthHeaders = async () => ({
-    auth_token: auth.currentUser ? await getIdToken(auth.currentUser) : undefined
+    auth_token: auth.currentUser ? await getIdToken(auth.currentUser) : undefined,
+    ...(await getAppCheckHeaders())
 });
 
 export const _ = {
