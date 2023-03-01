@@ -10,8 +10,8 @@
         "websiteUrl": "localhost",
         "port": "80",
         "lang": [
-            "en",
-            "nl"
+            "nl",
+            "en"
         ],
         "path": {
             "files": {
