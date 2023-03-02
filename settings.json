@@ -115,18 +115,18 @@
                     "get": "always"
                 },
                 "user": {
-                    "delete": "ifOwner"
+                    "delete": "owner"
                 }
             },
             "authenticated": {
                 "database": {
                     "get": "always",
-                    "delete": "ifOwner",
-                    "modify": "ifOwner",
+                    "delete": "owner",
+                    "modify": "owner",
                     "create": "always"
                 },
                 "user": {
-                    "delete": "ifOwner"
+                    "delete": "owner"
                 }
             }
         },
