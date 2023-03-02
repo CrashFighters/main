@@ -60,10 +60,14 @@ export async function loginWithEmail(email, password, initiator) {
     };
 };
 
-export async function createEmailAccount(email, password) {
+export async function createEmailAccount(email, password, initiator) {
     try {
+        if (!initiator)
+            throw new Error('No initiator provided in createEmailAccount')
+
         const { user } = await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(user);
+        logEvent('sign_up', { method: 'email', initiator, type: 'embedded', location: window.location.pathname });
     } catch (e) {
         throw e;
     };

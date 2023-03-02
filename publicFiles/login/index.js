@@ -446,7 +446,7 @@ window.doSignup = async (recaptchaScore) => {
     nativeButton.disabled = true;
     preventRedirect = true;
     try {
-        await createEmailAccount(email, password);
+        await createEmailAccount(email, password, 'button');
         await setDisplayName(name);
     } catch (e) {
         const firebaseErrorCode = firebaseErrorCodes[e.code];
