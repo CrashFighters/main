@@ -34,7 +34,7 @@ initAnalytics(app);
 const auth = getAuth(app);
 
 const onStateChangeCallbacks = [];
-export const onStateChange = (callback) => {
+export function onStateChange(callback) {
     onStateChangeCallbacks.push(callback);
 };
 
@@ -53,7 +53,7 @@ onAuthStateChanged(auth, async () => {
     first = false;
 });
 
-export const logout = async () => {
+export async function logout() {
     try {
         await signOut(auth);
     } catch (e) {
@@ -61,16 +61,20 @@ export const logout = async () => {
     }
 };
 
-export const login = () => {
-    if (!window.auth.user) // if the user is not logged in
-        if (window.location.pathname !== '/login')
-            window.open(`/login?redirect=${encodeURIComponent(location.href)}`, '_self');
+export async function login() {
+    if (window.auth.user)
+        await logout();
+
+    if (window.location.pathname !== '/login')
+        window.open(`/login?redirect=${encodeURIComponent(location.href)}`, '_self');
 };
 
-export const signup = () => {
-    if (!window.auth.user) // if the user is not logged in
-        if (window.location.pathname !== '/login')
-            window.open(`/login?signup=true&redirect=${encodeURIComponent(location.href)}`, '_self');
+export async function signup() {
+    if (window.auth.user)
+        await logout();
+
+    if (window.location.pathname !== '/login')
+        window.open(`/login?signup=true&redirect=${encodeURIComponent(location.href)}`, '_self');
 };
 
 async function updateCookies() {
