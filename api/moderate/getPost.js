@@ -3,11 +3,11 @@ const { get } = require('../../modules/database/functions/database.js');
 const moderationPostIds = {};
 
 module.exports = {
-    async execute({ parseError, statusCode, end, middlewareData: { getPermission } }) {
+    async execute({ parseError, statusCode, end, middlewareData: { hasPermission } }) {
         try {
 
-            getPermission = await getPermission;
-            if (getPermission('moderate.getPost') !== 'always')
+            hasPermission = await hasPermission;
+            if (!hasPermission('moderate.getPost'))
                 return statusCode(403, 'invalidPermission', 'Invalid permission to get post (moderate.getPost)');
 
             const posts = await getModerationPosts(10);

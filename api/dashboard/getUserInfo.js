@@ -1,7 +1,7 @@
 const firebase = require('../../modules/authentication/functions/authentication.js');
 
 module.exports = {
-    async execute({ params, statusCode, parseError, end, middlewareData: { getPermission, authentication, explicitAuthentication } }) {
+    async execute({ params, statusCode, parseError, end, middlewareData: { hasPermission, authentication, explicitAuthentication } }) {
         try {
             if (!params.user) return statusCode(400, 'noUserProved', 'No user provided');
 
@@ -48,24 +48,16 @@ module.exports = {
 
             const accessibleUserInfo = {};
 
-            getPermission = await getPermission;
+            hasPermission = await hasPermission;
             authentication = await authentication;
             explicitAuthentication = await explicitAuthentication;
+
             for (const [key, value] of Object.entries(userInfo)) {
                 const permissionParts = ['dashboard', 'get', 'userInfo', key];
-                const permission = getPermission(permissionParts);
 
-                let hasPermission;
-                if (permission === 'always')
-                    hasPermission = true;
-                else if (permission === 'ifOwner')
-                    hasPermission = explicitAuthentication && authentication.uid === user.uid;
-                else if (permission === 'never')
-                    hasPermission = false;
-                else
-                    throw new Error(`Don't know how to handle permission ${permission} (${permissionParts.join('.')})`)
-
-                if (hasPermission)
+                if (hasPermission(permissionParts, {
+                    ifOwner: explicitAuthentication && authentication.uid === user.uid
+                }))
                     accessibleUserInfo[key] = value;
             }
 
