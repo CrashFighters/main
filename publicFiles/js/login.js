@@ -38,10 +38,10 @@ export async function loginWithGithub(initiator) {
 
         if (isMobile()) {
             await signInWithRedirect(auth, githubProvider);
-            logEvent('login', { method: 'github', initiator, type: 'redirect', location: window.location.pathname });
+            logEvent('login', { method: 'github', initiator, type: 'redirect' });
         } else {
             await signInWithPopup(auth, githubProvider);
-            logEvent('login', { method: 'github', initiator, type: 'popup', location: window.location.pathname });
+            logEvent('login', { method: 'github', initiator, type: 'popup' });
         }
     } catch (e) {
         throw e;
@@ -54,7 +54,7 @@ export async function loginWithEmail(email, password, initiator) {
             throw new Error('No initiator provided in loginWithEmail')
 
         await signInWithEmailAndPassword(auth, email, password);
-        logEvent('login', { method: 'email', initiator, type: 'embedded', location: window.location.pathname });
+        logEvent('login', { method: 'email', initiator, type: 'embedded' });
     } catch (e) {
         throw e;
     };
@@ -67,7 +67,7 @@ export async function createEmailAccount(email, password, initiator) {
 
         const { user } = await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(user);
-        logEvent('sign_up', { method: 'email', initiator, type: 'embedded', location: window.location.pathname });
+        logEvent('sign_up', { method: 'email', initiator, type: 'embedded' });
     } catch (e) {
         throw e;
     };

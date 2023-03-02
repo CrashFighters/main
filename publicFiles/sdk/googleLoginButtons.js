@@ -29,7 +29,7 @@ const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
 window.googleButtonPopupCallback = async ({ credential }) => {
     await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
-    logEvent('login', { method: 'google', initiator: 'button', type: 'popup', location: window.location.pathname });
+    logEvent('login', { method: 'google', initiator: 'button', type: 'popup' });
 };
 
 const smallButtons = [...document.getElementsByClassName('smallGoogleLoginButton')];
@@ -106,5 +106,5 @@ if (googleSignInIdToken) {
     const credential = await response.text();
 
     await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
-    logEvent('login', { method: 'google', initiator: 'button', type: 'redirect', location: window.location.pathname });
+    logEvent('login', { method: 'google', initiator: 'button', type: 'redirect' });
 }

@@ -29,7 +29,7 @@ const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
 window.googleOneTapCallback = async ({ credential }) => {
     await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
-    logEvent('login', { method: 'google', initiator: 'oneTap', type: 'embedded', location: window.location.pathname })
+    logEvent('login', { method: 'google', initiator: 'oneTap', type: 'embedded' })
 };
 
 const googleOnLoadDiv = document.createElement('div');
