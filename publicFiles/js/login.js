@@ -2,6 +2,7 @@
 
 --fileRequirements--
 /sdk/auth.js
+/js/analytics.js
 --endFileRequirements--
 
 */
@@ -19,6 +20,8 @@ import {
     PhoneMultiFactorGenerator
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
+import { logEvent } from '/js/analytics.js';
+
 const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
 let isMobile;
@@ -26,6 +29,8 @@ export async function loginWithGithub() {
     try {
         if (!isMobile)
             ({ isMobile } = await import('/common/isMobile.js'));
+
+        logEvent('login', { method: 'github' });
 
         const githubProvider = new GithubAuthProvider();
         githubProvider.addScope('user:email');
@@ -41,6 +46,7 @@ export async function loginWithGithub() {
 
 export async function loginWithEmail(email, password) {
     try {
+        logEvent('login', { method: 'email' });
         await signInWithEmailAndPassword(auth, email, password);
     } catch (e) {
         throw e;
