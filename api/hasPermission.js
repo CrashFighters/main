@@ -22,7 +22,7 @@ module.exports = {
             authentication = await authentication;
             customClaims = await customClaims;
 
-            //todo: use hasPermission function from middlewareData
+            //todo-imp: use hasPermission function from middlewareData
             end(hasPermission(permissionParts, checks, authentication, customClaims));
         } catch (e) {
             parseError(e);
