@@ -2,6 +2,7 @@ const getPermission = require('../../../modules/authentication/functions/getPerm
 
 module.exports = {
     info: {
+        exports: ['getPermission'],
         requires: [
             'authentication',
             'customClaims'

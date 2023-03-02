@@ -2,6 +2,7 @@ const firebase = require('../../../modules/authentication/functions/authenticati
 
 module.exports = {
     info: {
+        exports: ['customClaims'],
         requires: ['authentication']
     },
     async execute({ parseError, middlewareData: { authentication } }) {

@@ -2,6 +2,9 @@ const firebase = require('../../../modules/authentication/functions/authenticati
 const parseCookie = require('../../functions/parse/cookie.js');
 
 module.exports = {
+    info: {
+        exports: ['authenticated', 'authentication', 'explicitAuthentication']
+    },
     async execute({ request, parseError }) {
         try {
 
