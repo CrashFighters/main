@@ -3,6 +3,7 @@
 --fetchPriority--: low
 
 --fileRequirements--
+/js/analytics.js
 /sdk/auth.js
 --endFileRequirements--
 
@@ -14,6 +15,8 @@ import {
     RecaptchaVerifier,
     PhoneMultiFactorGenerator
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
+
+import { logEvent } from '/js/analytics.js';
 
 const { firebase: { auth } } = (await import('/sdk/auth.js'))._;
 
@@ -95,11 +98,13 @@ export const add = async (phoneNumber, displayName) => {
 
     const phoneAuthProvider = new PhoneAuthProvider(auth);
     const verificationId = await phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
+    logEvent('2fa_add_code_send')
 
     return [async (verificationCode) => {
         const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
         const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(credential);
         await multiFactor(auth.currentUser).enroll(multiFactorAssertion, displayName);
+        logEvent('2fa_add')
     }, recaptchaButton];
 };
 
