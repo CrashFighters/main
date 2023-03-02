@@ -17,7 +17,7 @@ module.exports = {
         let isPrivate = false;
         if (fs.existsSync(privatePath)) {
             hasPermission = await hasPermission;
-            isPrivate = hasPermission(['privateFiles', ...permissionParts], {}, true);
+            isPrivate = hasPermission(['privateFiles', ...permissionParts]);
         };
         const isPublic = fs.existsSync(publicPath);
 

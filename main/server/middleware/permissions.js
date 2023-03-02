@@ -13,13 +13,14 @@ module.exports = {
         //todo: add explicitAuthentication to checks
 
         return {
-            hasPermission: (permission, { owner }, allowCookie) => {
+            hasPermission: (permission, { owner }) => {
                 const checks = {
-                    owner: owner === undefined ? undefined : explicitAuthentication && owner === authentication.uid,
-                    appCheck: appCheckPassed
+                    owner: owner === undefined ? undefined : owner === authentication.uid,
+                    appCheck: appCheckPassed,
+                    explicitAuth: explicitAuthentication
                 };
 
-                hasPermission(permission, checks, (explicitAuthentication || allowCookie) ? authentication : undefined, (explicitAuthentication || allowCookie) ? customClaims : undefined)
+                hasPermission(permission, checks, authentication, customClaims)
             }
         };
     }
