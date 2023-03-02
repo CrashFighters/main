@@ -9,11 +9,14 @@ module.exports = {
         ]
     },
     execute({ middlewareData: { authentication, explicitAuthentication, customClaims } }) {
-        //todo: add ifOwner automatically to checks
-
         return {
-            hasPermission: (permission, checks, allowCookie) =>
+            hasPermission: (permission, { owner }, allowCookie) => {
+                const checks = {
+                    ifOwner: explicitAuthentication && owner === authentication.uid
+                };
+
                 hasPermission(permission, checks, (explicitAuthentication || allowCookie) ? authentication : undefined, (explicitAuthentication || allowCookie) ? customClaims : undefined)
+            }
         };
     }
 }
