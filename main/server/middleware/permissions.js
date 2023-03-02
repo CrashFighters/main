@@ -1,8 +1,8 @@
-const getPermission = require('../../../modules/authentication/functions/getPermission.js');
+const hasPermission = require('../../../modules/authentication/functions/hasPermission.js');
 
 module.exports = {
     info: {
-        exports: ['getPermission'],
+        exports: ['hasPermission'],
         requires: [
             'authentication',
             'customClaims'
@@ -10,8 +10,8 @@ module.exports = {
     },
     execute({ middlewareData: { authentication, explicitAuthentication, customClaims } }) {
         return {
-            getPermission: (permission, allowCookie) =>
-                getPermission(permission, (explicitAuthentication || allowCookie) ? authentication : undefined, (explicitAuthentication || allowCookie) ? customClaims : undefined)
+            hasPermission: (permission, checks, allowCookie) =>
+                hasPermission(permission, checks, (explicitAuthentication || allowCookie) ? authentication : undefined, (explicitAuthentication || allowCookie) ? customClaims : undefined)
         };
     }
 }
