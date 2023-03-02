@@ -1,5 +1,5 @@
 
-//todo: get all permissions and perform checks on the client side
+//todo: get all permissions and perform checks on the client side, maybe also create folder with shared code for client and server?
 
 let getAuthHeaders;
 export async function getPermission(permission) {
