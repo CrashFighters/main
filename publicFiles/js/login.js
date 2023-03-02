@@ -53,8 +53,8 @@ export async function loginWithEmail(email, password, initiator) {
         if (!initiator)
             throw new Error('No initiator provided in loginWithEmail')
 
-        logEvent('login', { method: 'email', initiator, type: 'embedded', location: window.location.pathname });
         await signInWithEmailAndPassword(auth, email, password);
+        logEvent('login', { method: 'email', initiator, type: 'embedded', location: window.location.pathname });
     } catch (e) {
         throw e;
     };
