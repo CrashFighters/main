@@ -5,6 +5,7 @@
 --fileRequirements--
 /sdk/auth.js
 /js/login.js
+/js/analytics.js
 --endFileRequirements--
 
 */
@@ -16,6 +17,8 @@ import {
 import {
     sendPasswordResetEmail
 } from '/js/login.js';
+
+import { logEvent } from '/js/analytics.js';
 
 const emailInput = document.getElementById('emailInput');
 const urlParams = new URLSearchParams(window.location.search);
@@ -35,6 +38,7 @@ window.sendResetEmail = async () => {
 
     try {
         await sendPasswordResetEmail(emailInput.value);
+        logEvent('password_rest_email_sent');
         emailInput.value = '';
         Toastify({
             text: 'Password reset email sent! Please check your inbox.',
