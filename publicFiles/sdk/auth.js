@@ -22,7 +22,7 @@ import {
 import { firebaseConfig } from '/common/apiKeys.js';
 import { setCookie } from '/common/cookie.js';
 import { init as initAppCheck, _ as appCheck_ } from '/js/appCheck.js';
-import { init as initAnalytics } from '/js/analytics.js';
+import { init as initAnalytics, logEvent } from '/js/analytics.js';
 
 const { getAppCheckHeaders } = appCheck_;
 
@@ -56,6 +56,7 @@ onAuthStateChanged(auth, async () => {
 export async function logout() {
     try {
         await signOut(auth);
+        logEvent('logout');
     } catch (e) {
         throw e;
     }
