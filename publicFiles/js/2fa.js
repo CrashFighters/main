@@ -116,4 +116,5 @@ export const remove = async (index) => {
     const uid = multiFactorUser.enrolledFactors[index].uid;
 
     await multiFactorUser.unenroll(uid);
+    logEvent('2fa_remove')
 }
