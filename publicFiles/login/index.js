@@ -91,7 +91,7 @@ const githubLoginButtons = [...deepQuerySelectorAll('.githubLoginButton')];
 for (const githubLoginButton of githubLoginButtons)
     githubLoginButton.addEventListener('click', async () => {
         try {
-            await loginWithGithub();
+            await loginWithGithub('button');
         } catch (e) {
             if (!['auth/popup-closed-by-user', 'auth/cancelled-popup-request', 'auth/user-cancelled'].includes(e.code)) {
                 const firebaseErrorCode = firebaseErrorCodes[e.code];
@@ -369,7 +369,7 @@ window.doLogin = async (recaptchaScore) => {
     preventRedirect = true;
     try {
         window.removeLoginErrorFeedback();
-        await loginWithEmail(email, password);
+        await loginWithEmail(email, password, 'button');
     } catch (e) {
         if (e.code === 'auth/multi-factor-auth-required') return enable2fa(e);
 

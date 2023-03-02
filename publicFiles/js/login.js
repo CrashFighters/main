@@ -25,8 +25,11 @@ import { logEvent } from '/js/analytics.js';
 const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
 let isMobile;
-export async function loginWithGithub() {
+export async function loginWithGithub(initiator) {
     try {
+        if (!initiator)
+            throw new Error('No initiator provided in loginWithGithub')
+
         if (!isMobile)
             ({ isMobile } = await import('/common/isMobile.js'));
 
@@ -34,10 +37,10 @@ export async function loginWithGithub() {
         githubProvider.addScope('user:email');
 
         if (isMobile()) {
-            logEvent('login', { method: 'github', initiator: 'button', type: 'redirect', location: window.location.pathname });
+            logEvent('login', { method: 'github', initiator, type: 'redirect', location: window.location.pathname });
             await signInWithRedirect(auth, githubProvider);
         } else {
-            logEvent('login', { method: 'github', initiator: 'button', type: 'popup', location: window.location.pathname });
+            logEvent('login', { method: 'github', initiator, type: 'popup', location: window.location.pathname });
             await signInWithPopup(auth, githubProvider);
         }
     } catch (e) {
@@ -45,9 +48,12 @@ export async function loginWithGithub() {
     };
 }
 
-export async function loginWithEmail(email, password) {
+export async function loginWithEmail(email, password, initiator) {
     try {
-        logEvent('login', { method: 'email', initiator: 'button', type: 'embedded', location: window.location.pathname });
+        if (!initiator)
+            throw new Error('No initiator provided in loginWithEmail')
+
+        logEvent('login', { method: 'email', initiator, type: 'embedded', location: window.location.pathname });
         await signInWithEmailAndPassword(auth, email, password);
     } catch (e) {
         throw e;
