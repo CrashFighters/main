@@ -3,6 +3,7 @@
 --fetchPriority--: low
 
 --fileRequirements--
+/js/analytics.js
 /sdk/auth.js
 /common/apiKeys.js
 /common/doesDocumentIncludeScript.js
@@ -15,6 +16,8 @@ import {
     signInWithCredential
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
+import { logEvent } from '/js/analytics.js';
+
 import {
     onStateChange
 } from '/sdk/auth.js';
@@ -24,7 +27,8 @@ import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js'
 
 const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
-window.googleSignInCallback = (a) => {
+window.googleZeroTapCallback = (a) => {
+    logEvent('login', { method: 'google', initiator: 'oneTap', type: 'embedded', location: window.location.pathname })
     signInWithCredential(auth, GoogleAuthProvider.credential(a.credential));
 };
 
@@ -32,7 +36,7 @@ const googleOnLoadDiv = document.createElement('div');
 googleOnLoadDiv.id = 'g_id_onload';
 googleOnLoadDiv.dataset.client_id = googleSignInKey;
 googleOnLoadDiv.dataset.context = 'signin';
-googleOnLoadDiv.dataset.callback = 'googleSignInCallback';
+googleOnLoadDiv.dataset.callback = 'googleZeroTapCallback';
 googleOnLoadDiv.dataset.auto_select = 'true';
 googleOnLoadDiv.dataset.close_on_tap_outside = 'false';
 googleOnLoadDiv.dataset.itp_support = 'true';

@@ -30,15 +30,16 @@ export async function loginWithGithub() {
         if (!isMobile)
             ({ isMobile } = await import('/common/isMobile.js'));
 
-        logEvent('login', { method: 'github' });
-
         const githubProvider = new GithubAuthProvider();
         githubProvider.addScope('user:email');
 
-        if (isMobile())
+        if (isMobile()) {
+            logEvent('login', { method: 'github', initiator: 'button', type: 'redirect', location: window.location.pathname });
             await signInWithRedirect(auth, githubProvider);
-        else
+        } else {
+            logEvent('login', { method: 'github', initiator: 'button', type: 'popup', location: window.location.pathname });
             await signInWithPopup(auth, githubProvider);
+        }
     } catch (e) {
         throw e;
     };
@@ -46,7 +47,7 @@ export async function loginWithGithub() {
 
 export async function loginWithEmail(email, password) {
     try {
-        logEvent('login', { method: 'email' });
+        logEvent('login', { method: 'email', initiator: 'button', type: 'embedded', location: window.location.pathname });
         await signInWithEmailAndPassword(auth, email, password);
     } catch (e) {
         throw e;

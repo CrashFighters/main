@@ -3,6 +3,7 @@
 --fetchPriority--: low
 
 --fileRequirements--
+/js/analytics.js
 /common/cookie.js
 /common/apiKeys.js
 /common/doesDocumentIncludeScript.js
@@ -17,6 +18,8 @@ import {
     signInWithCredential
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
+import { logEvent } from '/js/analytics.js';
+
 import { getCookie, deleteCookie } from '/common/cookie.js';
 import { googleSignInKey } from '/common/apiKeys.js';
 import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
@@ -24,8 +27,9 @@ import { isMobile } from '/common/isMobile.js';
 
 const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
-window.googleSignInCallback = (a) => {
-    signInWithCredential(auth, GoogleAuthProvider.credential(a.credential));
+window.googleButtonPopupCallback = ({ credential }) => {
+    logEvent('login', { method: 'google', initiator: 'button', type: 'popup', location: window.location.pathname });
+    signInWithCredential(auth, GoogleAuthProvider.credential(credential));
 };
 
 const smallButtons = [...document.getElementsByClassName('smallGoogleLoginButton')];
@@ -68,7 +72,7 @@ if (isMobile()) {
     googleOnLoadDiv.dataset.login_uri = window.location.href
 } else {
     googleOnLoadDiv.dataset.ux_mode = 'popup';
-    googleOnLoadDiv.dataset.callback = 'googleSignInCallback';
+    googleOnLoadDiv.dataset.callback = 'googleButtonPopupCallback';
 }
 googleOnLoadDiv.dataset.auto_prompt = 'false';
 
@@ -101,5 +105,6 @@ if (googleSignInIdToken) {
 
     const credential = await response.text();
 
+    logEvent('login', { method: 'google', initiator: 'button', type: 'redirect', location: window.location.pathname });
     signInWithCredential(auth, GoogleAuthProvider.credential(credential));
 }
