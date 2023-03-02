@@ -1,16 +1,25 @@
-const getPermission = require('../../../modules/authentication/functions/getPermission.js');
+const hasPermission = require('../../../modules/authentication/functions/hasPermission.js');
 
 module.exports = {
     info: {
+        exports: ['hasPermission'],
         requires: [
             'authentication',
-            'customClaims'
+            'customClaims',
+            'appCheck'
         ]
     },
-    execute({ middlewareData: { authentication, explicitAuthentication, customClaims } }) {
+    execute({ middlewareData: { authentication, explicitAuthentication, customClaims, appCheckPassed } }) {
         return {
-            getPermission: (permission, allowCookie) =>
-                getPermission(permission, (explicitAuthentication || allowCookie) ? authentication : undefined, (explicitAuthentication || allowCookie) ? customClaims : undefined)
+            hasPermission: (permission, { owner }) => {
+                const checks = {
+                    owner: owner === undefined ? undefined : owner === authentication.uid,
+                    appCheck: appCheckPassed,
+                    explicitAuth: explicitAuthentication
+                };
+
+                hasPermission(permission, checks, authentication, customClaims)
+            }
         };
     }
 }

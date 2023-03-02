@@ -1,7 +1,13 @@
 const getPermissions = require('./getPermissions.js');
 
-module.exports = (_permissionParts, user, customClaims) => {
-    let permissionParts = _permissionParts;
+module.exports = (permissionParts, user, customClaims) => {
+    let permission = getPermission(permissionParts, user, customClaims);
+    if (typeof permission === 'string') permission = permission.split(' ');
+
+    return permission;
+}
+
+function getPermission(permissionParts, user, customClaims) {
     if (typeof permissionParts === 'string')
         permissionParts = permissionParts.split('.');
 
@@ -18,7 +24,7 @@ module.exports = (_permissionParts, user, customClaims) => {
     }
 
     if (typeof currentPermission === 'object')
-        throw new Error(`Permission ${_permissionParts} is object (${require('util').inspect(currentPermission)}`)
+        throw new Error(`Permission ${permissionParts} is object (${require('util').inspect(currentPermission)}`)
     else
         return currentPermission ?? getPermissionFromUndefined(fullPermissions, permissionParts);
 }

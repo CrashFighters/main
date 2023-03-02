@@ -115,18 +115,18 @@
                     "get": "always"
                 },
                 "user": {
-                    "delete": "ifOwner"
+                    "delete": "owner appCheck explicitAuth"
                 }
             },
             "authenticated": {
                 "database": {
                     "get": "always",
-                    "delete": "ifOwner",
-                    "modify": "ifOwner",
-                    "create": "always"
+                    "delete": "owner appCheck explicitAuth",
+                    "modify": "owner explicitAuth",
+                    "create": "explicitAuth"
                 },
                 "user": {
-                    "delete": "ifOwner"
+                    "delete": "owner appCheck explicitAuth"
                 }
             }
         },
@@ -136,11 +136,11 @@
                     "moderate": "always"
                 },
                 "moderate": {
-                    "getPost": "always",
+                    "getPost": "explicitAuth",
                     "updatePostVisibility": {
-                        "verified": "always",
-                        "flagged": "always",
-                        "hidden": "always"
+                        "verified": "explicitAuth",
+                        "flagged": "explicitAuth",
+                        "hidden": "explicitAuth"
                     }
                 }
             },
@@ -149,27 +149,30 @@
                     "dashboard": "always"
                 },
                 "dashboard": {
-                    "getUserFrom": "always",
+                    "getUserFrom": "explicitAuth",
                     "get": {
-                        "userInfo": "always"
+                        "userInfo": "explicitAuth"
                     },
                     "modify": {
                         "userInfo": {
                             "_other": "never",
-                            "email": "always",
                             "emailVerified": "never",
-                            "phoneNumber": "always",
-                            "password": "never",
-                            "displayName": "always",
-                            "picture": "always"
+                            "email": "appCheck explicitAuth",
+                            "phoneNumber": "appCheck explicitAuth",
+                            "password": "never explicitAuth",
+                            "displayName": "appCheck explicitAuth",
+                            "picture": "appCheck explicitAuth"
                         }
                     },
                     "remove": {
-                        "2fa": "always"
+                        "2fa": "appCheck explicitAuth"
                     }
                 }
             },
-            "admin": "always"
+            "admin": {
+                "privateFiles": "always",
+                "_other": "appCheck explicitAuth"
+            }
         }
     }
 }

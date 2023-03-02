@@ -31,10 +31,8 @@ module.exports = {
                 if (executedMiddlewares.includes(name)) return true;
                 const middleware = middlewares.find(a => a.name === name);
 
-                if (middleware.info?.requires) {
-                    for (const { name } of middleware.info.requires)
-                        if (!await executeMiddleware(name)) return false;
-                }
+                for (const name of middleware.info?.requires ?? [])
+                    if (!await executeMiddleware(name)) return false;
 
                 const newMiddlewareData = await middleware.execute({
                     request,
@@ -61,15 +59,16 @@ module.exports = {
                     if (!await executeMiddleware(name)) return;
 
             const middlewareData = {};
-            for (const { name } of middlewares)
-                Object.defineProperty(middlewareData, name, { //todo-imp: middlewares can set other stuff than the name of the middleware. For example: authentication also sets explicitAuthentication property
-                    configurable: false,
-                    enumerable: true,
-                    get: async () => {
-                        if (!await executeMiddleware(name)) return;
-                        return cachedMiddlewareData[name];
-                    }
-                });
+            for (const { info, name } of middlewares)
+                for (const exportName of info?.exports ?? [])
+                    Object.defineProperty(middlewareData, exportName, {
+                        configurable: false,
+                        enumerable: true,
+                        get: async () => {
+                            if (!await executeMiddleware(name)) return;
+                            return cachedMiddlewareData[exportName];
+                        }
+                    });
 
             if (!responded)
                 if (request.url.startsWith('/dbApi/'))

@@ -10,6 +10,9 @@ firebase.initializeApp({
 const appCheck = firebase.appCheck();
 
 module.exports = {
+    info: {
+        exports: ['appCheckPassed']
+    },
     async execute({ request, parseError }) {
         try {
             const appCheckToken = request.headers['x-firebase-appcheck'];

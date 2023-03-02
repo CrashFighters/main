@@ -1,22 +1,14 @@
 const firebase = require('../../../modules/authentication/functions/authentication.js');
 
 module.exports = {
-    async execute({ params, statusCode, parseError, end, middlewareData: { getPermission } }) {
+    async execute({ params, statusCode, parseError, end, middlewareData: { hasPermission } }) {
         try {
-
-            getPermission = await getPermission;
-            const permission = await getPermission('dashboard.getUserFrom.phoneNumber');
-
-            let hasPermission;
-            if (permission === 'always')
-                hasPermission = true;
-            else if (permission === 'never')
-                hasPermission = false;
-            else
-                throw new Error(`Don't know how to handle permission: ${permission}`);
-
             if (!params.phoneNumber) return statusCode(400, 'noPhoneNumberProvided', 'No phone number provided');
-            if (!hasPermission) return statusCode(403, 'invalidPermission', 'Invalid permission (dashboard.getUserFrom.phoneNumber)');
+
+            hasPermission = await hasPermission;
+
+            if (!hasPermission('dashboard.getUserFrom.phoneNumber'))
+                return statusCode(403, 'invalidPermission', 'Invalid permission (dashboard.getUserFrom.phoneNumber)');
 
             const auth = firebase.auth();
             let user;

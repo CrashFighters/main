@@ -2,19 +2,22 @@ const { getModerationPostIds } = require('./getPost.js');
 const { get, set } = require('../../modules/database/functions/database.js');
 
 module.exports = {
-    async execute({ parseError, statusCode, end, middlewareData: { getPermission }, params }) {
+    async execute({ parseError, statusCode, end, middlewareData: { hasPermission }, params }) {
         try {
 
             // Check visibility parameter
             if (!params.visibility) return statusCode(400, 'noVisibilityProvided', 'No visibility provided');
             if (!['verified', 'flagged', 'hidden'].includes(params.visibility)) return statusCode(400, 'invalidVisibility', 'Invalid visibility provided');
-            getPermission = await getPermission;
-            if (getPermission(['moderate', 'updatePostVisibility', params.visibility]) !== 'always') return statusCode(403, 'invalidPermission', `Invalid permission to update post visibility (moderate.updatePostVisibility.${params.visibility})`);
 
             // Check moderationPost parameter
             if (!params.moderationPost) return statusCode(400, 'noModerationPostProvided', 'No moderationPost provided');
             const moderationPostIds = getModerationPostIds();
             if (!moderationPostIds[params.moderationPost]) return statusCode(400, 'invalidModerationPost', 'Invalid moderationPost provided');
+
+            // check permission
+            hasPermission = await hasPermission;
+            if (!hasPermission(['moderate', 'updatePostVisibility', params.visibility]))
+                return statusCode(403, 'invalidPermission', `Invalid permission to update post visibility (moderate.updatePostVisibility.${params.visibility})`);
 
             // Get post
             const [community, postId] = moderationPostIds[params.moderationPost];

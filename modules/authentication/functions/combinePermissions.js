@@ -10,22 +10,20 @@ function combinePermissions(permissions) {
 }
 
 function combinePermissionsRecursive(oldPermissions, newPermissions) {
-    if (typeof newPermissions === 'object' &&
-        Object.keys(newPermissions).length === 0) return oldPermissions;
+    if (isObject(newPermissions) && Object.keys(newPermissions).length === 0)
+        return oldPermissions;
 
     if (oldPermissions === undefined) return newPermissions;
     if (newPermissions === undefined) return oldPermissions;
 
-    if (typeof oldPermissions !== 'object' && typeof newPermissions === 'object')
+    if (!isObject(newPermissions))
+        return newPermissions;
+    else if (!isObject(oldPermissions) && isObject(newPermissions))
         return {
             _other: oldPermissions,
             ...newPermissions
         };
-    else if (typeof oldPermissions !== 'object' && typeof newPermissions !== 'object')
-        return newPermissions;
-    else if (typeof oldPermissions === 'object' && typeof newPermissions !== 'object')
-        return newPermissions;
-    else if (typeof oldPermissions === 'object' && typeof newPermissions === 'object') {
+    else if (isObject(oldPermissions) && isObject(newPermissions)) {
 
         const currentPermissions = Object.assign({}, oldPermissions);
 
@@ -34,6 +32,11 @@ function combinePermissionsRecursive(oldPermissions, newPermissions) {
 
         return currentPermissions;
 
-    } else
-        throw new Error(`Don't know how to combine ${typeof currentPermission} and ${typeof newPermission}`)
+    }
+}
+
+function isObject(obj) {
+    return typeof obj === 'object' &&
+        obj !== null &&
+        !Array.isArray(obj);
 }

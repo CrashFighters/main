@@ -7,6 +7,7 @@ const client = new OAuth2Client(client_id);
 
 module.exports = {
     info: {
+        exports: ['googleUserId'],
         requireRun: true
     },
     async execute({ extraData, parseError }) {
