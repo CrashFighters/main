@@ -27,9 +27,9 @@ import { isMobile } from '/common/isMobile.js';
 
 const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
-window.googleButtonPopupCallback = ({ credential }) => {
+window.googleButtonPopupCallback = async ({ credential }) => {
+    await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
     logEvent('login', { method: 'google', initiator: 'button', type: 'popup', location: window.location.pathname });
-    signInWithCredential(auth, GoogleAuthProvider.credential(credential));
 };
 
 const smallButtons = [...document.getElementsByClassName('smallGoogleLoginButton')];
@@ -105,6 +105,6 @@ if (googleSignInIdToken) {
 
     const credential = await response.text();
 
+    await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
     logEvent('login', { method: 'google', initiator: 'button', type: 'redirect', location: window.location.pathname });
-    signInWithCredential(auth, GoogleAuthProvider.credential(credential));
 }

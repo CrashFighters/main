@@ -27,9 +27,9 @@ import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js'
 
 const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
-window.googleOneTapCallback = (a) => {
+window.googleOneTapCallback = async ({ credential }) => {
+    await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
     logEvent('login', { method: 'google', initiator: 'oneTap', type: 'embedded', location: window.location.pathname })
-    signInWithCredential(auth, GoogleAuthProvider.credential(a.credential));
 };
 
 const googleOnLoadDiv = document.createElement('div');

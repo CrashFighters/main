@@ -37,11 +37,11 @@ export async function loginWithGithub(initiator) {
         githubProvider.addScope('user:email');
 
         if (isMobile()) {
-            logEvent('login', { method: 'github', initiator, type: 'redirect', location: window.location.pathname });
             await signInWithRedirect(auth, githubProvider);
+            logEvent('login', { method: 'github', initiator, type: 'redirect', location: window.location.pathname });
         } else {
-            logEvent('login', { method: 'github', initiator, type: 'popup', location: window.location.pathname });
             await signInWithPopup(auth, githubProvider);
+            logEvent('login', { method: 'github', initiator, type: 'popup', location: window.location.pathname });
         }
     } catch (e) {
         throw e;
