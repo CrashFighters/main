@@ -1,3 +1,6 @@
+
+//todo: get all permissions and perform checks on the client side
+
 let getAuthHeaders;
 export async function getPermission(permission) {
     if (!getAuthHeaders)
