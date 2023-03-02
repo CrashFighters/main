@@ -5,7 +5,7 @@ module.exports = (permissionParts, checks, user, customClaims) => {
     if (typeof permission === 'string') permission = [permission];
 
     checks = {
-        ...checks,
+        ...(checks || {}),
         always: true,
         never: false
     };
