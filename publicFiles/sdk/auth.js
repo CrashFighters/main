@@ -1,9 +1,10 @@
 /*
 
 --fileRequirements--
-/js/appCheck.js
 /common/apiKeys.js
 /common/cookie.js
+/js/appCheck.js
+/js/analytics.js
 --endFileRequirements--
 
 */
@@ -20,13 +21,15 @@ import {
 
 import { firebaseConfig } from '/common/apiKeys.js';
 import { setCookie } from '/common/cookie.js';
-import { init, _ as appCheck_ } from '/js/appCheck.js';
+import { init as initAppCheck, _ as appCheck_ } from '/js/appCheck.js';
+import { init as initAnalytics } from '/js/analytics.js';
 
 const { getAppCheckHeaders } = appCheck_;
 
 const app = initializeApp(firebaseConfig);
 
-await init(app);
+await initAppCheck(app);
+initAnalytics(app);
 
 const auth = getAuth(app);
 
