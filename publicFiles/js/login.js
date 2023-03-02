@@ -96,9 +96,9 @@ let recaptchaVerifier;
 export async function prepare2fa() {
     const { getRecaptchaVerifier } = (await import('/js/2fa.js'))._;
 
-    logEvent('login_2fa_show_captcha');
+    logEvent('login_2fa_captcha_show');
     const result = await getRecaptchaVerifier();
-    logEvent('login_2fa_captcha_solved');
+    logEvent('login_2fa_captcha_solve');
 
     recaptchaVerifier = result[0];
     const recaptchaObject = result[1];
@@ -112,7 +112,7 @@ export function get2faMethods(error) {
         throw new Error('prepare2fa not called');
 
     resolver = getMultiFactorResolver(auth, error);
-    logEvent('login_2fa_show_methods', { amount: resolver.hints.length });
+    logEvent('login_2fa_methods_show', { amount: resolver.hints.length });
 
     return resolver.hints.map(hint => ({
         displayName: hint.displayName,
@@ -140,7 +140,7 @@ export async function send2fa(selectedIndex) {
 
     const phoneAuthProvider = new PhoneAuthProvider(auth);
     verificationId = await phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
-    logEvent('login_2fa_send_code', { method: 'phone' });
+    logEvent('login_2fa_code_send', { method: 'phone' });
     recaptchaVerifier = null;
 
     return {
