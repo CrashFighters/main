@@ -9,6 +9,9 @@ module.exports = {
         ]
     },
     execute({ middlewareData: { authentication, explicitAuthentication, customClaims } }) {
+        //todo: add appCheck to checks
+        //todo: add explicitAuthentication to checks
+
         return {
             hasPermission: (permission, { owner }, allowCookie) => {
                 const checks = {
