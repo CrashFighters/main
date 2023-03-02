@@ -1,10 +1,12 @@
+const hasPermission = require('../modules/authentication/functions/hasPermission.js');
+
 module.exports = {
-    async execute({ end, middlewareData: { hasPermission }, params, statusCode, parseError }) {
+    async execute({ end, middlewareData: { authentication, customClaims }, params, statusCode, parseError }) {
         try {
             if (!params.permission) return statusCode(400, 'noPermissionProvided', 'No permission provided');
-            let permissionName;
+            let permissionParts;
             try {
-                permissionName = JSON.parse(params.permission);
+                permissionParts = JSON.parse(params.permission);
             } catch {
                 return statusCode(400, 'invalidPermission', 'Invalid permission');
             };
@@ -17,9 +19,11 @@ module.exports = {
                 return statusCode(400, 'invalidChecks', 'Invalid checks');
             };
 
-            hasPermission = await hasPermission;
+            authentication = await authentication;
+            customClaims = await customClaims;
 
-            end(hasPermission(permissionName, checks));
+            //todo: use hasPermission function from middlewareData
+            end(hasPermission(permissionParts, checks, authentication, customClaims));
         } catch (e) {
             parseError(e);
         }

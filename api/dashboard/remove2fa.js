@@ -1,15 +1,13 @@
 const firebase = require('../../modules/authentication/functions/authentication.js');
 
 module.exports = {
-    async execute({ params, statusCode, parseError, end, middlewareData: { hasPermission, authentication, explicitAuthentication } }) {
+    async execute({ params, statusCode, parseError, end, middlewareData: { hasPermission } }) {
         try {
             if (!params.user) return statusCode(400, 'noUserProved', 'No user provided');
 
-            authentication = await authentication;
-            explicitAuthentication = await explicitAuthentication;
             hasPermission = await hasPermission;
 
-            const userHasPermission = hasPermission('dashboard.remove.2fa', { ifOwner: explicitAuthentication && authentication.uid === params.user });
+            const userHasPermission = hasPermission('dashboard.remove.2fa', { owner: params.user });
 
             if (!userHasPermission) return statusCode(403, 'invalidPermission', 'Invalid permission to remove 2fa (dashboard.remove.2fa)');
 

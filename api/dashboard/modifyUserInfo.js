@@ -9,7 +9,7 @@ const possibleProperties = Object.freeze({
 });
 
 module.exports = {
-    async execute({ params, statusCode, parseError, end, middlewareData: { hasPermission, authentication, explicitAuthentication } }) {
+    async execute({ params, statusCode, parseError, end, middlewareData: { hasPermission } }) {
         try {
             if (!params.user) return statusCode(400, 'noUserProved', 'No user provided');
 
@@ -24,17 +24,15 @@ module.exports = {
             const newProperties = {};
 
             hasPermission = await hasPermission;
-            authentication = await authentication;
-            explicitAuthentication = await explicitAuthentication;
             for (const [key, value] of Object.entries(properties)) {
                 if (!possibleProperties[key]) return statusCode(400, 'unknownProperty', `Unknown property ${key}`);
 
-                const userHasPermission = hasPermission(['dashboard', 'modify', 'userInfo', key], { ifOwner: explicitAuthentication && authentication.uid === params.user });
+                const userHasPermission = hasPermission(['dashboard', 'modify', 'userInfo', key], { owner: params.user });
 
                 if (!userHasPermission) return statusCode(403, 'invalidPermission', `Invalid permission to modify ${key} (dashboard.modify.userInfo.${key}))`);
 
                 if (key === 'email') {
-                    const userHasEmailVerifiedPermission = hasPermission('dashboard.modify.userInfo.emailVerified', { ifOwner: explicitAuthentication && authentication.uid === params.user });
+                    const userHasEmailVerifiedPermission = hasPermission('dashboard.modify.userInfo.emailVerified', { owner: params.user });
 
                     if (!userHasEmailVerifiedPermission)
                         newProperties.emailVerified = false;

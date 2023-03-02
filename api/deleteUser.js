@@ -1,18 +1,15 @@
 const firebase = require('../modules/authentication/functions/authentication.js');
 
 module.exports = {
-    async execute({ end, params, middlewareData: { authentication, explicitAuthentication, hasPermission }, statusCode, parseError }) {
+    async execute({ end, params, middlewareData: { authentication, hasPermission }, statusCode, parseError }) {
         try {
             const userId = params.user;
             if (!userId) return statusCode(400, 'noUserProvided', 'No user provided');
 
             hasPermission = await hasPermission;
             authentication = await authentication;
-            explicitAuthentication = await explicitAuthentication;
 
-            if (!hasPermission('user.delete', {
-                ifOwner: (explicitAuthentication) && (authentication.uid === userId)
-            }))
+            if (!hasPermission('user.delete', { owner: userId }))
                 return statusCode(403, 'invalidPermission', 'You do not have permission to delete this user (user.delete)');
 
             const auth = firebase.auth();

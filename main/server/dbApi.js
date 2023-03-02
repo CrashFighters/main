@@ -79,7 +79,7 @@ module.exports = {
                             if (!checkPermissionType)
                                 throw new Error('checkPermissionType is undefined');
 
-                            const userHasPermission = hasPermission(['database', checkPermissionType, 'community'], { ifOwner: community.owner === authentication.uid });
+                            const userHasPermission = hasPermission(['database', checkPermissionType, 'community'], { owner: community.owner });
 
                             if (!userHasPermission) {
                                 if (!preventError) statusCode(response, 403, { text: `Invalid permission to ${checkPermissionType} community ${value} (database.${checkPermissionType}.community)`, short: 'invalidPermission' });
@@ -113,7 +113,7 @@ module.exports = {
                             if (!checkPermissionType)
                                 throw new Error('checkPermissionType is undefined');
 
-                            const userHasPermission = hasPermission(['database', checkPermissionType, 'post'], { ifOwner: post.user === authentication.uid });
+                            const userHasPermission = hasPermission(['database', checkPermissionType, 'post'], { owner: post.user });
 
                             if (!userHasPermission) {
                                 if (!preventError) statusCode(response, 403, { text: `Invalid permission to ${checkPermissionType} post ${value} in community ${community} (database.${checkPermissionType}.post)`, short: 'invalidPermission' });
@@ -150,7 +150,7 @@ module.exports = {
                             if (!checkPermissionType)
                                 throw new Error('checkPermissionType is undefined');
 
-                            const userHasPermission = hasPermission(['database', checkPermissionType, 'vote'], { ifOwner: vote.user === authentication.uid });
+                            const userHasPermission = hasPermission(['database', checkPermissionType, 'vote'], { owner: vote.user });
 
                             if (!userHasPermission) {
                                 if (!preventError) statusCode(response, 403, { text: `Invalid permission to ${checkPermissionType} vote ${value} in post ${post} in community ${community} (database.${checkPermissionType}.vote)`, short: 'invalidPermission' });
