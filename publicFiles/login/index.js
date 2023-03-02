@@ -252,7 +252,7 @@ function wait2faRecaptchaSuccess(recaptchaObject) {
 }
 
 let _2faError;
-async function enable2fa(error) {
+async function doLoginWith2fa(error) {
     _2faError = error;
 
     const _2faRecaptchaContainer = document.getElementById('_2faRecaptchaContainer');
@@ -371,7 +371,7 @@ window.doLogin = async (recaptchaScore) => {
         window.removeLoginErrorFeedback();
         await loginWithEmail(email, password, 'button');
     } catch (e) {
-        if (e.code === 'auth/multi-factor-auth-required') return enable2fa(e);
+        if (e.code === 'auth/multi-factor-auth-required') return doLoginWith2fa(e);
 
         const firebaseErrorCode = firebaseErrorCodes[e.code];
         return handleLoginError({
