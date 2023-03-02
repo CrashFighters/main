@@ -67,7 +67,7 @@ export async function createEmailAccount(email, password, initiator) {
 
         const { user } = await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(user);
-        logEvent('sign_up', { method: 'email', initiator, type: 'embedded' });
+        logEvent('sign_up', { method: 'email', initiator, type: 'embedded', with2fa: false });
     } catch (e) {
         throw e;
     };
@@ -155,4 +155,6 @@ export async function loginWith2fa(verificationCode) {
 
     verificationId = null;
     resolver = null;
+
+    logEvent('login', { method: 'email', initiator: 'button', type: 'embedded', with2fa: true });
 };
