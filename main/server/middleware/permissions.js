@@ -5,17 +5,18 @@ module.exports = {
         exports: ['hasPermission'],
         requires: [
             'authentication',
-            'customClaims'
+            'customClaims',
+            'appCheck'
         ]
     },
-    execute({ middlewareData: { authentication, explicitAuthentication, customClaims } }) {
-        //todo: add appCheck to checks
+    execute({ middlewareData: { authentication, explicitAuthentication, customClaims, appCheckPassed } }) {
         //todo: add explicitAuthentication to checks
 
         return {
             hasPermission: (permission, { owner }, allowCookie) => {
                 const checks = {
-                    owner: owner === undefined ? undefined : explicitAuthentication && owner === authentication.uid
+                    owner: owner === undefined ? undefined : explicitAuthentication && owner === authentication.uid,
+                    appCheck: appCheckPassed
                 };
 
                 hasPermission(permission, checks, (explicitAuthentication || allowCookie) ? authentication : undefined, (explicitAuthentication || allowCookie) ? customClaims : undefined)

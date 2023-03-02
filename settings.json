@@ -115,18 +115,18 @@
                     "get": "always"
                 },
                 "user": {
-                    "delete": "owner"
+                    "delete": "owner appCheck"
                 }
             },
             "authenticated": {
                 "database": {
                     "get": "always",
-                    "delete": "owner",
+                    "delete": "owner appCheck",
                     "modify": "owner",
                     "create": "always"
                 },
                 "user": {
-                    "delete": "owner"
+                    "delete": "owner appCheck"
                 }
             }
         },
@@ -156,20 +156,23 @@
                     "modify": {
                         "userInfo": {
                             "_other": "never",
-                            "email": "always",
+                            "email": "appCheck",
                             "emailVerified": "never",
-                            "phoneNumber": "always",
+                            "phoneNumber": "appCheck",
                             "password": "never",
-                            "displayName": "always",
-                            "picture": "always"
+                            "displayName": "appCheck",
+                            "picture": "appCheck"
                         }
                     },
                     "remove": {
-                        "2fa": "always"
+                        "2fa": "appCheck"
                     }
                 }
             },
-            "admin": "always"
+            "admin": {
+                "privateFiles": "always",
+                "_other": "appCheck"
+            }
         }
     }
 }
