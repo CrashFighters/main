@@ -15,7 +15,7 @@ module.exports = {
         return {
             hasPermission: (permission, { owner }, allowCookie) => {
                 const checks = {
-                    ifOwner: explicitAuthentication && owner === authentication.uid
+                    ifOwner: owner === undefined ? undefined : explicitAuthentication && owner === authentication.uid
                 };
 
                 hasPermission(permission, checks, (explicitAuthentication || allowCookie) ? authentication : undefined, (explicitAuthentication || allowCookie) ? customClaims : undefined)
