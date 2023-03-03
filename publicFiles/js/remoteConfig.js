@@ -14,6 +14,8 @@ import {
     getAll
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-remote-config.js';
 
+const isNumber = (n) => !isNaN(parseFloat(n)) && !isNaN(n - 0);
+
 const { app } = (await import('/sdk/auth.js'))._.firebase;
 const remoteConfig = getRemoteConfig(app);
 
@@ -68,7 +70,7 @@ function transformConfig(group, config) {
         } catch { }
 
         if (!newValue)
-            if (!isNaN(parseFloat(value._value))) newValue = parseFloat(value._value);
+            if (isNumber(value.value)) newValue = parseFloat(value._value);
 
         if (!newValue)
             if (['true', 'false'].includes(value._value)) newValue = value._value === 'true';
