@@ -47,12 +47,17 @@ async function addApiCalls(websitePath, path) {
 
 module.exports = {
     async execute() {
-        //Load module api
-        for (const moduleName of readdirSync(generic.path.files.modules))
-            await addApiCalls('/', generic.path.files.moduleApi.replace('{modules}', generic.path.files.modules).replace('{name}', moduleName));
 
-        //Load website api
-        await addApiCalls('/', generic.path.files.api);
+        if (!api) {
+            api = {};
+
+            //Load module api
+            for (const moduleName of readdirSync(generic.path.files.modules))
+                await addApiCalls('/', generic.path.files.moduleApi.replace('{modules}', generic.path.files.modules).replace('{name}', moduleName));
+
+            //Load website api
+            await addApiCalls('/', generic.path.files.api);
+        }
 
         return api;
     }
