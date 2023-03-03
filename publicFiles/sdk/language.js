@@ -35,11 +35,10 @@ function flipFirstLetterCase(string) {
     return ((string[0].toUpperCase() === string[0]) ? string[0].toLowerCase() : string[0].toUpperCase()) + string.slice(1);
 }
 
-async function execute(isFast = true, language = messages?.info?.code) {
-    if (isFast)
-        await getMessagesFast();
-    else {
-        const newMessages = await getMessagesSlow(language);
+async function execute(isFast = true, language) {
+    messages = await getMessagesFast();
+    if (!isFast) {
+        const newMessages = await getMessagesSlow(language || messages?.info?.code);
         messages = combineMessages(messages, newMessages);
     }
     updateHtml();
@@ -80,12 +79,14 @@ async function getMessagesSlow(language) {
 }
 
 async function getMessagesFast() {
-    messages = await fetch('/api/messages', {
+    let newMessages = await fetch('/api/messages', {
         method: 'GET',
         credentials: 'include',
         mode: 'no-cors' //to allow to use the preload
     });
-    messages = await messages.json();
+    newMessages = await newMessages.json();
+
+    return newMessages;
 }
 
 function updateHtml() {
