@@ -34,8 +34,6 @@ async function getConfigFromCache(group) {
 
 const cacheUpdating = [];
 async function updateCache(group) {
-    console.log('Updating cache', group)
-
     let cacheFileName;
 
     if (group)
