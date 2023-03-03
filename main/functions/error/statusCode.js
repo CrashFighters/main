@@ -1,20 +1,22 @@
 const fs = require('fs');
 const settings = require('../../../settings.json');
-let gMessages;
-try {
-    gMessages = require('../get/messages').execute().mainFunction();
-} catch (err) {
-    gMessages = undefined;
-}
 const mime = require('mime-types');
+let gMessages = undefined;
 
 module.exports = {
-    execute(response, code, extra) {
+    execute(response, code, extra) { //todo-imp: change to async
         response.writeHead(code, { 'Content-Type': 'text/plain' });
         if (!extra) extra = {};
         const errorFile = extra.errorFile;
         const customText = extra.text;
         let text = '';
+
+        if (gMessages === undefined)
+            try {
+                gMessages = (await require('../get/messages').execute()).mainFunction(); //todo: use request
+            } catch {
+                gMessages = null;
+            }
 
         let errorMessage;
         if (gMessages)

@@ -74,7 +74,7 @@ module.exports = {
                 if (request.url.startsWith('/dbApi/'))
                     return dbApi.execute(request, response, { middlewareData, extraData });
                 else if (request.url.startsWith('/api/'))
-                    return api.execute(request, response, { middlewareData, extraData });
+                    return await api.execute(request, response, { middlewareData, extraData });
                 else
                     return normal.execute(request, response, { middlewareData, extraData });
 

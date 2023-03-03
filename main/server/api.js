@@ -14,11 +14,11 @@ const statusCode = (response, code, { text, short }) => {
 }
 
 module.exports = {
-    execute(request, response, { middlewareData, extraData }) {
+    async execute(request, response, { middlewareData, extraData }) {
         const parseError = (error, customText) => parseErrorOnline(error, response, customText);
 
         try {
-            const messages = require('../functions/get/messages').execute({ request }).mainFunction();
+            const messages = (await require('../functions/get/messages').execute({ request })).mainFunction();
             const { path, params, success } = require('../functions/parse/apiCall.js').execute(request);
 
             if (!success) {

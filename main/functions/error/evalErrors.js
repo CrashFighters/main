@@ -1,7 +1,7 @@
 const readdir = require('util').promisify(require('fs').readdir);
 
 const settings = require('../../../settings.json');
-const messages = require('../get/messages').execute().mainFunction();
+let messages;
 
 let cConsole = console;
 if (require('../../functions/isModuleInstalled').execute('console')) {
@@ -27,6 +27,10 @@ module.exports = {
                 cConsole.log(`Listening on port ${settings.generic.port}...`);
                 cConsole.log();
                 cConsole.log();
+
+                if (!messages)
+                    messages = (await require('../get/messages').execute()).mainFunction()
+
                 let message = messages.error.thereAreErrors.replace('{amount}', files.length);
                 if (files.length === 1) message = messages.error.thereIsError.replace('{amount}', files.length);
 

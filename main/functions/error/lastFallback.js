@@ -18,13 +18,7 @@ try {
 
 const fs = require('fs');
 const settings = require('../../../settings.json');
-let gMessages;
-
-try {
-    gMessages = require('../get/messages').execute().mainFunction();
-} catch {
-    gMessages = undefined;
-}
+let gMessages = undefined;
 
 let extremeErrorMode = false;
 let reloadMode = 0;
@@ -100,10 +94,17 @@ module.exports = {
         response.end('The server has an extreme error, please try again later');
         cConsole.warn('New request in extreme error mode')
     },
-    reloadServer(r, response) {
+    async reloadServer(r, response) {
+        if (gMessages === undefined)
+            try {
+                gMessages = (await require('../get/messages').execute()).mainFunction();
+            } catch {
+                gMessages = null;
+            }
+
         let messages;
         try {
-            messages = require('../get/messages').execute({ request: r }).mainFunction();
+            messages = (await require('../get/messages').execute({ request: r })).mainFunction();
         } catch {
             messages = gMessages;
         }
@@ -117,13 +118,13 @@ module.exports = {
             response.end('Because of an extreme error, the server is reloading in 5 seconds')
         }
     },
-    serverExecute(request, response) {
+    async serverExecute(request, response) {
         if (extremeErrorMode) {
             const t = require(__filename);
             t.extremeServer(request, response);
         } else if (reloadMode > 0) {
             const t = require(__filename);
-            t.reloadServer(request, response);
+            await t.reloadServer(request, response);
         } else {
             try {
                 require('../../server/main').execute(request, response);
