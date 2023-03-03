@@ -12,7 +12,6 @@
         "moduleNotInstalledForShort": "Dependencies not found for {api}",
         "notValid": "Given argument {argument} is not valid",
         "notGiven": "No {argument} specified",
-        "Unknown error in": "Unknown error in {place}",
         "thereAreErrors": "There are {amount} errors!",
         "thereIsError": "There is {amount} error!",
         "reload": "Reload",

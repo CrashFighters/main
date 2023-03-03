@@ -12,7 +12,6 @@
         "moduleNotInstalledForShort": "Benodigdheden niet gevonden voor {api}",
         "notValid": "Het gegeven argument {argument} is niet geldig",
         "notGiven": "{argument} is niet gegeven",
-        "Unknown error in": "Onbekende fout in {place}",
         "thereAreErrors": "Er zijn {amount} fouten!",
         "thereIsError": "Er is {amount} fout!",
         "reload": "Herladen",
