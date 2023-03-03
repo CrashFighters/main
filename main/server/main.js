@@ -14,7 +14,7 @@ const normal = require('./normal.js');
 
 module.exports = {
     async execute(request, response) {
-        const parseError = (error, customText) => await parseErrorOnline(error, response, customText); //todo-imp: change to async
+        const parseError = async (error, customText) => await parseErrorOnline(error, response, customText);
 
         try {
             let body;
@@ -37,10 +37,10 @@ module.exports = {
                 const newMiddlewareData = await middleware.execute({
                     request,
                     extraData,
-                    parseError: (...arg) => {
+                    parseError: async (...arg) => {
                         if (!responded) {
                             responded = true;
-                            parseError(...arg);
+                            await parseError(...arg);
                         }
                     },
                     middlewareData: cachedMiddlewareData
@@ -79,7 +79,7 @@ module.exports = {
                     return normal.execute(request, response, { middlewareData, extraData });
 
         } catch (err) {
-            parseError(err);
+            await parseError(err);
         }
     }
 }

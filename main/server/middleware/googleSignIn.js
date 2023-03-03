@@ -30,7 +30,7 @@ module.exports = {
             return { googleUserId: userid }
 
         } catch (e) {
-            parseError(e);
+            await parseError(e);
         }
     }
 }

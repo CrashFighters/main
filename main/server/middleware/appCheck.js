@@ -27,7 +27,7 @@ module.exports = {
                 return { appCheckPassed: false };
             }
         } catch (e) {
-            parseError(e);
+            await parseError(e);
         }
     }
 }

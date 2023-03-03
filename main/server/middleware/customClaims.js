@@ -13,7 +13,7 @@ module.exports = {
             const customClaims = firebaseUser.customClaims;
             return { customClaims };
         } catch (e) {
-            parseError(e);
+            await parseError(e);
         }
     }
 }

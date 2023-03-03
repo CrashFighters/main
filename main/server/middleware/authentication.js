@@ -37,7 +37,7 @@ module.exports = {
             }
 
         } catch (e) {
-            parseError(e);
+            await parseError(e);
         }
     }
 }
