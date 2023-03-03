@@ -14,7 +14,7 @@ const statusCode = (response, code, { text, short }) => {
 
 module.exports = {
     async execute(request, response, { middlewareData }) {
-        const parseError = (error, customText) => await parseErrorOnline(error, response, customText); //todo-imp: change to async
+        const parseError = async (error, customText) => await parseErrorOnline(error, response, customText);
 
         try {
             const { path, params, success } = require('../functions/parse/dbApiCall.js').execute(request);
@@ -199,7 +199,7 @@ module.exports = {
             });
 
         } catch (err) {
-            parseError(err);
+            await parseError(err);
         }
     }
 }
