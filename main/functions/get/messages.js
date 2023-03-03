@@ -3,12 +3,12 @@ const requestInfo = require('../../../modules/requestInfo/getInfo').execute;
 const parseCookie = require('../parse/cookie.js');
 
 module.exports = {
-    execute({ request } = {}) {
-        const languages = getLanguages(request);
+    async execute({ request } = {}) {
+        const languages = await getLanguages(request);
         let messages = {};
 
         for (const lang of languages) {
-            const langMessages = getLangMessages(lang);
+            const langMessages = await getLangMessages(lang);
             messages = combineMessages(messages, langMessages);
         };
 
@@ -34,8 +34,8 @@ function combineMessages(oldMessages, newMessages) {
     return messages;
 }
 
-function getLanguages(request) {
-    if (!request) return getSupportedLanguages();
+async function getLanguages(request) {
+    if (!request) return await getSupportedLanguages();
 
     let languages = [];
 
@@ -46,9 +46,12 @@ function getLanguages(request) {
         ...(requestInfo(request).lang?.map?.(({ name }) => name) ?? [])
     );
 
-    languages.push(...getSupportedLanguages());
+    languages.push(...await getSupportedLanguages());
 
-    languages = languages.filter(lang => getSupportedLanguages().includes(lang));
+    for (const lang of languages)
+        if (!(await getSupportedLanguages()).includes(lang))
+            languages = languages.filter(l => l !== lang);
+
     languages = [...new Set(languages)].reverse();
 
     return languages;
@@ -68,10 +71,10 @@ function getLanguages(request) {
 //     process.exit()
 // })
 
-function getLangMessages(lang) {
+async function getLangMessages(lang) {
     return require(`../../../messages/${lang}.json`);
 }
 
-function getSupportedLanguages() {
+async function getSupportedLanguages() {
     return settings.generic.lang;
 }
