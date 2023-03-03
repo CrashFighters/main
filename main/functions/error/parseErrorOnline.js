@@ -16,9 +16,10 @@ module.exports = {
             }
 
             let file = await parseErrorRaw(error, customText);
+            if (file)
+                file = file.split('.')[0];
 
             evalErrors();
-            file = file.split('.txt')[0];
             if (response)
                 return await statusCode(response, 500, { errorFile: file, text: customText });
         } catch (err) {
