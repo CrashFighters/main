@@ -25,9 +25,6 @@
                 "moduleApi": "{modules}{name}/api/",
                 "noError": ".noError",
                 "extraDependencies": "extraDependencies.json"
-            },
-            "online": {
-                "api": "/api/"
             }
         }
     },
