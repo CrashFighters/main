@@ -28,7 +28,7 @@ function combineMessages(oldMessages, newMessages) {
         if (messages[key] === undefined)
             messages[key] = newValue;
         else if (typeof newValue === 'object')
-            messages[key] = combineMessages(newValue, newMessages[key]);
+            messages[key] = combineMessages(messages[key], newValue);
         else
             messages[key] = newValue;
 

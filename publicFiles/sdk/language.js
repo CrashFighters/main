@@ -28,7 +28,7 @@ export function getMessage(message) {
 };
 
 function findMessageInMessages(message) {
-    return messages.pages[window.location.pathname]?.[message] || messages.general[message];
+    return messages.pages?.[window.location.pathname]?.[message] || messages.general?.[message];
 }
 
 function flipFirstLetterCase(string) {
@@ -69,10 +69,11 @@ async function getMessagesSlow(language) {
         }
     }
 
-    for (const [key, value] of Object.entries(newMessages.pages)) {
-        delete newMessages.pages[key];
-        newMessages.pages[key.replaceAll('1', '/')] = value;
-    }
+    if (newMessages.pages)
+        for (const [key, value] of Object.entries(newMessages.pages)) {
+            delete newMessages.pages[key];
+            newMessages.pages[key.replaceAll('1', '/')] = value;
+        }
 
     slowMessageCache[language] = newMessages;
     return slowMessageCache[language];
@@ -90,8 +91,10 @@ async function getMessagesFast() {
 }
 
 function updateHtml() {
+    console.log(messages)
+
     const html = document.querySelector('html');
-    html.lang = messages.info.code;
+    html.lang = messages?.info?.code || 'en';
 
     const innerTextElements = deepQuerySelectorAll('[data-lang_text]');
 
@@ -113,7 +116,7 @@ function combineMessages(oldMessages, newMessages) {
         if (messages[key] === undefined)
             messages[key] = newValue;
         else if (typeof newValue === 'object')
-            messages[key] = combineMessages(newValue, newMessages[key]);
+            messages[key] = combineMessages(messages[key], newValue);
         else
             messages[key] = newValue;
 
