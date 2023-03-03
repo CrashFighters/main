@@ -24,9 +24,12 @@ module.exports = {
             files.forEach(file => {
                 if (file === settings.generic.path.files.noError) return;
 
-                const data = require(`../../.${settings.generic.path.files.errors}${file}`);
+                let data;
+                try {
+                    data = require(`../../.${settings.generic.path.files.errors}${file}`);
+                } catch { }
 
-                if (data.errorMessage.split(': ')[1] === errorMessage.split('\n')[0].split(': ')[1]) {
+                if (data && (data.errorMessage.split(': ')[1] === errorMessage.split('\n')[0].split(': ')[1])) {
                     fileIsSpecial = false;
                     sameFile = file;
                 }
