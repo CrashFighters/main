@@ -16,7 +16,6 @@
         ],
         "path": {
             "files": {
-                "messages": "./messages/",
                 "api": "./api/",
                 "errors": "./logs/errors/",
                 "files": "./publicFiles",
