@@ -18,6 +18,7 @@ const isNumber = (n) => !isNaN(parseFloat(n)) && !isNaN(n - 0);
 
 const { app } = (await import('/sdk/auth.js'))._.firebase;
 const remoteConfig = getRemoteConfig(app);
+remoteConfig.settings.minimumFetchIntervalMillis = 5 * 60 * 1000; //todo: add to settings
 
 const configCache = {};
 export async function getConfig(group) {
