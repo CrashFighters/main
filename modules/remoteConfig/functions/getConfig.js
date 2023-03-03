@@ -69,16 +69,22 @@ async function getConfig(group) {
     if (!config)
         return {};
 
+    const newConfig = {};
+
     for (const [key, value] of Object.entries(config)) {
+        let newKey = key;
+        if (group)
+            newKey = key.split(`${group}_`).slice(1).join(`${group}_`);
+
         if (value.valueType === 'JSON')
-            config[key] = JSON.parse(value.defaultValue?.value);
+            newConfig[newKey] = JSON.parse(value.defaultValue?.value);
         else if (value.valueType === 'STRING')
-            config[key] = value.defaultValue?.value;
+            newConfig[newKey] = value.defaultValue?.value;
         else
             throw new Error(`Remote-config valueType ${value.valueType} not implemented`)
     }
 
-    return config;
+    return newConfig;
 }
 
 module.exports = getConfigFromCache;
