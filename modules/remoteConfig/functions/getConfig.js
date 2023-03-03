@@ -69,7 +69,6 @@ async function getConfig(group) {
     return newConfig;
 }
 
-//todo: add to shared folder so Client uses same function
 function transformConfig(group, config) {
     if (!config)
         return {};
