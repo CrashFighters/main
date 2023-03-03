@@ -3,7 +3,7 @@ const evalErrors = require('./evalErrors').execute;
 const statusCode = require('./statusCode.js').execute;
 
 module.exports = {
-    execute(error, response, customText) { //todo-imp: change to async
+    async execute(error, response, customText) {
         try {
             let errorMessage = error.stack;
             if (errorMessage === undefined) {
