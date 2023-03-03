@@ -37,10 +37,10 @@ let lastError = '';
 let lastErrorTime = 0;
 
 module.exports = {
-    execute(err, response) {
+    execute(err, response) { //todo-imp: change to async
         if (response)
             try {
-                require('./statusCode').execute(response, 500);
+                await require('./statusCode.js').execute(response, 500);
             } catch { }
 
         const timeDiff = new Date().getTime() - lastErrorTime;

@@ -4,7 +4,7 @@ const mime = require('mime-types');
 let gMessages = undefined;
 
 module.exports = {
-    execute(response, code, extra) { //todo-imp: change to async
+    async execute(response, code, extra) {
         response.writeHead(code, { 'Content-Type': 'text/plain' });
         if (!extra) extra = {};
         const errorFile = extra.errorFile;

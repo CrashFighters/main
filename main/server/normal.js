@@ -22,7 +22,7 @@ module.exports = {
         const isPublic = fs.existsSync(publicPath);
 
         if ((!isPrivate) && (!isPublic))
-            return statusCode(response, 404);
+            return await statusCode(response, 404);
 
         respond({
             path: isPrivate ? privatePath : publicPath,

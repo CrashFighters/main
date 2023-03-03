@@ -1,9 +1,9 @@
 const parseErrorRaw = require('./parseErrorRaw').execute;
 const evalErrors = require('./evalErrors').execute;
-const statusCode = require('./statusCode').execute;
+const statusCode = require('./statusCode.js').execute;
 
 module.exports = {
-    execute(error, response, customText) {
+    execute(error, response, customText) { //todo-imp: change to async
         try {
             let errorMessage = error.stack;
             if (errorMessage === undefined) {
@@ -20,10 +20,12 @@ module.exports = {
             evalErrors();
             file = file.split('.txt')[0];
             if (response)
-                return statusCode(response, 500, { errorFile: file, text: customText });
+                return await statusCode(response, 500, { errorFile: file, text: customText });
         } catch (err) {
             if (response)
-                statusCode(response, 500)
+                try {
+                    await statusCode(response, 500)
+                } catch { }
             require('./lastFallback').execute(err);
         }
     }
