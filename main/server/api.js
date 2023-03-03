@@ -15,7 +15,7 @@ const statusCode = (response, code, { text, short }) => {
 
 module.exports = {
     async execute(request, response, { middlewareData, extraData }) {
-        const parseError = (error, customText) => await parseErrorOnline(error, response, customText); //todo-imp: change to async
+        const parseError = async (error, customText) => await parseErrorOnline(error, response, customText);
 
         try {
             const messages = (await require('../functions/get/messages').execute({ request })).mainFunction();
@@ -33,7 +33,7 @@ module.exports = {
                     const executeFunctionExists = Boolean(file?.execute);
 
                     if (!executeFunctionExists)
-                        return parseError(new Error(messages.error.executeFunctionNotFoundWithFile.replace('{file}', path)), messages.error.executeFunctionNotFound);
+                        return await parseError(new Error(messages.error.executeFunctionNotFoundWithFile.replace('{file}', path)), messages.error.executeFunctionNotFound);
 
                     let cacheHeader;
                     if (!file.info?.cache?.enabled)
@@ -72,12 +72,12 @@ module.exports = {
                     else
                         statusCode(response, 405, { text: 'Method not allowed', short: 'methodNotAllowed' });
                 } else
-                    return parseError(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', path)), messages.error.moduleNotInstalledFor.replace('{api}', path).replace('{dependency}', api[path].enabled.dependencies.dependenciesNotInstalled.join(', ')));
+                    return await parseError(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', path)), messages.error.moduleNotInstalledFor.replace('{api}', path).replace('{dependency}', api[path].enabled.dependencies.dependenciesNotInstalled.join(', ')));
             else
                 return statusCode(response, 404, { text: messages.error.apiCallNotFound });
 
         } catch (err) {
-            parseError(err);
+            await parseError(err);
         }
     }
 }

@@ -21,7 +21,7 @@ module.exports = {
             end(user.uid);
 
         } catch (e) {
-            parseError(e)
+            await parseError(e)
         }
     }
 }

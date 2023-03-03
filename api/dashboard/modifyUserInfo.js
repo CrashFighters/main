@@ -51,7 +51,7 @@ module.exports = {
             end();
 
         } catch (e) {
-            parseError(e)
+            await parseError(e)
         }
     }
 }

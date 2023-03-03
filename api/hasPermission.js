@@ -25,7 +25,7 @@ module.exports = {
             //todo-imp: use hasPermission function from middlewareData
             end(hasPermission(permissionParts, checks, authentication, customClaims));
         } catch (e) {
-            parseError(e);
+            await parseError(e);
         }
     }
 }

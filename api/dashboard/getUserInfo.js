@@ -60,7 +60,7 @@ module.exports = {
             end(JSON.stringify(accessibleUserInfo))
 
         } catch (e) {
-            parseError(e)
+            await parseError(e)
         }
     }
 }

@@ -7,7 +7,7 @@ module.exports = {
 
             end(JSON.stringify(messages));
         } catch (e) {
-            parseError(e);
+            await parseError(e);
         }
     }
 }
