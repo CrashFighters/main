@@ -77,8 +77,8 @@ function transformConfig(group, config) {
 
     for (const [key, value] of Object.entries(config)) {
         let newKey = key;
-        if (group)
-            newKey = key.split(`${group}_`).slice(1).join(`${group}_`);
+        if (group && newKey.startsWith(`${group}_`))
+            newKey = newKey.split(`${group}_`).slice(1).join(`${group}_`);
 
         if (value.valueType === 'JSON')
             newConfig[newKey] = JSON.parse(value.defaultValue?.value);
