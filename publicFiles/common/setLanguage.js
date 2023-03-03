@@ -47,5 +47,5 @@ export async function setLanguage(language) {
         ({ doesDocumentIncludeScript } = await import('/common/doesDocumentIncludeScript.js'));
 
     if (doesDocumentIncludeScript('/sdk/language.js'))
-        (await import('/sdk/language.js'))._.execute(false, language);
+        (await import('/sdk/language.js'))._.execute(false, language); //todo: get browser language if language is undefined
 }
