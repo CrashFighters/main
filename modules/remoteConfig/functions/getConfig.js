@@ -66,6 +66,13 @@ async function getConfig(group) {
     else
         config = (await firebase.remoteConfig().getTemplate()).parameters;
 
+    const newConfig = transformConfig(group, config);
+
+    return newConfig;
+}
+
+//todo: add to shared folder so Client uses same function
+function transformConfig(group, config) {
     if (!config)
         return {};
 
