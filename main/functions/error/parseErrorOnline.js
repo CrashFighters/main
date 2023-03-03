@@ -1,4 +1,4 @@
-const parseErrorRaw = require('./parseErrorRaw').execute;
+const parseErrorRaw = require('./parseErrorRaw.js').execute;
 const evalErrors = require('./evalErrors').execute;
 const statusCode = require('./statusCode.js').execute;
 
@@ -15,7 +15,7 @@ module.exports = {
                 }
             }
 
-            let file = parseErrorRaw(error, customText);
+            let file = await parseErrorRaw(error, customText);
 
             evalErrors();
             file = file.split('.txt')[0];

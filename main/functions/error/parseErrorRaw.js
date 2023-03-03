@@ -4,7 +4,7 @@ const writeFileSync = fs.writeFileSync;
 const settings = require('../../../settings.json');
 
 module.exports = {
-    execute(error, customText) { //todo-imp: change to async
+    async execute(error, customText) {
         try {
             let errorMessage = error.stack;
             if (errorMessage === undefined) {
