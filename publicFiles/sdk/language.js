@@ -9,10 +9,16 @@
 
 */
 
+const wait = ms => new Promise(res => setTimeout(res, ms));
 import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
 
+const slowMessageCache = {};
 let messages;
-await executeFast();
+let getConfig;
+
+await execute(true);
+await wait(700);
+await execute(false);
 
 export function getMessage(message) {
     return findMessageInMessages(message) ||
@@ -29,22 +35,57 @@ function flipFirstLetterCase(string) {
     return ((string[0].toUpperCase() === string[0]) ? string[0].toLowerCase() : string[0].toUpperCase()) + string.slice(1);
 }
 
-async function execute() {
-    await executeFast(true); //todo: use remoteConfig to get the messages
+async function execute(isFast = true, language = messages?.info?.code) {
+    if (isFast)
+        await getMessagesFast();
+    else {
+        const newMessages = await getMessagesSlow(language);
+        messages = combineMessages(messages, newMessages);
+    }
+    updateHtml();
 }
 
-async function executeFast(preventExecute) {
+async function getMessagesSlow(language) {
+    if (slowMessageCache[language])
+        return slowMessageCache[language];
+
+    if (!getConfig)
+        ({ getConfig } = await import('/js/remoteConfig.js'));
+
+    const config = await getConfig(`messages_${language}`);
+    const newMessages = {};
+
+    for (const [key, value] of Object.entries(config)) {
+        let current = newMessages;
+
+        for (let keyPartIndex in key.split('_')) {
+            keyPartIndex = parseInt(keyPartIndex);
+            const keyPart = key.split('_')[keyPartIndex];
+
+            if (!current[keyPart])
+                current[keyPart] = keyPartIndex === key.split('_').length - 1 ? value : {};
+
+            current = current[keyPart];
+
+        }
+    }
+
+    for (const [key, value] of Object.entries(newMessages.pages)) {
+        delete newMessages.pages[key];
+        newMessages.pages[key.replaceAll('1', '/')] = value;
+    }
+
+    slowMessageCache[language] = newMessages;
+    return slowMessageCache[language];
+}
+
+async function getMessagesFast() {
     messages = await fetch('/api/messages', {
         method: 'GET',
         credentials: 'include',
         mode: 'no-cors' //to allow to use the preload
     });
     messages = await messages.json();
-
-    updateHtml();
-
-    if (preventExecute)
-        await execute();
 }
 
 function updateHtml() {
@@ -60,6 +101,22 @@ function updateHtml() {
 
     for (const element of placeholderElements)
         element.placeholder = getMessage(element.dataset.lang_placeholder);
+}
+
+
+//todo: add to shared folder so that Server uses same function
+function combineMessages(oldMessages, newMessages) {
+    const messages = Object.assign({}, oldMessages);
+
+    for (const [key, newValue] of Object.entries(newMessages))
+        if (messages[key] === undefined)
+            messages[key] = newValue;
+        else if (typeof newValue === 'object')
+            messages[key] = combineMessages(newValue, newMessages[key]);
+        else
+            messages[key] = newValue;
+
+    return messages;
 }
 
 export const _ = {
