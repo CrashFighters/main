@@ -29,10 +29,13 @@ module.exports = {
                 cConsole.log();
 
                 if (!messages)
-                    messages = (await require('../get/messages').execute()).mainFunction()
+                    try {
+                        messages = (await require('../get/messages').execute()).mainFunction()
+                    } catch { }
 
-                let message = messages.error.thereAreErrors.replace('{amount}', files.length);
-                if (files.length === 1) message = messages.error.thereIsError.replace('{amount}', files.length);
+                let message = messages?.error?.thereAreErrors?.replace?.('{amount}', files.length);
+                if (files.length === 1) message = messages?.error?.thereIsError?.replace?.('{amount}', files.length);
+                if (!message) message = 'unable to get message'
 
                 cConsole.warn(message);
                 files.forEach((val) => {
