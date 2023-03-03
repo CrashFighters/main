@@ -12,7 +12,7 @@
 import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
 
 let messages;
-await execute();
+await executeFast();
 
 export function getMessage(message) {
     return findMessageInMessages(message) ||
@@ -30,6 +30,10 @@ function flipFirstLetterCase(string) {
 }
 
 async function execute() {
+    await executeFast(true); //todo: use remoteConfig to get the messages
+}
+
+async function executeFast(preventExecute) {
     messages = await fetch('/api/messages', {
         method: 'GET',
         credentials: 'include',
@@ -37,6 +41,13 @@ async function execute() {
     });
     messages = await messages.json();
 
+    updateHtml();
+
+    if (preventExecute)
+        await execute();
+}
+
+function updateHtml() {
     const html = document.querySelector('html');
     html.lang = messages.info.code;
 
