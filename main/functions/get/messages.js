@@ -57,7 +57,11 @@ async function getLanguages(request) {
     return languages;
 }
 
+const messageCache = {};
 async function getLangMessages(lang) {
+    if (messageCache[lang])
+        return messageCache[lang];
+
     const config = await getConfig(`messages_${lang}`);
     const messages = {};
 
@@ -80,6 +84,8 @@ async function getLangMessages(lang) {
         delete messages.pages[key];
         messages.pages[key.replaceAll('1', '/')] = value;
     }
+
+    messageCache[lang] = messages;
 
     return messages;
 }
