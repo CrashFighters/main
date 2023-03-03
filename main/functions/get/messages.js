@@ -76,6 +76,11 @@ async function getLangMessages(lang) {
         }
     }
 
+    for (const [key, value] of Object.entries(messages.pages)) {
+        delete messages.pages[key];
+        messages.pages[key.replaceAll('1', '/')] = value;
+    }
+
     return messages;
 }
 
