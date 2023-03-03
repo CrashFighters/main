@@ -8,13 +8,13 @@ module.exports = {
         let messages = {};
 
         for (const lang of languages) {
-            const langMessages = require(`../../../messages/${lang}.json`);
+            const langMessages = getLangMessages(lang);
             messages = combineMessages(messages, langMessages);
         };
 
         return {
             languages,
-            mainFunction: () => { return messages }
+            mainFunction: () => { return messages } //todo: rename mainFunction to messages
         }
 
     }
@@ -35,7 +35,7 @@ function combineMessages(oldMessages, newMessages) {
 }
 
 function getLanguages(request) {
-    if (!request) return settings.generic.lang;
+    if (!request) return getSupportedLanguages();
 
     let languages = [];
 
@@ -46,10 +46,32 @@ function getLanguages(request) {
         ...(requestInfo(request).lang?.map?.(({ name }) => name) ?? [])
     );
 
-    languages.push(...settings.generic.lang);
+    languages.push(...getSupportedLanguages());
 
-    languages = languages.filter(lang => settings.generic.lang.includes(lang));
+    languages = languages.filter(lang => getSupportedLanguages().includes(lang));
     languages = [...new Set(languages)].reverse();
 
     return languages;
+}
+
+// const firebase = require('firebase-admin');
+
+// const { serviceAccount, databaseURL } = require('../../../credentials/firebase.json');
+
+// firebase.initializeApp({
+//     credential: firebase.credential.cert(serviceAccount),
+//     databaseURL
+// }, 'remote-config');
+
+// firebase.remoteConfig().getTemplate().then(a => {
+//     console.log(a)
+//     process.exit()
+// })
+
+function getLangMessages(lang) {
+    return require(`../../../messages/${lang}.json`);
+}
+
+function getSupportedLanguages() {
+    return settings.generic.lang;
 }
