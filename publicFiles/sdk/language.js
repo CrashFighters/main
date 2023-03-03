@@ -91,8 +91,6 @@ async function getMessagesFast() {
 }
 
 function updateHtml() {
-    console.log(messages)
-
     const html = document.querySelector('html');
     html.lang = messages?.info?.code || 'en';
 
