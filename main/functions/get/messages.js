@@ -1,6 +1,6 @@
-const settings = require('../../../settings.json');
 const requestInfo = require('../../../modules/requestInfo/getInfo').execute;
 const parseCookie = require('../parse/cookie.js');
+const getConfig = require('../../../modules/remoteConfig/functions/getConfig.js');
 
 module.exports = {
     async execute({ request } = {}) {
@@ -57,24 +57,29 @@ async function getLanguages(request) {
     return languages;
 }
 
-// const firebase = require('firebase-admin');
-
-// const { serviceAccount, databaseURL } = require('../../../credentials/firebase.json');
-
-// firebase.initializeApp({
-//     credential: firebase.credential.cert(serviceAccount),
-//     databaseURL
-// }, 'remote-config');
-
-// firebase.remoteConfig().getTemplate().then(a => {
-//     console.log(a)
-//     process.exit()
-// })
-
 async function getLangMessages(lang) {
-    return require(`../../../messages/${lang}.json`);
+    const config = await getConfig(`messages_${lang}`);
+    const messages = {};
+
+    for (const [key, value] of Object.entries(config)) {
+        let current = messages;
+
+        for (let keyPartIndex in key.split('_')) {
+            keyPartIndex = parseInt(keyPartIndex);
+            const keyPart = key.split('_')[keyPartIndex];
+
+            if (!current[keyPart])
+                current[keyPart] = keyPartIndex === key.split('_').length - 1 ? value : {};
+
+            current = current[keyPart];
+
+        }
+    }
+
+    return messages;
 }
 
 async function getSupportedLanguages() {
-    return settings.generic.lang;
+    const config = await getConfig();
+    return config.languages;
 }
