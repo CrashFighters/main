@@ -48,7 +48,7 @@ module.exports = {
                 cConsole.log();
             }
         } catch (err) {
-            require('./lastFallback').execute(err);
+            await require('./lastFallback').execute(err);
         }
     }
 }

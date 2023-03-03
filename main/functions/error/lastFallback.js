@@ -37,7 +37,7 @@ let lastError = '';
 let lastErrorTime = 0;
 
 module.exports = {
-    execute(err, response) { //todo-imp: change to async
+    async execute(err, response) {
         if (response)
             try {
                 await require('./statusCode.js').execute(response, 500);

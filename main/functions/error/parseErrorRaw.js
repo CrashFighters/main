@@ -4,7 +4,7 @@ const writeFileSync = fs.writeFileSync;
 const settings = require('../../../settings.json');
 
 module.exports = {
-    execute(error, customText) {
+    execute(error, customText) { //todo-imp: change to async
         try {
             let errorMessage = error.stack;
             if (errorMessage === undefined) {
@@ -72,7 +72,7 @@ module.exports = {
                 return sameFile;
             }
         } catch (err) {
-            require('./lastFallback').execute(err)
+            await require('./lastFallback').execute(err)
         }
     }
 }

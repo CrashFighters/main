@@ -26,7 +26,7 @@ module.exports = {
                 try {
                     await statusCode(response, 500)
                 } catch { }
-            require('./lastFallback').execute(err);
+            await require('./lastFallback').execute(err);
         }
     }
 }
