@@ -15,7 +15,7 @@ if (require('../../functions/isModuleInstalled').execute('console')) {
 module.exports = {
     async execute() {
         cConsole.clear();
-        cConsole.log(`Listening on port ${settings.generic.port}...`);
+        cConsole.log(`Listening on port ${settings.generic.port}`); //todo: add to messages
 
         try {
             const files =
@@ -24,7 +24,7 @@ module.exports = {
 
             if (files[0]) {
                 cConsole.clear();
-                cConsole.log(`Listening on port ${settings.generic.port}...`);
+                cConsole.log(`Listening on port ${settings.generic.port}`); //todo: add to messages
                 cConsole.log();
                 cConsole.log();
 
