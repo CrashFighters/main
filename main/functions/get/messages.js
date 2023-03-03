@@ -20,6 +20,7 @@ module.exports = {
     }
 }
 
+//todo: add to shared folder so that Client uses same function
 function combineMessages(oldMessages, newMessages) {
     const messages = Object.assign({}, oldMessages);
 
