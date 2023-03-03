@@ -1,4 +1,4 @@
-const api = require('../setup/preload/api.js').execute();
+const apiPromise = require('../setup/preload/api.js').execute();
 
 const isModuleInstalled = require('../functions/isModuleInstalled.js').execute;
 const parseErrorOnline = require('../functions/error/parseErrorOnline.js').execute;
@@ -26,6 +26,7 @@ module.exports = {
                 return;
             }
 
+            const api = await apiPromise;
             if (api[path])
                 if (api[path].enabled.dependencies.installed) {
                     const file = api[path].file;

@@ -46,7 +46,7 @@ async function addApiCalls(websitePath, path) {
 }
 
 module.exports = {
-    execute() { //todo-imp: change to async
+    async execute() {
         //Load module api
         for (const moduleName of readdirSync(generic.path.files.modules))
             await addApiCalls('/', generic.path.files.moduleApi.replace('{modules}', generic.path.files.modules).replace('{name}', moduleName));
