@@ -53,6 +53,7 @@
         "grecaptcha": true,
         "Toastify": true,
         "Swal": true,
-        "google": true
+        "google": true,
+        "Uint8Array": true
     }
 }
