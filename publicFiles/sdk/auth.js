@@ -26,6 +26,7 @@ import { init as initAnalytics, logEvent } from '/js/analytics.js';
 
 const { getAppCheckHeaders } = appCheck_;
 
+//todo: create separate core js file that creates the app and initializes appCheck and analytics
 const app = initializeApp(firebaseConfig);
 
 await initAppCheck(app);
