@@ -1,22 +1,22 @@
 {
-  "name": "template",
-  "version": "1.0.0",
-  "description": "Een template voor een website",
-  "main": "index.js",
-  "scripts": {
-    "dev": "nodemon"
-  },
-  "author": "Oscar",
-  "license": "ISC",
-  "dependencies": {
-    "firebase-admin": "^11.5.0",
-    "google-auth-library": "^8.7.0",
-    "googleapis": "^112.0.0",
-    "mime-types": "^2.1.35",
-    "sniffr": "^1.2.0"
-  },
-  "devDependencies": {
-    "eslint": "^8.35.0",
-    "nodemon": "^2.0.20"
-  }
+    "name": "template",
+    "version": "1.0.0",
+    "description": "Een template voor een website",
+    "main": "index.js",
+    "scripts": {
+        "dev": "nodemon"
+    },
+    "author": "Oscar",
+    "license": "ISC",
+    "dependencies": {
+        "firebase-admin": "^11.5.0",
+        "google-auth-library": "^8.7.0",
+        "googleapis": "^112.0.0",
+        "mime-types": "^2.1.35",
+        "sniffr": "^1.2.0"
+    },
+    "devDependencies": {
+        "eslint": "^8.35.0",
+        "nodemon": "^2.0.20"
+    }
 }
