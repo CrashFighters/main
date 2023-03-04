@@ -53,6 +53,9 @@ module.exports = {
         if (err)
             throw err;
 
-        return await data;
+        let newData = await data;
+        if (!newData) newData = {};
+
+        return newData;
     }
 }
