@@ -4,9 +4,12 @@
 
 --fileRequirements--
 /common/apiKeys.js
+
+/js/performance.js
 /js/appCheck.js
 /js/analytics.js
 /sdk/auth.js
+
 --endFileRequirements--
 
 */
@@ -14,6 +17,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js';
 import { firebaseConfig } from '/common/apiKeys.js';
 
+let initPerformance;
 let initAppCheck;
 let initAnalytics;
 let initAuth;
@@ -23,12 +27,19 @@ let getAppCheckHeaders;
 const excludeScripts = document.querySelector('script[src="/js/firebase.js"]').dataset.excludeScripts?.split(' ') ?? [];
 
 const scripts = [
+    '/js/performance.js',
     '/js/appCheck.js',
     '/js/analytics.js',
     '/sdk/auth.js'
 ].filter(script => !excludeScripts.includes(script));
 
 const app = initializeApp(firebaseConfig);
+
+if (scripts.includes('/js/performance.js')) {
+    if (!initPerformance)
+        ({ init: initPerformance } = await import('/js/performance.js'));
+    await initPerformance(app);
+}
 
 if (scripts.includes('/js/appCheck.js')) {
     if (!initAppCheck)
