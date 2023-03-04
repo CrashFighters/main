@@ -4,12 +4,14 @@
 
 --fileRequirements--
 /sdk/auth.js
+/js/performance.js
 /common/deepQuerySelectorAll.js
 --endFileRequirements--
 
 */
 
 import { onStateChange } from '/sdk/auth.js';
+import { startTrace, stopTrace } from '/js/performance.js';
 import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
 
 //check if script on page has the attribute data-debug
@@ -28,6 +30,7 @@ const getTemplateValues = (user) => ({
 });
 
 export async function replaceTemplates(user) {
+    startTrace('templates_replace');
     const templateValues = getTemplateValues(user);
     const elements = deepQuerySelectorAll('[data-template]');
 
@@ -116,9 +119,11 @@ export async function replaceTemplates(user) {
     }
 
     if (elements.length === 0 && debug)
-        throw new Error(
+        console.warn(new Error(
             '[templateSDK] No templates found to replace. Please make sure you have at least one element with the data-template attribute.'
-        );
+        ));
+
+    stopTrace('templates_replace');
 }
 
 onStateChange((user) => {
