@@ -6,6 +6,7 @@
 /common/apiKeys.js
 /common/doesDocumentIncludeScript.js
 /js/firebase.js
+/js/performance.js
 /sdk/auth.js
 /js/analytics.js
 --endFileRequirements--
@@ -21,6 +22,7 @@ import { googleSignInKey } from '/common/apiKeys.js';
 import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 
 const { auth } = (await import('/js/firebase.js'))._;
+import { startTrace, stopTrace } from '/js/performance.js';
 import { onStateChange } from '/sdk/auth.js';
 import { logEvent } from '/js/analytics.js';
 
@@ -28,6 +30,8 @@ window.googleOneTapCallback = async ({ credential }) => {
     await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
     logEvent('login', { method: 'google', initiator: 'oneTap', type: 'embedded' })
 };
+
+startTrace('oneTap_addGoogleScript');
 
 const googleOnLoadDiv = document.createElement('div');
 googleOnLoadDiv.id = 'g_id_onload';
@@ -69,4 +73,6 @@ function addGoogleScript() {
         script.src = 'https://accounts.google.com/gsi/client';
         document.head.appendChild(script);
     };
+
+    stopTrace('oneTap_addGoogleScript');
 };
