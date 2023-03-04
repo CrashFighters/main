@@ -18,6 +18,8 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js';
 import { firebaseConfig } from '/common/apiKeys.js';
 
+window.performance.mark('initFirebaseStart')
+
 const init = {
     performance: undefined,
     appCheck: undefined,
@@ -83,3 +85,6 @@ export const getHeaders = async () => {
 
     return headers;
 }
+
+window.performance.mark('initFirebaseEnd')
+window.performance.measure('initFirebase', 'initFirebaseStart', 'initFirebaseEnd')
