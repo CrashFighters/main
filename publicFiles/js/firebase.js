@@ -1,7 +1,7 @@
 /*
 
 //todo: all fileRequirements are not always needed
-//todo: move to sdk
+//todo: move to sdk?
 
 --fileRequirements--
 /common/apiKeys.js
