@@ -82,7 +82,8 @@ export async function signup() {
 };
 
 async function updateCookies() {
-    setCookie('authHeaders', JSON.stringify(await getAuthHeaders()));
+    const { getHeaders } = await import('/js/firebase.js');
+    setCookie('authHeaders', JSON.stringify(await getHeaders())); //todo: rename authHeaders cookie to something else, because appCheck is also included. Maybe requestHeaders?
 }
 
 async function updateUserObject(newUser) {

@@ -1,13 +1,12 @@
 /*
 
 --fileRequirements--
-/sdk/auth.js
+/js/firebase.js
 --endFileRequirements--
 
 */
 
-import { onStateChange } from '/sdk/auth.js';
-const { getAuthHeaders } = (await import('/sdk/auth.js'))._;
+import { getHeaders } from '/js/firebase.js';
 
 const paramsToQuery = params =>
     params ?
@@ -20,7 +19,7 @@ async function postRequest(path, params) {
         headers: {
             'Content-Type': 'application/json',
             body: JSON.stringify(params),
-            ...(await getAuthHeaders())
+            ...(await getHeaders())
         }
     });
     if ([401, 403].includes(response.status)) throw new Error('Unauthorized');
@@ -34,7 +33,7 @@ async function getRequest(path, params) {
     const response = await fetch(`/dbApi/${path}${paramsToQuery(params)}`, {
         method: 'GET',
         headers: {
-            ...(await getAuthHeaders())
+            ...(await getHeaders())
         }
     });
     if ([401, 403].includes(response.status)) throw new Error('Unauthorized');
@@ -50,7 +49,7 @@ async function putRequest(path, params) {
         headers: {
             'Content-Type': 'application/json',
             body: JSON.stringify(params),
-            ...(await getAuthHeaders())
+            ...(await getHeaders())
         }
     });
     if ([401, 403].includes(response.status)) throw new Error('Unauthorized');
@@ -64,7 +63,7 @@ async function deleteRequest(path, params) {
     const response = await fetch(`/dbApi/${path}${paramsToQuery(params)}`, {
         method: 'DELETE',
         headers: {
-            ...(await getAuthHeaders())
+            ...(await getHeaders())
         }
     });
     if ([401, 403].includes(response.status)) throw new Error('Unauthorized');
@@ -76,11 +75,7 @@ async function deleteRequest(path, params) {
 
 class Database {
     constructor() {
-        this.wait = new Promise(res => {
-            onStateChange(async () => {
-                res(await this._init());
-            })
-        });
+        this.wait = this._init();
     }
 
     async refresh() {
@@ -297,4 +292,5 @@ class Vote {
     }
 }
 
+//todo: create new Database or fetch Database again when authState changes
 export default new Database();

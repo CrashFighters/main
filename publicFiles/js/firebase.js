@@ -74,7 +74,7 @@ export const _ = {
     ...values //todo: remove exports from other files and use this one
 };
 
-export const getHeaders = async () => { //todo: use this instead of getAuthHeaders
+export const getHeaders = async () => {
     let headers = {};
 
     if (scripts.includes('/js/appCheck.js')) {
