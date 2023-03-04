@@ -1,7 +1,6 @@
 /*
 
 --fileRequirements--
-/common/apiKeys.js
 /common/cookie.js
 /js/appCheck.js
 /js/analytics.js
@@ -9,7 +8,6 @@
 
 */
 
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js';
 import {
     multiFactor,
     getAuth,
@@ -19,40 +17,33 @@ import {
     getIdToken
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-import { firebaseConfig } from '/common/apiKeys.js';
 import { setCookie } from '/common/cookie.js';
-import { init as initAppCheck, _ as appCheck_ } from '/js/appCheck.js';
-import { init as initAnalytics, logEvent } from '/js/analytics.js';
+import { logEvent } from '/js/analytics.js';
 
-const { getAppCheckHeaders } = appCheck_;
+let auth;
+export function init(app) {
+    auth = getAuth(app);
 
-//todo: create separate core js file that creates the app and initializes appCheck and analytics
-const app = initializeApp(firebaseConfig);
+    let first = true;
+    onAuthStateChanged(auth, async () => {
+        const promises = [];
+        for (const callback of onStateChangeCallbacks)
+            promises.push(callback(window.auth.user));
 
-await initAppCheck(app);
-initAnalytics(app);
+        await Promise.all(promises);
 
-const auth = getAuth(app);
+        if (!first)
+            if (window.privateFile === true)
+                window.location.reload();
+
+        first = false;
+    });
+};
 
 const onStateChangeCallbacks = [];
 export function onStateChange(callback) {
     onStateChangeCallbacks.push(callback);
 };
-
-let first = true;
-onAuthStateChanged(auth, async () => {
-    const promises = [];
-    for (const callback of onStateChangeCallbacks)
-        promises.push(callback(window.auth.user));
-
-    await Promise.all(promises);
-
-    if (!first)
-        if (window.privateFile === true)
-            window.location.reload();
-
-    first = false;
-});
 
 export async function logout() {
     try {
@@ -134,13 +125,12 @@ async function updateUserObject(newUser) {
 }
 
 const getAuthHeaders = async () => ({
-    auth_token: auth.currentUser ? await getIdToken(auth.currentUser) : undefined,
-    ...(await getAppCheckHeaders())
+    auth_token: auth.currentUser ? await getIdToken(auth.currentUser) : undefined
 });
 
 export const _ = {
-    firebase: {
-        app,
+    firebase: { //todo: remove firebase object
+        app, //todo: remove
         auth
     },
     updateUserObject,
