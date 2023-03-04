@@ -3,6 +3,11 @@ import {
     trace
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-performance.js';
 
+//todo: inline this script, because script is very small
+const script = document.createElement('script');
+script.src = 'https://www.unpkg.com/first-input-delay@0.1.3/dist/first-input-delay.min.js';
+document.body.appendChild(script);
+
 let performance;
 export function init(app) {
     performance = getPerformance(app);
