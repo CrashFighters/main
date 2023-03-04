@@ -19,6 +19,9 @@ import {
 import { setCookie } from '/common/cookie.js';
 import { logEvent } from '/js/analytics.js';
 
+let initPromiseResolve;
+const initPromise = new Promise(res => { initPromiseResolve = res });
+
 let auth;
 export function init(app) {
     auth = getAuth(app);
@@ -37,9 +40,24 @@ export function init(app) {
 
         first = false;
     });
+
+    initPromiseResolve();
 };
 
+await initPromise;
+
+const getAuthHeaders = async () => ({
+    auth_token: auth.currentUser ? await getIdToken(auth.currentUser) : undefined
+});
+
 const onStateChangeCallbacks = [];
+export const _ = {
+    auth,
+    updateUserObject,
+    onStateChangeCallbacks,
+    getAuthHeaders
+};
+
 export function onStateChange(callback) {
     onStateChangeCallbacks.push(callback);
 };
@@ -122,17 +140,6 @@ async function updateUserObject(newUser) {
         }))
     };
 }
-
-const getAuthHeaders = async () => ({
-    auth_token: auth.currentUser ? await getIdToken(auth.currentUser) : undefined
-});
-
-export const _ = {
-    auth,
-    updateUserObject,
-    onStateChangeCallbacks,
-    getAuthHeaders
-};
 
 window.auth = {
     onStateChange,
