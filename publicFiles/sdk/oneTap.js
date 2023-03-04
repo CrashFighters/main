@@ -3,10 +3,11 @@
 --fetchPriority--: low
 
 --fileRequirements--
-/js/analytics.js
-/sdk/auth.js
 /common/apiKeys.js
 /common/doesDocumentIncludeScript.js
+/js/firebase.js
+/sdk/auth.js
+/js/analytics.js
 --endFileRequirements--
 
 */
@@ -16,16 +17,12 @@ import {
     signInWithCredential
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-import { logEvent } from '/js/analytics.js';
-
-import {
-    onStateChange
-} from '/sdk/auth.js';
-
 import { googleSignInKey } from '/common/apiKeys.js';
 import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 
-const { auth } = (await import('/sdk/auth.js'))._;
+import { auth } from '/js/firebase.js';
+import { onStateChange } from '/sdk/auth.js';
+import { logEvent } from '/js/analytics.js';
 
 window.googleOneTapCallback = async ({ credential }) => {
     await signInWithCredential(auth, GoogleAuthProvider.credential(credential));

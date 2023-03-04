@@ -1,7 +1,7 @@
 /*
 
 --fileRequirements--
-/sdk/auth.js
+/js/firebase.js
 /js/analytics.js
 --endFileRequirements--
 
@@ -20,9 +20,8 @@ import {
     PhoneMultiFactorGenerator
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
+import { auth } from '/js/firebase.js';
 import { logEvent } from '/js/analytics.js';
-
-const { auth } = (await import('/sdk/auth.js'))._;
 
 let isMobile;
 export async function loginWithGithub(initiator) {

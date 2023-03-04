@@ -71,7 +71,7 @@ if (scripts.includes('/sdk/auth.js')) {
 
 export const _ = {
     app,
-    ...values //todo: remove exports from other files and use this one
+    ...values
 };
 
 export const getHeaders = async () => {

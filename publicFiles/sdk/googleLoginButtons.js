@@ -3,12 +3,12 @@
 --fetchPriority--: low
 
 --fileRequirements--
-/js/analytics.js
 /common/cookie.js
 /common/apiKeys.js
 /common/doesDocumentIncludeScript.js
 /common/isMobile.js
-/sdk/auth.js
+/js/firebase.js
+/js/analytics.js
 --endFileRequirements--
 
 */
@@ -18,14 +18,13 @@ import {
     signInWithCredential
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-import { logEvent } from '/js/analytics.js';
-
 import { getCookie, deleteCookie } from '/common/cookie.js';
 import { googleSignInKey } from '/common/apiKeys.js';
 import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 import { isMobile } from '/common/isMobile.js';
 
-const { auth } = (await import('/sdk/auth.js'))._;
+import { auth } from '/js/firebase.js';
+import { logEvent } from '/js/analytics.js';
 
 window.googleButtonPopupCallback = async ({ credential }) => {
     await signInWithCredential(auth, GoogleAuthProvider.credential(credential));

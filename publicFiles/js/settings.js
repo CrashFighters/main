@@ -13,12 +13,12 @@ import {
     updateProfile
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-import { getHeaders } from '/js/firebase.js';
+import { getHeaders, auth } from '/js/firebase.js';
 
 import {
     logout
 } from '/sdk/auth.js';
-const { updateUserObject, onStateChangeCallbacks, auth } = (await import('/sdk/auth.js'))._;
+const { updateUserObject, onStateChangeCallbacks } = (await import('/sdk/auth.js'))._;
 
 export const setDisplayName = async (displayName) => {
     if (!window.auth.user)
