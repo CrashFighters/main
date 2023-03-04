@@ -21,13 +21,17 @@ const slowMessageCache = {};
 let messages;
 let getConfig;
 
-startTrace('language');
+startTrace('language_full');
+startTrace('language_fast');
 
 await execute(true);
+
+stopTrace('language_fast');
+
 await wait(700);
 await execute(false);
 
-stopTrace('language');
+stopTrace('language_full');
 
 export function getMessage(message) {
     return findMessageInMessages(message) ||
