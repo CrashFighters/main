@@ -18,7 +18,7 @@ import {
 
 import { logEvent } from '/js/analytics.js';
 
-const { firebase: { auth } } = (await import('/sdk/auth.js'))._;
+const { auth } = (await import('/sdk/auth.js'))._;
 
 const id = '2faRecaptchaButton';
 

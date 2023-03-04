@@ -15,7 +15,7 @@ import {
 import {
     logout
 } from '/sdk/auth.js';
-const { updateUserObject, onStateChangeCallbacks, getAuthHeaders, firebase: { auth } } = (await import('/sdk/auth.js'))._;
+const { updateUserObject, onStateChangeCallbacks, getAuthHeaders, auth } = (await import('/sdk/auth.js'))._;
 
 export const setDisplayName = async (displayName) => {
     if (!window.auth.user)
