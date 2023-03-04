@@ -5,6 +5,7 @@
 --fileRequirements--
 /common/apiKeys.js
 /common/doesDocumentIncludeScript.js
+/js/firebase.js
 /js/performance.js
 --endFileRequirements--
 
@@ -16,6 +17,7 @@ import {
 } from '/common/apiKeys.js';
 import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 
+import '/js/firebase.js';
 import { startTrace, stopTrace } from '/js/performance.js';
 
 async function getScoreFromV3Token(token) {
