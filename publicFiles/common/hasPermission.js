@@ -8,9 +8,7 @@
 
 */
 
-import {
-    getHeaders
-} from '/js/firebase.js';
+import { getHeaders } from '/js/firebase.js';
 
 export async function hasPermission(permission, checks) {
     let url = '/api/hasPermission';

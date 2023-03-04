@@ -18,7 +18,7 @@ import {
     deleteCookie
 } from '/common/cookie.js';
 
-import { auth } from '/js/firebase.js';
+const { auth } = (await import('/js/firebase.js'))._;
 import { onStateChange } from '/sdk/auth.js';
 
 let first = true;

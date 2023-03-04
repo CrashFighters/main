@@ -23,7 +23,7 @@ import { googleSignInKey } from '/common/apiKeys.js';
 import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 import { isMobile } from '/common/isMobile.js';
 
-import { auth } from '/js/firebase.js';
+const { auth } = (await import('/js/firebase.js'))._;
 import { logEvent } from '/js/analytics.js';
 
 window.googleButtonPopupCallback = async ({ credential }) => {

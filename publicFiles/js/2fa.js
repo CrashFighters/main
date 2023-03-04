@@ -17,7 +17,7 @@ import {
     PhoneMultiFactorGenerator
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-import { auth } from '/js/firebase.js';
+const { auth } = (await import('/js/firebase.js'))._;
 import { logEvent } from '/js/analytics.js';
 
 const id = '2faRecaptchaButton';

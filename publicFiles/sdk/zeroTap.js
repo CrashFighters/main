@@ -20,7 +20,7 @@ import {
 import { googleSignInKey } from '/common/apiKeys.js';
 import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 
-import { auth } from '/js/firebase.js';
+const { auth } = (await import('/js/firebase.js'))._;
 import { onStateChange } from '/sdk/auth.js';
 import { logEvent } from '/js/analytics.js';
 

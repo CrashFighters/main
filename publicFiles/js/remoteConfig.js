@@ -16,7 +16,7 @@ import {
 
 const isNumber = (n) => !isNaN(parseFloat(n)) && !isNaN(n - 0);
 
-const { _: { app } } = await import('/js/firebase.js');
+const { app } = (await import('/js/firebase.js'))._;
 const remoteConfig = getRemoteConfig(app);
 remoteConfig.settings.minimumFetchIntervalMillis = 5 * 60 * 1000; //todo: add to settings
 
