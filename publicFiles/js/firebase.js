@@ -24,7 +24,7 @@ const init = {
     analytics: undefined,
     auth: undefined
 };
-const headers = {
+const getHeaderFunctions = {
     appCheck: undefined
 };
 const values = {
@@ -53,7 +53,7 @@ if (scripts.includes('/js/performance.js')) {
 
 if (scripts.includes('/js/appCheck.js')) {
     if (!init.appCheck)
-        ({ init: init.appCheck, _: { getAppCheckHeaders: headers.appCheck } } = await import('/js/appCheck.js'));
+        ({ init: init.appCheck, _: { getAppCheckHeaders: getHeaderFunctions.appCheck } } = await import('/js/appCheck.js'));
     values.appCheck = await init.appCheck(app);
 }
 
@@ -78,7 +78,7 @@ export const getHeaders = async () => {
     let headers = {};
 
     if (scripts.includes('/js/appCheck.js')) {
-        headers = { ...headers, ...await headers.appCheck() };
+        headers = { ...headers, ...await getHeaderFunctions.appCheck() };
     }
 
     return headers;
