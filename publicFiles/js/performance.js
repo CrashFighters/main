@@ -11,6 +11,9 @@ export function init(app) {
 
 const traces = {};
 export function startTrace(name) {
+    if (traces[name])
+        throw new Error(`Trace with name ${name} already started`)
+
     const t = trace(performance, name);
     traces[name] = t;
 
