@@ -18,12 +18,21 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js';
 import { firebaseConfig } from '/common/apiKeys.js';
 
-let initPerformance;
-let initAppCheck;
-let initAnalytics;
-let initAuth;
-
-let getAppCheckHeaders;
+const init = {
+    performance: undefined,
+    appCheck: undefined,
+    analytics: undefined,
+    auth: undefined
+};
+const headers = {
+    appCheck: undefined
+};
+const values = {
+    performance: undefined,
+    appCheck: undefined,
+    analytics: undefined,
+    auth: undefined
+};
 
 const excludeScripts = document.querySelector('script[src="/js/firebase.js"]')?.dataset.excludeScripts?.split(' ') ?? [];
 
@@ -37,40 +46,39 @@ const scripts = [
 const app = initializeApp(firebaseConfig);
 
 if (scripts.includes('/js/performance.js')) {
-    if (!initPerformance)
-        ({ init: initPerformance } = await import('/js/performance.js'));
-    await initPerformance(app);
+    if (!init.performance)
+        ({ init: init.performance } = await import('/js/performance.js'));
+    values.performance = await init.performance(app);
 }
 
 if (scripts.includes('/js/appCheck.js')) {
-    if (!initAppCheck)
-        ({ init: initAppCheck, _: { getAppCheckHeaders } } = await import('/js/appCheck.js'));
-    await initAppCheck(app);
+    if (!init.appCheck)
+        ({ init: init.appCheck, _: { getAppCheckHeaders: headers.appCheck } } = await import('/js/appCheck.js'));
+    values.appCheck = await init.appCheck(app);
 }
 
 if (scripts.includes('/js/analytics.js')) {
-    if (!initAnalytics)
-        ({ init: initAnalytics } = await import('/js/analytics.js'));
-    await initAnalytics(app);
+    if (!init.analytics)
+        ({ init: init.analytics } = await import('/js/analytics.js'));
+    values.analytics = await init.analytics(app);
 }
 
 if (scripts.includes('/sdk/auth.js')) {
-    if (!initAuth)
-        ({ init: initAuth } = await import('/sdk/auth.js'));
-    await initAuth(app);
+    if (!init.auth)
+        ({ init: init.auth } = await import('/sdk/auth.js'));
+    values.auth = await init.auth(app);
 };
 
 export const _ = {
-    app
+    app,
+    ...values //todo: remove exports from other files and use this one
 };
 
-export const getHeaders = async () => {
+export const getHeaders = async () => { //todo: use this instead of getAuthHeaders
     let headers = {};
 
     if (scripts.includes('/js/appCheck.js')) {
-        if (!getAppCheckHeaders)
-            ({ init: initAppCheck, _: { getAppCheckHeaders } } = await import('/js/appCheck.js'));
-        headers = { ...headers, ...await getAppCheckHeaders() };
+        headers = { ...headers, ...await headers.appCheck() };
     }
 
     return headers;

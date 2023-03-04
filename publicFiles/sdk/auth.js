@@ -19,9 +19,6 @@ import {
 import { setCookie } from '/common/cookie.js';
 import { logEvent } from '/js/analytics.js';
 
-let initPromiseResolve;
-const initPromise = new Promise(res => { initPromiseResolve = res });
-
 let auth;
 export function init(app) {
     auth = getAuth(app);
@@ -41,10 +38,8 @@ export function init(app) {
         first = false;
     });
 
-    initPromiseResolve();
+    return auth;
 };
-
-await initPromise;
 
 const getAuthHeaders = async () => ({
     auth_token: auth.currentUser ? await getIdToken(auth.currentUser) : undefined
@@ -52,7 +47,6 @@ const getAuthHeaders = async () => ({
 
 const onStateChangeCallbacks = [];
 export const _ = {
-    auth,
     updateUserObject,
     onStateChangeCallbacks,
     getAuthHeaders

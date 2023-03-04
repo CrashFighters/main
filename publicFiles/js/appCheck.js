@@ -23,6 +23,7 @@ export async function init(app) {
         provider: new ReCaptchaV3Provider(publicRecaptchaV3Key),
         isTokenAutoRefreshEnabled: true
     });
+    return appCheck;
 }
 
 export const _ = {
