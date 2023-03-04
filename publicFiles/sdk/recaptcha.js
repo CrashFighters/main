@@ -144,7 +144,7 @@ function googleCaptchaV3Callback(id) {
 
 startTrace('recaptcha_transformV3Buttons');
 
-const v3RecaptchaButtons = [...document.getElementsByClassName('invisRecaptchaButton')]; //todo: rename invisRecaptchaButton to v3RecaptchaButton
+const v3RecaptchaButtons = [...document.getElementsByClassName('v3RecaptchaButton')];
 for (const v3RecaptchaButton of v3RecaptchaButtons) {
     if (!v3RecaptchaButton.id) {
         console.error('captchaButton must have an id attribute', v3RecaptchaButton);
