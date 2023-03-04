@@ -18,7 +18,7 @@ import {
 } from '/common/cookie.js';
 
 import { onStateChange } from '/sdk/auth.js';
-const { auth } = (await import('/sdk/auth.js'))._.firebase;
+const { auth } = (await import('/sdk/auth.js'))._;
 
 let first = true;
 onStateChange(() => {

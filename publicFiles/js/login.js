@@ -22,7 +22,7 @@ import {
 
 import { logEvent } from '/js/analytics.js';
 
-const { auth } = (await import('/sdk/auth.js'))._.firebase;
+const { auth } = (await import('/sdk/auth.js'))._;
 
 let isMobile;
 export async function loginWithGithub(initiator) {

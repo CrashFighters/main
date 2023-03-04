@@ -25,7 +25,7 @@ import { googleSignInKey } from '/common/apiKeys.js';
 import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 import { isMobile } from '/common/isMobile.js';
 
-const { auth } = (await import('/sdk/auth.js'))._.firebase;
+const { auth } = (await import('/sdk/auth.js'))._;
 
 window.googleButtonPopupCallback = async ({ credential }) => {
     await signInWithCredential(auth, GoogleAuthProvider.credential(credential));

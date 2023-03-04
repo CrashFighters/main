@@ -25,7 +25,7 @@ import {
 import { googleSignInKey } from '/common/apiKeys.js';
 import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 
-const { auth } = (await import('/sdk/auth.js'))._.firebase;
+const { auth } = (await import('/sdk/auth.js'))._;
 
 window.googleZeroTapCallback = async ({ credential }) => {
     await signInWithCredential(auth, GoogleAuthProvider.credential(credential));

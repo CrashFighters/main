@@ -129,10 +129,7 @@ const getAuthHeaders = async () => ({
 });
 
 export const _ = {
-    firebase: { //todo: remove firebase object
-        app, //todo: remove
-        auth
-    },
+    auth,
     updateUserObject,
     onStateChangeCallbacks,
     getAuthHeaders

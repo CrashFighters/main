@@ -48,6 +48,10 @@ if (scripts.includes('/sdk/auth.js')) {
     await initAuth(app);
 };
 
+export const _ = {
+    app
+};
+
 export const getHeaders = async () => {
     let headers = {};
 
