@@ -161,7 +161,7 @@ for (const v3RecaptchaButton of v3RecaptchaButtons) {
     newV3CaptchaButton.dataset['recaptcha_callback'] = v3RecaptchaButton.dataset['recaptcha_callback'];
     newV3CaptchaButton.dataset['recaptcha_loading_class'] = v3RecaptchaButton.dataset['recaptcha_loading_class'];
 
-    newV3CaptchaButton.dataset.action = v3RecaptchaButton.dataset['recaptcha_action'] ?? 'SDK_invisButton'; //todo: rename invisButton to v3Button
+    newV3CaptchaButton.dataset.action = v3RecaptchaButton.dataset['recaptcha_action'] ?? 'SDK_v3RecaptchaButton';
     newV3CaptchaButton.dataset.callback = `googleCaptchaV3Callback-${v3RecaptchaButton.id}`;
     window[`googleCaptchaV3Callback-${v3RecaptchaButton.id}`] = googleCaptchaV3Callback(v3RecaptchaButton.id);
 
