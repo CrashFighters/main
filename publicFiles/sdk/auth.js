@@ -20,10 +20,10 @@ import { setCookie } from '/common/cookie.js';
 import { logEvent } from '/js/analytics.js';
 
 let auth;
+let authChangeCalled = false;
 export function init(app) {
     auth = getAuth(app);
 
-    let first = true;
     onAuthStateChanged(auth, async () => {
         const promises = [];
         for (const callback of onStateChangeCallbacks)
@@ -31,11 +31,11 @@ export function init(app) {
 
         await Promise.all(promises);
 
-        if (!first)
+        if (authChangeCalled)
             if (window.privateFile === true)
                 window.location.reload();
 
-        first = false;
+        authChangeCalled = true;
     });
 
     return auth;
@@ -54,6 +54,9 @@ export const _ = {
 
 export function onStateChange(callback) {
     onStateChangeCallbacks.push(callback);
+
+    if (authChangeCalled)
+        callback(window.auth.user);
 };
 
 export async function logout() {
@@ -102,7 +105,7 @@ async function updateUserObject(newUser) {
 
     let loginMethod = 'unknown';
     if (newUser.providerData.length > 1)
-        console.error(new Error("Multiple login methods shouldn't be possible, because linking is disabled"));
+        console.error(new Error("Multiple login methods shouldn't be possible, because linking is disabled. Setting loginMethod to 'unknown'"));
     else if (newUser.providerData[0].providerId === 'password')
         loginMethod = 'email';
     else if (newUser.providerData[0].providerId === 'google.com')
