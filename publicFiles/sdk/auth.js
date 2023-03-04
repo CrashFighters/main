@@ -2,7 +2,6 @@
 
 --fileRequirements--
 /common/cookie.js
-/js/appCheck.js
 /js/analytics.js
 --endFileRequirements--
 
