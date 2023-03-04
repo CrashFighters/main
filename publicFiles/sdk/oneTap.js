@@ -31,8 +31,6 @@ window.googleOneTapCallback = async ({ credential }) => {
     logEvent('login', { method: 'google', initiator: 'oneTap', type: 'embedded' })
 };
 
-startTrace('oneTap_addGoogleScript');
-
 const googleOnLoadDiv = document.createElement('div');
 googleOnLoadDiv.id = 'g_id_onload';
 googleOnLoadDiv.dataset.client_id = googleSignInKey;
@@ -66,6 +64,8 @@ function executeOneTap() {
 };
 
 function addGoogleScript() {
+    startTrace('oneTap_addGoogleScript');
+
     if (doesDocumentIncludeScript('https://accounts.google.com/gsi/client'))
         throw new Error('Google Sign In script already exists');
     else {
