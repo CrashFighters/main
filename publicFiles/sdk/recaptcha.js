@@ -7,6 +7,7 @@
 /common/doesDocumentIncludeScript.js
 /js/firebase.js
 /js/performance.js
+/js/analytics.js
 --endFileRequirements--
 
 */
@@ -19,6 +20,7 @@ import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js'
 
 import '/js/firebase.js';
 import { startTrace, stopTrace } from '/js/performance.js';
+import { logEvent } from '/js/analytics.js';
 
 async function getScoreFromV3Token(token) {
     startTrace('recaptcha_getResult_v3');
@@ -53,10 +55,13 @@ function waitReady() {
 
 export async function getScore(action = 'SDK_execute') {
     startTrace('recaptcha_getScore');
+
     await waitReady();
     const token = await grecaptcha.execute(publicRecaptchaV3Key, { action });
     const score = await getScoreFromV3Token(token);
+
     stopTrace('recaptcha_getScore');
+    logEvent('recaptcha_getScore', { action, score });
 
     return score;
 }
@@ -80,18 +85,24 @@ function renderV2Button(element) {
     grecaptcha.render(element, {
         sitekey: publicRecaptchaV2Key,
         callback: async token => {
-            if (await checkSuccessFromV2Token(token))
+            if (await checkSuccessFromV2Token(token)) {
                 setState('success')
-            else
+                logEvent('recaptcha_v2Button_newState_success');
+            } else {
                 setState('error')
+                logEvent('recaptcha_v2Button_newState_error');
+            }
         },
         'error-callback': () => {
             setState('error')
+            logEvent('recaptcha_v2Button_newState_error');
         },
         'expired-callback': () => {
             setState('expired')
+            logEvent('recaptcha_v2Button_newState_expired');
         }
     });
+    logEvent('recaptcha_v2Button_render');
 
     stopTrace('recaptcha_renderV2Button');
     return button;
@@ -122,6 +133,8 @@ function googleCaptchaV3Callback(id) {
 
         const score = await getScoreFromV3Token(token);
 
+        logEvent('recaptcha_v3Button_click', { score });
+
         window[element.dataset['recaptcha_callback']]?.(score);
 
         if (element.dataset['recaptcha_loading_class'])
@@ -131,7 +144,7 @@ function googleCaptchaV3Callback(id) {
 
 startTrace('recaptcha_transformV3Buttons');
 
-const v3RecaptchaButtons = [...document.getElementsByClassName('invisRecaptchaButton')];
+const v3RecaptchaButtons = [...document.getElementsByClassName('invisRecaptchaButton')]; //todo: rename invisRecaptchaButton to v3RecaptchaButton
 for (const v3RecaptchaButton of v3RecaptchaButtons) {
     if (!v3RecaptchaButton.id) {
         console.error('captchaButton must have an id attribute', v3RecaptchaButton);
@@ -148,7 +161,7 @@ for (const v3RecaptchaButton of v3RecaptchaButtons) {
     newV3CaptchaButton.dataset['recaptcha_callback'] = v3RecaptchaButton.dataset['recaptcha_callback'];
     newV3CaptchaButton.dataset['recaptcha_loading_class'] = v3RecaptchaButton.dataset['recaptcha_loading_class'];
 
-    newV3CaptchaButton.dataset.action = v3RecaptchaButton.dataset['recaptcha_action'] ?? 'SDK_invisButton';
+    newV3CaptchaButton.dataset.action = v3RecaptchaButton.dataset['recaptcha_action'] ?? 'SDK_invisButton'; //todo: rename invisButton to v3Button
     newV3CaptchaButton.dataset.callback = `googleCaptchaV3Callback-${v3RecaptchaButton.id}`;
     window[`googleCaptchaV3Callback-${v3RecaptchaButton.id}`] = googleCaptchaV3Callback(v3RecaptchaButton.id);
 
