@@ -4,6 +4,7 @@
 
 --fileRequirements--
 /js/firebase.js
+/js/performance.js
 --endFileRequirements--
 
 */
@@ -17,6 +18,8 @@ import {
 const isNumber = (n) => !isNaN(parseFloat(n)) && !isNaN(n - 0);
 
 const { app } = (await import('/js/firebase.js'))._;
+import { startTrace, stopTrace } from '/js/performance.js';
+
 const remoteConfig = getRemoteConfig(app);
 remoteConfig.settings.minimumFetchIntervalMillis = 5 * 60 * 1000; //todo: add to settings
 
@@ -43,9 +46,11 @@ async function getFullConfig() {
     if (fullConfigCache)
         return fullConfigCache;
 
+    startTrace('remoteConfig_load');
     await fetchAndActivate(remoteConfig);
-
     fullConfigCache = await getAll(remoteConfig);
+    stopTrace('remoteConfig_load');
+
     return fullConfigCache;
 }
 
@@ -53,6 +58,7 @@ function transformConfig(group, config) {
     if (!config)
         return {};
 
+    startTrace('remoteConfig_transform');
     const newConfig = {};
 
     for (const [key, value] of Object.entries(config)) {
@@ -81,6 +87,7 @@ function transformConfig(group, config) {
 
         newConfig[newKey] = newValue;
     }
+    stopTrace('remoteConfig_transform');
 
     return newConfig;
 }
