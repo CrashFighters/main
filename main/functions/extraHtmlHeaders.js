@@ -8,8 +8,8 @@ module.exports = ({ data }) => {
     let scriptIndex = data.indexOf('<script type="module" src="');
     while (scriptIndex !== -1) {
 
-        const scriptEndIndex = data.indexOf('</script>', scriptIndex);
-        const scriptPath = data.slice(scriptIndex, scriptEndIndex + 9).split('<script type="module" src="')[1].split('"></script>')[0].trim();
+        const scriptEndIndex = data.indexOf('"', scriptIndex + '<script type="module" src="'.length);
+        const scriptPath = data.slice(scriptIndex, scriptEndIndex + 9).split('<script type="module" src="')[1].split('"')[0].trim();
 
         loadedFiles.push({ path: scriptPath });
 
