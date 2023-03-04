@@ -4,6 +4,8 @@
 
 --fileRequirements--
 /common/deepQuerySelectorAll.js
+/js/firebase.js
+/js/performance.js
 /api/messages
 --endFileRequirements--
 
@@ -12,13 +14,20 @@
 const wait = ms => new Promise(res => setTimeout(res, ms));
 import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
 
+import '/js/firebase.js';
+import { startTrace, stopTrace } from '/js/performance.js';
+
 const slowMessageCache = {};
 let messages;
 let getConfig;
 
+startTrace('language');
+
 await execute(true);
 await wait(700);
 await execute(false);
+
+stopTrace('language');
 
 export function getMessage(message) {
     return findMessageInMessages(message) ||
@@ -48,6 +57,8 @@ async function getMessagesSlow(language) {
     if (slowMessageCache[language])
         return slowMessageCache[language];
 
+    startTrace('language_getMessages_slow');
+
     if (!getConfig)
         ({ getConfig } = await import('/js/remoteConfig.js'));
 
@@ -75,11 +86,14 @@ async function getMessagesSlow(language) {
             newMessages.pages[key.replaceAll('1', '/')] = value;
         }
 
+    stopTrace('language_getMessages_slow');
     slowMessageCache[language] = newMessages;
     return slowMessageCache[language];
 }
 
 async function getMessagesFast() {
+    startTrace('language_getMessages_fast');
+
     let newMessages = await fetch('/api/messages', {
         method: 'GET',
         credentials: 'include',
@@ -87,10 +101,13 @@ async function getMessagesFast() {
     });
     newMessages = await newMessages.json();
 
+    stopTrace('language_getMessages_fast');
     return newMessages;
 }
 
 function updateHtml() {
+    startTrace('language_transformHtml');
+
     const html = document.querySelector('html');
     html.lang = messages?.info?.code || 'en';
 
@@ -103,6 +120,8 @@ function updateHtml() {
 
     for (const element of placeholderElements)
         element.placeholder = getMessage(element.dataset.lang_placeholder);
+
+    stopTrace('language_transformHtml');
 }
 
 
