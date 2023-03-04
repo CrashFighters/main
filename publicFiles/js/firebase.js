@@ -24,7 +24,7 @@ let initAuth;
 
 let getAppCheckHeaders;
 
-const excludeScripts = document.querySelector('script[src="/js/firebase.js"]').dataset.excludeScripts?.split(' ') ?? [];
+const excludeScripts = document.querySelector('script[src="/js/firebase.js"]')?.dataset.excludeScripts?.split(' ') ?? [];
 
 const scripts = [
     '/js/performance.js',
