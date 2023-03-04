@@ -95,9 +95,9 @@ let recaptchaVerifier;
 export async function prepare2fa() {
     const { getRecaptchaVerifier } = (await import('/js/2fa.js'))._;
 
-    logEvent('login_2fa_captcha_show');
+    logEvent('login_2fa_recaptcha_show');
     const result = await getRecaptchaVerifier();
-    logEvent('login_2fa_captcha_solve');
+    logEvent('login_2fa_recaptcha_solve');
 
     recaptchaVerifier = result[0];
     const recaptchaObject = result[1];
