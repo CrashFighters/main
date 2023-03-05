@@ -1,7 +1,5 @@
-const hasPermission = require('../modules/authentication/functions/hasPermission.js');
-
 module.exports = {
-    async execute({ end, middlewareData: { authentication, customClaims }, params, statusCode, parseError }) {
+    async execute({ end, middlewareData: { hasPermission }, params, statusCode, parseError }) {
         try {
             if (!params.permission) return statusCode(400, 'noPermissionProvided', 'No permission provided');
             let permissionParts;
@@ -11,19 +9,16 @@ module.exports = {
                 return statusCode(400, 'invalidPermission', 'Invalid permission');
             };
 
-            if (!params.checks) return statusCode(400, 'noChecksProvided', 'No checks provided');
-            let checks;
+            if (!params.info) return statusCode(400, 'noInfoProvided', 'No info provided');
+            let info;
             try {
-                checks = JSON.parse(params.checks);
+                info = JSON.parse(params.info);
             } catch {
-                return statusCode(400, 'invalidChecks', 'Invalid checks');
+                return statusCode(400, 'invalidInfo', 'Invalid info');
             };
 
-            authentication = await authentication;
-            customClaims = await customClaims;
-
-            //todo-imp: use hasPermission function from middlewareData
-            end(hasPermission(permissionParts, checks, authentication, customClaims));
+            hasPermission = await hasPermission;
+            end(hasPermission(permissionParts, info));
         } catch (e) {
             await parseError(e);
         }

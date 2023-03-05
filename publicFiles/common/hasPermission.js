@@ -10,10 +10,10 @@
 
 import { getHeaders } from '/js/firebase.js';
 
-export async function hasPermission(permission, checks) {
+export async function hasPermission(permission, info) {
     let url = '/api/hasPermission';
     url += '?permission=' + encodeURIComponent(JSON.stringify(permission));
-    url += '&checks=' + encodeURIComponent(JSON.stringify(checks));
+    url += '&info=' + encodeURIComponent(JSON.stringify(info));
 
     const response = await fetch(url, {
         headers: {
