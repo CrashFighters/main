@@ -18,7 +18,7 @@ type community = {
 
 type post = {
     votes: {
-        [ownerId: string]: vote;
+        [voteId: string]: vote;
     };
     id: string;
     owner: string;
@@ -29,7 +29,7 @@ type post = {
 };
 
 type vote = {
-    //todo: add separate id value
+    id: string;
     owner: string;
     isUpvote: boolean;
 };

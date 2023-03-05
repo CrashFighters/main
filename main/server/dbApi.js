@@ -408,7 +408,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
                 set();
 
             if (require({ name: 'vote', type: 'voteId' }, { community: params.community, post: params.post }, ['hasGetPermission'], true))
-                end(db.communities[params.community].posts[params.post].votes[userId]);
+                end(db.communities[params.community].posts[params.post].votes[params.vote]);
             else
                 end(null);
         } else if (method === 'POST') {
@@ -424,18 +424,21 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
             if (!db.communities[params.community].posts[params.post].votes) db.communities[params.community].posts[params.post].votes = {};
             const votes = db.communities[params.community].posts[params.post].votes;
 
-            if (votes[userId]) {
-                statusCode(400, { text: 'You have already voted', short: 'voted' });
+            const id = userId;
+
+            if (votes[id]) {
+                statusCode(400, { text: 'The vote already exists', short: 'alreadyExists' });
                 return;
             }
 
-            votes[userId] = {
+            votes[id] = {
+                id,
                 owner: userId,
                 isUpVote: params.isUpVote
             };
 
             set();
-            end(userId);
+            end(id);
         }
     } else {
         statusCode(404, { text: 'Endpoint not found', short: 'endpointNotFound' });
