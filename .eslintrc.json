@@ -52,8 +52,6 @@
         "Proxy": true,
         "Reflect": true,
         "grecaptcha": true,
-        "Toastify": true,
-        "Swal": true,
         "google": true,
         "Uint8Array": true
     }
