@@ -25,7 +25,13 @@ import { logEvent } from '/js/analytics.js';
 async function getScoreFromV3Token(token) {
     startTrace('recaptcha_getResult_v3');
 
-    const res = await fetch(`/api/recaptchaV3?token=${token}`);
+    let res;
+    try {
+        res = await fetch(`/api/recaptchaV3?token=${token}`);
+    } catch (e) {
+        console.error(e);
+        return 0;
+    }
     const score = parseFloat(await res.text());
 
     stopTrace('recaptcha_getResult_v3');
