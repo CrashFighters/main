@@ -31,6 +31,16 @@ window.googleButtonPopupCallback = async ({ credential }) => {
     logEvent('login', { method: 'google', initiator: 'button', type: 'popup' });
 };
 
+function getRedirectLocation() {
+    if (urlParams.get('redirect'))
+        if (new URL(urlParams.get('redirect')).origin !== window.location.origin)
+            return window.location.href + '&instantRedirect=' + 'true';
+        else
+            return urlParams.get('redirect');
+    else
+        return window.location.href;
+}
+
 startTrace('googleLoginButtons_transformButtons');
 
 const smallButtons = [...document.getElementsByClassName('smallGoogleLoginButton')];
@@ -65,7 +75,7 @@ for (const bigButton of bigButtons) {
 stopTrace('googleLoginButtons_transformButtons');
 startTrace('googleLoginButtons_addGoogleScript');
 
-const documentIncludesGoogleTap = doesDocumentIncludeScript('/sdk/oneTap.js') || doesDocumentIncludeScript('/sdk/zeroTap.js');
+const urlParams = new URLSearchParams(window.location.search);
 
 const googleOnLoadDiv = document.createElement('div');
 googleOnLoadDiv.id = 'g_id_onload';
@@ -73,18 +83,22 @@ googleOnLoadDiv.dataset.client_id = googleSignInKey;
 googleOnLoadDiv.dataset.context = 'signin';
 if (isMobile()) {
     googleOnLoadDiv.dataset.ux_mode = 'redirect';
-    googleOnLoadDiv.dataset.login_uri = window.location.href
+    googleOnLoadDiv.dataset.login_uri = getRedirectLocation();
 } else {
     googleOnLoadDiv.dataset.ux_mode = 'popup';
     googleOnLoadDiv.dataset.callback = 'googleButtonPopupCallback';
 }
 googleOnLoadDiv.dataset.auto_prompt = 'false';
 
-if (!documentIncludesGoogleTap)
-    if (document.getElementById('g_id_onload'))
-        throw new Error('g_id_onload element already exists')
-    else
-        document.head.appendChild(googleOnLoadDiv);
+const documentIncludesGoogleTap = doesDocumentIncludeScript('/sdk/oneTap.js') || doesDocumentIncludeScript('/sdk/zeroTap.js');
+
+if (documentIncludesGoogleTap)
+    throw new Error("Document can't include both googleLoginButtons and (oneTap or zeroTap)")
+
+if (document.getElementById('g_id_onload'))
+    throw new Error('g_id_onload element already exists')
+else
+    document.head.appendChild(googleOnLoadDiv);
 
 if ((!documentIncludesGoogleTap) && ((!window.defaultGoogleClients) || window.defaultGoogleClients.length === 0))
     if (doesDocumentIncludeScript('https://accounts.google.com/gsi/client'))
