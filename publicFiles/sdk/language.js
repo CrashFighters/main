@@ -34,6 +34,9 @@ await execute(false);
 stopTrace('language_full');
 
 export function getMessage(message) {
+    if (!message)
+        return message;
+
     return findMessageInMessages(message) ||
         (findMessageInMessages(flipFirstLetterCase(message)) ?
             flipFirstLetterCase(findMessageInMessages(flipFirstLetterCase(message))) :
