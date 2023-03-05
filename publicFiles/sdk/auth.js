@@ -90,7 +90,7 @@ async function signInWithGoogleSignInIdToken(googleSignInIdToken) {
     stopTrace('auth_getGoogleSignInRedirectCredential')
 
     if ((!response.ok))
-        throw new Error(`Status code ${response.status} (${response.statusText}) from /api/getGoogleSignInCredential`);
+        throw new Error(`Status code ${response.status} (${response.statusText}) from API`);
 
     const credential = await response.text();
 
