@@ -37,10 +37,10 @@ let lastError = '';
 let lastErrorTime = 0;
 
 module.exports = {
-    async execute(err, response) {
+    async execute({ error: err, response, request }) {
         if (response)
             try {
-                await require('./statusCode.js').execute(response, 500);
+                await require('./statusCode.js').execute({ request, response, code: 500 });
             } catch { }
 
         const timeDiff = new Date().getTime() - lastErrorTime;

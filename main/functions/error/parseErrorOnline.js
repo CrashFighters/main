@@ -3,7 +3,7 @@ const evalErrors = require('./evalErrors').execute;
 const statusCode = require('./statusCode.js').execute;
 
 module.exports = {
-    async execute(error, response, customText) {
+    async execute({ error, request, response, text: customText }) {
         try {
             let errorMessage = error.stack;
             if (errorMessage === undefined) {
@@ -16,17 +16,14 @@ module.exports = {
             }
 
             let file = await parseErrorRaw(error, customText);
+            if (file)
+                file = file.split('.')[0];
 
             evalErrors();
-            file = file.split('.txt')[0];
             if (response)
-                return await statusCode(response, 500, { errorFile: file, text: customText });
-        } catch (err) {
-            if (response)
-                try {
-                    await statusCode(response, 500)
-                } catch { }
-            await require('./lastFallback').execute(err);
+                return await statusCode({ request, response, code: 500, errorFile: file, text: customText });
+        } catch (error) {
+            await require('./lastFallback.js').execute({ error, request, response });
         }
     }
 }

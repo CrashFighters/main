@@ -1,15 +1,12 @@
 /*
 
 --fileRequirements--
-/common/apiKeys.js
 /common/cookie.js
-/js/appCheck.js
 /js/analytics.js
 --endFileRequirements--
 
 */
 
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js';
 import {
     multiFactor,
     getAuth,
@@ -19,39 +16,48 @@ import {
     getIdToken
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-import { firebaseConfig } from '/common/apiKeys.js';
 import { setCookie } from '/common/cookie.js';
-import { init as initAppCheck, _ as appCheck_ } from '/js/appCheck.js';
-import { init as initAnalytics, logEvent } from '/js/analytics.js';
+import { logEvent } from '/js/analytics.js';
 
-const { getAppCheckHeaders } = appCheck_;
+let auth;
+let authChangeCalled = false;
+export function init(app) {
+    auth = getAuth(app);
 
-const app = initializeApp(firebaseConfig);
+    onAuthStateChanged(auth, async () => {
+        const promises = [];
+        for (const callback of onStateChangeCallbacks)
+            promises.push(callback(window.auth.user));
 
-await initAppCheck(app);
-initAnalytics(app);
+        await Promise.all(promises);
 
-const auth = getAuth(app);
+        if (authChangeCalled)
+            if (window.privateFile === true)
+                window.location.reload();
 
-const onStateChangeCallbacks = [];
-export function onStateChange(callback) {
-    onStateChangeCallbacks.push(callback);
+        authChangeCalled = true;
+    });
+
+    return auth;
 };
 
-let first = true;
-onAuthStateChanged(auth, async () => {
-    const promises = [];
-    for (const callback of onStateChangeCallbacks)
-        promises.push(callback(window.auth.user));
-
-    await Promise.all(promises);
-
-    if (!first)
-        if (window.privateFile === true)
-            window.location.reload();
-
-    first = false;
+const getAuthHeaders = async () => ({
+    auth_token: auth.currentUser ? await getIdToken(auth.currentUser) : undefined
 });
+
+const onStateChangeCallbacks = [];
+export const _ = {
+    updateUserObject,
+    onStateChangeCallbacks,
+    getAuthHeaders
+};
+
+export function onStateChange(callback) {
+    onStateChangeCallbacks.push(callback);
+
+    if (authChangeCalled)
+        callback(window.auth.user);
+};
 
 export async function logout() {
     try {
@@ -79,7 +85,8 @@ export async function signup() {
 };
 
 async function updateCookies() {
-    setCookie('authHeaders', JSON.stringify(await getAuthHeaders()));
+    const { getHeaders } = await import('/js/firebase.js');
+    setCookie('authHeaders', JSON.stringify(await getHeaders())); //todo: rename authHeaders cookie to something else, because appCheck is also included. Maybe requestHeaders?
 }
 
 async function updateUserObject(newUser) {
@@ -98,7 +105,7 @@ async function updateUserObject(newUser) {
 
     let loginMethod = 'unknown';
     if (newUser.providerData.length > 1)
-        console.error(new Error("Multiple login methods shouldn't be possible, because linking is disabled"));
+        console.error(new Error("Multiple login methods shouldn't be possible, because linking is disabled. Setting loginMethod to 'unknown'"));
     else if (newUser.providerData[0].providerId === 'password')
         loginMethod = 'email';
     else if (newUser.providerData[0].providerId === 'google.com')
@@ -131,21 +138,6 @@ async function updateUserObject(newUser) {
         }))
     };
 }
-
-const getAuthHeaders = async () => ({
-    auth_token: auth.currentUser ? await getIdToken(auth.currentUser) : undefined,
-    ...(await getAppCheckHeaders())
-});
-
-export const _ = {
-    firebase: {
-        app,
-        auth
-    },
-    updateUserObject,
-    onStateChangeCallbacks,
-    getAuthHeaders
-};
 
 window.auth = {
     onStateChange,

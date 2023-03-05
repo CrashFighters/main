@@ -5,3 +5,4 @@ logs/
 console.txt
 
 modules/perspective/data/queue.json
+modules/remoteConfig/cache/

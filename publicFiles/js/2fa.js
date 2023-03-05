@@ -3,6 +3,7 @@
 --fetchPriority--: low
 
 --fileRequirements--
+/js/firebase.js
 /js/analytics.js
 /sdk/auth.js
 --endFileRequirements--
@@ -16,9 +17,8 @@ import {
     PhoneMultiFactorGenerator
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
+const { auth } = (await import('/js/firebase.js'))._;
 import { logEvent } from '/js/analytics.js';
-
-const { firebase: { auth } } = (await import('/sdk/auth.js'))._;
 
 const id = '2faRecaptchaButton';
 

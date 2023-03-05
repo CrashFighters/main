@@ -3,12 +3,13 @@
 --fetchPriority--: low
 
 --fileRequirements--
-/js/analytics.js
 /common/cookie.js
 /common/apiKeys.js
 /common/doesDocumentIncludeScript.js
 /common/isMobile.js
-/sdk/auth.js
+/js/firebase.js
+/js/performance.js
+/js/analytics.js
 --endFileRequirements--
 
 */
@@ -18,19 +19,21 @@ import {
     signInWithCredential
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-import { logEvent } from '/js/analytics.js';
-
 import { getCookie, deleteCookie } from '/common/cookie.js';
 import { googleSignInKey } from '/common/apiKeys.js';
 import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 import { isMobile } from '/common/isMobile.js';
 
-const { auth } = (await import('/sdk/auth.js'))._.firebase;
+const { auth } = (await import('/js/firebase.js'))._;
+import { startTrace, stopTrace } from '/js/performance.js';
+import { logEvent } from '/js/analytics.js';
 
 window.googleButtonPopupCallback = async ({ credential }) => {
     await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
     logEvent('login', { method: 'google', initiator: 'button', type: 'popup' });
 };
+
+startTrace('googleLoginButtons_transformButtons');
 
 const smallButtons = [...document.getElementsByClassName('smallGoogleLoginButton')];
 
@@ -60,6 +63,9 @@ for (const bigButton of bigButtons) {
 
     bigButton.replaceWith(newBigButton);
 }
+
+stopTrace('googleLoginButtons_transformButtons');
+startTrace('googleLoginButtons_addGoogleScript');
 
 const documentIncludesGoogleTap = doesDocumentIncludeScript('/sdk/oneTap.js') || doesDocumentIncludeScript('/sdk/zeroTap.js');
 
@@ -94,13 +100,17 @@ if ((!documentIncludesGoogleTap) && ((!window.defaultGoogleClients) || window.de
 if (!window.defaultGoogleClients) window.defaultGoogleClients = [];
 window.defaultGoogleClients.push('googleLoginButtons');
 
+stopTrace('googleLoginButtons_addGoogleScript');
+
 const googleSignInIdToken = getCookie('g_csrf_token');
 if (googleSignInIdToken) {
     // user got redirected from login with Google redirect
 
     deleteCookie('g_csrf_token');
 
+    startTrace('googleLoginButtons_getGoogleSignInCredential')
     const response = await fetch(`/api/getGoogleSignInCredential?token=${googleSignInIdToken}`);
+    stopTrace('googleLoginButtons_getGoogleSignInCredential')
     if (!response.ok) throw new Error('Failed to get Google Sign In credential')
 
     const credential = await response.text();

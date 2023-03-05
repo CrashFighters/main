@@ -4,6 +4,7 @@
 
 --fileRequirements--
 /js/settings.js
+/js/analytics.js
 /js/login.js
 /sdk/language.js
 /sdk/auth.js
@@ -53,6 +54,7 @@ signInButton_mobile.addEventListener('click', () => {
 
 
 import { setDisplayName } from '/js/settings.js';
+import { logEvent } from '/js/analytics.js';
 import {
     loginWithEmail,
     loginWithGithub,
@@ -186,6 +188,8 @@ const loginFields = [
     '2fa-recaptcha'
 ];
 async function handleLoginError({ errorCode, field, error }) {
+    logEvent('login_disruption', { errorCode, field, hasError: Boolean(error) });
+
     const message =
         (await getErrorCodeMessages())[errorCode] ??
         errorCode ??
@@ -349,8 +353,20 @@ let loginRecaptcha;
 window.doLogin = async (recaptchaScore) => {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
-    const nativeButton = document.getElementById('loginButton-1');
 
+    if (!email)
+        return handleLoginError({
+            errorCode: 'missingEmail',
+            field: 'email'
+        });
+
+    if (!password)
+        return handleLoginError({
+            errorCode: 'missingPassword',
+            field: 'password'
+        });
+
+    const nativeButton = document.getElementById('loginButton-1');
     const { login } = minimalScores;
 
     // create login captcha if user is likely a bot
@@ -389,6 +405,8 @@ window.doLogin = async (recaptchaScore) => {
 
 const signupFields = ['name', 'email', 'password', 'recaptcha'];
 async function handleSignupError({ errorCode, field, error }) {
+    logEvent('signup_disruption', { errorCode, field, hasError: Boolean(error) });
+
     const message =
         (await getErrorCodeMessages())[errorCode] ??
         errorCode ??
@@ -427,7 +445,7 @@ window.doSignup = async (recaptchaScore) => {
     const nativeButton = document.getElementById('signupButton-1');
 
     if (name.length === 0)
-        return handleSignupError({ errorCode: 'noName', field: 'name' });
+        return handleSignupError({ errorCode: 'missingName', field: 'name' });
 
     const { signup } = minimalScores;
 

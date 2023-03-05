@@ -3,10 +3,12 @@
 --fetchPriority--: low
 
 --fileRequirements--
-/js/analytics.js
-/sdk/auth.js
 /common/apiKeys.js
 /common/doesDocumentIncludeScript.js
+/js/firebase.js
+/js/performance.js
+/sdk/auth.js
+/js/analytics.js
 --endFileRequirements--
 
 */
@@ -16,16 +18,13 @@ import {
     signInWithCredential
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-import { logEvent } from '/js/analytics.js';
-
-import {
-    onStateChange
-} from '/sdk/auth.js';
-
 import { googleSignInKey } from '/common/apiKeys.js';
 import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 
-const { auth } = (await import('/sdk/auth.js'))._.firebase;
+const { auth } = (await import('/js/firebase.js'))._;
+import { startTrace, stopTrace } from '/js/performance.js';
+import { onStateChange } from '/sdk/auth.js';
+import { logEvent } from '/js/analytics.js';
 
 window.googleOneTapCallback = async ({ credential }) => {
     await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
@@ -65,6 +64,8 @@ function executeOneTap() {
 };
 
 function addGoogleScript() {
+    startTrace('oneTap_addGoogleScript');
+
     if (doesDocumentIncludeScript('https://accounts.google.com/gsi/client'))
         throw new Error('Google Sign In script already exists');
     else {
@@ -72,4 +73,6 @@ function addGoogleScript() {
         script.src = 'https://accounts.google.com/gsi/client';
         document.head.appendChild(script);
     };
+
+    stopTrace('oneTap_addGoogleScript');
 };

@@ -4,16 +4,12 @@ const mime = require('mime-types');
 let gMessages = undefined;
 
 module.exports = {
-    async execute(response, code, extra) {
-        response.writeHead(code, { 'Content-Type': 'text/plain' });
-        if (!extra) extra = {};
-        const errorFile = extra.errorFile;
-        const customText = extra.text;
+    async execute({ request, response, code, errorFile, text: customText }) {
         let text = '';
 
         if (gMessages === undefined)
             try {
-                gMessages = (await require('../get/messages').execute()).mainFunction(); //todo: use request
+                gMessages = (await require('../get/messages').execute({ request })).mainFunction();
             } catch {
                 gMessages = null;
             }

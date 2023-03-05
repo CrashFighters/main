@@ -8,8 +8,8 @@ module.exports = ({ data }) => {
     let scriptIndex = data.indexOf('<script type="module" src="');
     while (scriptIndex !== -1) {
 
-        const scriptEndIndex = data.indexOf('</script>', scriptIndex);
-        const scriptPath = data.slice(scriptIndex, scriptEndIndex + 9).split('<script type="module" src="')[1].split('"></script>')[0];
+        const scriptEndIndex = data.indexOf('"', scriptIndex + '<script type="module" src="'.length);
+        const scriptPath = data.slice(scriptIndex, scriptEndIndex + 9).split('<script type="module" src="')[1].split('"')[0].trim();
 
         loadedFiles.push({ path: scriptPath });
 
@@ -102,10 +102,7 @@ function getPublicFilePreloadInfo(path) {
     else if (path.startsWith('/api/'))
         type = 'fetch';
     else
-        throw new Error(`Unknown type for file: ${path}`)
-
-    if (!type)
-        throw new Error('Unknown type for file: ' + path)
+        throw new Error(`Unknown type for file: "${path}"`)
 
     return { fileRequirements, type, fetchPriority };
 }
@@ -119,7 +116,8 @@ function getFileRequirements(file) {
             file.findIndex(a => a.includes('--fileRequirements--')) + 1,
             file.findIndex(a => a.includes('--endFileRequirements--'))
         )
-        .filter(a => a.trim() !== '')
+        .map(a => a.trim())
+        .filter(a => a !== '')
 }
 
 function getFetchpriority(file) {

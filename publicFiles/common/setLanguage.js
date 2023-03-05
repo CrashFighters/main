@@ -2,6 +2,7 @@
 
 --fileRequirements--
 /common/cookie.js
+/js/firebase.js
 /sdk/auth.js
 --endFileRequirements--
 
@@ -17,8 +18,8 @@ import {
     deleteCookie
 } from '/common/cookie.js';
 
+const { auth } = (await import('/js/firebase.js'))._;
 import { onStateChange } from '/sdk/auth.js';
-const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
 let first = true;
 onStateChange(() => {
@@ -47,5 +48,5 @@ export async function setLanguage(language) {
         ({ doesDocumentIncludeScript } = await import('/common/doesDocumentIncludeScript.js'));
 
     if (doesDocumentIncludeScript('/sdk/language.js'))
-        (await import('/sdk/language.js'))._.execute();
+        (await import('/sdk/language.js'))._.execute(false, language);
 }

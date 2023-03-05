@@ -14,8 +14,13 @@ if (require('../../functions/isModuleInstalled').execute('console')) {
 
 module.exports = {
     async execute() {
+        if (!messages)
+            try {
+                messages = (await require('../get/messages').execute()).mainFunction()
+            } catch { }
+
         cConsole.clear();
-        cConsole.log(`Listening on port ${settings.generic.port}...`);
+        cConsole.log(`${messages?.general?.ListeningOnPort || 'unable to get message'} ${settings.generic.port}`);
 
         try {
             const files =
@@ -24,15 +29,13 @@ module.exports = {
 
             if (files[0]) {
                 cConsole.clear();
-                cConsole.log(`Listening on port ${settings.generic.port}...`);
+                cConsole.log(`${messages?.general?.ListeningOnPort || 'unable to get message'} ${settings.generic.port}`);
                 cConsole.log();
                 cConsole.log();
 
-                if (!messages)
-                    messages = (await require('../get/messages').execute()).mainFunction()
-
-                let message = messages.error.thereAreErrors.replace('{amount}', files.length);
-                if (files.length === 1) message = messages.error.thereIsError.replace('{amount}', files.length);
+                let message = messages?.error?.thereAreErrors?.replace?.('{amount}', files.length);
+                if (files.length === 1) message = messages?.error?.thereIsError?.replace?.('{amount}', files.length);
+                if (!message) message = 'unable to get message'
 
                 cConsole.warn(message);
                 files.forEach((val) => {
@@ -47,8 +50,8 @@ module.exports = {
 
                 cConsole.log();
             }
-        } catch (err) {
-            await require('./lastFallback').execute(err);
+        } catch (error) {
+            await require('./lastFallback.js').execute({ error });
         }
     }
 }

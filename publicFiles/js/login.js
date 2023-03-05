@@ -1,7 +1,7 @@
 /*
 
 --fileRequirements--
-/sdk/auth.js
+/js/firebase.js
 /js/analytics.js
 --endFileRequirements--
 
@@ -20,9 +20,8 @@ import {
     PhoneMultiFactorGenerator
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
+const { auth } = (await import('/js/firebase.js'))._;
 import { logEvent } from '/js/analytics.js';
-
-const { auth } = (await import('/sdk/auth.js'))._.firebase;
 
 let isMobile;
 export async function loginWithGithub(initiator) {
@@ -96,9 +95,9 @@ let recaptchaVerifier;
 export async function prepare2fa() {
     const { getRecaptchaVerifier } = (await import('/js/2fa.js'))._;
 
-    logEvent('login_2fa_captcha_show');
+    logEvent('login_2fa_recaptcha_show');
     const result = await getRecaptchaVerifier();
-    logEvent('login_2fa_captcha_solve');
+    logEvent('login_2fa_recaptcha_solve');
 
     recaptchaVerifier = result[0];
     const recaptchaObject = result[1];

@@ -1,18 +1,23 @@
+/*
 
 //todo: get all permissions and perform checks on the client side, maybe also create folder with shared code for client and server?
 
-let getAuthHeaders;
-export async function hasPermission(permission, checks) {
-    if (!getAuthHeaders)
-        ({ getAuthHeaders } = (await import('/sdk/auth.js'))._);
+--fileRequirements--
+/js/firebase.js
+--endFileRequirements--
 
+*/
+
+import { getHeaders } from '/js/firebase.js';
+
+export async function hasPermission(permission, info) {
     let url = '/api/hasPermission';
     url += '?permission=' + encodeURIComponent(JSON.stringify(permission));
-    url += '&checks=' + encodeURIComponent(JSON.stringify(checks));
+    url += '&info=' + encodeURIComponent(JSON.stringify(info));
 
     const response = await fetch(url, {
         headers: {
-            ...await getAuthHeaders()
+            ...await getHeaders()
         }
     });
     const result = await response.json();

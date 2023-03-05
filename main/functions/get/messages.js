@@ -1,6 +1,6 @@
-const settings = require('../../../settings.json');
 const requestInfo = require('../../../modules/requestInfo/getInfo').execute;
 const parseCookie = require('../parse/cookie.js');
+const getConfig = require('../../../modules/remoteConfig/functions/getConfig.js');
 
 module.exports = {
     async execute({ request } = {}) {
@@ -20,6 +20,7 @@ module.exports = {
     }
 }
 
+//todo: add to shared folder so that Client uses same function
 function combineMessages(oldMessages, newMessages) {
     const messages = Object.assign({}, oldMessages);
 
@@ -27,7 +28,7 @@ function combineMessages(oldMessages, newMessages) {
         if (messages[key] === undefined)
             messages[key] = newValue;
         else if (typeof newValue === 'object')
-            messages[key] = combineMessages(newValue, newMessages[key]);
+            messages[key] = combineMessages(messages[key], newValue);
         else
             messages[key] = newValue;
 
@@ -57,24 +58,41 @@ async function getLanguages(request) {
     return languages;
 }
 
-// const firebase = require('firebase-admin');
-
-// const { serviceAccount, databaseURL } = require('../../../credentials/firebase.json');
-
-// firebase.initializeApp({
-//     credential: firebase.credential.cert(serviceAccount),
-//     databaseURL
-// }, 'remote-config');
-
-// firebase.remoteConfig().getTemplate().then(a => {
-//     console.log(a)
-//     process.exit()
-// })
-
+const messageCache = {};
 async function getLangMessages(lang) {
-    return require(`../../../messages/${lang}.json`);
+    if (messageCache[lang])
+        return messageCache[lang];
+
+    const config = await getConfig(`messages_${lang}`);
+    const messages = {};
+
+    for (const [key, value] of Object.entries(config)) {
+        let current = messages;
+
+        for (let keyPartIndex in key.split('_')) {
+            keyPartIndex = parseInt(keyPartIndex);
+            const keyPart = key.split('_')[keyPartIndex];
+
+            if (!current[keyPart])
+                current[keyPart] = keyPartIndex === key.split('_').length - 1 ? value : {};
+
+            current = current[keyPart];
+
+        }
+    }
+
+    if (messages.pages)
+        for (const [key, value] of Object.entries(messages.pages)) {
+            delete messages.pages[key];
+            messages.pages[key.replaceAll('1', '/')] = value;
+        }
+
+    messageCache[lang] = messages;
+
+    return messages;
 }
 
 async function getSupportedLanguages() {
-    return settings.generic.lang;
+    const config = await getConfig();
+    return config.languages;
 }

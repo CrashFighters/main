@@ -1,6 +1,11 @@
 const fs = require('fs');
 const mime = require('mime-types');
 
+const cConsole = {
+    clear: require('../../../modules/console/functions/clear').execute,
+    log: require('../../../modules/console/functions/log').execute,
+    warn: require('../../../modules/console/functions/warn').execute
+};
 const serverSideRenderHtml = require('../../functions/serverSideRenderHtml/serverSideRenderHtml.js');
 const getExtraHeaders = require('../../functions/extraHeaders.js');
 const getExtraHtmlHeaders = require('../../functions/extraHtmlHeaders.js');
@@ -14,6 +19,8 @@ addPublicFiles('/', './publicFiles/')
 module.exports = publicFiles;
 
 function addPublicFiles(websitePath, path) {
+    cConsole.log(`Preloading public files from ${path}`)
+
     if (fs.existsSync(path))
         for (const name of fs.readdirSync(path)) {
             if (fs.statSync(path + name).isFile()) {

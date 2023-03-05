@@ -3,6 +3,7 @@
 --fetchPriority--: low
 
 --fileRequirements--
+/js/firebase.js
 /sdk/auth.js
 --endFileRequirements--
 
@@ -12,10 +13,13 @@ import {
     updateProfile
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
+const { auth } = (await import('/js/firebase.js'))._;
+import { getHeaders } from '/js/firebase.js';
+
 import {
     logout
 } from '/sdk/auth.js';
-const { updateUserObject, onStateChangeCallbacks, getAuthHeaders, firebase: { auth } } = (await import('/sdk/auth.js'))._;
+const { updateUserObject, onStateChangeCallbacks } = (await import('/sdk/auth.js'))._;
 
 export const setDisplayName = async (displayName) => {
     if (!window.auth.user)
@@ -47,7 +51,7 @@ export const deleteUser = async () => {
 
     await fetch('/api/deleteUser', {
         headers: {
-            ...await getAuthHeaders()
+            ...await getHeaders()
         }
     });
 
