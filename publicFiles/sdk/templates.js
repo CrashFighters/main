@@ -10,6 +10,7 @@
 
 */
 
+const wait = (ms) => new Promise((res) => setTimeout(res, ms));
 import { onStateChange } from '/sdk/auth.js';
 import { startTrace, stopTrace } from '/js/performance.js';
 import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
@@ -29,7 +30,13 @@ const getTemplateValues = (user) => ({
     custom: null
 });
 
+let replacing = false;
+
 export async function replaceTemplates(user) {
+    while (replacing)
+        await wait(100)
+
+    replacing = true;
     startTrace('templates_replace');
     const templateValues = getTemplateValues(user);
     const elements = deepQuerySelectorAll('[data-template]');
@@ -124,6 +131,7 @@ export async function replaceTemplates(user) {
         ));
 
     stopTrace('templates_replace');
+    replacing = false;
 }
 
 onStateChange((user) => {
