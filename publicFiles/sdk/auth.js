@@ -25,11 +25,17 @@ import { logEvent } from '/js/analytics.js';
 import { startTrace, stopTrace } from '/js/performance.js';
 
 let auth;
+let preventFirstAuthStateChange = false;
 let stateChangeCalled = false;
 export function init(app) {
     auth = getAuth(app);
 
     onAuthStateChanged(auth, async () => {
+        if ((!stateChangeCalled) && preventFirstAuthStateChange) {
+            preventFirstAuthStateChange = false;
+            return;
+        }
+
         const promises = [];
         for (const callback of onStateChangeCallbacks)
             promises.push(callback(window.auth.user));
@@ -57,7 +63,7 @@ const checkGoogleSignInRedirect = async () => {
     const signInWithGoogleRedirect = urlSearchParams.get('signInWithGoogleRedirect') === 'true';
     if (!signInWithGoogleRedirect) return;
 
-    //todo: prevent first auth onStateChange when user is not logged in and signInWithGoogleRedirect is true
+    preventFirstAuthStateChange = true;
 
     urlSearchParams.delete('signInWithGoogleRedirect');
     window.history.replaceState({}, document.title, `${window.location.pathname}${urlSearchParams.toString() === '' ? '' : '?'}${urlSearchParams.toString()}`);
