@@ -35,8 +35,19 @@ function getRedirectLocation() {
     if (urlParams.get('redirect'))
         if (new URL(urlParams.get('redirect')).origin !== window.location.origin)
             return window.location.href + '&instantRedirect=' + 'true';
-        else
-            return urlParams.get('redirect');
+        else {
+            let location = urlParams.get('redirect');
+            const url = new URL(location);
+
+            if (url.search)
+                location += '&signInWithGoogleRedirect=' + 'true';
+            else if (location.endsWith('?'))
+                location += 'signInWithGoogleRedirect=' + 'true';
+            else
+                location += '?signInWithGoogleRedirect=' + 'true';
+
+            return location;
+        }
     else
         return window.location.href;
 }

@@ -52,7 +52,7 @@ async function betterAlert(text) {
         await wait(swalLoadTime);
 
     if ('Swal' in window)
-        window.Swal.fire({
+        await window.Swal.fire({
             backdrop: true,
             icon: 'warning',
             title: getMessage('ErrorDialogueTitle'),
@@ -104,19 +104,7 @@ const minimalScores = await fetch('/api/minimalScores', {
     method: 'GET',
     credentials: 'include',
     mode: 'no-cors' //to allow to use the preload
-}).then((a) => a.json());;
-
-const urlParams = new URLSearchParams(window.location.search);
-const signup = urlParams.get('signup') === 'true';
-if (signup)
-    document.getElementById('container').classList.add('right-panel-active');
-if (urlParams.get('redirect'))
-    document.getElementById('forgotPassword').href += `?redirect=${encodeURIComponent(urlParams.get('redirect'))}`;
-
-let preventRedirect = false;
-onStateChange(async (user) => {
-    if (user && !preventRedirect) await redirect();
-});
+}).then((a) => a.json());
 
 const githubLoginButtons = [...deepQuerySelectorAll('.githubLoginButton')];
 for (const githubLoginButton of githubLoginButtons)
@@ -221,6 +209,7 @@ async function handleLoginError({ errorCode, field, error }) {
 
     const message =
         (await getErrorCodeMessages())[errorCode] ??
+        getMessage(errorCode) ??
         errorCode ??
         (error?.message
             ? `${getMessage('Error')}: ${error.message}`
@@ -517,7 +506,7 @@ window.doSignup = async (recaptchaScore) => {
 };
 
 async function redirect() {
-    const redirectLocation = urlParams.get('redirect');
+    const redirectLocation = urlSearchParams.get('redirect');
 
     const doRedirect = redirectLocation !== null;
     if (
@@ -535,3 +524,24 @@ async function redirect() {
         window.open('/', '_self')
 
 }
+
+let preventRedirect = false;
+
+const urlSearchParams = new URLSearchParams(window.location.search);
+const signup = urlSearchParams.get('signup') === 'true';
+if (signup)
+    document.getElementById('container').classList.add('right-panel-active');
+if (urlSearchParams.get('redirect'))
+    document.getElementById('forgotPassword').href += `?redirect=${encodeURIComponent(urlSearchParams.get('redirect'))}`;
+if (urlSearchParams.get('loginError')) {
+    const loginError = urlSearchParams.get('loginError');
+
+    urlSearchParams.delete('loginError');
+    window.history.replaceState({}, document.title, `${window.location.pathname}?${urlSearchParams.toString()}`);
+
+    await handleLoginError({ errorCode: decodeURIComponent(loginError) });
+}
+
+onStateChange(async (user) => {
+    if (user && (!preventRedirect)) await redirect();
+});

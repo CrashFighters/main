@@ -53,6 +53,15 @@ const getAuthHeaders = async () => ({
 });
 
 const checkGoogleSignInRedirect = async () => {
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const signInWithGoogleRedirect = urlSearchParams.get('signInWithGoogleRedirect') === 'true';
+    if (!signInWithGoogleRedirect) return;
+
+    //todo: prevent first auth onStateChange when user is not logged in and signInWithGoogleRedirect is true
+
+    urlSearchParams.delete('signInWithGoogleRedirect');
+    window.history.replaceState({}, document.title, `${window.location.pathname}?${urlSearchParams.toString()}`);
+
     const googleSignInIdToken = getCookie('g_csrf_token');
     if (googleSignInIdToken) {
         // user got redirected from login with Google redirect
@@ -62,12 +71,18 @@ const checkGoogleSignInRedirect = async () => {
         startTrace('auth_getGoogleSignInRedirectCredential')
         const response = await fetch(`/api/getGoogleSignInCredential?token=${googleSignInIdToken}`);
         stopTrace('auth_getGoogleSignInRedirectCredential')
-        if (!response.ok) throw new Error('Failed to get Google Sign In Redirect credential')
+        if ((!response.ok)) {
+            window.location.replace(`/login?redirect=${encodeURIComponent(window.location.href)}&loginError=${encodeURIComponent('UnknownErrorOccurred')}`);
+            return;
+        }
 
         const credential = await response.text();
 
         await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
         logEvent('login', { method: 'google', initiator: 'button', type: 'redirect' });
+    } else {
+        window.location.replace(`/login?redirect=${encodeURIComponent(window.location.href)}&loginError=${encodeURIComponent('UnknownErrorOccurred')}`);
+        return;
     }
 }
 
