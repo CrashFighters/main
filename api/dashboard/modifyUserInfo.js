@@ -1,4 +1,4 @@
-const firebase = require('../../modules/authentication/functions/authentication.js');
+const firebase = require('../../modules/authentication/functions/getFirebase.js');
 const possibleProperties = Object.freeze({
     email: 'email',
     emailVerified: 'emailVerified',

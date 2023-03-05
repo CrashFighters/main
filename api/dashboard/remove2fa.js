@@ -1,4 +1,4 @@
-const firebase = require('../../modules/authentication/functions/authentication.js');
+const firebase = require('../../modules/authentication/functions/getFirebase.js');
 
 module.exports = {
     async execute({ params, statusCode, parseError, end, middlewareData: { hasPermission } }) {
