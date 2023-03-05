@@ -22,12 +22,8 @@ module.exports = {
             evalErrors();
             if (response)
                 return await statusCode({ response, code: 500, errorFile: file, text: customText }); //todo: add request
-        } catch (err) {
-            if (response)
-                try {
-                    await statusCode(response, 500)
-                } catch { }
-            await require('./lastFallback').execute(err);
+        } catch (error) {
+            await require('./lastFallback.js').execute({ error, response }); //todo: add request
         }
     }
 }

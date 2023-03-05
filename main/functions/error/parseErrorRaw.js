@@ -74,8 +74,8 @@ module.exports = {
                 writeFileSync(fsPath, JSON.stringify(oldObj, null, 4));
                 return sameFile;
             }
-        } catch (err) {
-            await require('./lastFallback').execute(err)
+        } catch (error) {
+            await require('./lastFallback.js').execute({ error })
         }
     }
 }

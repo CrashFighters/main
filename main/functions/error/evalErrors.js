@@ -50,8 +50,8 @@ module.exports = {
 
                 cConsole.log();
             }
-        } catch (err) {
-            await require('./lastFallback').execute(err);
+        } catch (error) {
+            await require('./lastFallback.js').execute({ error });
         }
     }
 }
