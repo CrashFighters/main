@@ -3,6 +3,7 @@
 --fileRequirements--
 /common/cookie.js
 /js/analytics.js
+/js/performance.js
 --endFileRequirements--
 
 */
@@ -13,11 +14,15 @@ import {
     onAuthStateChanged,
     signOut,
     updateProfile,
-    getIdToken
+    getIdToken,
+    signInWithCredential,
+    GoogleAuthProvider
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-import { setCookie } from '/common/cookie.js';
+import { setCookie, getCookie, deleteCookie } from '/common/cookie.js';
+
 import { logEvent } from '/js/analytics.js';
+import { startTrace, stopTrace } from '/js/performance.js';
 
 let auth;
 let stateChangeCalled = false;
@@ -38,6 +43,8 @@ export function init(app) {
         stateChangeCalled = true;
     });
 
+    checkGoogleSignInRedirect();
+
     return auth;
 };
 
@@ -45,12 +52,34 @@ const getAuthHeaders = async () => ({
     auth_token: auth.currentUser ? await getIdToken(auth.currentUser) : undefined
 });
 
+const checkGoogleSignInRedirect = async () => {
+    const googleSignInIdToken = getCookie('g_csrf_token');
+    if (googleSignInIdToken) {
+        // user got redirected from login with Google redirect
+
+        deleteCookie('g_csrf_token');
+
+        startTrace('auth_getGoogleSignInRedirectCredential')
+        const response = await fetch(`/api/getGoogleSignInCredential?token=${googleSignInIdToken}`);
+        stopTrace('auth_getGoogleSignInRedirectCredential')
+        if (!response.ok) throw new Error('Failed to get Google Sign In Redirect credential')
+
+        const credential = await response.text();
+
+        await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
+        logEvent('login', { method: 'google', initiator: 'button', type: 'redirect' });
+    }
+}
+
 const onStateChangeCallbacks = [];
 export const _ = {
     updateUserObject,
     onStateChangeCallbacks,
     getAuthHeaders
 };
+
+onStateChange(() => updateUserObject(auth.currentUser));
+onStateChange(updateCookies);
 
 export function onStateChange(callback) {
     onStateChangeCallbacks.push(callback);
@@ -147,6 +176,3 @@ window.auth = {
     user: null,
     _
 };
-
-onStateChange(() => updateUserObject(auth.currentUser));
-onStateChange(updateCookies);

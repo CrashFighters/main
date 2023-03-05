@@ -3,7 +3,6 @@
 --fetchPriority--: low
 
 --fileRequirements--
-/common/cookie.js
 /common/apiKeys.js
 /common/doesDocumentIncludeScript.js
 /common/isMobile.js
@@ -19,7 +18,6 @@ import {
     signInWithCredential
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-import { getCookie, deleteCookie } from '/common/cookie.js';
 import { googleSignInKey } from '/common/apiKeys.js';
 import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 import { isMobile } from '/common/isMobile.js';
@@ -101,20 +99,3 @@ if (!window.defaultGoogleClients) window.defaultGoogleClients = [];
 window.defaultGoogleClients.push('googleLoginButtons');
 
 stopTrace('googleLoginButtons_addGoogleScript');
-
-const googleSignInIdToken = getCookie('g_csrf_token');
-if (googleSignInIdToken) {
-    // user got redirected from login with Google redirect
-
-    deleteCookie('g_csrf_token');
-
-    startTrace('googleLoginButtons_getGoogleSignInCredential')
-    const response = await fetch(`/api/getGoogleSignInCredential?token=${googleSignInIdToken}`);
-    stopTrace('googleLoginButtons_getGoogleSignInCredential')
-    if (!response.ok) throw new Error('Failed to get Google Sign In credential')
-
-    const credential = await response.text();
-
-    await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
-    logEvent('login', { method: 'google', initiator: 'button', type: 'redirect' });
-}
