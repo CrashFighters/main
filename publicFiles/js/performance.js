@@ -32,3 +32,9 @@ export function stopTrace(name) {
     t.stop();
     delete traces[name];
 }
+
+export function cancelTrace(name) {
+    if (!traces[name]) return;
+
+    delete traces[name];
+}
