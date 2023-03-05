@@ -62,28 +62,34 @@ const checkGoogleSignInRedirect = async () => {
     urlSearchParams.delete('signInWithGoogleRedirect');
     window.history.replaceState({}, document.title, `${window.location.pathname}?${urlSearchParams.toString()}`);
 
-    const googleSignInIdToken = getCookie('g_csrf_token');
-    if (googleSignInIdToken) {
-        // user got redirected from login with Google redirect
+    try {
 
-        deleteCookie('g_csrf_token');
+        const googleSignInIdToken = getCookie('g_csrf_token');
+        if (googleSignInIdToken) {
+            // user got redirected from login with Google redirect
 
-        startTrace('auth_getGoogleSignInRedirectCredential')
-        const response = await fetch(`/api/getGoogleSignInCredential?token=${googleSignInIdToken}`);
-        stopTrace('auth_getGoogleSignInRedirectCredential')
-        if ((!response.ok)) {
-            window.location.replace(`/login?redirect=${encodeURIComponent(window.location.href)}&loginError=${encodeURIComponent('UnknownErrorOccurred')}`);
-            return;
-        }
+            deleteCookie('g_csrf_token');
+            await signInWithGoogleSignInIdToken(googleSignInIdToken);
+        } else
+            throw new Error('No g_csrf_token cookie found');
 
-        const credential = await response.text();
-
-        await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
-        logEvent('login', { method: 'google', initiator: 'button', type: 'redirect' });
-    } else {
-        window.location.replace(`/login?redirect=${encodeURIComponent(window.location.href)}&loginError=${encodeURIComponent('UnknownErrorOccurred')}`);
-        return;
+    } catch (e) {
+        window.location.replace(`/login?redirect=${encodeURIComponent(window.location.href)}&loginError=${encodeURIComponent(JSON.stringify({ error: { message: e.message } }))}`);
     }
+}
+
+async function signInWithGoogleSignInIdToken(googleSignInIdToken) {
+    startTrace('auth_getGoogleSignInRedirectCredential')
+    const response = await fetch(`/api/getGoogleSignInCredential?token=${googleSignInIdToken}`);
+    stopTrace('auth_getGoogleSignInRedirectCredential')
+
+    if ((!response.ok))
+        throw new Error(`Status code ${response.status} (${response.statusText}) from /api/getGoogleSignInCredential`);
+
+    const credential = await response.text();
+
+    await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
+    logEvent('login', { method: 'google', initiator: 'button', type: 'redirect' });
 }
 
 const onStateChangeCallbacks = [];

@@ -539,7 +539,11 @@ if (urlSearchParams.get('loginError')) {
     urlSearchParams.delete('loginError');
     window.history.replaceState({}, document.title, `${window.location.pathname}?${urlSearchParams.toString()}`);
 
-    await handleLoginError({ errorCode: decodeURIComponent(loginError) });
+    try {
+        await handleLoginError(JSON.parse(decodeURIComponent(loginError)));
+    } catch {
+        await handleLoginError({ error: new Error('Unable to parse loginError') });
+    };
 }
 
 onStateChange(async (user) => {
