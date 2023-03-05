@@ -77,6 +77,7 @@ async function deleteRequest(path, params) {
     return result;
 };
 
+const communityClasses = {};
 class Database {
     constructor() {
         this.enabled = true;
@@ -115,9 +116,17 @@ class Database {
                 const community = await postRequest('community', properties);
                 stopTrace('database_create_community')
 
-                communityCache[community] = new Community({ community });
-                communityIds.push(community);
+                if (communityClasses[community]) {
+                    communityClasses[community].enabled = true;
+                    await communityClasses[community].refresh();
+                    communityCache[community] = communityClasses[community];
+                } else {
+                    communityCache[community] = new Community({ community });
+                    await communityCache[community].wait;
+                    communityClasses[community] = communityCache[community];
+                }
 
+                communityIds.push(community);
                 return communityCache[community];
             }
         };
@@ -133,7 +142,15 @@ class Database {
                 if (key in customCommunityProperties) return customCommunityProperties[key];
 
                 if (!communityIds.includes(key)) return undefined;
-                if (!(key in communityCache)) communityCache[key] = new Community({ community: key });
+                if (!(key in communityCache))
+                    if (communityClasses[key]) {
+                        communityClasses[key].enabled = true;
+                        communityClasses[key].refresh();
+                        communityCache[key] = communityClasses[key];
+                    } else {
+                        communityCache[key] = new Community({ community: key });
+                        communityClasses[key] = communityCache[key];
+                    }
 
                 return communityCache[key];
             },
@@ -159,6 +176,7 @@ class Database {
     }
 }
 
+const postClasses = {};
 class Community {
     constructor(inf) {
         this.enabled = true;
@@ -197,9 +215,17 @@ class Community {
                 const post = await postRequest('post', { community, ...properties });
                 stopTrace('database_create_post')
 
-                postCache[post] = new Post({ community, post });
-                postIds.push(post);
+                if (postClasses[post]) {
+                    postClasses[post].enabled = true;
+                    await postClasses[post].refresh();
+                    postCache[post] = postClasses[post];
+                } else {
+                    postCache[post] = new Post({ community, post });
+                    await postCache[post].wait;
+                    postClasses[post] = postCache[post];
+                }
 
+                postIds.push(post);
                 return postCache[post];
             }
         };
@@ -233,7 +259,15 @@ class Community {
                 if (key in customPostProperties) return customPostProperties[key];
 
                 if (!postIds.includes(key)) return undefined;
-                if (!(key in postCache)) postCache[key] = new Post({ community, post: key });
+                if (!(key in postCache))
+                    if (postClasses[key]) {
+                        postClasses[key].enabled = true;
+                        postClasses[key].refresh();
+                        postCache[key] = postClasses[key];
+                    } else {
+                        postCache[key] = new Post({ community, post: key });
+                        postClasses[key] = postCache[key];
+                    }
 
                 return postCache[key];
             },
@@ -241,6 +275,7 @@ class Community {
                 if (!postIds.includes(key)) return false;
 
                 postIds.splice(postIds.indexOf(key), 1);
+                postCache[key].enabled = false;
                 delete postCache[key];
 
                 startTrace('database_delete_post')
@@ -258,6 +293,7 @@ class Community {
     }
 }
 
+const voteClasses = {};
 class Post {
     constructor(inf) {
         this.enabled = true;
@@ -296,9 +332,17 @@ class Post {
                 const vote = await postRequest('vote', { community, post, ...properties });
                 stopTrace('database_create_vote')
 
-                voteCache[vote] = new Vote({ community, post, vote });
-                voteIds.push(vote);
+                if (voteClasses[vote]) {
+                    voteClasses[vote].enabled = true;
+                    await voteClasses[vote].refresh();
+                    voteCache[vote] = voteClasses[vote];
+                } else {
+                    voteCache[vote] = new Vote({ community, post, vote });
+                    await voteCache[vote].wait;
+                    voteClasses[vote] = voteCache[vote];
+                }
 
+                voteIds.push(vote);
                 return voteCache[vote];
             }
         };
@@ -332,7 +376,15 @@ class Post {
                 if (key in customVoteProperties) return customVoteProperties[key];
 
                 if (!voteIds.includes(key)) return undefined;
-                if (!(key in voteCache)) voteCache[key] = new Vote({ community, post, vote: key });
+                if (!(key in voteCache))
+                    if (voteClasses[key]) {
+                        voteClasses[key].enabled = true;
+                        voteClasses[key].refresh();
+                        voteCache[key] = voteClasses[key];
+                    } else {
+                        voteCache[key] = new Vote({ community, post, vote: key });
+                        voteClasses[key] = voteCache[key];
+                    }
 
                 return voteCache[key];
             },
@@ -340,6 +392,7 @@ class Post {
                 if (!voteIds.includes(key)) return false;
 
                 voteIds.splice(voteIds.indexOf(key), 1);
+                voteCache[key].enabled = false;
                 delete voteCache[key];
 
                 startTrace('database_delete_vote')
