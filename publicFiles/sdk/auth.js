@@ -60,7 +60,7 @@ const checkGoogleSignInRedirect = async () => {
     //todo: prevent first auth onStateChange when user is not logged in and signInWithGoogleRedirect is true
 
     urlSearchParams.delete('signInWithGoogleRedirect');
-    window.history.replaceState({}, document.title, `${window.location.pathname}?${urlSearchParams.toString()}`);
+    window.history.replaceState({}, document.title, `${window.location.pathname}${urlSearchParams.toString() === '' ? '' : '?'}${urlSearchParams.toString()}`);
 
     try {
 

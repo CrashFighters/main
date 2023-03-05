@@ -537,7 +537,7 @@ if (urlSearchParams.get('loginError')) {
     const loginError = urlSearchParams.get('loginError');
 
     urlSearchParams.delete('loginError');
-    window.history.replaceState({}, document.title, `${window.location.pathname}?${urlSearchParams.toString()}`);
+    window.history.replaceState({}, document.title, `${window.location.pathname}${urlSearchParams.toString() === '' ? '' : '?'}${urlSearchParams.toString()}`);
 
     try {
         await handleLoginError(JSON.parse(decodeURIComponent(loginError)));
