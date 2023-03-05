@@ -391,10 +391,14 @@ window.doLogin = async (recaptchaScore) => {
     const { login } = minimalScores;
 
     // create login captcha if user is likely a bot
-    if (recaptchaScore < login && !loginRecaptcha)
+    if (recaptchaScore < login && !loginRecaptcha) {
         loginRecaptcha = await createButton(
             document.getElementById('loginRecaptchaButton')
         );
+        loginRecaptcha.onStateChange(() => {
+            window.removeLoginErrorFeedback();
+        });
+    }
 
     if (loginRecaptcha && loginRecaptcha.state !== 'success')
         return handleLoginError({
