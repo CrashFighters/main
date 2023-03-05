@@ -119,8 +119,8 @@
                 "database": {
                     "get": "always",
                     "delete": "owner appCheck explicitAuth",
-                    "modify": "owner explicitAuth",
-                    "create": "explicitAuth"
+                    "modify": "owner appCheck explicitAuth",
+                    "create": "appCheck explicitAuth"
                 },
                 "user": {
                     "delete": "owner appCheck explicitAuth"
@@ -133,11 +133,11 @@
                     "moderate": "always"
                 },
                 "moderate": {
-                    "getPost": "explicitAuth",
+                    "getPost": "appCheck explicitAuth",
                     "updatePostVisibility": {
-                        "verified": "explicitAuth",
-                        "flagged": "explicitAuth",
-                        "hidden": "explicitAuth"
+                        "verified": "appCheck explicitAuth",
+                        "flagged": "appCheck explicitAuth",
+                        "hidden": "appCheck explicitAuth"
                     }
                 }
             },
@@ -146,9 +146,9 @@
                     "dashboard": "always"
                 },
                 "dashboard": {
-                    "getUserFrom": "explicitAuth",
+                    "getUserFrom": "appCheck explicitAuth",
                     "get": {
-                        "userInfo": "explicitAuth"
+                        "userInfo": "appCheck explicitAuth"
                     },
                     "modify": {
                         "userInfo": {
@@ -156,7 +156,7 @@
                             "emailVerified": "never",
                             "email": "appCheck explicitAuth",
                             "phoneNumber": "appCheck explicitAuth",
-                            "password": "never explicitAuth",
+                            "password": "never",
                             "displayName": "appCheck explicitAuth",
                             "picture": "appCheck explicitAuth"
                         }
