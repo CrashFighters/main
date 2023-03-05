@@ -52,7 +52,6 @@ signInButton_mobile.addEventListener('click', () => {
     container.classList.remove('right-panel-active');
 });
 
-
 import { setDisplayName } from '/js/settings.js';
 import { logEvent } from '/js/analytics.js';
 import {
