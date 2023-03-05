@@ -17,6 +17,7 @@ async function init() {
     serviceAccount = require('../../../credentials/firebase.json').serviceAccount;
     databaseURL = require('../../../credentials/firebase.json').databaseURL;
 
+    //todo: create separate getFirebase file
     app = await admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
         databaseURL
