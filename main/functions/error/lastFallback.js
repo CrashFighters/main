@@ -40,7 +40,7 @@ module.exports = {
     async execute(err, response) {
         if (response)
             try {
-                await require('./statusCode.js').execute(response, 500);
+                await require('./statusCode.js').execute({ response, code: 500 }); //todo: add request
             } catch { }
 
         const timeDiff = new Date().getTime() - lastErrorTime;

@@ -22,12 +22,12 @@ module.exports = {
         const isPublic = fs.existsSync(publicPath);
 
         if ((!isPrivate) && (!isPublic))
-            return await statusCode(response, 404);
+            return await statusCode({ request, response, code: 404 });
 
         respond({
             path: isPrivate ? privatePath : publicPath,
-            response,
             request,
+            response,
             privateFile: isPrivate
         });
     }

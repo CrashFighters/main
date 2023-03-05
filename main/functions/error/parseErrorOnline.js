@@ -21,7 +21,7 @@ module.exports = {
 
             evalErrors();
             if (response)
-                return await statusCode(response, 500, { errorFile: file, text: customText });
+                return await statusCode({ response, code: 500, errorFile: file, text: customText }); //todo: add request
         } catch (err) {
             if (response)
                 try {
