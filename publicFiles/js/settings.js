@@ -3,7 +3,7 @@
 --fetchPriority--: low
 
 --fileRequirements--
-/js/firebase.js
+/sdk/firebase.js
 /sdk/auth.js
 --endFileRequirements--
 
@@ -13,8 +13,8 @@ import {
     updateProfile
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-const { auth } = (await import('/js/firebase.js'))._;
-import { getHeaders } from '/js/firebase.js';
+const { auth } = (await import('/sdk/firebase.js'))._;
+import { getHeaders } from '/sdk/firebase.js';
 
 import {
     logout

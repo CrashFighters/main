@@ -2,7 +2,7 @@
 
 --fileRequirements--
 /common/cookie.js
-/js/firebase.js
+/sdk/firebase.js
 /sdk/auth.js
 --endFileRequirements--
 
@@ -18,7 +18,7 @@ import {
     deleteCookie
 } from '/common/cookie.js';
 
-const { auth } = (await import('/js/firebase.js'))._;
+const { auth } = (await import('/sdk/firebase.js'))._;
 import { onStateChange } from '/sdk/auth.js';
 
 let first = true;

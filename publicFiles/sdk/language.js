@@ -4,7 +4,7 @@
 
 --fileRequirements--
 /common/deepQuerySelectorAll.js
-/js/firebase.js
+/sdk/firebase.js
 /js/performance.js
 /api/messages
 --endFileRequirements--
@@ -14,7 +14,7 @@
 const wait = (ms) => new Promise((res) => setTimeout(res, ms));
 import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
 
-import '/js/firebase.js';
+import '/sdk/firebase.js';
 import { startTrace, stopTrace } from '/js/performance.js';
 
 const slowMessageCache = {};

@@ -1,7 +1,6 @@
 /*
 
 //todo: all fileRequirements are not always needed
-//todo: move to sdk?
 
 --fileRequirements--
 /common/apiKeys.js
@@ -36,7 +35,7 @@ const values = {
     auth: undefined
 };
 
-const excludeScripts = document.querySelector('script[src="/js/firebase.js"]')?.dataset.excludeScripts?.split(' ') ?? [];
+const excludeScripts = document.querySelector('script[src="/sdk/firebase.js"]')?.dataset.excludeScripts?.split(' ') ?? [];
 
 const scripts = [
     '/js/performance.js',

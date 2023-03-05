@@ -3,7 +3,7 @@
 --fetchPriority--: low
 
 --fileRequirements--
-/js/firebase.js
+/sdk/firebase.js
 /js/performance.js
 --endFileRequirements--
 
@@ -17,7 +17,7 @@ import {
 
 const isNumber = (n) => !isNaN(parseFloat(n)) && !isNaN(n - 0);
 
-const { app } = (await import('/js/firebase.js'))._;
+const { app } = (await import('/sdk/firebase.js'))._;
 import { startTrace, stopTrace } from '/js/performance.js';
 
 const remoteConfig = getRemoteConfig(app);

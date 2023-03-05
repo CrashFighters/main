@@ -1,14 +1,14 @@
 /*
 
 --fileRequirements--
-/js/firebase.js
+/sdk/firebase.js
 /sdk/auth.js
 /js/performance.js
 --endFileRequirements--
 
 */
 
-import { getHeaders } from '/js/firebase.js';
+import { getHeaders } from '/sdk/firebase.js';
 import { onStateChange as onAuthStateChange } from '/sdk/auth.js';
 import { startTrace, stopTrace } from '/js/performance.js';
 
