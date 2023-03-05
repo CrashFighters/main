@@ -14,7 +14,7 @@ const normal = require('./normal.js');
 
 module.exports = {
     async execute(request, response) {
-        const parseError = async (error, customText) => await parseErrorOnline(error, response, customText);
+        const parseError = async (error, text) => await parseErrorOnline({ error, request, response, text });
 
         try {
             let body;

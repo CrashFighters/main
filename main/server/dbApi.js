@@ -14,7 +14,7 @@ const statusCode = (response, code, { text, short }) => {
 
 module.exports = {
     async execute(request, response, { middlewareData }) {
-        const parseError = async (error, customText) => await parseErrorOnline(error, response, customText);
+        const parseError = async (error, text) => await parseErrorOnline({ error, request, response, text });
 
         try {
             const { path, params, success } = require('../functions/parse/dbApiCall.js').execute(request);
