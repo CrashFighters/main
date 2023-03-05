@@ -68,8 +68,6 @@ async function betterConfirm(text) {
     if (!('Swal' in window))
         await wait(swalLoadTime);
 
-    console.log('message', getMessage('RedirectQuestionTitle'))
-
     if ('Swal' in window)
         return (await window.Swal.fire({
             title: getMessage('RedirectQuestionTitle'),
