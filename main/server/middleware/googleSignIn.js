@@ -17,11 +17,15 @@ module.exports = {
 
             const { credential, clientId, g_csrf_token } = extraData.body;
 
-            //todo: add error handling with invalid token instead of server error
-            const ticket = await client.verifyIdToken({
-                idToken: credential,
-                audience: clientId
-            });
+            let ticket;
+            try {
+                ticket = await client.verifyIdToken({
+                    idToken: credential,
+                    audience: clientId
+                });
+            } catch {
+                return { googleUserId: null };
+            };
             const payload = ticket.getPayload();
             const userid = payload['sub'];
 
