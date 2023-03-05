@@ -43,7 +43,7 @@ const scripts = [
     '/js/appCheck.js',
     '/js/analytics.js',
     '/sdk/auth.js'
-].filter(script => !excludeScripts.includes(script));
+].filter((script) => !excludeScripts.includes(script));
 
 const app = initializeApp(firebaseConfig);
 

@@ -12,7 +12,7 @@ module.exports = {
         try {
             if (!params.token) return statusCode(400, 'noTokenProvided', 'No token provided');
             if (params.token.length !== 526) return statusCode(400, 'invalidToken', 'Invalid token');
-            if (params.token.split('').some(char => !allowedTokenCharacters.includes(char))) return statusCode(400, 'invalidToken', 'Invalid token');
+            if (params.token.split('').some((char) => !allowedTokenCharacters.includes(char))) return statusCode(400, 'invalidToken', 'Invalid token');
 
             const postData = Object.entries({
                 secret,

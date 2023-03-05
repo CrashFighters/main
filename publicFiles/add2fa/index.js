@@ -48,7 +48,7 @@ window.doAdd2fa = async () => {
         window.addTwofaStyle = 'display: none;';
         replaceTemplates();
     }));
-    recaptchaButton.onStateChange(recaptchaButton => {
+    recaptchaButton.onStateChange((recaptchaButton) => {
         console.log(recaptchaButton.state);
     })
 }

@@ -7,7 +7,7 @@ module.exports = (acceptHeader, check) => {
     let isAll = false;
     let allQal = 1;
 
-    arr.forEach(val => {
+    arr.forEach((val) => {
         if (isAll) return;
         if (val.split(';')[0] === '*/*') {
             isAll = true;
@@ -30,7 +30,7 @@ module.exports = (acceptHeader, check) => {
     let found = false;
     let quality;
 
-    newArr.forEach(val => {
+    newArr.forEach((val) => {
         if (found) return;
 
         if (val.type === check) {

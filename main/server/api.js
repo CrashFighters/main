@@ -47,7 +47,7 @@ module.exports = {
                                 statusCode(response, code, { text, short });
                             },
                             parseError,
-                            end: data => {
+                            end: (data) => {
                                 let type;
                                 if (typeof data === 'string')
                                     type = 'text/plain';

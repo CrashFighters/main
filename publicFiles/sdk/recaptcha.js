@@ -48,7 +48,7 @@ async function checkSuccessFromV2Token(token) {
 }
 
 function waitReady() {
-    return new Promise(res => {
+    return new Promise((res) => {
         grecaptcha.ready(res);
     });
 };
@@ -71,12 +71,12 @@ function renderV2Button(element) {
     const callbacks = [];
     const button = {
         state: 'ready',
-        onStateChange: cb => {
+        onStateChange: (cb) => {
             callbacks.push(cb);
         }
     };
 
-    const setState = state => {
+    const setState = (state) => {
         button.state = state;
         for (const cb of callbacks)
             cb(button);
@@ -84,7 +84,7 @@ function renderV2Button(element) {
 
     grecaptcha.render(element, {
         sitekey: publicRecaptchaV2Key,
-        callback: async token => {
+        callback: async (token) => {
             if (await checkSuccessFromV2Token(token)) {
                 setState('success')
                 logEvent('recaptcha_v2Button_newState_success');

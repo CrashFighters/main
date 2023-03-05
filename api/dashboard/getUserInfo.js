@@ -37,7 +37,7 @@ module.exports = {
                 phoneNumber: user.phoneNumber,
                 creationTime: user.metadata.creationTime,
                 lastSignInTime: user.metadata.lastSignInTime,
-                '2fa': !multiFactorUser?.enrolledFactors ? [] : multiFactorUser?.enrolledFactors.map(factor => ({
+                '2fa': !multiFactorUser?.enrolledFactors ? [] : multiFactorUser?.enrolledFactors.map((factor) => ({
                     creationTime: factor.enrollmentTime,
                     type: factor.factorId,
                     displayName: factor.displayName,

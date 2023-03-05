@@ -10,7 +10,7 @@
 import { getHeaders } from '/js/firebase.js';
 import { startTrace, stopTrace } from '/js/performance.js';
 
-const paramsToQuery = params =>
+const paramsToQuery = (params) =>
     params ?
         '?' + Object.entries(params).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&') :
         '';
@@ -177,7 +177,7 @@ class Community {
                 configurable: true,
                 enumerable: true,
                 get: () => properties[key],
-                set: async newValue => {
+                set: async (newValue) => {
                     properties[key] = newValue;
 
                     startTrace('database_modify_community')
@@ -259,7 +259,7 @@ class Post {
                 configurable: true,
                 enumerable: true,
                 get: () => properties[key],
-                set: async newValue => {
+                set: async (newValue) => {
                     properties[key] = newValue;
 
                     startTrace('database_modify_post')
@@ -325,7 +325,7 @@ class Vote {
                 configurable: false,
                 enumerable: true,
                 get: () => properties[key],
-                set: async newValue => {
+                set: async (newValue) => {
                     properties[key] = newValue;
 
                     startTrace('database_modify_vote')

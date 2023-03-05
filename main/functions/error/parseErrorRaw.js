@@ -21,7 +21,7 @@ module.exports = {
 
             const files = readdirSync(settings.generic.path.files.errors);
 
-            files.forEach(file => {
+            files.forEach((file) => {
                 if (file === settings.generic.path.files.noError) return;
 
                 let data;
@@ -83,10 +83,10 @@ module.exports = {
 function createEasyAccessPath(errorMessage) {
     try {
         const easyAccessPath = errorMessage.split('\n')
-            .filter(line => line.trim().startsWith('at'))
-            .filter(line => !line.includes('internal'))
-            .filter(line => !line.includes('node:'))
-            .filter(line => !line.includes('node_modules'))[0]
+            .filter((line) => line.trim().startsWith('at'))
+            .filter((line) => !line.includes('internal'))
+            .filter((line) => !line.includes('node:'))
+            .filter((line) => !line.includes('node_modules'))[0]
             ?.split?.('(')?.[1]
             ?.split?.(')')?.[0]
 

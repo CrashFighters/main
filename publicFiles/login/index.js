@@ -75,7 +75,7 @@ const minimalScores = await fetch('/api/minimalScores', {
     method: 'GET',
     credentials: 'include',
     mode: 'no-cors' //to allow to use the preload
-}).then(a => a.json());;
+}).then((a) => a.json());;
 
 const urlParams = new URLSearchParams(window.location.search);
 const signup = urlParams.get('signup') === 'true';

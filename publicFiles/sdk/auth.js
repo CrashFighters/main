@@ -129,7 +129,7 @@ async function updateUserObject(newUser) {
         creationTime: new Date(newUser.metadata.creationTime),
         lastSignInTime: new Date(newUser.metadata.lastSignInTime),
         id: newUser.uid,
-        '2fa': !multiFactorUser?.enrolledFactors ? [] : multiFactorUser?.enrolledFactors.map(factor => ({
+        '2fa': !multiFactorUser?.enrolledFactors ? [] : multiFactorUser?.enrolledFactors.map((factor) => ({
             creationTime: new Date(factor.enrollmentTime),
             type: factor.factorId,
             displayName: factor.displayName,

@@ -40,7 +40,7 @@ googleOnLoadDiv.dataset.close_on_tap_outside = 'false';
 googleOnLoadDiv.dataset.itp_support = 'true';
 
 let loaded = false;
-onStateChange(user => {
+onStateChange((user) => {
     if (!loaded) {
         if (user) {
             googleOnLoadDiv.dataset.auto_prompt = 'false';

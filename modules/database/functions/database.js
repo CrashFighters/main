@@ -7,7 +7,7 @@ let ref;
 let app;
 
 let dataResolve;
-let data = new Promise(res => { dataResolve = res });
+let data = new Promise((res) => { dataResolve = res });
 let dataResolved = false;
 let err;
 
@@ -26,14 +26,14 @@ async function init() {
     db = app.database();
     ref = db.ref();
 
-    ref.on('value', snapshot => {
+    ref.on('value', (snapshot) => {
         if (dataResolved)
             data = Promise.resolve(snapshot.val());
         else {
             dataResolve(snapshot.val());
             dataResolved = true;
         }
-    }, error => {
+    }, (error) => {
         err = error;
     });
 

@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const middlewares = fs.existsSync(path.resolve(__dirname, './middleware/')) ?
-    fs.readdirSync(path.resolve(__dirname, './middleware/')).map(a => ({ ...require(`./middleware/${a}`), name: a.split('.')[0] })) :
+    fs.readdirSync(path.resolve(__dirname, './middleware/')).map((a) => ({ ...require(`./middleware/${a}`), name: a.split('.')[0] })) :
     [];
 
 const parseErrorOnline = require('../functions/error/parseErrorOnline.js').execute;
@@ -29,7 +29,7 @@ module.exports = {
 
             async function executeMiddleware(name) {
                 if (executedMiddlewares.includes(name)) return true;
-                const middleware = middlewares.find(a => a.name === name);
+                const middleware = middlewares.find((a) => a.name === name);
 
                 for (const name of middleware.info?.requires ?? [])
                     if (!await executeMiddleware(name)) return false;
@@ -85,10 +85,10 @@ module.exports = {
 }
 
 function waitPost(request) {
-    return new Promise(res => {
+    return new Promise((res) => {
 
         let body = '';
-        request.on('data', data => {
+        request.on('data', (data) => {
             body += data;
 
             if (body.length > 1e6)

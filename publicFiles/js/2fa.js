@@ -68,7 +68,7 @@ export const _ = {
         };
         recaptchaObject.state = 'waiting';
 
-        return new Promise(async res => {
+        return new Promise(async (res) => {
             await recaptchaRenderPromise;
             recaptchaDoneCallbacks.push(res);
         });

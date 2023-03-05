@@ -51,7 +51,7 @@ async function getLanguages(request) {
 
     for (const lang of languages)
         if (!(await getSupportedLanguages()).includes(lang))
-            languages = languages.filter(l => l !== lang);
+            languages = languages.filter((l) => l !== lang);
 
     languages = [...new Set(languages)].reverse();
 

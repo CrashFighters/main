@@ -113,7 +113,7 @@ export function get2faMethods(error) {
     resolver = getMultiFactorResolver(auth, error);
     logEvent('login_2fa_methods_show', { amount: resolver.hints.length });
 
-    return resolver.hints.map(hint => ({
+    return resolver.hints.map((hint) => ({
         displayName: hint.displayName,
         phoneNumber: hint.phoneNumber
     }));

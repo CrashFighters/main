@@ -39,7 +39,7 @@ module.exports = {
 
                     const installModules = [];
 
-                    const installModule = name => {
+                    const installModule = (name) => {
                         try {
                             require.resolve(name)
                         } catch {
@@ -51,12 +51,12 @@ module.exports = {
                         }
                     }
 
-                    repairSettings.projectDependencies.forEach(val => {
+                    repairSettings.projectDependencies.forEach((val) => {
                         installModule(val);
                     })
 
                     const modules = fs.readdirSync(settings.generic.path.files.modules);
-                    modules.forEach(val => {
+                    modules.forEach((val) => {
 
                         const extraDependenciesPath = `${settings.generic.path.files.modules}${val}/${settings.generic.path.files.extraDependencies}`;
                         console.log(extraDependenciesPath)
@@ -65,7 +65,7 @@ module.exports = {
                                 const extraDependencies = require(extraDependenciesPath);
 
                                 if (extraDependencies?.node_modules)
-                                    extraDependencies.node_modules.forEach(val => {
+                                    extraDependencies.node_modules.forEach((val) => {
                                         installModule(val)
                                     })
                             } catch (err) {
@@ -79,11 +79,11 @@ module.exports = {
                         const apiPath = settings.generic.path.files.moduleApi.replace('{modules}', settings.generic.path.files.modules).replace('{name}', val);
                         if (fs.existsSync(apiPath)) {
                             const apis = fs.readdirSync(apiPath);
-                            apis.forEach(api => {
+                            apis.forEach((api) => {
                                 try {
                                     const apiFile = require(`../../.${settings.generic.path.files.moduleApi.replace('{modules}', settings.generic.path.files.modules).replace('{name}', val)}${api}`);
                                     if (apiFile.dependencies?.node_modules) {
-                                        apiFile.dependencies.node_modules.forEach(val => {
+                                        apiFile.dependencies.node_modules.forEach((val) => {
                                             installModule(val);
                                         })
                                     }

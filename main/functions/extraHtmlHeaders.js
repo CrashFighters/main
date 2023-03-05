@@ -113,14 +113,14 @@ function getFileRequirements(file) {
 
     return file
         .slice(
-            file.findIndex(a => a.includes('--fileRequirements--')) + 1,
-            file.findIndex(a => a.includes('--endFileRequirements--'))
+            file.findIndex((a) => a.includes('--fileRequirements--')) + 1,
+            file.findIndex((a) => a.includes('--endFileRequirements--'))
         )
-        .map(a => a.trim())
-        .filter(a => a !== '')
+        .map((a) => a.trim())
+        .filter((a) => a !== '')
 }
 
 function getFetchpriority(file) {
     if (!file.includes('--fetchPriority--: ')) return null;
-    return file.split('\n').find(a => a.includes('--fetchPriority--: ')).split(':').slice(1).join(':').trim() || null;
+    return file.split('\n').find((a) => a.includes('--fetchPriority--: ')).split(':').slice(1).join(':').trim() || null;
 }

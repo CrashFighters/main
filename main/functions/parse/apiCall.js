@@ -12,7 +12,7 @@ module.exports = {
             params = url.query ?
                 Object.fromEntries(
                     url.query.split('&')
-                        .map(a => a.split('='))
+                        .map((a) => a.split('='))
                         .map(([key, value]) => [key, decodeURIComponent(value)])
                 ) : {};
         else if (request.headers['content-type'] === 'application/json')
