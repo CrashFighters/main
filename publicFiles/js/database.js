@@ -2,12 +2,14 @@
 
 --fileRequirements--
 /js/firebase.js
+/sdk/auth.js
 /js/performance.js
 --endFileRequirements--
 
 */
 
 import { getHeaders } from '/js/firebase.js';
+import { onStateChange as onAuthStateChange } from '/sdk/auth.js';
 import { startTrace, stopTrace } from '/js/performance.js';
 
 const paramsToQuery = (params) =>
@@ -77,7 +79,19 @@ async function deleteRequest(path, params) {
 
 class Database {
     constructor() {
+        this.enabled = true;
+        this.stateChangeCalled = false;
+        this.stateChangeCallbacks = [];
+
         this.wait = this._init();
+        onAuthStateChange(() => this.refresh());
+    }
+
+    onStateChange(cb) {
+        this.stateChangeCallbacks.push(cb);
+
+        if (this.stateChangeCalled && this.enabled)
+            cb(this);
     }
 
     async refresh() {
@@ -127,6 +141,7 @@ class Database {
                 if (!communityIds.includes(key)) return false;
 
                 communityIds.splice(communityIds.indexOf(key), 1);
+                communityCache[key].enabled = false;
                 delete communityCache[key];
 
                 startTrace('database_delete_community')
@@ -136,12 +151,29 @@ class Database {
                 return true;
             }
         });
+
+        this.stateChangeCalled = true;
+        if (this.enabled)
+            for (const stateChangeCallback of this.stateChangeCallbacks)
+                stateChangeCallback(this);
     }
 }
 
 class Community {
     constructor(inf) {
+        this.enabled = true;
+        this.stateChangeCalled = false;
+        this.stateChangeCallbacks = [];
+
         this.wait = this._init(inf);
+        onAuthStateChange(() => this.refresh());
+    }
+
+    onStateChange(cb) {
+        this.stateChangeCallbacks.push(cb);
+
+        if (this.stateChangeCalled && this.enabled)
+            cb(this);
     }
 
     async refresh() {
@@ -218,12 +250,29 @@ class Community {
                 return true;
             }
         });
+
+        this.stateChangeCalled = true;
+        if (this.enabled)
+            for (const stateChangeCallback of this.stateChangeCallbacks)
+                stateChangeCallback(this);
     }
 }
 
 class Post {
     constructor(inf) {
+        this.enabled = true;
+        this.stateChangeCalled = false;
+        this.stateChangeCallbacks = [];
+
         this.wait = this._init(inf);
+        onAuthStateChange(() => this.refresh());
+    }
+
+    onStateChange(cb) {
+        this.stateChangeCallbacks.push(cb);
+
+        if (this.stateChangeCalled && this.enabled)
+            cb(this);
     }
 
     async refresh() {
@@ -300,12 +349,29 @@ class Post {
                 return true;
             }
         });
+
+        this.stateChangeCalled = true;
+        if (this.enabled)
+            for (const stateChangeCallback of this.stateChangeCallbacks)
+                stateChangeCallback(this);
     }
 }
 
 class Vote {
     constructor(inf) {
+        this.enabled = true;
+        this.stateChangeCalled = false;
+        this.stateChangeCallbacks = [];
+
         this.wait = this._init(inf);
+        onAuthStateChange(() => this.refresh());
+    }
+
+    onStateChange(cb) {
+        this.stateChangeCallbacks.push(cb);
+
+        if (this.stateChangeCalled && this.enabled)
+            cb(this);
     }
 
     async refresh() {
@@ -338,9 +404,12 @@ class Vote {
                 }
             });
 
+        this.stateChangeCalled = true;
+        if (this.enabled)
+            for (const stateChangeCallback of this.stateChangeCallbacks)
+                stateChangeCallback(this);
 
     }
 }
 
-//todo: create new Database or fetch Database again when authState changes
 export default new Database();
