@@ -19,7 +19,7 @@ import {
 import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 
 import '/sdk/firebase.js';
-import { startTrace, stopTrace } from '/js/performance.js';
+import { startTrace, stopTrace, cancelTrace } from '/js/performance.js';
 import { logEvent } from '/js/analytics.js';
 
 async function getScoreFromV3Token(token) {
@@ -28,6 +28,7 @@ async function getScoreFromV3Token(token) {
     const res = await fetch(`/api/recaptchaV3?token=${token}`);
     if (!res.ok) {
         console.error('Recaptcha v3 check failed');
+        cancelTrace('recaptcha_getResult_v3');
         return 0;
     }
     const score = parseFloat(await res.text());
@@ -41,6 +42,11 @@ async function checkSuccessFromV2Token(token) {
         startTrace('recaptcha_getResult_v2');
 
         const res = await fetch(`/api/recaptchaV2?token=${token}`);
+        if (!res.ok) {
+            console.error('Recaptcha v2 check failed');
+            cancelTrace('recaptcha_getResult_v2');
+            return false;
+        }
         const success = await res.json();
 
         stopTrace('recaptcha_getResult_v2');
