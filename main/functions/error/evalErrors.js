@@ -3,13 +3,11 @@ const readdir = require('util').promisify(require('fs').readdir);
 const settings = require('../../../settings.json');
 let messages;
 
-let cConsole = console;
-if (require('../../functions/isModuleInstalled').execute('console')) {
-    cConsole = {
-        clear: require(`../../.${settings.generic.path.files.modules}console/functions/clear`).execute,
-        log: require(`../../.${settings.generic.path.files.modules}console/functions/log`).execute,
-        warn: require(`../../.${settings.generic.path.files.modules}console/functions/warn`).execute
-    }
+let cConsole;
+try {
+    cConsole = require('../../../modules/console/functions/get.js');
+} catch {
+    cConsole = console;
 }
 
 module.exports = {
@@ -25,7 +23,7 @@ module.exports = {
         try {
             const files =
                 (await readdir(settings.generic.path.files.errors))
-                    .filter(val => val !== settings.generic.path.files.noError);
+                    .filter((val) => val !== settings.generic.path.files.noError);
 
             if (files[0]) {
                 cConsole.clear();

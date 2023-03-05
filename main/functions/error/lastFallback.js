@@ -23,13 +23,11 @@ let gMessages = undefined;
 let extremeErrorMode = false;
 let reloadMode = 0;
 
-let cConsole = console;
-if (require('../../functions/isModuleInstalled').execute('console')) {
-    cConsole = {
-        clear: require(`../../.${settings.generic.path.files.modules}console/functions/clear`).execute,
-        log: require(`../../.${settings.generic.path.files.modules}console/functions/log`).execute,
-        warn: require(`../../.${settings.generic.path.files.modules}console/functions/warn`).execute
-    }
+let cConsole;
+try {
+    cConsole = require('../../../modules/console/functions/get.js');
+} catch {
+    cConsole = console;
 }
 
 let amountError = 0;
@@ -69,7 +67,7 @@ module.exports = {
 
             reloadMode++;
 
-            countDown(5, 1000, ii => {
+            countDown(5, 1000, (ii) => {
                 cConsole.clear();
                 cConsole.log(`Retrying in ${ii} seconds...`);
             });
@@ -138,7 +136,7 @@ module.exports = {
 }
 
 function asyncTimeout(wait) {
-    return new Promise(resolve => setTimeout(resolve, wait))
+    return new Promise((resolve) => setTimeout(resolve, wait))
 }
 
 async function countDown(start, wait, callback) {

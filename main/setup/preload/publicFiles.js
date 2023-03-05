@@ -1,11 +1,7 @@
 const fs = require('fs');
 const mime = require('mime-types');
 
-const cConsole = {
-    clear: require('../../../modules/console/functions/clear').execute,
-    log: require('../../../modules/console/functions/log').execute,
-    warn: require('../../../modules/console/functions/warn').execute
-};
+const cConsole = require('../../../modules/console/functions/get.js');
 const serverSideRenderHtml = require('../../functions/serverSideRenderHtml/serverSideRenderHtml.js');
 const getExtraHeaders = require('../../functions/extraHeaders.js');
 const getExtraHtmlHeaders = require('../../functions/extraHtmlHeaders.js');

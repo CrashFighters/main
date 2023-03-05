@@ -1,1 +1,0 @@
-//todo: create a function that creates a cConsole object with log, warn and clear functions
