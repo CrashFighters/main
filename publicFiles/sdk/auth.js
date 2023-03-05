@@ -20,7 +20,7 @@ import { setCookie } from '/common/cookie.js';
 import { logEvent } from '/js/analytics.js';
 
 let auth;
-let authChangeCalled = false;
+let stateChangeCalled = false;
 export function init(app) {
     auth = getAuth(app);
 
@@ -31,11 +31,11 @@ export function init(app) {
 
         await Promise.all(promises);
 
-        if (authChangeCalled)
+        if (stateChangeCalled)
             if (window.privateFile === true)
                 window.location.reload();
 
-        authChangeCalled = true;
+        stateChangeCalled = true;
     });
 
     return auth;
@@ -55,7 +55,7 @@ export const _ = {
 export function onStateChange(callback) {
     onStateChangeCallbacks.push(callback);
 
-    if (authChangeCalled)
+    if (stateChangeCalled)
         callback(window.auth.user);
 };
 
