@@ -15,43 +15,6 @@
 
 */
 
-const signUpButton = document.getElementById('signUp');
-const signInButton = document.getElementById('signIn');
-const container = document.getElementById('container');
-const signUpButton_mobile = document.getElementById('signUp_mobile');
-const signInButton_mobile = document.getElementById('signIn_mobile');
-
-const alertScript = document.createElement('script');
-alertScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
-document.head.appendChild(alertScript);
-
-function coolAlert(message) {
-    Swal.fire({
-        backdrop: true,
-        icon: 'warning',
-        title: getMessage('ErrorDialogueTitle'),
-        text: message,
-        confirmButtonText: getMessage('ErrorDialogueConfirm'),
-        confirmButtonColor: '#000'
-    });
-}
-
-signUpButton.addEventListener('click', () => {
-    container.classList.add('right-panel-active');
-});
-
-signInButton.addEventListener('click', () => {
-    container.classList.remove('right-panel-active');
-});
-
-signUpButton_mobile.addEventListener('click', () => {
-    container.classList.add('right-panel-active');
-});
-
-signInButton_mobile.addEventListener('click', () => {
-    container.classList.remove('right-panel-active');
-});
-
 import { setDisplayName } from '/js/settings.js';
 import { logEvent } from '/js/analytics.js';
 import {
@@ -70,6 +33,75 @@ import { createButton } from '/sdk/recaptcha.js';
 
 import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
 
+const signUpButton = document.getElementById('signUp');
+const signInButton = document.getElementById('signIn');
+const container = document.getElementById('container');
+const signUpButton_mobile = document.getElementById('signUp_mobile');
+const signInButton_mobile = document.getElementById('signIn_mobile');
+
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const alertScript = document.createElement('script');
+alertScript.src = 'https://www.unpkg.com/sweetalert2@11.7.3/dist/sweetalert2.all.min.js';
+document.head.appendChild(alertScript);
+
+const swalLoadTime = 500; //todo: move to settings or remoteConfig
+
+async function betterAlert(text) {
+    if (!('Swal' in window))
+        await wait(swalLoadTime);
+
+    if ('Swal' in window)
+        window.Swal.fire({
+            backdrop: true,
+            icon: 'warning',
+            title: getMessage('ErrorDialogueTitle'),
+            text: text,
+            confirmButtonText: getMessage('ErrorDialogueConfirm'),
+            confirmButtonColor: '#000'
+        });
+    else
+        alert(text);
+};
+
+async function betterConfirm(text) {
+    if (!('Swal' in window))
+        await wait(swalLoadTime);
+
+    console.log('message', getMessage('RedirectQuestionTitle'))
+
+    if ('Swal' in window)
+        return (await window.Swal.fire({
+            title: getMessage('RedirectQuestionTitle'),
+            text: text,
+            showCancelButton: true,
+            confirmButtonColor: '#000',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Nope!',
+            confirmButtonText: 'Yep!'
+        })).isConfirmed
+    else
+        return confirm(`${getMessage('RedirectQuestionTitle')}\n${text}`);
+}
+
+window.betterConfirm = betterConfirm; //todo: remove
+
+signUpButton.addEventListener('click', () => {
+    container.classList.add('right-panel-active');
+});
+
+signInButton.addEventListener('click', () => {
+    container.classList.remove('right-panel-active');
+});
+
+signUpButton_mobile.addEventListener('click', () => {
+    container.classList.add('right-panel-active');
+});
+
+signInButton_mobile.addEventListener('click', () => {
+    container.classList.remove('right-panel-active');
+});
+
 const minimalScores = await fetch('/api/minimalScores', {
     method: 'GET',
     credentials: 'include',
@@ -84,8 +116,8 @@ if (urlParams.get('redirect'))
     document.getElementById('forgotPassword').href += `?redirect=${encodeURIComponent(urlParams.get('redirect'))}`;
 
 let preventRedirect = false;
-onStateChange((user) => {
-    if (user && !preventRedirect) redirect();
+onStateChange(async (user) => {
+    if (user && !preventRedirect) await redirect();
 });
 
 const githubLoginButtons = [...deepQuerySelectorAll('.githubLoginButton')];
@@ -196,7 +228,10 @@ async function handleLoginError({ errorCode, field, error }) {
             ? `${getMessage('Error')}: ${error.message}`
             : getMessage('UnknownErrorOccurred'));
 
-    if (!field) return coolAlert(message);
+    if (!field) {
+        await betterAlert(message);
+        return
+    };
 
     if (!loginFields.includes(field))
         throw new Error(`Invalid field: ${field}`);
@@ -399,7 +434,7 @@ window.doLogin = async (recaptchaScore) => {
         preventRedirect = false;
     }
 
-    redirect();
+    await redirect();
 };
 
 const signupFields = ['name', 'email', 'password', 'recaptcha'];
@@ -413,7 +448,10 @@ async function handleSignupError({ errorCode, field, error }) {
             ? `${getMessage('Error')}: ${error.message}`
             : getMessage('UnknownErrorOccurred'));
 
-    if (!field) return coolAlert(message);
+    if (!field) {
+        await betterAlert(message);
+        return;
+    };
 
     if (!signupFields.includes(field))
         throw new Error(`Invalid field: ${field}`);
@@ -477,37 +515,25 @@ window.doSignup = async (recaptchaScore) => {
         preventRedirect = false;
     }
 
-    redirect();
+    await redirect();
 };
 
-function redirect() {
+async function redirect() {
     const redirectLocation = urlParams.get('redirect');
 
     const doRedirect = redirectLocation !== null;
     if (
         doRedirect &&
         new URL(redirectLocation).origin !== window.location.origin
-    )
-        Swal.fire({
-            title: getMessage('RedirectQuestionTitle'),
-            text: redirectLocation,
-            showCancelButton: true,
-            confirmButtonColor: '#000',
-            cancelButtonColor: '#d33',
-            cancelButtonText: 'Nope!',
-            confirmButtonText: 'Yep!'
-        }).then((result) => {
-            if (result.isConfirmed)
-                window.open(redirectLocation, '_self')
-            else
-                window.open('/', '_self')
-        });
-    else {
-        if (redirectLocation)
-            window.open(redirectLocation, '_self')
+    ) {
+        const result = await betterConfirm(redirectLocation);
+        if (result)
+            window.open(redirectLocation, '_self');
         else
-            window.open('/', '_self')
-    }
-
+            window.open('/', '_self');
+    } else if (redirectLocation)
+        window.open(redirectLocation, '_self')
+    else
+        window.open('/', '_self')
 
 }
