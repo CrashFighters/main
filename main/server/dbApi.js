@@ -166,12 +166,12 @@ module.exports = {
                                 return false;
                             }
                         }
-                    } else if (type === 'postMessage') { //todo: rename postMessage to postContent
+                    } else if (type === 'postContent') {
                         if (checkTypes.includes('correctType')) {
                             const correctType = value.length > 10 && value.length <= 500;
 
                             if (!correctType) {
-                                if (!preventError) statusCode(response, 400, { text: 'Invalid post message', short: 'invalidPostMessage' });
+                                if (!preventError) statusCode(response, 400, { text: 'Invalid post content', short: 'invalidPostContent' });
                                 return false;
                             }
                         }
@@ -313,7 +313,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
 
             for (const name of Object.keys(params.properties))
                 if (name === 'content') {
-                    if (!require({ value: params.properties[name], type: 'postMessage' }, { community: params.community }, ['correctType']))
+                    if (!require({ value: params.properties[name], type: 'postContent' }, { community: params.community }, ['correctType']))
                         return;
 
                     db.communities[params.community].posts[params.post].content = params.content;
@@ -335,7 +335,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
                 return;
             if (!require({ type: 'postId' }, { community: params.community }, ['hasCreatePermission']))
                 return;
-            if (!require({ name: 'content', type: 'postMessage' }, { community: params.community }, ['correctType']))
+            if (!require({ name: 'content', type: 'postContent' }, { community: params.community }, ['correctType']))
                 return;
 
             if (!db.communities[params.community].posts) db.communities[params.community].posts = {};
