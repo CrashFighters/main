@@ -14,7 +14,7 @@ module.exports = {
 
         return {
             languages,
-            mainFunction: () => { return messages } //todo: rename mainFunction to messages
+            messages
         }
 
     }

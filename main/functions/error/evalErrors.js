@@ -16,7 +16,7 @@ module.exports = {
     async execute() {
         if (!messages)
             try {
-                messages = (await require('../get/messages').execute()).mainFunction()
+                messages = (await require('../get/messages.js').execute()).messages
             } catch { }
 
         cConsole.clear();

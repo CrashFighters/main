@@ -18,7 +18,7 @@ module.exports = {
         const parseError = async (error, text) => await parseErrorOnline({ error, request, response, text });
 
         try {
-            const messages = (await require('../functions/get/messages').execute({ request })).mainFunction();
+            const messages = (await require('../functions/get/messages.js').execute({ request })).messages;
             const { path, params, success } = require('../functions/parse/apiCall.js').execute(request);
 
             if (!success) {

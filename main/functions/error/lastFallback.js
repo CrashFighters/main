@@ -97,14 +97,14 @@ module.exports = {
     async reloadServer(r, response) {
         if (gMessages === undefined)
             try {
-                gMessages = (await require('../get/messages').execute()).mainFunction();
+                gMessages = (await require('../get/messages.js').execute()).messages;
             } catch {
                 gMessages = null;
             }
 
         let messages;
         try {
-            messages = (await require('../get/messages').execute({ request: r })).mainFunction();
+            messages = (await require('../get/messages.js').execute({ request: r })).messages;
         } catch {
             messages = gMessages;
         }

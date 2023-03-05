@@ -9,7 +9,7 @@ module.exports = {
 
         if (gMessages === undefined)
             try {
-                gMessages = (await require('../get/messages').execute({ request })).mainFunction();
+                gMessages = (await require('../get/messages.js').execute({ request })).messages;
             } catch {
                 gMessages = null;
             }

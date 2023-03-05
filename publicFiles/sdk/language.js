@@ -98,7 +98,7 @@ async function getMessagesSlow(language) {
 async function getMessagesFast() {
     startTrace('language_getMessages_fast');
 
-    let newMessages = await fetch('/api/messages', {
+    let newMessages = await fetch('/api/messages.js', {
         method: 'GET',
         credentials: 'include',
         mode: 'no-cors' //to allow to use the preload

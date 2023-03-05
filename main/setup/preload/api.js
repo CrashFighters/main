@@ -38,7 +38,7 @@ async function addApiCalls(websitePath, path) {
 
                 if (!dependenciesInstalled) {
                     if (!messages)
-                        messages = (await require('../../functions/get/messages').execute()).mainFunction();
+                        messages = (await require('../../functions/get/messages.js').execute()).messages;
                     await parseErrorRaw(new Error(messages.error.moduleNotInstalledForShort.replace('{api}', `${websitePath}${apiName}`)), messages.error.moduleNotInstalledFor.replace('{api}', `${websitePath}${apiName}`).replace('{dependency}', dependenciesNotInstalled.join(', ')));
                     evalErrors();
                 }
