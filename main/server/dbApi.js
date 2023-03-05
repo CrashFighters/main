@@ -18,14 +18,14 @@ module.exports = {
 
         try {
             const { path, params, success } = require('../functions/parse/dbApiCall.js').execute(request);
-            let { authentication: a, explicitAuthentication, hasPermission } = middlewareData;
+            let { authentication: a, explicitlyAuthenticated, hasPermission } = middlewareData;
 
             a = await a;
-            explicitAuthentication = await explicitAuthentication;
+            explicitlyAuthenticated = await explicitlyAuthenticated;
             hasPermission = await hasPermission;
 
             let authentication = a;
-            if (!explicitAuthentication)
+            if (!explicitlyAuthenticated)
                 authentication = null;
 
             if (!success) {

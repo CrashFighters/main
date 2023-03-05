@@ -3,14 +3,14 @@ const parseCookie = require('../../functions/parse/cookie.js');
 
 module.exports = {
     info: {
-        exports: ['authenticated', 'authentication', 'explicitAuthentication']
+        exports: ['authenticated', 'authentication', 'explicitlyAuthenticated']
     },
     async execute({ request, parseError }) {
         try {
 
-            const explicitAuthentication = Boolean(request.headers['auth_token']); // todo: rename to explicitlyAuthenticated
+            const explicitlyAuthenticated = Boolean(request.headers['auth_token']);
             let authHeaders;
-            if (explicitAuthentication)
+            if (explicitlyAuthenticated)
                 authHeaders = request.headers;
             else
                 authHeaders = getAuthHeadersFromCookie(request.headers.cookie);
@@ -18,7 +18,7 @@ module.exports = {
             const authToken = authHeaders?.['auth_token'];
 
             if ((!authHeaders) || (!authToken))
-                return { authenticated: false, authentication: null, explicitAuthentication };
+                return { authenticated: false, authentication: null, explicitlyAuthenticated };
 
             try {
                 const authentication = await firebase.auth().verifyIdToken(authToken, true);
@@ -26,13 +26,13 @@ module.exports = {
                 return {
                     authenticated: true,
                     authentication,
-                    explicitAuthentication
+                    explicitlyAuthenticated
                 };
             } catch {
                 return {
                     authenticated: false,
                     authentication: null,
-                    explicitAuthentication
+                    explicitlyAuthenticated
                 };
             }
 

@@ -9,13 +9,13 @@ module.exports = {
             'appCheck'
         ]
     },
-    execute({ middlewareData: { authentication, explicitAuthentication, customClaims, appCheckPassed } }) {
+    execute({ middlewareData: { authentication, explicitlyAuthenticated, customClaims, appCheckPassed } }) {
         return {
             hasPermission: (permission, { owner }) => {
                 const checks = {
                     owner: owner === undefined ? undefined : owner === authentication.uid,
                     appCheck: appCheckPassed,
-                    explicitAuth: explicitAuthentication
+                    explicitAuth: explicitlyAuthenticated
                 };
 
                 hasPermission(permission, checks, authentication, customClaims)
