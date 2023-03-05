@@ -1,34 +1,21 @@
-let admin;
-let serviceAccount
-let databaseURL;
-
 let db;
 let ref;
-let app;
+let firebase;
 
 let dataResolve;
-let data = new Promise((res) => { dataResolve = res });
+let dataPromise = new Promise((res) => { dataResolve = res });
 let dataResolved = false;
 let err;
 
 let hasInit = false;
-async function init() {
-    admin = require('firebase-admin');
-    serviceAccount = require('../../../credentials/firebase.json').serviceAccount;
-    databaseURL = require('../../../credentials/firebase.json').databaseURL;
-
-    //todo: create separate getFirebase file
-    app = await admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-        databaseURL
-    }, 'database');
-
-    db = app.database();
+function init() {
+    firebase = require('./getFirebase.js');
+    db = firebase.database();
     ref = db.ref();
 
     ref.on('value', (snapshot) => {
         if (dataResolved)
-            data = Promise.resolve(snapshot.val());
+            dataPromise = Promise.resolve(snapshot.val());
         else {
             dataResolve(snapshot.val());
             dataResolved = true;
@@ -43,20 +30,22 @@ async function init() {
 module.exports = {
     async set(val) {
         if (!hasInit)
-            await init();
+            init();
+
+        await dataPromise;
 
         ref.set(val)
     },
     async get() {
         if (!hasInit)
-            await init()
+            init()
 
         if (err)
             throw err;
 
-        let newData = await data;
-        if (!newData) newData = {};
+        let data = await dataPromise;
+        if (!data) data = {};
 
-        return newData;
+        return data;
     }
 }
