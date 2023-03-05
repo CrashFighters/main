@@ -150,7 +150,7 @@ module.exports = {
                             if (!checkPermissionType)
                                 throw new Error('checkPermissionType is undefined');
 
-                            const userHasPermission = hasPermission(['database', checkPermissionType, 'vote'], { owner: vote.user });
+                            const userHasPermission = hasPermission(['database', checkPermissionType, 'vote'], { owner: vote.owner });
 
                             if (!userHasPermission) {
                                 if (!preventError) statusCode(response, 403, { text: `Invalid permission to ${checkPermissionType} vote ${value} in post ${post} in community ${community} (database.${checkPermissionType}.vote)`, short: 'invalidPermission' });
@@ -430,7 +430,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
             }
 
             votes[userId] = {
-                user: userId,
+                owner: userId,
                 isUpVote: params.isUpVote
             };
 
