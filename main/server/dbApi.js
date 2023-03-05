@@ -42,7 +42,7 @@ module.exports = {
                 params,
                 method: request.method,
                 userId: authentication?.uid,
-                end: json => {
+                end: (json) => {
                     response.writeHead(200, { 'Content-Type': 'application/json' });
                     response.end(JSON.stringify(json));
                 },
@@ -113,7 +113,7 @@ module.exports = {
                             if (!checkPermissionType)
                                 throw new Error('checkPermissionType is undefined');
 
-                            const userHasPermission = hasPermission(['database', checkPermissionType, 'post'], { owner: post.user });
+                            const userHasPermission = hasPermission(['database', checkPermissionType, 'post'], { owner: post.owner });
 
                             if (!userHasPermission) {
                                 if (!preventError) statusCode(response, 403, { text: `Invalid permission to ${checkPermissionType} post ${value} in community ${community} (database.${checkPermissionType}.post)`, short: 'invalidPermission' });
@@ -166,7 +166,7 @@ module.exports = {
                                 return false;
                             }
                         }
-                    } else if (type === 'postMessage') {
+                    } else if (type === 'postMessage') { //todo: rename postMessage to postContent
                         if (checkTypes.includes('correctType')) {
                             const correctType = value.length > 10 && value.length <= 500;
 
@@ -312,11 +312,11 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
             let changed = false;
 
             for (const name of Object.keys(params.properties))
-                if (name === 'message') {
+                if (name === 'content') {
                     if (!require({ value: params.properties[name], type: 'postMessage' }, { community: params.community }, ['correctType']))
                         return;
 
-                    db.communities[params.community].posts[params.post].message = params.message;
+                    db.communities[params.community].posts[params.post].content = params.content;
                     changed = true;
                 }
 
@@ -335,7 +335,7 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
                 return;
             if (!require({ type: 'postId' }, { community: params.community }, ['hasCreatePermission']))
                 return;
-            if (!require({ name: 'message', type: 'postMessage' }, { community: params.community }, ['correctType']))
+            if (!require({ name: 'content', type: 'postMessage' }, { community: params.community }, ['correctType']))
                 return;
 
             if (!db.communities[params.community].posts) db.communities[params.community].posts = {};
@@ -348,8 +348,8 @@ function doApiCall({ db, set, path, params, method, require, end, statusCode, us
             posts[id] = {
                 votes: {},
                 id,
-                message: params.message,
-                user: userId,
+                content: params.content,
+                owner: userId,
                 visibility: 'pending',
                 visibilityAuthor: 'automatic',
                 perspective: null

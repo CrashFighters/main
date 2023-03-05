@@ -8,7 +8,7 @@ const actOnScore = require('./functions/actOnScore.js');
 const fs = require('fs');
 const path = require('path');
 
-const wait = ms => new Promise(res => setTimeout(res, ms));
+const wait = (ms) => new Promise((res) => setTimeout(res, ms));
 
 if (!fs.existsSync(path.resolve(__dirname, '../data/')))
     fs.mkdirSync(path.resolve(__dirname, '../data/'));
@@ -41,7 +41,7 @@ async function execute() {
 
     if (dbPost) {
         debugLog('Running perspective...')
-        const result = await perspective(dbPost.message);
+        const result = await perspective(dbPost.content);
 
         debugLog('Saving to database...')
         dbPost.perspective = result;

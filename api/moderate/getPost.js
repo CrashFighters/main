@@ -22,7 +22,7 @@ module.exports = {
                 id: moderationPostId,
                 visibility: post.visibility,
                 visibilityAuthor: post.visibilityAuthor,
-                message: post.message,
+                content: post.content,
                 perspective: post.perspective
             }));
 

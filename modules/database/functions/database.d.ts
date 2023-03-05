@@ -21,8 +21,8 @@ type post = {
         [userId: string]: vote;
     };
     id: string;
-    user: string; //todo: rename to owner
-    message: string; //todo: rename to content
+    owner: string;
+    content: string;
     visibility: 'pending' | 'verified' | 'flagged' | 'hidden';
     visibilityAuthor: 'automatic' | 'manual';
     perspective: perspective;
