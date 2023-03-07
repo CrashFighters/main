@@ -71,16 +71,16 @@ async function betterConfirm(text) {
     if ('Swal' in window)
         return (await window.Swal.fire({
             title: getMessage('RedirectQuestionTitle'),
-            text: text,
+            text,
             showCancelButton: true,
             confirmButtonColor: '#000',
             cancelButtonColor: '#d33',
-            cancelButtonText: 'Nope!',
-            confirmButtonText: 'Yep!'
+            cancelButtonText: getMessage('No'),
+            confirmButtonText: getMessage('RedirectDialogueConfirm')
         })).isConfirmed
     else
         return confirm(`${getMessage('RedirectQuestionTitle')}\n${text}`);
-}
+};
 
 window.betterConfirm = betterConfirm; //todo: remove
 
