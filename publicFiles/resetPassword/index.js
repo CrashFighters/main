@@ -27,7 +27,7 @@ if (urlParams.get('redirect'))
 
 window.sendResetEmail = async () => {
     if (emailInput.value === '') {
-        return Toastify({
+        return window.Toastify({
             text: 'Please enter your email address.',
             duration: 3000,
             gravity: 'top',
@@ -40,7 +40,7 @@ window.sendResetEmail = async () => {
         await sendPasswordResetEmail(emailInput.value);
         logEvent('password_rest_email_sent');
         emailInput.value = '';
-        Toastify({
+        window.Toastify({
             text: 'Password reset email sent! Please check your inbox.',
             duration: 3000,
             gravity: 'top',
@@ -52,7 +52,7 @@ window.sendResetEmail = async () => {
             }
         }).showToast();
     } catch (error) {
-        Toastify({
+        window.Toastify({
             text: 'An error occurred while sending the password reset email.',
             duration: 3000,
             gravity: 'top',
@@ -85,7 +85,7 @@ document
                 .getElementById('sendResetEmailButton')
                 .classList.contains('disabled') === true
         )
-            return Toastify({
+            return window.Toastify({
                 text: 'Please enter a valid email address.',
                 duration: 3000,
                 gravity: 'top',
