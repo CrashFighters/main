@@ -76,7 +76,7 @@ export async function getScore(action = 'SDK_execute') {
     return score;
 }
 
-function renderV2Button(element) { //todo: change to async and change references
+async function renderV2Button(element) {
     startTrace('recaptcha_renderV2Button');
     const callbacks = [];
     const button = {
@@ -123,7 +123,7 @@ export async function createButton(element) {
         throw new Error('No element provided to createButton')
 
     await waitReady();
-    const button = renderV2Button(element);
+    const button = await renderV2Button(element);
 
     return button;
 }
