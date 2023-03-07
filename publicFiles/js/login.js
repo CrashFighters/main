@@ -37,10 +37,10 @@ export async function loginWithGithub(initiator) {
 
         if (isMobile()) {
             await signInWithRedirect(auth, githubProvider);
-            logEvent('login', { method: 'github', initiator, type: 'redirect' });
+            await logEvent('login', { method: 'github', initiator, type: 'redirect' });
         } else {
             await signInWithPopup(auth, githubProvider);
-            logEvent('login', { method: 'github', initiator, type: 'popup' });
+            await logEvent('login', { method: 'github', initiator, type: 'popup' });
         }
     } catch (e) {
         throw e;
@@ -53,7 +53,7 @@ export async function loginWithEmail(email, password, initiator) {
             throw new Error('No initiator provided in loginWithEmail')
 
         await signInWithEmailAndPassword(auth, email, password);
-        logEvent('login', { method: 'email', initiator, type: 'embedded' });
+        await logEvent('login', { method: 'email', initiator, type: 'embedded' });
     } catch (e) {
         throw e;
     };
@@ -66,7 +66,7 @@ export async function createEmailAccount(email, password, initiator) {
 
         const { user } = await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(user);
-        logEvent('sign_up', { method: 'email', initiator, type: 'embedded', with2fa: false });
+        await logEvent('sign_up', { method: 'email', initiator, type: 'embedded', with2fa: false });
     } catch (e) {
         throw e;
     };
@@ -95,9 +95,9 @@ let recaptchaVerifier;
 export async function prepare2fa() {
     const { getRecaptchaVerifier } = (await import('/js/2fa.js'))._;
 
-    logEvent('login_2fa_recaptcha_show');
+    await logEvent('login_2fa_recaptcha_show');
     const result = await getRecaptchaVerifier();
-    logEvent('login_2fa_recaptcha_solve');
+    await logEvent('login_2fa_recaptcha_solve');
 
     recaptchaVerifier = result[0];
     const recaptchaObject = result[1];
@@ -106,12 +106,12 @@ export async function prepare2fa() {
 };
 
 let resolver;
-export function get2faMethods(error) {
+export function get2faMethods(error) { // todo: make async and change references
     if (!recaptchaVerifier)
         throw new Error('prepare2fa not called');
 
     resolver = getMultiFactorResolver(auth, error);
-    logEvent('login_2fa_methods_show', { amount: resolver.hints.length });
+    await logEvent('login_2fa_methods_show', { amount: resolver.hints.length });
 
     return resolver.hints.map((hint) => ({
         displayName: hint.displayName,
@@ -139,7 +139,7 @@ export async function send2fa(selectedIndex) {
 
     const phoneAuthProvider = new PhoneAuthProvider(auth);
     verificationId = await phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
-    logEvent('login_2fa_code_send', { method: 'phone' });
+    await logEvent('login_2fa_code_send', { method: 'phone' });
     recaptchaVerifier = null;
 
     return {
@@ -160,5 +160,5 @@ export async function loginWith2fa(verificationCode) {
     verificationId = null;
     resolver = null;
 
-    logEvent('login', { method: 'email', initiator: 'button', type: 'embedded', with2fa: true });
+    await logEvent('login', { method: 'email', initiator: 'button', type: 'embedded', with2fa: true });
 };

@@ -28,7 +28,7 @@ import { logEvent } from '/js/analytics.js';
 
 window.googleButtonPopupCallback = async ({ credential }) => {
     await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
-    logEvent('login', { method: 'google', initiator: 'button', type: 'popup' });
+    await logEvent('login', { method: 'google', initiator: 'button', type: 'popup' });
 };
 
 function getRedirectLocation() {

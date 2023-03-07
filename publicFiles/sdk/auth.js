@@ -95,7 +95,7 @@ async function signInWithGoogleSignInIdToken(googleSignInIdToken) {
     const credential = await response.text();
 
     await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
-    logEvent('login', { method: 'google', initiator: 'button', type: 'redirect' });
+    await logEvent('login', { method: 'google', initiator: 'button', type: 'redirect' });
 }
 
 const onStateChangeCallbacks = [];
@@ -118,7 +118,7 @@ export function onStateChange(callback) {
 export async function logout() {
     try {
         await signOut(auth);
-        logEvent('logout');
+        await logEvent('logout');
     } catch (e) {
         throw e;
     }

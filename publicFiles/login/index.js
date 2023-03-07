@@ -206,7 +206,7 @@ const loginFields = [
     '2fa-recaptcha'
 ];
 async function handleLoginError({ errorCode, field, error }) {
-    logEvent('login_disruption', { errorCode, field, hasError: Boolean(error) });
+    await logEvent('login_disruption', { errorCode, field, hasError: Boolean(error) });
 
     const message =
         (await getErrorCodeMessages())[errorCode] ??
@@ -431,7 +431,7 @@ window.doLogin = async (recaptchaScore) => {
 
 const signupFields = ['name', 'email', 'password', 'recaptcha'];
 async function handleSignupError({ errorCode, field, error }) {
-    logEvent('signup_disruption', { errorCode, field, hasError: Boolean(error) });
+    await logEvent('signup_disruption', { errorCode, field, hasError: Boolean(error) });
 
     const message =
         (await getErrorCodeMessages())[errorCode] ??

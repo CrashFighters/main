@@ -71,12 +71,12 @@ export async function getScore(action = 'SDK_execute') {
     const score = await getScoreFromV3Token(token);
 
     stopTrace('recaptcha_getScore');
-    logEvent('recaptcha_getScore', { action, score });
+    await logEvent('recaptcha_getScore', { action, score });
 
     return score;
 }
 
-function renderV2Button(element) {
+function renderV2Button(element) { //todo: change to async and change references
     startTrace('recaptcha_renderV2Button');
     const callbacks = [];
     const button = {
@@ -97,22 +97,22 @@ function renderV2Button(element) {
         callback: async (token) => {
             if (await checkSuccessFromV2Token(token)) {
                 setState('success')
-                logEvent('recaptcha_v2Button_newState_success');
+                await logEvent('recaptcha_v2Button_newState_success');
             } else {
                 setState('error')
-                logEvent('recaptcha_v2Button_newState_error');
+                await logEvent('recaptcha_v2Button_newState_error');
             }
         },
-        'error-callback': () => {
+        'error-callback': async () => {
             setState('error')
-            logEvent('recaptcha_v2Button_newState_error');
+            await logEvent('recaptcha_v2Button_newState_error');
         },
-        'expired-callback': () => {
+        'expired-callback': async () => {
             setState('expired')
-            logEvent('recaptcha_v2Button_newState_expired');
+            await logEvent('recaptcha_v2Button_newState_expired');
         }
     });
-    logEvent('recaptcha_v2Button_render');
+    await logEvent('recaptcha_v2Button_render');
 
     stopTrace('recaptcha_renderV2Button');
     return button;
@@ -143,7 +143,7 @@ function googleCaptchaV3Callback(id) {
 
         const score = await getScoreFromV3Token(token);
 
-        logEvent('recaptcha_v3Button_click', { score });
+        await logEvent('recaptcha_v3Button_click', { score });
 
         window[element.dataset['recaptcha_callback']]?.(score);
 

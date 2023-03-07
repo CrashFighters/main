@@ -38,7 +38,7 @@ window.sendResetEmail = async () => {
 
     try {
         await sendPasswordResetEmail(emailInput.value);
-        logEvent('password_rest_email_sent');
+        await logEvent('password_rest_email_sent');
         emailInput.value = '';
         window.Toastify({
             text: 'Password reset email sent! Please check your inbox.',
