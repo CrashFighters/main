@@ -17,8 +17,10 @@ import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
 import '/sdk/firebase.js';
 import { startTrace, stopTrace } from '/js/performance.js';
 
-const slowMessageCache = {};
 let messages;
+let effectiveLanguage;
+
+const slowMessageCache = {};
 let getConfig;
 
 startTrace('language_full');
@@ -61,6 +63,11 @@ async function execute(isFast = true, language) {
 }
 
 async function getMessagesSlow(language) {
+    if (language)
+        effectiveLanguage = language;
+    else
+        effectiveLanguage = messages.info.code;
+
     if (slowMessageCache[language])
         return slowMessageCache[language];
 
@@ -107,6 +114,7 @@ async function getMessagesFast() {
         mode: 'no-cors' //to allow to use the preload
     });
     newMessages = await newMessages.json();
+    effectiveLanguage = newMessages.info.code;
 
     stopTrace('language_getMessages_fast');
     return newMessages;
