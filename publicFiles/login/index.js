@@ -76,7 +76,8 @@ async function betterConfirm(text) {
             confirmButtonColor: '#000',
             cancelButtonColor: '#d33',
             cancelButtonText: getMessage('No'),
-            confirmButtonText: getMessage('RedirectDialogueConfirm')
+            confirmButtonText: getMessage('RedirectDialogueConfirm'),
+            reverseButtons: true
         })).isConfirmed
     else
         return confirm(`${getMessage('RedirectQuestionTitle')}\n${text}`);
