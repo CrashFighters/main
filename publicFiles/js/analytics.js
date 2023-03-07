@@ -3,6 +3,7 @@ import {
     logEvent as analyticsLogEvent
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-analytics.js';
 
+let getEffectiveLanguage;
 let analytics;
 
 export function init(app) {
@@ -10,6 +11,12 @@ export function init(app) {
     return analytics;
 }
 
-export function logEvent(name, params) {
-    analyticsLogEvent(analytics, name, params);
+export async function logEvent(name, params) {
+    if (!getEffectiveLanguage)
+        ({ getEffectiveLanguage } = await import('/sdk/language.js'));
+
+    analyticsLogEvent(analytics, name, {
+        effectiveLanguage: getEffectiveLanguage(), // todo: change to user property
+        ...params
+    });
 }

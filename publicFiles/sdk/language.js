@@ -155,6 +155,10 @@ function combineMessages(oldMessages, newMessages) {
     return messages;
 }
 
+export function getEffectiveLanguage() {
+    return effectiveLanguage;
+}
+
 export const _ = {
     execute
 }
