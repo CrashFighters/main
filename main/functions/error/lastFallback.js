@@ -53,10 +53,10 @@ module.exports = {
             amountError = 1;
         }
 
-        let stack = err.stack;
+        let stack = err?.stack;
         if (!stack) stack = new Error('No error stack given').stack.split('\n').splice(1).join('\n');
 
-        const data = `${`${err}`.split('\n')[0]}\n\n\nStack${err.stack ? '' : ' (No stack given)'}:\n${stack}`
+        const data = `${`${err}`.split('\n')[0]}\n\n\nStack${err?.stack ? '' : ' (No stack given)'}:\n${stack}`
 
         fs.writeFileSync(`${settings.generic.path.files.errors}RAW1-${amountError}-${Math.floor(Math.random() * 1000)}.txt`, data);
 
@@ -127,7 +127,7 @@ module.exports = {
             try {
                 require('../../server/main').execute(request, response);
             } catch (err) {
-                err.stack; // generate stack
+                err?.stack; // generate stack
                 const t = require(__filename);
                 t.execute(err, response);
             }
