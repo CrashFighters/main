@@ -33,27 +33,6 @@ let stateChangeCalled = false;
 
 export const auth = getAuth(app);
 
-onAuthStateChanged(auth, async () => {
-    if ((!stateChangeCalled) && preventFirstAuthStateChange) {
-        preventFirstAuthStateChange = false;
-        return;
-    }
-
-    const promises = [];
-    for (const callback of onStateChangeCallbacks)
-        promises.push(callback(window.auth.user));
-
-    await Promise.all(promises);
-
-    if (stateChangeCalled)
-        if (window.privateFile === true)
-            window.location.reload();
-
-    stateChangeCalled = true;
-});
-
-checkGoogleSignInRedirect();
-
 const getAuthHeaders = async () => ({ //todo: this isn't used in /common/getHeaders
     auth_token: auth.currentUser ? await getIdToken(auth.currentUser) : undefined
 });
@@ -104,6 +83,27 @@ export const _ = {
     onStateChangeCallbacks,
     getAuthHeaders
 };
+
+onAuthStateChanged(auth, async () => {
+    if ((!stateChangeCalled) && preventFirstAuthStateChange) {
+        preventFirstAuthStateChange = false;
+        return;
+    }
+
+    const promises = [];
+    for (const callback of onStateChangeCallbacks)
+        promises.push(callback(window.auth.user));
+
+    await Promise.all(promises);
+
+    if (stateChangeCalled)
+        if (window.privateFile === true)
+            window.location.reload();
+
+    stateChangeCalled = true;
+});
+
+checkGoogleSignInRedirect();
 
 onStateChange(() => updateUserObject(auth.currentUser));
 onStateChange(updateCookies);
