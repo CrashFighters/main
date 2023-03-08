@@ -3,7 +3,7 @@
 --fetchPriority--: low
 
 --fileRequirements--
-/common/getHeaders
+/common/getHeaders.js
 /sdk/auth.js
 --endFileRequirements--
 
