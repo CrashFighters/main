@@ -6,7 +6,7 @@
 /common/apiKeys.js
 /common/doesDocumentIncludeScript.js
 /common/isMobile.js
-/sdk/firebase.js
+/sdk/auth.js
 /js/performance.js
 /js/analytics.js
 --endFileRequirements--
@@ -22,7 +22,7 @@ import { googleSignInKey } from '/common/apiKeys.js';
 import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 import { isMobile } from '/common/isMobile.js';
 
-const { auth } = (await import('/sdk/firebase.js'))._;
+import { auth } from '/sdk/auth.js';
 import { startTrace, stopTrace } from '/js/performance.js';
 import { logEvent } from '/js/analytics.js';
 

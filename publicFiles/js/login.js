@@ -1,7 +1,7 @@
 /*
 
 --fileRequirements--
-/sdk/firebase.js
+/sdk/auth.js
 /js/analytics.js
 --endFileRequirements--
 
@@ -20,7 +20,7 @@ import {
     PhoneMultiFactorGenerator
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
-const { auth } = (await import('/sdk/firebase.js'))._;
+import { auth } from '/sdk/auth.js';
 import { logEvent } from '/js/analytics.js';
 
 let isMobile;

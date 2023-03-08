@@ -5,7 +5,6 @@
 --fileRequirements--
 /common/apiKeys.js
 /common/doesDocumentIncludeScript.js
-/sdk/firebase.js
 /js/performance.js
 /js/analytics.js
 --endFileRequirements--
@@ -18,7 +17,6 @@ import {
 } from '/common/apiKeys.js';
 import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 
-import '/sdk/firebase.js';
 import { startTrace, stopTrace, cancelTrace } from '/js/performance.js';
 import { logEvent } from '/js/analytics.js';
 

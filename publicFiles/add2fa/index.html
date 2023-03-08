@@ -8,7 +8,7 @@
   <title>Add 2fa method</title>
   <meta name="description" content="Add a 2 factor authentication method" />
 
-  <script type="module" src="/sdk/firebase.js"></script>
+  <script type="module" src="/sdk/auth.js"></script>
   <script type="module" src="/sdk/templates.js"></script>
 
   <script type="module" src="/add2fa/index.js"></script>
@@ -18,7 +18,7 @@
 <body>
   <div data-template="custom" data-template_insert="style" data-template_fallback="display: block;"
     data-template_var="addTwofaStyle">
-    <button onclick="window.auth.logout().then(() => window.auth.login())">
+    <button onclick="window.auth.login()">
       Re login
     </button>
     <br />

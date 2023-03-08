@@ -5,7 +5,6 @@
 --fileRequirements--
 /common/apiKeys.js
 /common/doesDocumentIncludeScript.js
-/sdk/firebase.js
 /js/performance.js
 /sdk/auth.js
 /js/analytics.js
@@ -21,9 +20,8 @@ import {
 import { googleSignInKey } from '/common/apiKeys.js';
 import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';
 
-const { auth } = (await import('/sdk/firebase.js'))._;
 import { startTrace, stopTrace } from '/js/performance.js';
-import { onStateChange } from '/sdk/auth.js';
+import { auth, onStateChange } from '/sdk/auth.js';
 import { logEvent } from '/js/analytics.js';
 
 window.googleZeroTapCallback = async ({ credential }) => {

@@ -2,6 +2,7 @@
 
 --fileRequirements--
 /common/cookie.js
+/common/getHeaders.js
 /js/analytics.js
 /js/performance.js
 /js/firebase.js
@@ -21,6 +22,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
 import { setCookie, getCookie, deleteCookie } from '/common/cookie.js';
+import { getHeaders } from '/common/getHeaders.js';
 
 import { logEvent } from '/js/analytics.js';
 import { startTrace, stopTrace } from '/js/performance.js';
@@ -139,7 +141,6 @@ export async function signup() {
 };
 
 async function updateCookies() {
-    const { getHeaders } = await import('/sdk/firebase.js');
     setCookie('authHeaders', JSON.stringify(await getHeaders())); //todo: rename authHeaders cookie to something else, because appCheck is also included. Maybe requestHeaders?
 }
 

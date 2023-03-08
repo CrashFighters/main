@@ -3,7 +3,7 @@
 --fetchPriority--: low
 
 --fileRequirements--
-/sdk/firebase.js
+/js/firebase.js
 /js/performance.js
 --endFileRequirements--
 
@@ -17,10 +17,10 @@ import {
 
 const isNumber = (n) => !isNaN(parseFloat(n)) && !isNaN(n - 0);
 
-const { app } = (await import('/sdk/firebase.js'))._;
+import { app } from '/js/firebase.js';
 import { startTrace, stopTrace } from '/js/performance.js';
 
-const remoteConfig = getRemoteConfig(app);
+export const remoteConfig = getRemoteConfig(app);
 remoteConfig.settings.minimumFetchIntervalMillis = 5 * 60 * 1000; //todo: add to settings
 
 const configCache = {};
