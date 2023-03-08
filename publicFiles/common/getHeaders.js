@@ -5,6 +5,8 @@
 --fileRequirements--
 /sdk/auth.js
 /js/appCheck.js
+--endFileRequirements--
+
 */
 
 import { _ } from '/js/appCheck.js';
