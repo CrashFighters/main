@@ -2,6 +2,7 @@
 
 --fileRequirements--
 /common/apiKeys.js
+/js/firebase.js
 --endFileRequirements--
 
 */
@@ -12,21 +13,15 @@ import {
     getToken
 } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app-check.js';
 
-import {
-    publicRecaptchaV3Key
-} from '/common/apiKeys.js';
+import { publicRecaptchaV3Key } from '/common/apiKeys.js';
+import { app } from '/js/firebase.js';
 
-let appCheck;
+export const appCheck = await initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider(publicRecaptchaV3Key),
+    isTokenAutoRefreshEnabled: true
+});
 
-export async function init(app) {
-    appCheck = await initializeAppCheck(app, {
-        provider: new ReCaptchaV3Provider(publicRecaptchaV3Key),
-        isTokenAutoRefreshEnabled: true
-    });
-    return appCheck;
-}
-
-export const _ = {
+export const _ = { //todo: remove _ object
     getAppCheckHeaders: async () => ({
         'X-Firebase-AppCheck': (await getToken(appCheck, false)).token
     })

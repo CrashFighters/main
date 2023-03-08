@@ -4,6 +4,7 @@
 /common/cookie.js
 /js/analytics.js
 /js/performance.js
+/js/firebase.js
 --endFileRequirements--
 
 */
@@ -23,38 +24,35 @@ import { setCookie, getCookie, deleteCookie } from '/common/cookie.js';
 
 import { logEvent } from '/js/analytics.js';
 import { startTrace, stopTrace } from '/js/performance.js';
+import { app } from '/js/firebase.js';
 
-let auth;
 let preventFirstAuthStateChange = false;
 let stateChangeCalled = false;
-export function init(app) {
-    auth = getAuth(app);
 
-    onAuthStateChanged(auth, async () => {
-        if ((!stateChangeCalled) && preventFirstAuthStateChange) {
-            preventFirstAuthStateChange = false;
-            return;
-        }
+export const auth = getAuth(app);
 
-        const promises = [];
-        for (const callback of onStateChangeCallbacks)
-            promises.push(callback(window.auth.user));
+onAuthStateChanged(auth, async () => {
+    if ((!stateChangeCalled) && preventFirstAuthStateChange) {
+        preventFirstAuthStateChange = false;
+        return;
+    }
 
-        await Promise.all(promises);
+    const promises = [];
+    for (const callback of onStateChangeCallbacks)
+        promises.push(callback(window.auth.user));
 
-        if (stateChangeCalled)
-            if (window.privateFile === true)
-                window.location.reload();
+    await Promise.all(promises);
 
-        stateChangeCalled = true;
-    });
+    if (stateChangeCalled)
+        if (window.privateFile === true)
+            window.location.reload();
 
-    checkGoogleSignInRedirect();
+    stateChangeCalled = true;
+});
 
-    return auth;
-};
+checkGoogleSignInRedirect();
 
-const getAuthHeaders = async () => ({
+const getAuthHeaders = async () => ({ //todo: this isn't used in /common/getHeaders
     auth_token: auth.currentUser ? await getIdToken(auth.currentUser) : undefined
 });
 
