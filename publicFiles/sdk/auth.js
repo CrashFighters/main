@@ -10,8 +10,6 @@
 
 */
 
-//todo: make getting account info faster. Maybe we can use a cache in localStorage until the real info is loaded or something?
-
 import {
     multiFactor,
     getAuth,
