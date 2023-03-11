@@ -17,20 +17,13 @@ import {
     deleteCookie
 } from '/common/cookie.js';
 
-import { auth, onStateChange } from '/sdk/auth.js';
+import { auth } from '/sdk/auth.js';
 
-let first = true;
-onStateChange(() => {
-    if (!first) return;
-
-    const language = getCookie('language');
-    if (language)
-        auth.languageCode = language;
-    else
-        useDeviceLanguage(auth);
-
-    first = false;
-});
+const language = getCookie('language');
+if (language)
+    auth.languageCode = language;
+else
+    useDeviceLanguage(auth);
 
 let doesDocumentIncludeScript;
 export async function setLanguage(language) {
