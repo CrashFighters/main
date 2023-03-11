@@ -22,7 +22,7 @@ module.exports = (html, isPrivate) => {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" fetchpriority="low" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" fetchpriority="low" rel="stylesheet"></noscript>
-    `); //todo: noscript doesn't work. It replaces the link element with the literal text "<link href..."
+    `);
 
     for (const url of cssDeferLoadUrls)
         html = html.replaceAll(`<link href="${url}" rel="stylesheet" />`, `
