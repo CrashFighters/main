@@ -33,6 +33,31 @@ import { createButton } from '/sdk/recaptcha.js';
 
 import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
 
+let preventRedirect = false;
+
+const urlSearchParams = new URLSearchParams(window.location.search);
+const signup = urlSearchParams.get('signup') === 'true';
+if (signup)
+    document.getElementById('container').classList.add('right-panel-active');
+if (urlSearchParams.get('redirect'))
+    document.getElementById('forgotPassword').href += `?redirect=${encodeURIComponent(urlSearchParams.get('redirect'))}`;
+if (urlSearchParams.get('loginError')) {
+    const loginError = urlSearchParams.get('loginError');
+
+    urlSearchParams.delete('loginError');
+    window.history.replaceState({}, document.title, `${window.location.pathname}${urlSearchParams.toString() === '' ? '' : '?'}${urlSearchParams.toString()}`);
+
+    try {
+        await handleLoginError(JSON.parse(decodeURIComponent(loginError)));
+    } catch {
+        await handleLoginError({ error: new Error('Unable to parse loginError') });
+    };
+}
+
+onStateChange(async (user) => {
+    if (user && (!preventRedirect)) await redirect();
+});
+
 const signUpButton = document.getElementById('signUp');
 const signInButton = document.getElementById('signIn');
 const container = document.getElementById('container');
@@ -83,47 +108,7 @@ async function betterConfirm(text) {
         return confirm(`${getMessage('RedirectQuestionTitle')}\n${text}`);
 };
 
-window.betterConfirm = betterConfirm; //todo: remove
-
-signUpButton.addEventListener('click', () => {
-    container.classList.add('right-panel-active');
-});
-
-signInButton.addEventListener('click', () => {
-    container.classList.remove('right-panel-active');
-});
-
-signUpButton_mobile.addEventListener('click', () => {
-    container.classList.add('right-panel-active');
-});
-
-signInButton_mobile.addEventListener('click', () => {
-    container.classList.remove('right-panel-active');
-});
-
-const minimalScores = await fetch('/api/minimalScores', {
-    method: 'GET',
-    credentials: 'include',
-    mode: 'no-cors' //to allow to use the preload
-}).then((a) => a.json());
-
-const githubLoginButtons = [...deepQuerySelectorAll('.githubLoginButton')];
-for (const githubLoginButton of githubLoginButtons)
-    githubLoginButton.addEventListener('click', async () => {
-        try {
-            await loginWithGithub('button');
-        } catch (e) {
-            if (!['auth/popup-closed-by-user', 'auth/cancelled-popup-request', 'auth/user-cancelled'].includes(e.code)) {
-                const firebaseErrorCode = firebaseErrorCodes[e.code];
-                return handleSignupError({
-                    errorCode: firebaseErrorCode?.errorCode,
-                    field: firebaseErrorCode?.field,
-                    error: e
-                });
-            };
-        }
-    });
-
+//todo: move to separate file
 const firebaseErrorCodes = {
     'auth/user-not-found': {
         errorCode: 'emailDoesNotExist',
@@ -179,6 +164,45 @@ const firebaseErrorCodes = {
         errorCode: 'operationNotAllowed'
     }
 };
+
+signUpButton.addEventListener('click', () => {
+    container.classList.add('right-panel-active');
+});
+
+signInButton.addEventListener('click', () => {
+    container.classList.remove('right-panel-active');
+});
+
+signUpButton_mobile.addEventListener('click', () => {
+    container.classList.add('right-panel-active');
+});
+
+signInButton_mobile.addEventListener('click', () => {
+    container.classList.remove('right-panel-active');
+});
+
+const minimalScores = await fetch('/api/minimalScores', {
+    method: 'GET',
+    credentials: 'include',
+    mode: 'no-cors' //to allow to use the preload
+}).then((a) => a.json());
+
+const githubLoginButtons = [...deepQuerySelectorAll('.githubLoginButton')];
+for (const githubLoginButton of githubLoginButtons)
+    githubLoginButton.addEventListener('click', async () => {
+        try {
+            await loginWithGithub('button');
+        } catch (e) {
+            if (!['auth/popup-closed-by-user', 'auth/cancelled-popup-request', 'auth/user-cancelled'].includes(e.code)) {
+                const firebaseErrorCode = firebaseErrorCodes[e.code];
+                return handleSignupError({
+                    errorCode: firebaseErrorCode?.errorCode,
+                    field: firebaseErrorCode?.field,
+                    error: e
+                });
+            };
+        }
+    });
 
 const recaptchaStateNames = {
     ready: 'recaptchaNotSolved',
@@ -529,28 +553,3 @@ async function redirect() {
         window.open('/', '_self')
 
 }
-
-let preventRedirect = false;
-
-const urlSearchParams = new URLSearchParams(window.location.search);
-const signup = urlSearchParams.get('signup') === 'true';
-if (signup)
-    document.getElementById('container').classList.add('right-panel-active');
-if (urlSearchParams.get('redirect'))
-    document.getElementById('forgotPassword').href += `?redirect=${encodeURIComponent(urlSearchParams.get('redirect'))}`;
-if (urlSearchParams.get('loginError')) {
-    const loginError = urlSearchParams.get('loginError');
-
-    urlSearchParams.delete('loginError');
-    window.history.replaceState({}, document.title, `${window.location.pathname}${urlSearchParams.toString() === '' ? '' : '?'}${urlSearchParams.toString()}`);
-
-    try {
-        await handleLoginError(JSON.parse(decodeURIComponent(loginError)));
-    } catch {
-        await handleLoginError({ error: new Error('Unable to parse loginError') });
-    };
-}
-
-onStateChange(async (user) => {
-    if (user && (!preventRedirect)) await redirect();
-});
