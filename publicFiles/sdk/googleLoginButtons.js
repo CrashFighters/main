@@ -57,6 +57,7 @@ startTrace('googleLoginButtons_transformButtons');
 const smallButtons = [...document.getElementsByClassName('smallGoogleLoginButton')];
 
 for (const smallButton of smallButtons) {
+    //todo: add locale property (make sure it's in the correct format)
     const newSmallButton = document.createElement('div');
     newSmallButton.className = 'g_id_signin';
     newSmallButton.dataset.type = 'icon';
