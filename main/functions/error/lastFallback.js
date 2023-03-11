@@ -129,7 +129,7 @@ module.exports = {
             } catch (err) {
                 err?.stack; // generate stack
                 const t = require(__filename);
-                t.execute(err, response);
+                t.execute({ error: err, response, request });
             }
         }
     }
