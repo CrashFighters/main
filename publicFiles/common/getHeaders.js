@@ -1,7 +1,5 @@
 /*
 
-//todo-imp: change references to new getHeaders function
-
 --fileRequirements--
 /sdk/auth.js
 /js/appCheck.js
