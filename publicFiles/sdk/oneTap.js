@@ -38,8 +38,8 @@ googleOnLoadDiv.dataset.close_on_tap_outside = 'false';
 googleOnLoadDiv.dataset.itp_support = 'true';
 
 let loaded = false;
-onStateChange((user) => {
-    if (!loaded) {
+onStateChange((user, isHint) => {
+    if ((!loaded) && (!isHint)) {
         if (user) {
             googleOnLoadDiv.dataset.auto_prompt = 'false';
             addGoogleScript();

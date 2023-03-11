@@ -86,35 +86,51 @@ export const _ = {
     getAuthHeaders
 };
 
-onAuthStateChanged(auth, async () => {
+const emitStateChangeCallbacks = async (userOverride) => {
     if ((!stateChangeCalled) && preventFirstAuthStateChange) {
         preventFirstAuthStateChange = false;
         return;
     }
 
+    if (!userOverride)
+        await updateUserObject(auth.currentUser);
+
+    const user = userOverride ?? window.auth.user;
+
     const promises = [];
     for (const callback of onStateChangeCallbacks)
-        promises.push(callback(window.auth.user));
+        promises.push(callback(user, Boolean(userOverride)));
 
     await Promise.all(promises);
+
+    await updateCookies(user, Boolean(userOverride));
+    await updateUserCache(user, Boolean(userOverride));
 
     if (stateChangeCalled)
         if (window.privateFile === true)
             window.location.reload();
 
-    stateChangeCalled = true;
-});
+    if (!userOverride)
+        stateChangeCalled = true;
+};
 
-checkGoogleSignInRedirect();
+const checkUserCache = async () => {
+    const user = JSON.parse(localStorage.getItem('user'));
 
-onStateChange(() => updateUserObject(auth.currentUser));
-onStateChange(updateCookies);
+    if (user)
+        await emitStateChangeCallbacks(user);
+};
+
+onAuthStateChanged(auth, () => emitStateChangeCallbacks());
+
+await checkGoogleSignInRedirect();
+await checkUserCache();
 
 export function onStateChange(callback) {
     onStateChangeCallbacks.push(callback);
 
     if (stateChangeCalled)
-        callback(window.auth.user);
+        callback(window.auth.user, false);
 };
 
 export async function logout() {
@@ -144,6 +160,13 @@ export async function signup() {
 
 async function updateCookies() {
     setCookie('authHeaders', JSON.stringify(await getHeaders())); //todo: rename authHeaders cookie to something else, because appCheck is also included. Maybe requestHeaders?
+}
+
+function updateUserCache(user) {
+    if (user)
+        localStorage.setItem('user', JSON.stringify(user));
+    else
+        localStorage.removeItem('user');
 }
 
 async function updateUserObject(newUser) {
