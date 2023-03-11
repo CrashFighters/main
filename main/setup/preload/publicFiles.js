@@ -8,6 +8,14 @@ const getExtraHtmlHeaders = require('../../functions/extraHtmlHeaders.js');
 
 const publicFiles = {};
 
+//todo: move to separate file
+const textFiles = [
+    'html',
+    'css',
+    'js',
+    'json'
+];
+
 addPublicFiles('/', './publicFiles/')
 
 // console.log(require('util').inspect(publicFiles, { colors: true, depth: 2 }))
@@ -50,6 +58,20 @@ function getPublicFile(path) {
             },
             data: finalData
         }
+    } else if (textFiles.some((ext) => contentType.endsWith(ext))) {
+        const data = fs.readFileSync(path).toString();
+
+        const extraHeaders = getExtraHeaders(false);
+
+        return {
+            statusCode: 200,
+            headers: {
+                ...extraHeaders,
+                'Content-Type': contentType + '; charset=UTF-8',
+                'Content-Length': Buffer.byteLength(data)
+            },
+            data
+        };
     } else {
         const size = fs.statSync(path).size;
 

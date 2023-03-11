@@ -8,6 +8,14 @@ const getExtraHeaders = require('../functions/extraHeaders.js');
 
 const publicFiles = require('../setup/preload/publicFiles.js');
 
+//todo: move to separate file
+const textFiles = [
+    'html',
+    'css',
+    'js',
+    'json'
+];
+
 module.exports = {
     async execute(request, response, { middlewareData: { hasPermission } }) {
 
@@ -65,6 +73,20 @@ function respond({ path, response, request, privateFile }) {
         });
 
         response.end(finalData);
+    } else if (textFiles.some((ext) => contentType.endsWith(ext))) {
+        const data = fs.readFileSync(path).toString();
+
+        const extraHeaders = getExtraHeaders(false);
+
+        return {
+            statusCode: 200,
+            headers: {
+                ...extraHeaders,
+                'Content-Type': contentType + '; charset=UTF-8',
+                'Content-Length': Buffer.byteLength(data)
+            },
+            data
+        };
     } else {
         const size = fs.statSync(path).size;
         const readStream = fs.createReadStream(path);
