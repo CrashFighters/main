@@ -58,7 +58,7 @@ function getPublicFile(path) {
             },
             data: finalData
         }
-    } else if (textFiles.some((ext) => contentType.endsWith(ext))) {
+    } else if (textFiles.some((ext) => path.endsWith(ext))) {
         const data = fs.readFileSync(path).toString();
 
         const extraHeaders = getExtraHeaders(false);
