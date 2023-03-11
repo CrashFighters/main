@@ -108,12 +108,12 @@ module.exports = {
         }
 
         const reloadingPath = settings.generic.path.files.reloadingFile.replace('{files}', settings.generic.path.files.files);
-        response.writeHead(500, 'Because of an extreme error, the server is reloading in 5 seconds');
+        response.writeHead(500, 'The server is restarting due to an error.');
         try {
             const data = Buffer.from(fs.readFileSync(reloadingPath).toString('utf-8').replace('|reloadText|', messages ? messages.error.clientServerReload : ''));
             response.end(data);
         } catch (err) {
-            response.end('Because of an extreme error, the server is reloading in 5 seconds')
+            response.end('The server is restarting due to an error.')
         }
     },
     async serverExecute(request, response) {
