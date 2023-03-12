@@ -31,6 +31,8 @@ window.googleButtonPopupCallback = async ({ credential }) => {
     await logEvent('login', { method: 'google', initiator: 'button', type: 'popup' });
 };
 
+const urlParams = new URLSearchParams(window.location.search);
+
 function getRedirectLocation() {
     if (urlParams.get('redirect'))
         if (new URL(urlParams.get('redirect')).origin !== window.location.origin)
@@ -86,8 +88,6 @@ for (const bigButton of bigButtons) {
 
 stopTrace('googleLoginButtons_transformButtons');
 startTrace('googleLoginButtons_addGoogleScript');
-
-const urlParams = new URLSearchParams(window.location.search);
 
 const googleOnLoadDiv = document.createElement('div');
 googleOnLoadDiv.id = 'g_id_onload';
