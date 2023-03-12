@@ -332,7 +332,7 @@ async function doLoginWith2fa(error) {
 
     const recaptchaObject = await prepare2fa();
 
-    const _2faMethods = await get2faMethods(error);
+    const _2faMethods = get2faMethods(error);
     let selectedIndex;
 
     passwordElement.style.display = 'none';
