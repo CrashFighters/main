@@ -26,7 +26,7 @@ import { logEvent } from '/js/analytics.js';
 
 window.googleOneTapCallback = async ({ credential }) => {
     await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
-    await logEvent('login', { method: 'google', initiator: 'oneTap', type: 'embedded' })
+    logEvent('login', { method: 'google', initiator: 'oneTap', type: 'embedded' })
 };
 
 const googleOnLoadDiv = document.createElement('div');

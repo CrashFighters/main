@@ -17,7 +17,7 @@ import { getEffectiveLanguage } from '/sdk/language.js';
 
 export const analytics = getAnalytics(app);
 
-export function logEvent(name, params) { //todo: change references to not use await
+export function logEvent(name, params) {
     analyticsLogEvent(analytics, name, {
         effectiveLanguage: getEffectiveLanguage(), // todo: change to user property
         ...params

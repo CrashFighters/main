@@ -97,13 +97,13 @@ export const add = async (phoneNumber, displayName) => {
 
     const phoneAuthProvider = new PhoneAuthProvider(auth);
     const verificationId = await phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
-    await logEvent('2fa_add_code_send')
+    logEvent('2fa_add_code_send')
 
     return [async (verificationCode) => {
         const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
         const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(credential);
         await multiFactor(auth.currentUser).enroll(multiFactorAssertion, displayName);
-        await logEvent('2fa_add')
+        logEvent('2fa_add')
     }, recaptchaButton];
 };
 
@@ -115,5 +115,5 @@ export const remove = async (index) => {
     const uid = multiFactorUser.enrolledFactors[index].uid;
 
     await multiFactorUser.unenroll(uid);
-    await logEvent('2fa_remove')
+    logEvent('2fa_remove')
 }

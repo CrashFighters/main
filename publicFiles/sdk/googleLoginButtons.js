@@ -28,7 +28,7 @@ import { logEvent } from '/js/analytics.js';
 
 window.googleButtonPopupCallback = async ({ credential }) => {
     await signInWithCredential(auth, GoogleAuthProvider.credential(credential));
-    await logEvent('login', { method: 'google', initiator: 'button', type: 'popup' });
+    logEvent('login', { method: 'google', initiator: 'button', type: 'popup' });
 };
 
 const urlParams = new URLSearchParams(window.location.search);
