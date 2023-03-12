@@ -74,7 +74,7 @@ export async function getScore(action = 'SDK_execute') {
     return score;
 }
 
-async function renderV2Button(element) {
+function renderV2Button(element) {
     startTrace('recaptcha_renderV2Button');
     const callbacks = [];
     const button = {
@@ -101,11 +101,11 @@ async function renderV2Button(element) {
                 logEvent('recaptcha_v2Button_newState_error');
             }
         },
-        'error-callback': async () => {
+        'error-callback': () => {
             setState('error')
             logEvent('recaptcha_v2Button_newState_error');
         },
-        'expired-callback': async () => {
+        'expired-callback': () => {
             setState('expired')
             logEvent('recaptcha_v2Button_newState_expired');
         }
@@ -121,7 +121,7 @@ export async function createButton(element) {
         throw new Error('No element provided to createButton')
 
     await waitReady();
-    const button = await renderV2Button(element);
+    const button = renderV2Button(element);
 
     return button;
 }
