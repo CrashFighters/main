@@ -3,6 +3,7 @@
 --fileRequirements--
 /common/cookie.js
 /sdk/auth.js
+/js/analytics.js
 --endFileRequirements--
 
 */
@@ -21,7 +22,7 @@ import { auth } from '/sdk/auth.js';
 
 const language = getCookie('language');
 if (language)
-    auth.languageCode = language;
+    setLanguage(language);
 else
     useDeviceLanguage(auth);
 
