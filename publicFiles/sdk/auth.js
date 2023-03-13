@@ -30,6 +30,7 @@ import { app } from '/js/firebase.js';
 
 let preventFirstAuthStateChange = false;
 let stateChangeCalled = false;
+window.auth = {};
 
 export const auth = getAuth(app);
 
@@ -223,5 +224,6 @@ window.auth = {
     login,
     signup,
     user: null,
-    _
+    _,
+    ...window.auth
 };
