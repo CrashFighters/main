@@ -33,7 +33,6 @@
         "no-dupe-else-if": "warn",
         "no-constant-condition": "warn",
         "no-unneeded-ternary": "warn",
-        "no-else-return": "warn",
         "no-return-assign": "warn",
         "operator-assignment": "warn",
         "require-await": "warn",
