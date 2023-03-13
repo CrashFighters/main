@@ -3,7 +3,6 @@
 --fetchPriority--: low
 
 --fileRequirements--
-/firebase/firebase-auth.js
 /common/apiKeys.js
 /common/doesDocumentIncludeScript.js
 /js/performance.js
@@ -16,7 +15,7 @@
 import {
     GoogleAuthProvider,
     signInWithCredential
-} from '/firebase/firebase-auth.js';
+} from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
 import { googleSignInKey } from '/common/apiKeys.js';
 import { doesDocumentIncludeScript } from '/common/doesDocumentIncludeScript.js';

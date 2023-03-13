@@ -1,7 +1,6 @@
 /*
 
 --fileRequirements--
-/firebase/firebase-auth.js
 /common/cookie.js
 /common/getHeaders.js
 /js/analytics.js
@@ -20,7 +19,7 @@ import {
     getIdToken,
     signInWithCredential,
     GoogleAuthProvider
-} from '/firebase/firebase-auth.js';
+} from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
 import { setCookie, getCookie, deleteCookie } from '/common/cookie.js';
 import { getHeaders } from '/common/getHeaders.js';

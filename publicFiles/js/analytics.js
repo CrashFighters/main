@@ -1,7 +1,6 @@
 /*
 
 --fileRequirements--
-/firebase/firebase-analytics.js
 /js/firebase.js
 /sdk/language.js
 --endFileRequirements--
@@ -11,7 +10,7 @@
 import {
     getAnalytics,
     logEvent as analyticsLogEvent
-} from '/firebase/firebase-analytics.js';
+} from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-analytics.js';
 
 import { app } from '/js/firebase.js';
 import { getEffectiveLanguage } from '/sdk/language.js';

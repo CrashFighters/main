@@ -3,7 +3,6 @@
 --fetchPriority--: low
 
 --fileRequirements--
-/firebase/firebase-auth.js
 /js/analytics.js
 /sdk/auth.js
 --endFileRequirements--
@@ -15,7 +14,7 @@ import {
     PhoneAuthProvider,
     RecaptchaVerifier,
     PhoneMultiFactorGenerator
-} from '/firebase/firebase-auth.js';
+} from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
 import { logEvent } from '/js/analytics.js';
 import { auth } from '/sdk/auth.js';

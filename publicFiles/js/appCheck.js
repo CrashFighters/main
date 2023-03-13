@@ -1,7 +1,6 @@
 /*
 
 --fileRequirements--
-/firebase/firebase-app-check.js
 /common/apiKeys.js
 /js/firebase.js
 --endFileRequirements--
@@ -12,7 +11,7 @@ import {
     initializeAppCheck,
     ReCaptchaV3Provider,
     getToken
-} from '/firebase/firebase-app-check.js';
+} from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app-check.js';
 
 import { publicRecaptchaV3Key } from '/common/apiKeys.js';
 import { app } from '/js/firebase.js';

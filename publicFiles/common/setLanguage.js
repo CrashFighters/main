@@ -1,7 +1,6 @@
 /*
 
 --fileRequirements--
-/firebase/firebase-auth.js
 /common/cookie.js
 /sdk/auth.js
 --endFileRequirements--
@@ -10,7 +9,7 @@
 
 import {
     useDeviceLanguage
-} from '/firebase/firebase-auth.js';
+} from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
 
 import {
     getCookie,

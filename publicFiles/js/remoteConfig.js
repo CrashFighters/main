@@ -3,7 +3,6 @@
 --fetchPriority--: low
 
 --fileRequirements--
-/firebase/firebase-remote-config.js
 /js/firebase.js
 /js/performance.js
 --endFileRequirements--
@@ -14,7 +13,7 @@ import {
     getRemoteConfig,
     fetchAndActivate,
     getAll
-} from '/firebase/firebase-remote-config.js';
+} from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-remote-config.js';
 
 const isNumber = (n) => !isNaN(parseFloat(n)) && !isNaN(n - 0);
 
