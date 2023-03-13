@@ -5,6 +5,7 @@
 --fileRequirements--
 /common/deepQuerySelectorAll.js
 /js/performance.js
+/js/analytics.js
 /api/messages
 --endFileRequirements--
 
@@ -14,9 +15,9 @@ const wait = (ms) => new Promise((res) => setTimeout(res, ms));
 
 import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
 import { startTrace, stopTrace } from '/js/performance.js';
+import { updateEffectiveLanguage } from '/js/analytics.js';
 
 let messages;
-let effectiveLanguage;
 
 const slowMessageCache = {};
 let getConfig;
@@ -57,15 +58,11 @@ async function execute(isFast = true, language) {
         const newMessages = await getMessagesSlow(language || messages?.info?.code);
         messages = combineMessages(messages, newMessages);
     }
+    updateEffectiveLanguage(messages.info.code);
     updateHtml();
 }
 
 async function getMessagesSlow(language) {
-    if (language)
-        effectiveLanguage = language;
-    else
-        effectiveLanguage = messages.info.code;
-
     if (slowMessageCache[language])
         return slowMessageCache[language];
 
@@ -112,7 +109,6 @@ async function getMessagesFast() {
         mode: 'no-cors' //to allow to use the preload
     });
     newMessages = await newMessages.json();
-    effectiveLanguage = newMessages.info.code;
 
     stopTrace('language_getMessages_fast');
     return newMessages;
@@ -151,10 +147,6 @@ function combineMessages(oldMessages, newMessages) {
             messages[key] = newValue;
 
     return messages;
-}
-
-export function getEffectiveLanguage() {
-    return effectiveLanguage;
 }
 
 export const _ = {
