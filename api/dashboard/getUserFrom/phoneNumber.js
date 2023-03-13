@@ -1,6 +1,16 @@
 const firebase = require('../../../modules/authentication/functions/getFirebase.js');
 
 module.exports = {
+    info: {
+        cache: {
+            enabled: true,
+            minutes: 60,
+            staleUseMinutes: 180,
+            errorUseMinutes: 90,
+            vary: ['Cookie', 'auth_token'],
+            private: true
+        }
+    },
     async execute({ params, statusCode, parseError, end, middlewareData: { hasPermission } }) {
         try {
             if (!params.phoneNumber) return statusCode(400, 'noPhoneNumberProvided', 'No phone number provided');

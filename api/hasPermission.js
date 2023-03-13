@@ -1,4 +1,14 @@
 module.exports = {
+    info: {
+        cache: {
+            enabled: true,
+            minutes: 60,
+            staleUseMinutes: 180,
+            errorUseMinutes: 90,
+            vary: ['Cookie', 'auth_token'],
+            private: true
+        }
+    },
     async execute({ end, middlewareData: { hasPermission }, params, statusCode, parseError }) {
         try {
             if (!params.permission) return statusCode(400, 'noPermissionProvided', 'No permission provided');
