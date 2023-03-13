@@ -29,15 +29,13 @@ export function logEvent(name, params) {
     analyticsLogEvent(analytics, name, params);
 }
 
-function updateUserRoles(userRoles) {
-    setUserProperties(analytics, { userRoles: userRoles.join(' ') });
-}
-
 (async () => { //to avoid import loops
 
     const { onStateChange } = await import('/sdk/auth.js');
 
-    onStateChange(async () => {
+    onStateChange(async (user) => {
+        setUserProperties(analytics, { user: user?.id ?? null });
+
         const response = await fetch('/api/getUserRoles', {
             headers: {
                 ...await getHeaders()
@@ -47,7 +45,9 @@ function updateUserRoles(userRoles) {
         if (!response.ok)
             throw new Error(`${response.status} ${response.statusText}`);
 
-        updateUserRoles(await response.json());
+        const userRoles = await response.json();
+
+        setUserProperties(analytics, { userRoles: userRoles.join(' ') });
     });
 
 })();
