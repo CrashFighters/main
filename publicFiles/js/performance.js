@@ -1,6 +1,7 @@
 /*
 
 --fileRequirements--
+/firebase/firebase-performance.js
 /js/firebase.js
 --endFileRequirements--
 
@@ -9,7 +10,7 @@
 import {
     getPerformance,
     trace
-} from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-performance.js';
+} from '/firebase/firebase-performance.js';
 
 import { app } from '/js/firebase.js';
 

@@ -1,6 +1,7 @@
 /*
 
 --fileRequirements--
+/firebase/firebase-auth.js
 /sdk/auth.js
 /js/analytics.js
 --endFileRequirements--
@@ -18,7 +19,7 @@ import {
     GithubAuthProvider,
     PhoneAuthProvider,
     PhoneMultiFactorGenerator
-} from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';
+} from '/firebase/firebase-auth.js';
 
 import { auth } from '/sdk/auth.js';
 import { logEvent } from '/js/analytics.js';

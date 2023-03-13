@@ -1,12 +1,13 @@
 /*
 
 --fileRequirements--
+/firebase/firebase-app.js
 /common/apiKeys.js
 --endFileRequirements--
 
 */
 
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js';
+import { initializeApp } from '/firebase/firebase-app.js';
 import { firebaseConfig } from '/common/apiKeys.js';
 
 window.performance.mark('firebase_init_start')
