@@ -67,7 +67,7 @@ async function betterAlert(text) {
         alert(text);
 };
 
-async function betterConfirm(text) {
+async function redirectConfirm(text) {
     if (!('Swal' in window))
         await wait(swalLoadTime);
 
@@ -515,21 +515,27 @@ window.doSignup = async (recaptchaScore) => {
 async function redirect() {
     const redirectLocation = urlSearchParams.get('redirect');
 
-    const doRedirect = redirectLocation !== null;
     if (
-        doRedirect &&
+        redirectLocation !== null &&
         new URL(redirectLocation).origin !== window.location.origin
     ) {
-        const result = await betterConfirm(redirectLocation);
+        const result = await redirectConfirm(redirectLocation);
         if (result)
-            window.open(redirectLocation, '_self');
+            redirectTo(redirectLocation);
         else
-            window.open('/', '_self');
+            redirectTo('/');
     } else if (redirectLocation)
-        window.open(redirectLocation, '_self')
+        redirectTo(redirectLocation);
     else
-        window.open('/', '_self')
+        redirectTo('/');
 
+}
+
+function redirectTo(url) {
+    if (document.referrer === url)
+        window.history.back();
+    else
+        window.location.replace(url);
 }
 
 const signup = urlSearchParams.get('signup') === 'true';
