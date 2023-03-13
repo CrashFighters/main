@@ -1,5 +1,7 @@
 /*
 
+//todo: rename to getRequestHeaders
+
 --fileRequirements--
 /sdk/auth.js
 /js/appCheck.js
