@@ -13,7 +13,10 @@ const textFiles = [
     'html',
     'css',
     'js',
-    'json'
+    'json',
+    'txt',
+    'md',
+    'svg'
 ];
 
 addPublicFiles('/', './publicFiles/')
