@@ -13,6 +13,15 @@
         "no-this-before-super": "error",
         "constructor-super": "error",
         "no-cond-assign": "error",
+        "no-use-before-define": [
+            "error",
+            {
+                "functions": false,
+                "classes": false,
+                "variables": true,
+                "allowNamedExports": false
+            }
+        ],
         "no-eval": "error",
         "indent": [
             "warn",
@@ -21,6 +30,10 @@
                 "SwitchCase": 1
             }
         ],
+        "no-dupe-else-if": "warn",
+        "no-constant-condition": "warn",
+        "no-unneeded-ternary": "warn",
+        "no-else-return": "warn",
         "no-return-assign": "warn",
         "operator-assignment": "warn",
         "require-await": "warn",
@@ -29,6 +42,7 @@
         "no-unreachable": "warn",
         "eqeqeq": "warn",
         "prefer-const": "warn",
+        "no-extra-boolean-cast": "warn",
         "arrow-parens": "warn",
         "comma-dangle": [
             "warn",
@@ -39,15 +53,6 @@
             "single",
             {
                 "avoidEscape": true
-            }
-        ],
-        "no-use-before-define": [
-            "error",
-            {
-                "functions": false,
-                "classes": false,
-                "variables": true,
-                "allowNamedExports": false
             }
         ]
     },
