@@ -34,29 +34,7 @@ import { createButton } from '/sdk/recaptcha.js';
 import { deepQuerySelectorAll } from '/common/deepQuerySelectorAll.js';
 
 let preventRedirect = false;
-
 const urlSearchParams = new URLSearchParams(window.location.search);
-const signup = urlSearchParams.get('signup') === 'true';
-if (signup)
-    document.getElementById('container').classList.add('right-panel-active');
-if (urlSearchParams.get('redirect'))
-    document.getElementById('forgotPassword').href += `?redirect=${encodeURIComponent(urlSearchParams.get('redirect'))}`;
-if (urlSearchParams.get('loginError')) {
-    const loginError = urlSearchParams.get('loginError');
-
-    urlSearchParams.delete('loginError');
-    window.history.replaceState({}, document.title, `${window.location.pathname}${urlSearchParams.toString() === '' ? '' : '?'}${urlSearchParams.toString()}`);
-
-    try {
-        await handleLoginError(JSON.parse(decodeURIComponent(loginError)));
-    } catch {
-        await handleLoginError({ error: new Error('Unable to parse loginError') });
-    };
-}
-
-onStateChange(async (user) => {
-    if (user && (!preventRedirect)) await redirect();
-});
 
 const signUpButton = document.getElementById('signUp');
 const signInButton = document.getElementById('signIn');
@@ -553,3 +531,25 @@ async function redirect() {
         window.open('/', '_self')
 
 }
+
+const signup = urlSearchParams.get('signup') === 'true';
+if (signup)
+    document.getElementById('container').classList.add('right-panel-active');
+if (urlSearchParams.get('redirect'))
+    document.getElementById('forgotPassword').href += `?redirect=${encodeURIComponent(urlSearchParams.get('redirect'))}`;
+if (urlSearchParams.get('loginError')) {
+    const loginError = urlSearchParams.get('loginError');
+
+    urlSearchParams.delete('loginError');
+    window.history.replaceState({}, document.title, `${window.location.pathname}${urlSearchParams.toString() === '' ? '' : '?'}${urlSearchParams.toString()}`);
+
+    try {
+        await handleLoginError(JSON.parse(decodeURIComponent(loginError)));
+    } catch {
+        await handleLoginError({ error: new Error('Unable to parse loginError') });
+    };
+}
+
+onStateChange(async (user) => {
+    if (user && (!preventRedirect)) await redirect();
+});
