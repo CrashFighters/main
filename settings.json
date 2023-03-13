@@ -5,6 +5,11 @@
             "staleUseMinutes": 180,
             "errorUseMinutes": 60
         },
+        "privateFiles": {
+            "cacheMinutes": 30,
+            "staleUseMinutes": 180,
+            "errorUseMinutes": 60
+        },
         "remoteConfig": 15
     },
     "generic": {
